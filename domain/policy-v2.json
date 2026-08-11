@@ -1,0 +1,65 @@
+{
+  "version": "2",
+  "domain": "abc-conjecture-verification",
+  "target": "thm-abc-certificate-implies-abc-conjecture",
+  "note": "proofctl domain policy for the abc Conjecture Verification Kernel. Models domains/weil/policy-v2.json. Status is derived by proofctl; producer PASS flags are ignored. CL-12 (abc proved) and CL-13 (IUT verified) are both [OUT] and are never self-declared.",
+  "foundation_hash": "sha256:PLACEHOLDER-abc-foundation-hash-fill-on-freeze",
+  "foundation_hash_note": "SHA-256 of concatenated canonical texts of admitted BASE statements (CL-02: abc<->Szpiro equivalence, CL-05: Faltings theorem, CL-06: Mason-Stothers over function fields). Reproducible via checker/compute_foundation_hash.py when implemented.",
+  "allowed_assurances": [
+    "formal-kernel",
+    "deterministic-cap",
+    "exact-replay",
+    "reproducible-computation",
+    "independent-review"
+  ],
+  "forbidden_assurances": [
+    "ai-review",
+    "assumption",
+    "shadow-review"
+  ],
+  "forbidden_runtimes": [
+    "shadow",
+    "abc-triple-table",
+    "fitted-k-epsilon",
+    "szpiro-assumed",
+    "iut-identification-without-isomorphism",
+    "abc-equivalent-positivity",
+    "network-fetch",
+    "grh-assumed"
+  ],
+  "required_claims": [
+    "core-0-abc-definition",
+    "core-1-provenance-manifest",
+    "core-2-height-framework",
+    "core-3-key-inequality",
+    "core-4-finiteness",
+    "core-5-conclusion"
+  ],
+  "required_metadata_keys": [
+    "module",
+    "provenance_dag_hash",
+    "construction_frozen_before_comparison",
+    "inequality_kind",
+    "epsilon_bound",
+    "constant_k_epsilon"
+  ],
+  "module_import_policy": {
+    "note": "Non-anticipation barrier (spec §0.3). Construction modules must not import target/comparison/conclusion modules.",
+    "modules": ["M0", "M1", "M2", "M3", "M4", "M5", "M6"],
+    "allowed_edges": [
+      ["M0", "M1"], ["M1", "M2"], ["M2", "M3"], ["M3", "M5"], ["M5", "M6"],
+      ["M0", "M4"], ["M4", "M5"]
+    ],
+    "forbidden_imports": {
+      "M1": ["M4", "M5", "M6"],
+      "M2": ["M4", "M5", "M6"],
+      "M3": ["M4", "M5", "M6"]
+    }
+  },
+  "iut_policy": {
+    "note": "IUT-specific policy. Corollary 3.12 of IUTT-III must be independently machine-replayed. The Scholze-Stix dispute is recorded as a blocking obligation. This policy does not adjudicate the dispute.",
+    "required_iut_obligation": "core3.iut-corollary-312-independently-verified",
+    "blocking_reason": "Scholze-Stix: identification of objects across Hodge theaters requires explicit isomorphism proof; not yet formalized",
+    "iut_status": "OPEN"
+  }
+}

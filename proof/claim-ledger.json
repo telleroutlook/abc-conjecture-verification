@@ -1,0 +1,152 @@
+{
+  "schema_version": "abc-ledger-1",
+  "note": "Authoritative claim ledger. Mirrors spec/SPECIFICATION.md §9. Status is DERIVED by the checker, never self-declared. Composite labels forbidden. CL-12 (abc proved) and CL-13 (IUT verified) are [OUT] and are never to be self-declared.",
+  "target_id": "abc-conjecture-masser-oesterle-1985",
+  "claims": [
+    {
+      "id": "CL-01",
+      "statement": "rad(n) is well-defined and multiplicative for coprime inputs",
+      "status": "DEF",
+      "module": "M0"
+    },
+    {
+      "id": "CL-02",
+      "statement": "the abc conjecture is equivalent to Szpiro's conjecture for elliptic curves",
+      "status": "BASE",
+      "module": "M4",
+      "note": "Admitted as foundational base result; not proved here"
+    },
+    {
+      "id": "CL-03",
+      "statement": "a certificate (epsilon_bound, K_epsilon, P_height, P_ineq, P_finiteness) implies the abc conjecture",
+      "status": "THM",
+      "module": "M6",
+      "depends_on": ["CL-01"],
+      "note": "Theorem 2 of the spec. The implication is proved. The construction premises are OBL."
+    },
+    {
+      "id": "CL-04",
+      "statement": "certificate existence is equivalent to the abc conjecture (honesty check)",
+      "status": "THM",
+      "module": "M6",
+      "depends_on": ["CL-03"],
+      "note": "Theorem 3 of the spec. Forward: CL-03. Converse: assuming abc, K_epsilon = max over finite exception set. The converse uses abc as hypothesis only — not as a construction leaf."
+    },
+    {
+      "id": "CL-05",
+      "statement": "Faltings theorem: every curve of genus >= 2 over Q has finitely many rational points",
+      "status": "BASE",
+      "module": "M4",
+      "note": "Mordell conjecture, proved by Faltings 1983. Admitted as foundational base result."
+    },
+    {
+      "id": "CL-06",
+      "statement": "Mason-Stothers theorem: abc theorem holds over function fields",
+      "status": "BASE",
+      "module": "M4",
+      "note": "Proved. Admitted as foundational base result. Provides function-field analogue and confidence."
+    },
+    {
+      "id": "CL-07",
+      "statement": "the provenance barrier is syntactically machine-checkable",
+      "status": "THM",
+      "module": "M0",
+      "note": "Syntactic only: import graph scan is decidable O(V+E). Does NOT imply CL-08."
+    },
+    {
+      "id": "CL-08",
+      "statement": "the provenance barrier decides all semantic circularity",
+      "status": "OUT",
+      "note": "Deliberately outside certified profile. No general algorithm decides abc-equivalence."
+    },
+    {
+      "id": "CL-09",
+      "statement": "a height/rad framework has been constructed without forbidden inputs (P_height)",
+      "status": "OBL",
+      "module": "M1",
+      "note": "Not yet supplied. CORE-2 obligation."
+    },
+    {
+      "id": "CL-10",
+      "statement": "the key inequality c <= K_epsilon * rad(abc)^(1+epsilon) has been proved (Corollary 3.12)",
+      "status": "OBL",
+      "module": "M2",
+      "depends_on": ["CL-09"],
+      "note": "Not yet supplied. CORE-3 obligation. IUT sub-obligation core3.iut-corollary-312-independently-verified is OPEN with Scholze-Stix blocking reason."
+    },
+    {
+      "id": "CL-11",
+      "statement": "the finiteness of exceptions has been proved uniformly in a, b, c",
+      "status": "OBL",
+      "module": "M3",
+      "depends_on": ["CL-09", "CL-10"],
+      "note": "Not yet supplied. CORE-4 obligation."
+    },
+    {
+      "id": "CL-12",
+      "statement": "the abc conjecture is proved by the present document",
+      "status": "OUT",
+      "note": "Deliberately outside certified profile. Never self-declared. CL-09/10/11 are OBL."
+    },
+    {
+      "id": "CL-13",
+      "statement": "Mochizuki's IUT proof passes all gates and is verified by this framework",
+      "status": "OUT",
+      "note": "Deliberately outside certified profile. Never self-declared. core3.iut-corollary-312-independently-verified is OPEN."
+    }
+  ],
+  "core_gates": [
+    {
+      "id": "CORE-0",
+      "deliverable": "formal definition of abc, rad, certificate tuple, Theorem 2, Theorem 3",
+      "pass": "abc statement, rad definition, certificate tuple, implication theorem, honesty check all available",
+      "auto_fail": "abc statement ambiguous or rad function undefined",
+      "claims": ["CL-01", "CL-03", "CL-04"]
+    },
+    {
+      "id": "CORE-1",
+      "deliverable": "immutable assumption and dependency manifest",
+      "pass": "construction modules have no forbidden imports; DAG acyclic; no forbidden construction leaves",
+      "auto_fail": "known abc triples / fitted K_epsilon / Szpiro assumed / IUT identification-without-isomorphism enter construction",
+      "claims": ["CL-07"]
+    },
+    {
+      "id": "CORE-2",
+      "deliverable": "height/rad framework (P_height)",
+      "pass": "Faltings heights and arithmetic geometry framework constructed without forbidden inputs",
+      "auto_fail": "known abc triples / fitted parameters / abc-equivalent input used in framework",
+      "claims": ["CL-09"]
+    },
+    {
+      "id": "CORE-3",
+      "deliverable": "key inequality P_ineq (Mochizuki's Corollary 3.12)",
+      "pass": "c <= K_epsilon * rad(abc)^(1+epsilon) proved for all coprime triples; core3.iut-corollary-312-independently-verified passes",
+      "auto_fail": "abc assumed / Szpiro assumed / IUT identification without isomorphism / bound only for fixed S",
+      "claims": ["CL-10"],
+      "iut_sub_obligation": "core3.iut-corollary-312-independently-verified",
+      "iut_sub_obligation_status": "OPEN",
+      "iut_blocking_reason": "Scholze-Stix: identification of objects across Hodge theaters requires explicit isomorphism proof; not yet formalized"
+    },
+    {
+      "id": "CORE-4",
+      "deliverable": "finiteness of exceptions (P_finiteness)",
+      "pass": "finitely many exceptions proved uniformly in a, b, c",
+      "auto_fail": "finiteness assumed / finiteness proved only for specific families / abc assumed",
+      "claims": ["CL-11"]
+    },
+    {
+      "id": "CORE-5",
+      "deliverable": "theorem application",
+      "pass": "checker derives Theorem 2 from passed CORE-0..4 artifacts",
+      "auto_fail": "a producer-supplied PASS flag is trusted",
+      "claims": ["CL-03"]
+    }
+  ],
+  "completion_state": {
+    "implication_kernel": "COMPLETE (CL-03, CL-04, CL-07 are THM)",
+    "arithmetic_certificate": "NOT SUPPLIED (CL-09, CL-10, CL-11 are OBL)",
+    "iut_status": "NOT VERIFIED (core3.iut-corollary-312-independently-verified is OPEN; Scholze-Stix blocking reason recorded)",
+    "abc_conjecture": "OUT (CL-12): not proved here, never self-declared",
+    "mochizuki_iut": "OUT (CL-13): not verified here, never self-declared"
+  }
+}

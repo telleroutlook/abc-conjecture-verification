@@ -1,0 +1,34 @@
+{
+  "contract_version": "2",
+  "claim_id": "core-2-height-framework",
+  "note": "CORE-2 (spec §5.1). Height/rad framework (P_height): Faltings heights, Arakelov intersection theory, and the arithmetic geometry setup constructed without forbidden inputs. Status: [OBL] — not yet supplied.",
+  "statement_digest": "sha256:PLACEHOLDER-core2-abc-statement-digest-OBL",
+  "dependencies": [
+    {"claim_id": "core-1-provenance-manifest", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:PLACEHOLDER-core1-abc-statement-digest-fill-on-freeze"}
+  ],
+  "evidence": {
+    "mode": "joint",
+    "required": [
+      {"role": "height-framework", "media_type": "application/json", "digest": "sha256:PLACEHOLDER-height-framework"}
+    ]
+  },
+  "checker": {
+    "protocol": "proofctl-checker/v2",
+    "checker_digest": "sha256:PLACEHOLDER-core2-checker",
+    "schema_digest": "sha256:PLACEHOLDER-core2-schema"
+  },
+  "runtime": {"class": "native-dev", "network": "none"},
+  "obligations": [
+    "core2.rad-function-formally-defined",
+    "core2.faltings-height-setup",
+    "core2.arithmetic-geometry-framework",
+    "core2.framework-built-without-forbidden-inputs"
+  ],
+  "assurance": {"required": ["formal-kernel"]},
+  "replay": {"semantic": "required", "byte_exact": "not_required"},
+  "replay_profile": "semantic",
+  "module": "M1",
+  "spec_status": "OBL",
+  "auto_fail": "known abc triples / fitted parameters / Szpiro assumed / abc-equivalent input used in framework",
+  "independence": {}
+}

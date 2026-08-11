@@ -1,0 +1,33 @@
+{
+  "contract_version": "2",
+  "claim_id": "core-5-conclusion",
+  "note": "CORE-5 (spec §5.1). Deterministic application of Theorem 2: from passed CORE-0..CORE-4 artifacts the checker derives the abc conjecture. NO independent mathematical assumption; NO producer-supplied PASS is trusted. Status: THM (CL-03) as an implication; fires only when CORE-2/3/4 (OBL) actually pass.",
+  "statement_digest": "sha256:PLACEHOLDER-core5-abc-statement-digest-fill-on-freeze",
+  "dependencies": [
+    {"claim_id": "core-3-key-inequality", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:PLACEHOLDER-core3-abc-statement-digest-OBL"},
+    {"claim_id": "core-4-finiteness", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:PLACEHOLDER-core4-abc-statement-digest-OBL"}
+  ],
+  "evidence": {
+    "mode": "joint",
+    "required": [
+      {"role": "theorem-instantiation", "media_type": "application/json", "digest": "sha256:PLACEHOLDER-core5-instantiation"}
+    ]
+  },
+  "checker": {
+    "protocol": "proofctl-checker/v2",
+    "checker_digest": "sha256:PLACEHOLDER-core5-checker",
+    "schema_digest": "sha256:PLACEHOLDER-core5-schema"
+  },
+  "runtime": {"class": "native-dev", "network": "none"},
+  "obligations": [
+    "core5.derive-theorem2-from-passed-artifacts",
+    "core5.no-trusted-producer-pass-flag"
+  ],
+  "assurance": {"required": ["formal-kernel"]},
+  "replay": {"semantic": "required", "byte_exact": "not_required"},
+  "replay_profile": "semantic",
+  "module": "M6",
+  "spec_status": "THM",
+  "auto_fail": "a producer-supplied PASS flag is trusted",
+  "independence": {}
+}

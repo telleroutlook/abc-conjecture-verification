@@ -1,0 +1,35 @@
+{
+  "contract_version": "2",
+  "claim_id": "core-3-key-inequality",
+  "note": "CORE-3 (spec §5.1, §4.4). Key inequality P_ineq: c <= K_epsilon * rad(abc)^(1+epsilon) for all coprime a+b=c. This is the Mochizuki Corollary 3.12 gate. Includes sub-obligation core3.iut-corollary-312-independently-verified which is OPEN pending a machine-replayed formal proof. The Scholze-Stix dispute is recorded as blocking reason. Status: [OBL].",
+  "statement_digest": "sha256:PLACEHOLDER-core3-abc-statement-digest-OBL",
+  "dependencies": [
+    {"claim_id": "core-2-height-framework", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:PLACEHOLDER-core2-abc-statement-digest-OBL"}
+  ],
+  "evidence": {
+    "mode": "joint",
+    "required": [
+      {"role": "inequality-proof", "media_type": "application/json", "digest": "sha256:PLACEHOLDER-inequality-proof"}
+    ]
+  },
+  "checker": {
+    "protocol": "proofctl-checker/v2",
+    "checker_digest": "sha256:PLACEHOLDER-core3-checker",
+    "schema_digest": "sha256:PLACEHOLDER-core3-schema"
+  },
+  "runtime": {"class": "native-dev", "network": "none"},
+  "obligations": [
+    "core3.height-inequality-stated",
+    "core3.height-inequality-proved",
+    "core3.iut-corollary-312-independently-verified",
+    "core3.inequality-not-circular"
+  ],
+  "assurance": {"required": ["formal-kernel", "independent-review"]},
+  "replay": {"semantic": "required", "byte_exact": "required"},
+  "replay_profile": "semantic",
+  "module": "M2",
+  "spec_status": "OBL",
+  "auto_fail": "abc assumed / Szpiro assumed / IUT identification without isomorphism / bound only for fixed finite prime set S",
+  "iut_note": "core3.iut-corollary-312-independently-verified is OPEN. Blocking reason: Scholze-Stix objection — identification of objects across Hodge theaters requires explicit isomorphism proof not yet formalized. This is not a determination that IUT is wrong; it is a determination that the obligation is open.",
+  "independence": {}
+}
