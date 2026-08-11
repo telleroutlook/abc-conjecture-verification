@@ -1,5 +1,6 @@
 {
   "version": "1",
   "policy_file": "domain/policy-v2.json",
-  "graph_source": "graph.json"
+  "graph_source": "graph.json",
+  "proofctl_version": "v0.3.18"
 }
