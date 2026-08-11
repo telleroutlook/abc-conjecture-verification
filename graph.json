@@ -1,0 +1,120 @@
+{
+  "claims": [
+    {
+      "id": "core-0-abc-definition",
+      "kind": "theorem",
+      "statement": {
+        "text": "[core-0-abc-definition]",
+        "digest": "sha256:e0582cbedf0039e4b42d0b658f1b7dac0822bc3118c75052880a6bdaaeb8e5da"
+      },
+      "depends_on": [],
+      "required_assurance": [
+        "formal-kernel"
+      ],
+      "evidence": [],
+      "checker_policy": "abccv-bridge-v1"
+    },
+    {
+      "id": "core-1-provenance-manifest",
+      "kind": "theorem",
+      "statement": {
+        "text": "[core-1-provenance-manifest]",
+        "digest": "sha256:a737d2417048fa46923eb66d528dce01023ccf8992183e0eb9b4c41e654ef5c6"
+      },
+      "depends_on": [
+        "core-0-abc-definition"
+      ],
+      "required_assurance": [
+        "deterministic-cap",
+        "exact-replay"
+      ],
+      "evidence": [],
+      "checker_policy": "abccv-bridge-v1"
+    },
+    {
+      "id": "core-2-height-framework",
+      "kind": "theorem",
+      "statement": {
+        "text": "[core-2-height-framework]",
+        "digest": "sha256:a30835600b6ce2473afbb17281eb951a02a854f9ba62cd37c9ad6b5e242da46d"
+      },
+      "depends_on": [
+        "core-1-provenance-manifest"
+      ],
+      "required_assurance": [
+        "formal-kernel"
+      ],
+      "evidence": [],
+      "checker_policy": "abccv-bridge-v1"
+    },
+    {
+      "id": "core-3-key-inequality",
+      "kind": "theorem",
+      "statement": {
+        "text": "[core-3-key-inequality]",
+        "digest": "sha256:7ad9dcc2fca962d9c877903df5c6a1f7dfe3b4e15f75bd0143ab90fcdef6c452"
+      },
+      "depends_on": [
+        "core-2-height-framework"
+      ],
+      "required_assurance": [
+        "formal-kernel",
+        "independent-review"
+      ],
+      "evidence": [],
+      "checker_policy": "abccv-bridge-v1"
+    },
+    {
+      "id": "core-4-finiteness",
+      "kind": "theorem",
+      "statement": {
+        "text": "[core-4-finiteness]",
+        "digest": "sha256:67786e1e489fc79e0883c9145a318e718225b187e0014a703dc5762bd6c11473"
+      },
+      "depends_on": [
+        "core-3-key-inequality"
+      ],
+      "required_assurance": [
+        "formal-kernel"
+      ],
+      "evidence": [],
+      "checker_policy": "abccv-bridge-v1"
+    },
+    {
+      "id": "core-5-conclusion",
+      "kind": "theorem",
+      "statement": {
+        "text": "[core-5-conclusion]",
+        "digest": "sha256:fbffa786fee6f7d993e55102e332e68fccb49b51fbb83d42da836d1fafd2b1e2"
+      },
+      "depends_on": [
+        "core-3-key-inequality",
+        "core-4-finiteness"
+      ],
+      "required_assurance": [
+        "formal-kernel"
+      ],
+      "evidence": [],
+      "checker_policy": "abccv-bridge-v1"
+    }
+  ],
+  "checkers": [
+    {
+      "id": "abccv-bridge-v1",
+      "protocol_version": 2,
+      "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+      "schema_digest": "sha256:6d4331a211a431c1c1b6e996d1eb2cb8f464d79af7192399e5fa1ac02fc6db64",
+      "runtime": {
+        "kind": "native",
+        "cmd": [
+          "python3",
+          "checker/check_certificate.py"
+        ],
+        "schema_path": "schemas/claim.schema.json",
+        "dependency_manifest_path": "requirements.txt"
+      },
+      "network": "none"
+    }
+  ],
+  "evidence": []
+}

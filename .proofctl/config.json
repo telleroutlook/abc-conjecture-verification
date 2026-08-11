@@ -1,0 +1,5 @@
+{
+  "version": "1",
+  "policy_file": "domain/policy-v2.json",
+  "graph_source": "graph.json"
+}

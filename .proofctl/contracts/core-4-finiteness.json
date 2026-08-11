@@ -1,0 +1,52 @@
+{
+  "contract_version": "2",
+  "claim_id": "core-4-finiteness",
+  "note": "CORE-4 (spec \u00a75.1). Finiteness of exceptions P_finiteness: the set {(a,b,c) coprime, a+b=c : c > rad(abc)^(1+epsilon)} is finite, proved uniformly in a,b,c without assuming abc or restricting to a fixed prime set S. Status: [OBL] \u2014 not yet supplied.",
+  "statement_digest": "sha256:67786e1e489fc79e0883c9145a318e718225b187e0014a703dc5762bd6c11473",
+  "dependencies": [
+    {
+      "claim_id": "core-3-key-inequality",
+      "required_state": "GLOBALLY_VERIFIED",
+      "statement_digest": "sha256:PLACEHOLDER-core3-abc-statement-digest-OBL"
+    }
+  ],
+  "evidence": {
+    "mode": "joint",
+    "required": [
+      {
+        "role": "finiteness-proof",
+        "media_type": "application/json",
+        "digest": "sha256:bb99d40c9d0a7afcaf4ed81a94f346a75580d40877090bf9fba37ec0c11453b3"
+      }
+    ]
+  },
+  "checker": {
+    "protocol": "proofctl-checker/v2",
+    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "schema_digest": "sha256:6d4331a211a431c1c1b6e996d1eb2cb8f464d79af7192399e5fa1ac02fc6db64"
+  },
+  "runtime": {
+    "class": "native-dev",
+    "network": "none"
+  },
+  "obligations": [
+    "core4.finiteness-of-exceptions-stated",
+    "core4.finiteness-proved-uniformly",
+    "core4.finiteness-not-assumed",
+    "core4.no-fixed-prime-set-promotion"
+  ],
+  "assurance": {
+    "required": [
+      "formal-kernel"
+    ]
+  },
+  "replay": {
+    "semantic": "required",
+    "byte_exact": "not_required"
+  },
+  "replay_profile": "semantic",
+  "module": "M3",
+  "spec_status": "OBL",
+  "auto_fail": "finiteness assumed / finiteness proved only for specific families or fixed S / abc assumed",
+  "independence": {}
+}

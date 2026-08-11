@@ -1,0 +1,45 @@
+{
+  "contract_version": "2",
+  "claim_id": "core-0-abc-definition",
+  "note": "CORE-0 (spec \u00a75.1). Formal definition of the abc conjecture, the rad function, the certificate tuple, Theorem 2 (certificate implies abc), and Theorem 3 (honesty check: certificate existence is equivalent to abc). Module M0/M4. Status: DEF/THM.",
+  "statement_digest": "sha256:e0582cbedf0039e4b42d0b658f1b7dac0822bc3118c75052880a6bdaaeb8e5da",
+  "dependencies": [],
+  "evidence": {
+    "mode": "joint",
+    "required": [
+      {
+        "role": "abc-definition",
+        "media_type": "text/markdown",
+        "digest": "sha256:f555e857ea0e972a94d2d3ee3bac78a8a56dea85a50a125a422d93217b3fa4b3"
+      }
+    ]
+  },
+  "checker": {
+    "protocol": "proofctl-checker/v2",
+    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "schema_digest": "sha256:6d4331a211a431c1c1b6e996d1eb2cb8f464d79af7192399e5fa1ac02fc6db64"
+  },
+  "runtime": {
+    "class": "native-dev",
+    "network": "none"
+  },
+  "obligations": [
+    "core0.abc-statement-and-rad-defined",
+    "core0.certificate-tuple-defined",
+    "core0.theorem2-certificate-implies-abc",
+    "core0.theorem3-honesty-check"
+  ],
+  "assurance": {
+    "required": [
+      "formal-kernel"
+    ]
+  },
+  "replay": {
+    "semantic": "required",
+    "byte_exact": "not_required"
+  },
+  "replay_profile": "semantic",
+  "module": "M0",
+  "spec_status": "THM",
+  "independence": {}
+}
