@@ -721,6 +721,15 @@ instance are formalized:
     ($\omega=6$ instance of the universal pattern, zero \texttt{sorry}).
 \end{itemize}
 
+The general bound $\rho^4 < 1/6$ for all type $(2,2,1)$ triples (F29) is formalized:
+\begin{itemize}
+  \item \texttt{pasten\_F29\_221\_key}: $6q_1^3 < p_1 p_2 q_2 r$ for $p_1 \ge 2$,
+    $p_2 \ge p_1{+}1$, $q_2 \ge q_1{+}1$, $r \ge q_1 q_2$ (Nat, \texttt{calc}+\texttt{nlinarith}).
+  \item \texttt{pasten\_F29\_221\_rho4\_lt\_sixth}:
+    $q_1^3/(p_1 p_2 q_2 r) < 1/6$ in $\mathbb{R}$
+    (\texttt{div\_lt\_one} pattern, zero \texttt{sorry}).
+\end{itemize}
+
 All proofs are zero \texttt{sorry}.
 
 \section{Conclusion}
@@ -741,17 +750,21 @@ change reducing $F(a,b)$ to the simplest integer hyperplane lattice; (c) the opt
 crossing formula (Theorem F10): the minimum non-degenerate norm is the second smallest
 of $\{\min P_a, \min P_b, \min P_c\}$, achieved by any cross-group prime pair;
 (d) a complete table of sharp non-degenerate minimum norms for all partition types
-$\omega \in \{3,4,5\}$ (Table in Theorem~\ref{thm:sharp}); and (e) the unifying
+$\omega \in \{3,4,5\}$ (Table in Theorem~\ref{thm:sharp}); (e) the unifying
 pattern $\sup_{\text{balanced}}(\omega) = 2^{-1/(\omega-1)}$ for \emph{all} $\omega \ge 3$
-(Theorem~\ref{thm:pattern}, F28), with the general key lemma Lean-formalized.
+(Theorem~\ref{thm:pattern}, F28), with the general key lemma Lean-formalized; and
+(f) the general bound $\rho^4 < 1/6$ for \emph{all} type $(2,2,1)$ triples (F29,
+Lean-formalized), with $\sup = 6^{-1/4}$ approached by the $a=6$ near-twin-prime subfamily.
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
 crossings), and grows without bound for the ``isolated'' types where both non-dominant
 constituents are forced-large single primes.  For $\omega \ge 6$, every type is unbounded.
 The sharp bounds for the bounded types are now analytically complete (Theorem~\ref{thm:sharp}),
-with exact suprema proved for $\omega \in \{3,4,5\}$ and the universal formula
-$2^{-1/(\omega-1)}$ proved for all balanced single-prime-group types (Theorem~\ref{thm:pattern}).
+with exact suprema proved for $\omega \in \{3,4,5\}$, the universal formula
+$2^{-1/(\omega-1)}$ proved for all balanced single-prime-group types (Theorem~\ref{thm:pattern}),
+and the general bound $\rho^4 < 6^{-1}$ proved for all type $(2,2,1)$ triples with
+$\sup = 6^{-1/4}$ (F29).
 
 We also prove a quality boundary for the squarefree subfamily
 (Proposition~\ref{prop:quality}): quality $> 1/2$ if and only if $a = 1$.

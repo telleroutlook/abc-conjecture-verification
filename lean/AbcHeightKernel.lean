@@ -841,4 +841,59 @@ theorem pasten_F28_omega6_rho_lt_half (p q r s t : ℕ)
       2 * ((p : ℝ) ^ 4 / (2 * (q : ℝ) * r * s * t)) := by ring
   linarith
 
+/-!
+## F29: General bound ρ⁴ < 1/6 for ALL type (2,2,1) triples
+
+THEOREM F29: For a=p1*p2, b=q1*q2, c=r (prime), all 5 primes distinct, a+b=c:
+  ρ⁴ = nd³ / (p1*p2*q2*r) < 1/6   where nd = max(p1,q1).
+
+PROOF (WLOG nd = q1, i.e., q1 ≥ p1):
+  ρ⁴ = q1³ / (p1*p2*q2*r).
+  KEY: p1*p2*q2*r ≥ p1*p2*q1*q2² (since r ≥ q1*q2)
+                 ≥ 6*q1*(q1+1)²   (since p1*p2 ≥ 6, q2 ≥ q1+1)
+                 > 6*q1³           (since (q1+1)² > q1²).
+  Hence 6*q1³ < p1*p2*q2*r. QED.
+
+SHARPNESS: a=6 with q1→q2→n gives ρ⁴→n²/(6*(6+n²))→1/6.
+  Sup = (1/6)^{1/4} ≈ 0.6389. Never achieved. Verified: 476k triples c≤20000.
+-/
+
+/-- [THM] F29.key: 6*q1³ < p1*p2*q2*r when p1≥2, p2≥p1+1, q2≥q1+1, r≥q1*q2. -/
+theorem pasten_F29_221_key (p1 p2 q1 q2 r : ℕ)
+    (hp1 : 2 ≤ p1) (hp12 : p1 + 1 ≤ p2) (hq1 : 1 ≤ q1) (hq12 : q1 + 1 ≤ q2)
+    (hr : q1 * q2 ≤ r) :
+    6 * q1 ^ 3 < p1 * p2 * q2 * r := by
+  have hp1p2 : 6 ≤ p1 * p2 := by nlinarith
+  have step1 : p1 * p2 * q1 * q2 ^ 2 ≤ p1 * p2 * q2 * r := by
+    calc p1 * p2 * q1 * q2 ^ 2 = p1 * p2 * q2 * (q1 * q2) := by ring
+      _ ≤ p1 * p2 * q2 * r := Nat.mul_le_mul_left (p1 * p2 * q2) hr
+  have step2 : 6 * q1 * (q1 + 1) ^ 2 ≤ p1 * p2 * q1 * q2 ^ 2 := by
+    have h1 : 6 * q1 ≤ p1 * p2 * q1 := by nlinarith
+    have h2 : (q1 + 1) ^ 2 ≤ q2 ^ 2 := Nat.pow_le_pow_left hq12 2
+    nlinarith [h1, h2, sq_nonneg q1, sq_nonneg q2]
+  nlinarith [sq_nonneg q1]
+
+/-- [THM] F29: ρ⁴ = q1³/(p1*p2*q2*r) < 1/6 in ℝ for all type (2,2,1) triples. -/
+theorem pasten_F29_221_rho4_lt_sixth (p1 p2 q1 q2 r : ℕ)
+    (hp1 : 2 ≤ p1) (hp12 : p1 + 1 ≤ p2) (hq1 : 1 ≤ q1) (hq12 : q1 + 1 ≤ q2)
+    (hr_eq : r = p1 * p2 + q1 * q2) :
+    (q1 : ℝ) ^ 3 / ((p1 : ℝ) * p2 * q2 * r) < 1 / 6 := by
+  have hq1_pos : (0 : ℝ) < (q1 : ℝ) := by exact_mod_cast (show 0 < q1 by omega)
+  have hp2_pos : (0 : ℝ) < (p2 : ℝ) := by exact_mod_cast (show 0 < p2 by omega)
+  have hq2_pos : (0 : ℝ) < (q2 : ℝ) := by exact_mod_cast (show 0 < q2 by omega)
+  have hr_nat_pos : 0 < r := by
+    have hqq : 0 < q1 * q2 := Nat.mul_pos (by omega) (by omega)
+    have hqq_le : q1 * q2 ≤ r := by omega
+    linarith
+  have hr_pos : (0 : ℝ) < (r : ℝ) := by exact_mod_cast hr_nat_pos
+  have hp1_pos : (0 : ℝ) < (p1 : ℝ) := by exact_mod_cast (show 0 < p1 by omega)
+  have key_nat : 6 * q1 ^ 3 < p1 * p2 * q2 * r :=
+    pasten_F29_221_key p1 p2 q1 q2 r hp1 hp12 hq1 hq12 (by omega)
+  have key_real : 6 * (q1 : ℝ) ^ 3 < (p1 : ℝ) * p2 * q2 * r := by exact_mod_cast key_nat
+  have hdenom : (0 : ℝ) < (p1 : ℝ) * p2 * q2 * r := by positivity
+  have h1 : 6 * (q1 : ℝ) ^ 3 / ((p1 : ℝ) * p2 * q2 * r) < 1 :=
+    (div_lt_one hdenom).mpr (by linarith)
+  have h2 : 6 * (q1 : ℝ) ^ 3 / ((p1 : ℝ) * p2 * q2 * r) =
+      6 * ((q1 : ℝ) ^ 3 / ((p1 : ℝ) * p2 * q2 * r)) := by ring
+  linarith
 

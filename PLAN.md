@@ -1287,6 +1287,32 @@ which is rare for small search ranges; the sup is still 2^{-1/(ω-1)} analytical
 Key lemma: `pasten_F28_key_gen` (general: p^m < prod of m naturals each > p).
 Instantiation at ω=6: `pasten_F28_omega6_rho_lt_half`. Build: PASS (zero errors). ✓
 
+#### Step F29 — General bound ρ⁴ < 1/6 for ALL type (2,2,1) triples ✅ COMPLETE (2026-08-15)
+
+**Type (2,2,1):** a=p1·p2, b=q1·q2, c=r (prime), all 5 primes distinct, a+b=c.
+F10: nd = max(p1,q1) (r is always the largest group min since r = p1·p2 + q1·q2 > max(p1,q1)).
+
+**THEOREM F29:** ρ⁴ = nd³/(p1·p2·q2·r) < 1/6 for ALL type (2,2,1) triples.
+Sup = (1/6)^{1/4} ≈ 0.6389. Never achieved.
+
+**Proof (WLOG nd = q1 ≥ p1):**
+1. r = p1·p2 + q1·q2 ≥ q1·q2, so p1·p2·q2·r ≥ p1·p2·q1·q2².
+2. p1·p2 ≥ 2·3 = 6 (two distinct primes ≥ 2) and q2 ≥ q1+1 (distinct), so
+   p1·p2·q1·q2² ≥ 6·q1·(q1+1)².
+3. 6·q1·(q1+1)² > 6·q1³ since (q1+1)² > q1² always.
+4. Chain: p1·p2·q2·r > 6·q1³, hence ρ⁴ < 1/6. □
+
+**Sharpness:** a=6, b=q1·q2 with q1 → q2 → n gives ρ⁴ → n²/(6(6+n²)) → 1/6.
+Bound is tight; sup approached by near-twin-prime b-factors.
+
+**Numerical verification:** `discovery/m2_directions/t42_f29_221_general_bound.py`.
+Checked 476 381 triples with c ≤ 20 000. Violations: 0.
+Max ρ = 0.62995 at (6, 5183, 5189) [a=6, b=71·73, c=5189]; gap to sup: 0.009.
+
+**Lean formalization:** `lean/AbcHeightKernel.lean`, section `## F29`.
+- `pasten_F29_221_key`: 6·q1³ < p1·p2·q2·r (Nat, 4-step `calc`+`nlinarith`).
+- `pasten_F29_221_rho4_lt_sixth`: ρ⁴ < 1/6 in ℝ (`div_lt_one` pattern). Build: PASS ✓
+
 ---
 
 **Discovery script:** `discovery/m2_directions/t30_rho_distribution.py`
