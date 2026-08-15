@@ -9,6 +9,8 @@ one-dimensional real vector spaces. No assumption is made that Mochizuki's argum
 correct; the question is whether the specified diagram commutes or whether a precise
 obstruction can be exhibited.
 
+**Review status (2026-08-15):** INCONCLUSIVE + LOCALIZATION — independent Gate-A review confirms the gap is precisely localised to IUTT-III Remark 3.9.5(vii) Observations 3-1–3, 9-2 and Corollary 3.12 proof steps (xi-d)–(xi-f): the comparison morphism B_j (from procession-normalised Θ-pilot log-volume to q-pilot log-volume) is not constructed in any cited source. D1–D6 all contain type errors or missing assumptions that must be corrected before re-send (10-item checklist in `reviews/OB-02v2-independent-gate-a-review-2026-08-15.md` §9). obligation `core3.iut-corollary-312-independently-verified` NOT certified.
+
 Source PDFs used for this problem (must be verified against baseline/ before citing):
 - IUTT-I: Mochizuki, *IUTT I: Construction of Hodge Theaters*, PRIMS 57 (2021).
 - IUTT-III: Mochizuki, *IUTT III: Canonical Splittings of the Log-Theta-Lattice*, PRIMS 57 (2021).
