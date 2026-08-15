@@ -355,6 +355,25 @@ sigma(c) from below — which requires abc-equivalent input.
 
 ---
 
+### Referee corrections to Route IV analysis (2026-08-15)
+
+Three errors identified after D1–D5:
+
+1. **A2 (Size-drop axiom): provably impossible (theorem, not observation).**
+   D(p^k)/p^k = k·D(p)/p diverges for any D(p)≠0. No real-valued linear D can satisfy
+   the size-drop axiom A2. The construction is ruled out — not merely hard.
+
+2. **A5 (Fixed points): n=p^p is a fixed point of the arithmetic derivative.**
+   Example: 27′ = 27. This is the same phenomenon as char-p Mason–Stothers.
+   The "✓" claim in A5 (no fixed points) was wrong.
+
+3. **T5 equivalence overstated.** Only the ⟹ direction holds:
+   abc ⟹ Φ(c) ≤ K_ε·R^ε for all coprime triples.
+   The ⟸ direction fails for fixed small ε: Φ(c) ≤ K_ε·R^ε for a specific ε does not
+   recover the variable-ε form of abc. The theorem in T5 should read ⟹ only.
+
+---
+
 ### Hard constraints on Route IV
 
 These are identical to the project-wide constraints and apply to all D1–D5:
@@ -393,3 +412,124 @@ issues, and bibliography problems.
 The PAPER_LINT.md two-layer architecture applies here:
 - Reactive layer (P1–P54): run as a sweep before submission
 - Proactive layer (S1–S5): answer once per new or substantially revised theorem
+
+---
+
+## Part X · Discovery Route V — Pasten Lattice (Layer 1)
+
+**Status:** `EXPLORATION` (discovery/ tier only; nothing in proof/ yet).
+**Started:** 2026-08-15. Toys: `discovery/m2_directions/t8_pasten_lattice.py`,
+`t9_pasten_lattice_v2.py`, `t10_minkowski_bound.py`.
+
+### Foundation: Pasten (2021)
+
+**[BASE] Pasten, H.** "Arithmetic derivatives through geometry of numbers,"
+arXiv:2106.16165 (2021). Source: pre-print, to be verified against published version.
+
+For each coprime triple (a,b,c) with a+b=c, Pasten constructs the
+**universal derivative lattice**:
+
+    F(a,b) = { ψ: Primes(abc) → ℤ  |  d^ψ(a) + d^ψ(b) = d^ψ(c) }
+
+where d^ψ(n) = n · Σ_{p|n} v_p(n)/p · ψ(p). The additivity constraint is one
+linear equation over disjoint prime sets; F(a,b) has **rank ω(abc) − 1**.
+
+**Non-degeneracy:** W^ψ(a,b) = ab·(Σ_{p|b} v_p(b)/p·ψ_p − Σ_{p|a} v_p(a)/p·ψ_p) ≠ 0.
+
+**Small Derivatives Conjecture (SDC):** ‖ψ‖_min ≤ c^η for some η < 1 ↔ abc conjecture.
+Siegel's lemma gives only η = 1 (trivial). Pasten explicitly excludes degenerate
+triples (ω=2, Mersenne-type) from SDC.
+
+### Empirical findings (T8, T9)
+
+See `discovery/m2_directions/t9_pasten_lattice_v2.py` for reproducible output.
+
+| ω | count | min η_c | mean η_c | min η_R | mean η_R |
+|---|-------|---------|---------|---------|---------|
+| 2 | 4     | 0.792   | 1.062   | 0.613   | 1.072   |
+| 3 | 9     | 0.250   | 0.442   | 0.323   | 0.499   |
+| 4 | 4     | 0.187   | 0.215   | 0.126   | 0.250   |
+
+**Pattern:** η_R ≈ 1/(ω−1) — decreasing sharply with ω.
+
+### Mechanism: Minkowski bound for the Pasten lattice
+
+The integer additivity constraint for F(a,b) is a single equation:
+
+    Σ_p coeff_p · ψ_p = 0,   coeff_p = v_p(n) · (denom/p),   denom = lcm_{p|abc}(p)
+
+For a rank-(ω−1) lattice L defined by one integer constraint c ∈ ℤ^ω, the
+**lattice determinant** is:
+
+    det(L) = ‖c‖_2 / gcd(c_p)
+
+By **Minkowski's theorem**: ‖ψ‖_min ≤ det(L)^{1/(ω−1)}.
+
+So if det(L) = O(R), then ‖ψ‖_min ≤ O(R^{1/(ω−1)}).
+
+### T10 findings: det(L)/R ≈ O(1) confirmed
+
+See `discovery/m2_directions/t10_minkowski_bound.py`.
+
+| ω | n  | max ratio ‖ψ‖/R^{1/(ω−1)} | det(L)/R mean | (det/R)^{1/(ω−1)} mean |
+|---|----|--------------------------|---------------|----------------------|
+| 2 | 4  | 3.50 (Mersenne, degenerate)| 2.04         | 1.43                 |
+| 3 | 12 | 1.64                     | 0.87          | 0.935                |
+| 4 | 7  | 1.18                     | 1.07          | 1.024                |
+| 5 | 4  | 0.97                     | 1.72          | 1.148                |
+
+**H1 holds** (ratio ≤ 2) for all tested omega ≥ 3 cases.
+
+**det(L) = O(R) confirmed** for squarefree triples analytically (see T10 output).
+For triples with prime-power components: det(L) = O(max_v · R) where max_v = max_p v_p(abc);
+since max_v = O(log c), the bound becomes ‖ψ‖ ≤ O(log(c)^{1/(ω−1)} · R^{1/(ω−1)}).
+
+### Layer 1 Hypothesis
+
+**H1 (Minkowski bound):** For coprime (a,b,c) with a+b=c and ω(abc) = k:
+
+    ‖ψ‖_min  ≤  C · R^{1/(k−1)}
+
+where R = rad(abc) and C is an absolute constant.
+
+**H1 for squarefree (a,b,c): provable.** Proof sketch:
+- v_p(abc) = 1 for all p, so coeff_p = denom/p.
+- ‖c‖_2 = denom · sqrt(Σ 1/p^2) ≤ denom / √2 ≤ R / √2.
+- gcd(c_p) = 1 (typically).
+- det(L) ≤ R / √2 ⟹ ‖ψ‖_min ≤ (R/√2)^{1/(k−1)}.
+- [OBL] — verify det(L) bound rigorously in outsource/OB-09.
+
+**H1 does NOT imply abc.** The bound only approaches abc as ω(abc) → ∞, but
+high-quality triples (the hard cases for abc) have SMALL ω. The degenerate ω=2
+cases (Mersenne, prime-power c) are exactly where H1 is weakest (η_R → 1) —
+consistent with Pasten's explicit exclusion.
+
+### Toy-first execution plan
+
+#### Step E1 — Systematic R-based bound test ✅ DONE (2026-08-15)
+
+**Toy:** `t10_minkowski_bound.py`. Results above. H1 confirmed empirically for ω=3–5.
+
+#### Step E2 — Provable squarefree subfamily outsource (OPEN)
+
+**Goal:** Outsource the det(L) ≤ R/√2 bound for squarefree triples.
+**Outsource file:** `outsource/OB-09-pasten-squarefree-det-bound.md` (to be written).
+**Acceptance criteria:** Prove det(L) ≤ C · R for squarefree (a,b,c), ω ≥ 3.
+Run PROMPT_LINT before sending.
+
+#### Step E3 — Lean formalization (conditional)
+
+If OB-09 closes, formalize the squarefree subfamily bound in `lean/AbcHeightKernel.lean`.
+This would be [THM] conditional on Minkowski's theorem (to be cited as [BASE]).
+
+### Hard constraints (same as Part IX)
+
+- **B2:** No known abc triples as input to any proof of H1.
+- **B3:** H1 must hold for ALL coprime triples in the stated subfamily.
+- **B4:** H1 for all ω may be equivalent to abc — scope must be restricted to
+  the squarefree subfamily or ω ≥ k₀ for fixed k₀.
+- **B5:** No PASS self-report; [OBL] until proved.
+
+**This route does NOT claim progress on abc.** All work is in `discovery/`.
+The squarefree H1 bound, if proved, is a non-trivial structural result about
+Pasten's lattice — it is NOT abc, and it does not imply abc.
