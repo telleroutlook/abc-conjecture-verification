@@ -1114,3 +1114,14 @@ theorem pasten_F31a (a : ℕ) (ha : 1 ≤ a) :
 theorem pasten_quality_lt_half_core (a b : ℕ) (ha : 2 ≤ a) (hb : 3 ≤ b) :
     a + b < a * b := by nlinarith
 
+/-- [THM] F32a_gap: No integer k ≥ 2 satisfies q < k*q < q+2 for q ≥ 3.
+    Integer core of: the second minimum non-degenerate norm for type (1,1,1) = q+2 = r
+    (there is no non-degenerate vector with norm strictly between q and q+2). -/
+theorem pasten_F32a_gap (q k : ℕ) (hq : 3 ≤ q) (hk : 2 ≤ k) :
+    q + 2 ≤ k * q := by nlinarith
+
+/-- [THM] F32a_upper: max(0, q, q+2) = q+2.  Norm of the type-(1,1,1) second-minimum
+    vector φ=(0,1,1): ψ=(0,q,r) has norm r = q+2 (upper bound for second minimum). -/
+theorem pasten_F32a_upper (q : ℕ) :
+    max (max 0 q) (q + 2) = q + 2 := by omega
+

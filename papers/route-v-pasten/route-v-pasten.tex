@@ -650,6 +650,40 @@ Key-lemma Lean formalizations: \texttt{pasten\_E10\_lb\_key} (Theorem~\ref{thm:e
 Numerical confirmation across all types: $\omega=4$ (\texttt{t47}),
 $\omega=5$ (\texttt{t48}), $\omega=6$ (\texttt{t49})---all verified in $\le 1$\,s.
 
+\subsubsection*{F32a: second minimum non-degenerate norm for $\omega=3$}
+
+For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
+\emph{second} minimum non-degenerate norm.
+
+\begin{theorem}[F32a: second minimum for type $(1,1,1)$]\label{thm:f32a}
+  For a type $(1,1,1)$ triple with primes $p < q < r = p+q$,
+  the second minimum non-degenerate norm is $r = q+2$ (achieved by
+  the vector $\psi=(0,q,r)$, i.e.\ $\varphi=(0,1,1)$, which has
+  $W=pq\ne 0$ and $\|\psi\|_\infty = r$).
+  Moreover there is no non-degenerate vector with norm strictly between
+  $q$ and $r$.
+\end{theorem}
+
+\begin{proof}
+  \textit{Upper bound.}  The vector $\varphi=(0,1,1)$ satisfies the lattice
+  constraint $S_a + S_b = S_c$ (i.e.\ $0 + 1 = 1$) and is non-degenerate since
+  $S_b = 1 \ne 0 = S_a$.  Its norm is $\max(0, q, r) = r = q+2$.
+
+  \textit{Lower bound (no gap).}  Suppose $\psi$ is non-degenerate with
+  $\|\psi\|_\infty \in (q, r)$.  Since $r\,|\varphi_r|$ must be strictly less than
+  $r$, we have $\varphi_r = 0$.  The constraint then gives $\varphi_q = -\varphi_p$.
+  Non-degeneracy ($S_b \ne S_a$) forces $\varphi_p \ne 0$.  But the norm is
+  $\max(p|\varphi_p|, q|\varphi_p|, 0) = q|\varphi_p|$.
+  For the norm to lie strictly in $(q, r) = (q, q+2)$ we need
+  $q < q|\varphi_p| < q+2$, i.e.\ $1 < |\varphi_p| < 1 + 2/q$.
+  Since $q \ge 3$ (the smallest odd prime gap gives $q=3$), $2/q \le 2/3 < 1$,
+  so there is no integer in $(1, 1+2/q)$.  Contradiction.
+
+  The integer core ($q + 2 \le k q$ for all $k \ge 2$ and $q \ge 3$, with no
+  integer $k$ satisfying $q < kq < q+2$) is formalized as
+  \texttt{pasten\_F32a\_gap} and \texttt{pasten\_F32a\_upper} in the Lean kernel.
+\end{proof}
+
 \subsubsection*{F11: $\omega \ge 6$ --- all types unbounded}
 
 \begin{theorem}[F11]\label{thm:f11}
