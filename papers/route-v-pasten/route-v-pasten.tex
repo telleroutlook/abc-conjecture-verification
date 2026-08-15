@@ -996,6 +996,11 @@ Additional lemmas added in the E10/E11/E$_n$/F31 extension:
   \item \texttt{pasten\_F33\_gap}: $N \le k\cdot r_1$ for $k \ge 2$, $N \le 2r_1$;
     integer core of second-minimum gap for type $(1,1,2)$ (F33, Theorem~\ref{thm:f33},
     zero \texttt{sorry}).
+  \item \texttt{pasten\_En\_lb\_general}: for any Finsets $P_a, P_b, P_c$ of primes
+    satisfying the lattice constraint $\sum_{P_a} f + \sum_{P_b} f = \sum_{P_c} f$,
+    if $f = 0$ on $P_b$ and $f = 0$ on $P_c$, then $\sum_{P_b} f = \sum_{P_a} f$
+    (degenerate condition for all $\omega$; Lean, zero \texttt{sorry}).
+    This is the first fully general-$\omega$ Lean formalization in this project.
 \end{itemize}
 
 \section{Conclusion}

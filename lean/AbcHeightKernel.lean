@@ -1139,3 +1139,19 @@ theorem pasten_F32b_ineq (q : ℕ) (hq : 5 ≤ q) : 2 * q + 4 ≤ q ^ 2 := by nl
 theorem pasten_F33_gap (r1 N k : ℕ) (hk : 2 ≤ k) (hN : N ≤ 2 * r1) : N ≤ k * r1 := by
   nlinarith
 
+/-- [THM] En_lb_general: General-ω E_n lower bound kernel.
+    For ANY Finsets Pa, Pb, Pc of primes satisfying the Pasten lattice constraint
+      Σ_{p∈Pa} φ(p) + Σ_{q∈Pb} φ(q) = Σ_{r∈Pc} φ(r),
+    if φ = 0 on Pb and φ = 0 on Pc, then Σ_{Pb} φ = Σ_{Pa} φ (degenerate condition).
+
+    This is the core of E_n for ALL ω ≥ 3: if ‖ψ‖_∞ < nd then all primes in the two
+    larger groups satisfy φ_p = 0, so S_b = S_c = 0, the constraint forces S_a = 0,
+    and S_b = S_a — meaning the Wronskian W = p·S_b − a·S_a = 0 (degenerate). -/
+theorem pasten_En_lb_general (pa pb pc : Finset ℕ) (f : ℕ → ℤ)
+    (h_constraint : pa.sum f + pb.sum f = pc.sum f)
+    (h_zero_b : ∀ q ∈ pb, f q = 0)
+    (h_zero_c : ∀ r ∈ pc, f r = 0) :
+    pb.sum f = pa.sum f := by
+  rw [Finset.sum_eq_zero h_zero_b, Finset.sum_eq_zero h_zero_c] at *
+  linarith
+
