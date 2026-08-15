@@ -1022,6 +1022,42 @@ types are confined to ω ≤ 5: {(1,1,1)} ∪ {(0,2,2),(1,1,2),(1,2,1)} ∪
 
 ---
 
+#### Step F13 — Prime-power triples and scope boundary ✅ COMPLETE (2026-08-15)
+
+**Discovery script:** `discovery/m2_directions/t25_prime_power_extension.py`
+
+**THEORY:** The lattice F(a,b) = {ψ∈ℤ^P: ∑_p (R/p)ψ_p=0} uses only the prime set
+P=primes(abc) and R=rad(abc) — not the exponents. So the F10 formula is valid for ANY
+coprime (a,b,c), squarefree or not.
+
+**Tested against known published abc triples (15 triples, quality range 0.61–1.63):**
+
+| Triple | ω | type | R | quality | ratio | class |
+|---|---|---|---|---|---|---|
+| 1 + 2·3^7 = 5^4·7 | 4 | (0,2,2) | 210 | 1.568 | 0.841 | BOUNDED |
+| 2 + 3^10·109 = 23^5 | 4 | (1,2,1) | 15042 | 1.630 | 0.122 | BOUNDED |
+| 1 + 2^5·3^2 = 17^2 | 3 | (0,2,1) | 102 | 1.225 | **1.683** | — |
+| 1 + 2^4·3 = 7^2 | 3 | (0,2,1) | 42 | 1.041 | 1.080 | — |
+| Mersenne: 1+M_p=2^n | 2 | (0,1,1) | 2M_p | <1 | **0.5000 exact** | — |
+
+**Key findings (F13):**
+1. F10 formula applies universally to all coprime triples (prime-power or squarefree).
+2. High-quality triples (quality>1) have SMALL ratios — prime power concentrates
+   large c while keeping R small, making nd/R^{1/(ω-1)} tiny.
+3. Non-squarefree triples CAN violate squarefree bounds: (1,288,289) gives ratio=1.683
+   > √(7/6)=1.080, consistent with F3 being proved only for squarefree ω=3.
+4. Mersenne family (1, 2^n−1, 2^n): ratio = 1/2 EXACTLY for all n (analytical).
+5. The F-series bounds are SQUAREFREE-SPECIFIC. Extension to non-squarefree requires
+   a generalized analysis of the degenerate subspace.
+
+**Scope boundary confirmed:**
+The F-series structural analysis is complete for squarefree triples. The arithmetic gap
+remains: ‖ψ_nd‖ ≤ R^{1/(ω-1)} (Minkowski, squarefree) vs. c ≤ K_ε R^{1+ε} (abc).
+No chain connects ψ_nd to c without additional arithmetic input. The program moves to
+the outsource tier for the next ingredient (OB-11).
+
+---
+
 #### Step F12 — Sharp bound for type (1,2,1); strategic scope assessment ✅ COMPLETE (2026-08-15)
 
 **Discovery scripts:** `discovery/m2_directions/t23_complete_classification.py`,
