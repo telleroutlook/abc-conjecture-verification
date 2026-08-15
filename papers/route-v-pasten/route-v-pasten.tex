@@ -733,7 +733,7 @@ For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also 
 
 \begin{proof}
   By Theorem~\ref{thm:f32b} the achievable norms are the numerical semigroup
-  $\langle q, r \rangle = \langle q, q+2 \rangle$.
+  $\langle q, r \rangle = \langle q, q+2 \rangle$ (see also Remark~\ref{rem:semigroup}).
   Since $q$ is an odd prime $\ge 5$ and $r = q+2$ is prime, $\gcd(q,r)=1$.
   The Sylvester--Frobenius theorem gives Frobenius number
   $q \cdot r - q - r = q(q+2) - q - (q+2) = q^2 - 2$.
@@ -741,6 +741,16 @@ For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also 
   $q^2 - 2 = (q+2)(q-2)+2 \equiv 2 \not\equiv 0 \pmod{q+2}$,
   confirming $q^2-2$ is not in $\langle q, r \rangle$.
 \end{proof}
+
+\begin{remark}[Semigroup structure]\label{rem:semigroup}
+  The achievable non-degenerate norms $\{kq\}\cup\{kr\}$ form a proper subset of
+  the numerical semigroup $\langle q,r \rangle$.
+  Elements of $\langle q,r \rangle \setminus (\{kq\}\cup\{kr\})$, such as $q+r=2q+2$,
+  are achieved only by \emph{degenerate} vectors: the vector $\varphi = (k,k,2k)$
+  satisfies $S_b = k = S_a$, giving $W = 0$.
+  Theorem~\ref{thm:f32b} shows that non-degeneracy exactly eliminates these
+  mixed-term combinations, leaving only the pure scalings of $q$ and $r$.
+\end{remark}
 
 \begin{remark}[Note on all type $(1,1,1)$ triples having $p=2$]
   For any type $(1,1,1)$ triple $(p,q,r)$ with $p < q$, we have $r = p+q$.
