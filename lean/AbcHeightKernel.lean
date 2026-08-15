@@ -1037,3 +1037,61 @@ theorem pasten_E11_vec_norm (p r1 : ℕ) (hpr1 : p ≤ r1) :
     max (max (max p 0) r1) 0 = r1 := by
   simp [max_def]; omega
 
+/-!
+## E_n: General lower bound theorem — min non-degenerate norm ≥ nd (for any ω)
+
+THEOREM E_n (Universal lower bound):
+  Let (a,b,c) be squarefree coprime with a+b=c and ω distinct prime factors.
+  Let Pa, Pb, Pc be the prime factor sets. Let nd = second_smallest{min(Pa), min(Pb), min(Pc)}.
+  Then every non-degenerate ψ in the Pasten lattice satisfies ‖ψ‖_∞ ≥ nd.
+
+PROOF (general):
+  Assume for contradiction that ‖ψ‖_∞ < nd.
+  By F8 (Universal Divisibility), ψ_l = l · φ_l with φ_l ∈ ℤ.
+  So l · |φ_l| ≤ ‖ψ‖_∞ < nd for all l ∈ Pa ∪ Pb ∪ Pc.
+  In particular, for any l with l ≥ nd: l · |φ_l| < l → |φ_l| < 1 → φ_l = 0.
+  Key: every prime in Pb satisfies l ≥ min(Pb) ≥ nd (by definition of nd).
+       every prime in Pc satisfies l ≥ min(Pc) ≥ nd (by definition of nd).
+  (Both hold because nd = second_smallest of three group minimums, so both Pb and Pc
+   group minimums are ≥ nd — the only group allowed to have min < nd is Pa.)
+  Therefore: φ_l = 0 for all l ∈ Pb ∪ Pc.
+  → Σ_{l ∈ Pb} φ_l = 0 (Pb_sum) and Σ_{l ∈ Pc} φ_l = 0 (Pc_sum).
+  Lattice constraint: Σ_{Pa} φ_l + Σ_{Pb} φ_l = Σ_{Pc} φ_l → Σ_{Pa} φ_l + 0 = 0.
+  Non-degenerate condition: Σ_{Pb} φ_l ≠ Σ_{Pa} φ_l → 0 ≠ 0. CONTRADICTION. □
+
+  (Symmetric argument applies when l_1 ∈ Pb or l_1 ∈ Pc — all cases give contradiction.)
+
+Verification: T44 (ω=3), T46c (ω=4 type (1,1,2)), T47 (all ω=4), T48 (all ω=5).
+-/
+
+/-- [THM] E10.lb_key: If ψ_q = ψ_r = 0 and ω=3 constraint holds, then W = 0
+    (contrapositive: non-degenerate ψ cannot have ψ_q = ψ_r = 0). -/
+theorem pasten_E10_lb_key (p q r : ℕ) (hq : 1 ≤ q) (hr : 1 ≤ r)
+    (ψp ψq ψr : ℤ)
+    (hmem : (q : ℤ) * r * ψp + (p : ℤ) * r * ψq = (p : ℤ) * q * ψr)
+    (hq0 : ψq = 0) (hr0 : ψr = 0) :
+    (p : ℤ) * ψq - (q : ℤ) * ψp = 0 := by
+  subst hq0 hr0
+  simp only [mul_zero, add_zero] at hmem
+  have hq' : (0 : ℤ) < q := by exact_mod_cast Nat.lt_of_lt_of_le Nat.zero_lt_one hq
+  have hr' : (0 : ℤ) < r := by exact_mod_cast Nat.lt_of_lt_of_le Nat.zero_lt_one hr
+  have hqr : (q : ℤ) * r ≠ 0 := ne_of_gt (mul_pos hq' hr')
+  have hψp : ψp = 0 := (mul_eq_zero.mp hmem).resolve_left hqr
+  simp [hψp]
+
+/-- [THM] E11.lb_key: If ψ_q = ψ_r1 = ψ_r2 = 0 and ω=4 type-(1,1,2) constraint holds, W = 0. -/
+theorem pasten_E11_lb_key (p q r1 r2 : ℕ) (hq : 1 ≤ q) (hr1 : 1 ≤ r1) (hr2 : 1 ≤ r2)
+    (ψp ψq ψr1 ψr2 : ℤ)
+    (hmem : (q : ℤ) * r1 * r2 * ψp + (p : ℤ) * r1 * r2 * ψq -
+            (p : ℤ) * q * r2 * ψr1 - (p : ℤ) * q * r1 * ψr2 = 0)
+    (hq0 : ψq = 0) (hr10 : ψr1 = 0) (hr20 : ψr2 = 0) :
+    (p : ℤ) * ψq - (q : ℤ) * ψp = 0 := by
+  subst hq0 hr10 hr20
+  simp only [mul_zero, sub_zero, add_zero] at hmem
+  have hq' : (0 : ℤ) < q := by exact_mod_cast Nat.lt_of_lt_of_le Nat.zero_lt_one hq
+  have hr1' : (0 : ℤ) < r1 := by exact_mod_cast Nat.lt_of_lt_of_le Nat.zero_lt_one hr1
+  have hr2' : (0 : ℤ) < r2 := by exact_mod_cast Nat.lt_of_lt_of_le Nat.zero_lt_one hr2
+  have hc : (q : ℤ) * r1 * r2 ≠ 0 := ne_of_gt (mul_pos (mul_pos hq' hr1') hr2')
+  have hψp : ψp = 0 := (mul_eq_zero.mp hmem).resolve_left hc
+  simp [hψp]
+
