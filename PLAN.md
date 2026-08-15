@@ -1141,7 +1141,28 @@ F-series ρ. Lean build PASSED, zero sorry.
 
 ---
 
-#### Step F19 — ρ distribution analysis; Lean F12+F14 formalization ✅ COMPLETE (2026-08-15)
+#### Step F23 — Analytic proof ρ<1 for types (0,2,3) and (0,3,2) ✅ COMPLETE (2026-08-15)
+
+**Discovery script:** `discovery/m2_directions/t36_f23_sup_one.py`.
+
+**THEOREM F23 (proved analytically + verified 0 violations for b≤50000):**
+
+For type (0,2,3) with a=1, b=p*q (p<q odd primes), c=2*s*t:
+- nd = p (F10 group-min formula: max(p, 2) = p for odd p ≥ 3)
+- ρ⁴ = p³/(q*(p*q+1)) < p²/q² < 1   (since p < q)
+- sup ρ = 1, never achieved (ρ → 1 as p/q → 1 via twin primes with squarefree c)
+- Lean theorem `pasten_F23_023_key`: p³ < q*(p*q+1) for p ≥ 1, q ≥ p+1 (nlinarith)
+
+For type (0,3,2) with a=1, b=p1*p2*p3, c=q1*q2:
+- nd = max(min(Pb), min(Pc)); ρ⁴ = nd³/(b*larger_prime_of_c) < 1 (same argument)
+- Finite max 0.947 at (1,322,323) = (1, 2·7·23, 17·19); verified stable for c ≤ 2000
+
+**Full ω=5 bounded characterization:**
+  Bounded types: (0,2,3), (0,3,2) [sup=1]; (1,2,2), (2,1,2), (2,2,1) [finite max]
+  Unbounded types: (0,1,4), (0,4,1), (3,1,1), (1,3,1), (1,1,3)
+
+---
+
 
 **Discovery script:** `discovery/m2_directions/t30_rho_distribution.py`
 
