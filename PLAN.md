@@ -1158,8 +1158,33 @@ For type (0,3,2) with a=1, b=p1*p2*p3, c=q1*q2:
 - Finite max 0.947 at (1,322,323) = (1, 2·7·23, 17·19); verified stable for c ≤ 2000
 
 **Full ω=5 bounded characterization:**
-  Bounded types: (0,2,3), (0,3,2) [sup=1]; (1,2,2), (2,1,2), (2,2,1) [finite max]
+  Bounded types: (0,2,3), (0,3,2) [sup=1]; (1,2,2), (2,1,2) [finite max]; (2,2,1) [sup=(1/6)^{1/4}]
   Unbounded types: (0,1,4), (0,4,1), (3,1,1), (1,3,1), (1,1,3)
+
+---
+
+#### Step F24 — Type (2,2,1) sup = (1/6)^{1/4} ✅ COMPLETE (2026-08-15)
+
+**Discovery script:** `discovery/m2_directions/t38_f24_221_sup.py`.
+
+**THEOREM F24 (proved analytically + verified 0 violations for c≤30000):**
+
+For type (2,2,1): a=p1*p2, b=q1*q2, c=r (single prime).
+Group mins {p1, q1, r}; nd = second-smallest.
+
+The a=6=2·3 subfamily drives the supremum:
+- c = 6+q1*q2, nd = q1 (since q1 < c always), R = 2·3·q1·q2·c
+- ρ⁴ = q1³/(6·q2·(6+q1·q2)) < q1²/(6·q2²) < 1/6   (since q1 < q2)
+- As q1/q2 → 1 (near-twin-prime pairs): ρ⁴ → 1/6 from below
+
+For all other a (p1*p2 ≥ 10): ρ⁴ < 1/10 < 1/6.
+
+Therefore: **sup ρ = (1/6)^{1/4} ≈ 0.6389**, never achieved.
+Extremal examples: (6, 9461·9463, 6+9461·9463) → ρ = 0.63888, gap ≈ 0.00007.
+Global max at c≤30000: ρ = 0.62995 at (6, 5183, 5189).
+
+This corrects F15's claim that (2,2,1) has a finite global max — the correct structure
+is an asymptotic supremum, approached via the a=6, near-twin-prime subfamily.
 
 ---
 
@@ -1209,7 +1234,7 @@ achieved at a specific small triple (not an asymptotic limit).
 |---|---|---|---|---|
 | (1,2,2) | 0.499875 | (13, 22, 35) | 5 | 10010 |
 | (2,1,2) | 0.607577 | (6, 1511, 1517) | 37 | 13,753,122 |
-| (2,2,1) | 0.606377 | (6, 1517, 1523) | 37 | 13,862,346 |
+| (2,2,1) | 0.610697 | (6, 2021, 2027) | 43 | 24,579,402 | (F22 correction)
 
 Analytical proof (example for (2,1,2)): a=6, r₁=37 fixed.
   ratio = r₁ / (6·b·(b+6))^{1/4}. For b→∞: ratio → 0.
