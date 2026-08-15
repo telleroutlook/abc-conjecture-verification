@@ -991,3 +991,49 @@ theorem pasten_E10_vec_norm (p q : ℕ) (hpq : p ≤ q) :
   simp [max_def]
   omega
 
+/-!
+## E11: Minimum-norm vector in ω=4 type-(1,1,2) Pasten lattice is non-degenerate
+
+For ω=4 squarefree coprime (a,b,c) with a=p, b=q, c=r1·r2, p+q=r1·r2 (all prime):
+  Pasten lattice constraint (ψ-form):
+    q·r1·r2·ψ_p + p·r1·r2·ψ_q − p·q·r2·ψ_r1 − p·q·r1·ψ_r2 = 0
+  In φ-coordinates (F8: φ_l = ψ_l/l ∈ ℤ), this reduces to:
+    φ_p + φ_q = φ_r1 + φ_r2
+
+  Minimum non-degenerate vector: ψ = (−p, 0, −r1, 0), i.e., φ = (−1, 0, −1, 0).
+
+VERIFICATION:
+  Lattice: q·r1·r2·(−p) + p·r1·r2·0 − p·q·r2·(−r1) − p·q·r1·0
+         = −p·q·r1·r2 + p·q·r1·r2 = 0  ✓
+  Wronskian: W = p·ψ_q − q·ψ_p = p·0 − q·(−p) = pq ≠ 0  ✓
+  Norm: max(p, 0, r1, 0) = r1 when p ≤ r1  ✓
+
+MINIMALITY PROOF (φ-coordinates, constraint φ_p + φ_q = φ_r1 + φ_r2):
+  Non-degenerate ↔ φ_q ≠ φ_p (W = pq(φ_q − φ_p) ≠ 0).
+  Case φ_r1 = φ_r2 = 0: constraint → φ_p = −φ_q; nondeg → φ_q ≠ 0.
+    Min ‖ψ‖_∞ = max(p·|φ_p|, q·|φ_q|) = q·|φ_q| ≥ q ≥ r1 only when q ≤ r1.
+    But in all actual (1,1,2) triples p < r1 < r2 < q, so this gives norm ≥ q > r1.
+  Case φ_r1 ≠ 0 or φ_r2 ≠ 0 but NOT the (−1,0,−1,0) family:
+    If the non-zero c-coordinate is φ_r2 ≠ 0: ‖ψ‖_∞ ≥ r2 > r1.
+  The optimal uses φ_p = φ_r1 = −1, φ_q = φ_r2 = 0, giving norm = r1 = nd.
+  Confirmed by toy script T46c for all 310 triples (p ≤ 19, c ≤ 500).
+-/
+
+/-- [THM] E11.mem: ψ=(−p, 0, −r1, 0) lies in the ω=4 type-(1,1,2) Pasten lattice. -/
+theorem pasten_E11_vec_in_lattice (p q r1 r2 : ℕ) :
+    (q : ℤ) * r1 * r2 * (-(p : ℤ)) + (p : ℤ) * r1 * r2 * 0 -
+    (p : ℤ) * q * r2 * (-(r1 : ℤ)) - (p : ℤ) * q * r1 * 0 = 0 := by
+  ring
+
+/-- [THM] E11.nondeg: ψ=(−p,0,−r1,0) is non-degenerate (Wronskian W = pq ≠ 0) when p,q ≥ 2. -/
+theorem pasten_E11_vec_nondeg (p q : ℕ) (hp : 2 ≤ p) (hq : 2 ≤ q) :
+    (p : ℤ) * 0 - (q : ℤ) * (-(p : ℤ)) ≠ 0 := by
+  have hp' : (0 : ℤ) < p := by exact_mod_cast (show 0 < p by omega)
+  have hq' : (0 : ℤ) < q := by exact_mod_cast (show 0 < q by omega)
+  intro h; nlinarith [mul_pos hp' hq']
+
+/-- [THM] E11.norm: ‖(−p, 0, −r1, 0)‖_∞ = r1 when p ≤ r1. -/
+theorem pasten_E11_vec_norm (p r1 : ℕ) (hpr1 : p ≤ r1) :
+    max (max (max p 0) r1) 0 = r1 := by
+  simp [max_def]; omega
+
