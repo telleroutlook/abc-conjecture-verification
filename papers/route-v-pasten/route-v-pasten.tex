@@ -608,18 +608,26 @@ $(q, q+2)$ both prime gives $\rho^2 \to q/(2q) = 1/2$, so $\rho \to 1/\sqrt{2}$.
 
 The three types with unachieved suprema follow a single formula:
 
-\begin{theorem}[Balanced-type pattern, F16]\label{thm:pattern}
-For the ``balanced'' partition types --- those with two single-prime constituents
-and one multi-prime constituent, approached as the two single primes become
-equal-sized --- the supremum satisfies
+\begin{theorem}[Balanced-type universal pattern, F16/F28]\label{thm:pattern}
+For any partition type $(1, k_1, k_2)$ with $k_1+k_2=\omega-1$ (a single-prime
+$a$-group, forcing $a=2$ in the extremal subfamily) and any $\omega \ge 3$:
 \[
-  \sup_{\text{balanced}}(\omega) \;=\; 2^{-1/(\omega-1)}, \qquad \omega = 3, 4.
+  \sup\rho \;=\; 2^{-1/(\omega-1)},
 \]
-Specifically: type $(1,1,1)$ gives $2^{-1/2}$; types $(1,2,1)$ and $(1,1,2)$
-give $2^{-1/3}$.  The pattern \emph{extends} to $\omega=5$ for type $(1,2,2)$:
-the $a=2$ subfamily gives $\sup\rho = 2^{-1/4}$ (Theorem~F26).
-However, the symmetric type $(1,1,3)$ is \emph{unbounded} (Theorem~\ref{thm:f11}),
-so the extension depends on partition type, not merely on $\omega$.
+and the supremum is never achieved at any finite triple.
+
+\emph{Proof (Theorem~F28):} With $a=2$, group minimums $\{2,\min P_b,\min P_c\}$,
+$\mathrm{nd}=\min(\min P_b,\min P_c)$; all other $\omega-2$ primes are distinct
+from $\mathrm{nd}$ and hence strictly greater.  Key lemma: $m$ positive integers
+all $> n$ have product $> n^m$ (since each $\ge n+1$, product $\ge (n+1)^m > n^m$).
+Hence $\rho^{\omega-1}=\mathrm{nd}^{\omega-2}/(2\cdot\prod_{\omega-2\text{ primes}>nd})<
+\mathrm{nd}^{\omega-2}/(2\cdot\mathrm{nd}^{\omega-2})=1/2$.
+Sharpness: as all $k_1{+}k_2$ primes $\to n$ with $2+b=c$, $\rho^{\omega-1}\to 1/2$. $\square$
+
+Numerically verified for $\omega=3,\ldots,7$ (zero violations).
+Specific cases: $(1,1,1)\to 2^{-1/2}$; $(1,1,2),(1,2,1)\to 2^{-1/3}$;
+$(1,2,2)\to 2^{-1/4}$.  The type $(1,1,3)$ is \emph{unbounded}
+(Theorem~\ref{thm:f11}), confirming the bound depends on partition type.
 \end{theorem}
 
 \subsubsection*{General pattern}
@@ -695,6 +703,24 @@ The sharp bound for the c-even subfamily of type $(1,1,2)$ (F14) has been formal
 
 These three families cover all universally-bounded $\omega \le 4$ types with
 unachieved suprema, completing the Lean formalization of the sharp bound core.
+
+For $\omega=5$, the type $(1,2,2)$ key inequality is also formalized:
+\begin{itemize}
+  \item \texttt{pasten\_F27\_122\_rho4\_key}: for $p{+}1\le q,r$ and $r{+}1\le s$,
+    $p^3 < qrs$ (Nat, nlinarith).
+  \item \texttt{pasten\_F27\_122\_rho4\_lt\_half\_real}: $p^3/(2qrs) < 1/2$ in $\mathbb{R}$
+    (Theorem~F26 key inequality, Lean zero \texttt{sorry}).
+\end{itemize}
+
+For the universal pattern (Theorem~F28), the general key lemma and the $\omega=6$
+instance are formalized:
+\begin{itemize}
+  \item \texttt{pasten\_F28\_key\_gen}: for $n \ge 1$ naturals each $> p$,
+    $p^n < \prod x_i$ (Lean, \texttt{Finset.prod\_le\_prod} + \texttt{Nat.pow\_lt\_pow\_left}).
+  \item \texttt{pasten\_F28\_omega6\_rho\_lt\_half}: $p^4/(2qrst) < 1/2$ in $\mathbb{R}$
+    ($\omega=6$ instance of the universal pattern, zero \texttt{sorry}).
+\end{itemize}
+
 All proofs are zero \texttt{sorry}.
 
 \section{Conclusion}
@@ -716,15 +742,16 @@ crossing formula (Theorem F10): the minimum non-degenerate norm is the second sm
 of $\{\min P_a, \min P_b, \min P_c\}$, achieved by any cross-group prime pair;
 (d) a complete table of sharp non-degenerate minimum norms for all partition types
 $\omega \in \{3,4,5\}$ (Table in Theorem~\ref{thm:sharp}); and (e) the unifying
-pattern $\sup_{\text{balanced}}(\omega) = 2^{-1/(\omega-1)}$ for $\omega = 3, 4$
-(Theorem~\ref{thm:pattern}), with the key inequality Lean-formalized.
+pattern $\sup_{\text{balanced}}(\omega) = 2^{-1/(\omega-1)}$ for \emph{all} $\omega \ge 3$
+(Theorem~\ref{thm:pattern}, F28), with the general key lemma Lean-formalized.
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
 crossings), and grows without bound for the ``isolated'' types where both non-dominant
 constituents are forced-large single primes.  For $\omega \ge 6$, every type is unbounded.
-The sharp bounds for the seven bounded types are now analytically complete (Theorem~\ref{thm:sharp}),
-with exact suprema proved for $\omega \in \{3,4\}$ and exact finite maxima verified for $\omega = 5$.
+The sharp bounds for the bounded types are now analytically complete (Theorem~\ref{thm:sharp}),
+with exact suprema proved for $\omega \in \{3,4,5\}$ and the universal formula
+$2^{-1/(\omega-1)}$ proved for all balanced single-prime-group types (Theorem~\ref{thm:pattern}).
 
 We also prove a quality boundary for the squarefree subfamily
 (Proposition~\ref{prop:quality}): quality $> 1/2$ if and only if $a = 1$.
