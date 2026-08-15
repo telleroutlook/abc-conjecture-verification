@@ -176,3 +176,90 @@ Stop, narrow the claim, or open a new proved profile if any occur:
 - Does not upgrade the syntactic provenance barrier to a semantic non-circularity oracle
   (CL-07 is syntactic; CL-08 `[OUT]`).
 - Does not adjudicate the Scholze–Stix dispute; records it as a blocking open obligation.
+
+---
+
+## Baseline literature discipline (load-bearing — verify from source, never from memory)
+
+Every theorem used as a premise must be checked against its published source before it
+supports any claim here. Key foundations that must be source-verified before use:
+
+- **Faltings 1983** (Mordell conjecture / Faltings heights): cited as `[BASE]` in M4/CL-05
+- **Mason–Stothers** (polynomial abc): cited as `[BASE]` in M4/CL-06
+- **Szpiro equivalence** (abc ↔ Szpiro's conjecture): cited as `[BASE]` in M4/CL-02
+- **Mochizuki IUTT-I..IV** (Corollary 3.12 route): cited as the object of the OPEN gate
+
+Store verified source PDFs or tarballs under `baseline/`. For any new base theorem added
+to the ledger, run `grep -n 'Theorem X.Y' baseline/<file>` to confirm theorem number and
+exact statement before citing it. "I remember what it says" is not a pass.
+
+---
+
+## Outsource-prompt pre-send checklist (mandatory)
+
+Before sending any `outsource/` problem for external review, self-check these failure
+modes. Verify load-bearing claims with a quick script, not from memory.
+
+Run `outsource/PROMPT_LINT.md` on every new or edited prompt before it ships.  When a
+referee surfaces a new defect class, add it to PROMPT_LINT.md and re-scan every active
+prompt AND every `proof/*/` relevant file — defects are never assumed independent.
+
+1. **No circular target.** The goal must not assume abc, Szpiro, or an abc-equivalent
+   assertion, directly or through a fitted parameter K_ε derived from known abc triples.
+   Grep the prompt for "known triples", "rad(abc)", "best known example", "fit K".
+
+2. **No dropped term.** Any assembly/reduction identity you state must be verified
+   end-to-end. Watch: universal quantifier scope (the inequality must cover ALL coprime
+   a+b=c, not just a fixed prime set S), and boundary terms in estimates.
+
+3. **Cite only what is proved.** Label each black box with its proof source and theorem
+   number (verified). Confirm it actually covers the object used. PLAN.md statuses can
+   be stale — trust only verified `checker/` output.
+
+4. **No false dichotomy.** If offering "prove X / prove obstruction", also allow an
+   honest "inconclusive + precise partial localization" outcome.
+
+5. **Self-contained.** Every symbol defined in-file. No "see other file". Inline full
+   formulas (rad, heights, K_ε, prime sets S). Any numerical anchor labeled
+   "sanity only, not an input" and verified by script.
+
+### Minimum outsource file structure
+
+```
+# Problem OB-NN — Short title
+
+**Type:** [algebraic geometry / analytic number theory / combinatorics / etc.]
+**Non-circularity:** [explicit statement that abc, IUT Corollary 3.12, abc triples,
+  fitted K_ε, and Szpiro are not assumed — or why this problem does not touch them]
+
+## All definitions (self-contained — everything is here)
+[Every symbol defined, every formula written out in full]
+
+## The theorem / claim to be verified
+[Complete statement]
+
+## Proof skeleton to be closed
+### Step 1 — [name]
+[Draft with "What to close for Step 1:" subsection]
+### Step 2 — ...
+
+## Acceptance criteria
+[Numbered list; allow CONFIRMED / PARTIAL / REFUTED / inconclusive outcomes]
+
+## Numerical anchor (sanity only, not an input to the proof)
+[One concrete computable example the reviewer can sanity-check]
+```
+
+---
+
+## Paper pre-submission checklist (mandatory)
+
+Before sending any `papers/*/` file for external review, run all checks in
+`papers/PAPER_LINT.md` (items P1–P17 at minimum) against the target `.tex` file.
+Record the one-line output of each automatable check next to the item.
+Fix every failure before submission. "Looks fine by eye" is not a pass.
+
+```bash
+TEX=papers/<id>/<file>.tex  # set this first
+# Then run each grep/script from PAPER_LINT.md in order P1 → P17.
+```

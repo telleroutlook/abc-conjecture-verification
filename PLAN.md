@@ -191,3 +191,31 @@ approach that finds high-quality triples is a HINT about the problem, not a proo
 (definitions; provenance; CORE-2/3/4 OBL; IUT gate; circular rejection; import barrier;
 CORE-5 blocked; CL-03/04 honesty; CL-07 syntactic). These run before any certificate
 is entertained.
+
+---
+
+## Part VIII · External review and paper discipline
+
+### Outsource discipline
+
+When a proof obligation becomes a self-contained mathematical problem (e.g., the key
+inequality step, a non-circularity argument, a specific algebraic geometry claim), extract
+it as an `outsource/OB-NN-*.md` file. Use the minimum structure from CLAUDE.md:
+self-contained definitions, non-circularity statement, proof skeleton, acceptance criteria,
+numerical anchor.
+
+Run `outsource/PROMPT_LINT.md` before sending. The lint file accumulates abc-specific
+defect classes as referees return feedback — update it after every review round and
+re-scan all active prompts.
+
+### Paper discipline
+
+When any result from this repository is written up as a paper (LaTeX), run
+`papers/PAPER_LINT.md` before every external submission. The checklist is general-purpose
+(not abc-specific) and catches common mathematical writing errors: undefined references,
+missing citations, asymptotic order claims needing script verification, typesetting
+issues, and bibliography problems.
+
+The PAPER_LINT.md two-layer architecture applies here:
+- Reactive layer (P1–P54): run as a sweep before submission
+- Proactive layer (S1–S5): answer once per new or substantially revised theorem

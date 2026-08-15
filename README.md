@@ -152,6 +152,26 @@ All 10 adversarial tests must pass. They verify:
 
 ---
 
+## Verification chain (trust hierarchy)
+
+Evidence flows one-directionally; no status is self-declared:
+
+```
+External source (PDF/tarball in baseline/)
+  → Human proof checked against source (theorem number verified)
+    → Checker output (proofctl, no trusted PASS from generator)
+      → Gate status (CORE-N derived, not asserted)
+        → Ledger status ([THM] / [OBL] / [OUT] — never upgraded by assertion)
+```
+
+A DOI or arXiv deposit is archival publication, not peer review.
+A finite numerical check validates only the specific instance replayed — never the analytic
+or algebraic theorem it came from.
+A non-anticipation barrier being syntactically PASS means the import graph is acyclic —
+it does NOT mean the construction is semantically non-circular (CL-08 is `[OUT]`).
+
+---
+
 ## Mathematical background
 
 The abc conjecture (Masser–Oesterlé, 1985): for every ε > 0, there exist only finitely
