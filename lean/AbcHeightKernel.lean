@@ -1109,3 +1109,8 @@ theorem pasten_F31a (a : ℕ) (ha : 1 ≤ a) :
         ≤ (2 * a) ^ a := Nat.pow_le_pow_left h1 a
       _ < (2 * a) ^ (a + 4) := Nat.pow_lt_pow_right h2 (by omega)
 
+/-- [THM] F21a_core: For coprime a,b with a ≥ 2, b ≥ 3: a+b < a*b.
+    Integer core of quality < 1/2 (since quality < 1/2 ↔ c < ab ↔ c² < R = abc). -/
+theorem pasten_quality_lt_half_core (a b : ℕ) (ha : 2 ≤ a) (hb : 3 ≤ b) :
+    a + b < a * b := by nlinarith
+
