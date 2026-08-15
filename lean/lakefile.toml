@@ -1,0 +1,10 @@
+name = "AbcHeightKernel"
+version = "0.1.0"
+defaultTargets = ["AbcHeightKernel"]
+
+[[require]]
+name = "mathlib"
+path = "../../weil-first-prime/lean4/.lake/packages/mathlib"
+
+[[lean_lib]]
+name = "AbcHeightKernel"
