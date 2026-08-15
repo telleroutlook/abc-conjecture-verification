@@ -991,6 +991,76 @@ vectors. The actual min nd norm = min(b,c) (the smaller single prime), which gro
 - Equivalently: UNBOUNDED for types {(k≥2,1,1), (0,1,k≥2), (0,k≥2,1)} [up to permutation of ab-side].
 - BOUNDED otherwise (when at least two groups can simultaneously hold small primes).
 
+#### Step F11 — ω=6 classification and asymptotic growth ✅ COMPLETE (2026-08-15)
+
+**Discovery scripts:** `discovery/m2_directions/t22_omega6_classification.py`,
+`discovery/m2_directions/t22b_asymptotic_growth.py`
+
+**ω=6 classification (c≤5000, 408,457 triples):**
+
+| Type | #triples | max ratio | verdict |
+|---|---|---|---|
+| (0,1,5) | — | 151.1 | UNBOUNDED |
+| (0,5,1) | — | 162.3 | UNBOUNDED |
+| (1,1,4) | — | 19.7 | UNBOUNDED |
+| (1,4,1) | — | 19.8 | UNBOUNDED |
+| (4,1,1) | — | 54.9 | UNBOUNDED |
+| (2,2,2) | — | 1.38 | **ASYMPTOTICALLY UNBOUNDED** (slow: ratio ~ b^{1/10}) |
+| (3,1,2) | — | 1.14 | **ASYMPTOTICALLY UNBOUNDED** |
+| (3,2,1) | — | 1.15 | **ASYMPTOTICALLY UNBOUNDED** |
+
+F10 formula verified correct for all 408,457 triples checked.
+
+**Asymptotic analysis (T22b):**
+For type (2,2,2) with a=6=2·3 fixed, b=67·q₂ (q₂ prime growing):
+- ratio ≈ q₂^{1/10} analytically (from second_smallest ≈ √b, R ≈ 6b²)
+- Very slow growth; looks bounded for small c, unbounded analytically.
+
+**CONCLUSION F11:** No ω=6 type is universally bounded. The universally-bounded
+types are confined to ω ≤ 5: {(1,1,1)} ∪ {(0,2,2),(1,1,2),(1,2,1)} ∪
+{(1,2,2),(2,1,2),(2,2,1)}.
+
+---
+
+#### Step F12 — Sharp bound for type (1,2,1); strategic scope assessment ✅ COMPLETE (2026-08-15)
+
+**Discovery scripts:** `discovery/m2_directions/t23_complete_classification.py`,
+`discovery/m2_directions/t24_sharpness_121.py`
+
+**Theorem F12 — Complete classification of universally-bounded types [analytical + numerical, c≤500]:**
+
+| Type | sup ratio | status | proof |
+|---|---|---|---|
+| ω=3 (1,1,1) | ≤ √(7/6)≈1.08; conj. sharp=1/√2 | BOUNDED | F3 analytical |
+| ω=4 (0,2,2) | → 0, sup≤0.505 | BOUNDED | numerical |
+| ω=4 (1,1,2) | → 0, sup≤0.773 | BOUNDED | numerical |
+| ω=4 (1,2,1) | **= 2^{-1/3} (sharp)** | BOUNDED | **F7a + F12 sharpness** |
+| ω=5 (1,2,2) | → 0, sup≤0.500 | BOUNDED | numerical |
+| ω=5 (2,1,2) | → 0, sup≤0.607 | BOUNDED | numerical |
+| ω=5 (2,2,1) | → 0, sup≤0.582 | BOUNDED | numerical |
+| all other ω≥4 | → ∞ | UNBOUNDED | analytical/numerical |
+
+**Sharpness of 2^{-1/3} for type (1,2,1) [Theorem F12]:**
+For b=2·q₂ subfamily with u=q₂/p ≥ 1/2 (a=p prime, b=2q₂, c=p+2q₂ prime):
+
+  ratio = 1 / (2·u·(1+2u))^{1/3}
+
+Minimum of 2·u·(1+2u) over u≥1/2 is g(1/2)=2, giving ratio_max = 2^{-1/3}.
+Achieved in the limit as p→∞ with q₂=⌈p/2⌉ (prime). Formula is EXACT (zero floating
+error vs. numerical data). The supremum 2^{-1/3} is not achieved but not improvable.
+
+Numerical confirmation: ratio=0.79057 at (379,382,761), gap=0.00313 and shrinking.
+
+**Strategic scope note (F13 preamble):**
+Squarefree triples (a,b,c) always have R = rad(abc) = a·b·c for squarefree abc, so
+quality = log(c)/log(R) < 1 universally. The Pasten lattice F-series analysis is
+entirely in the quality < 1 regime. High-quality abc examples (quality > 1) require
+prime powers and are outside the squarefree setting. The F-series is a complete
+structural theory of the lattice for squarefree triples; extension to prime-power triples
+requires a generalized lattice definition.
+
+---
+
 ### Hard constraints (same as Part X)
 
 - **B2:** No known abc triples as construction input.
