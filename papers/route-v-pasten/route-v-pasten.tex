@@ -458,7 +458,8 @@ framework (scripts \texttt{t14}--\texttt{t19}, verified for all triples $c \le 3
 \hline
 Type & Degen? & Non-degen min & Ratio bound ($\rho = \|\psi_\mathrm{nd}\|/R^{1/3}$) & Pattern \\
 \hline
-$(0,2,2)$ & Never & $\max(p_b^{\min}, p_c^{\min})$ & $\le 3\cdot 210^{-1/3}\approx 0.505$, max at $(1,14,15)$ & BOUNDED \\
+$(0,2,2)$ & Never & $\max(p_b^{\min}, p_c^{\min})$ &
+  $\le 3\cdot 210^{-1/3}\approx 0.505$, max at $(1,14,15)$ & BOUNDED \\
 $(1,1,2)$ & Never & $\max(p_a, p_b)$ & $\sup = 2^{-1/3} \approx 0.794$ (F14) & BOUNDED \\
 $(1,2,1)$ & iff $a > r$ & $\max(a, q)$ & $\sup = 2^{-1/3} \approx 0.794$ (F12) & BOUNDED \\
 $(2,1,1)$ & Always & $\max(p_1, r)$ & grows $\sim r^{1/3}$ & UNBOUNDED \\
@@ -533,7 +534,7 @@ The unbounded types (0,1,4) and (0,4,1) have $\rho^4 \approx q^2 \to \infty$ ana
 
 The key structural insight from \texttt{t21} completes the classification at all $\omega$:
 
-\begin{theorem}[F10, proved 2026-08-15]
+\begin{theorem}[F10, proved 2026-08-15]\label{thm:f10}
 For any cross-group pair $X \ne Y$ with $X, Y \in \{P_a, P_b, P_c\}$, the two-entry
 $\varphi$-vector with $\varphi_p = 1$ ($p \in X$) and $\varphi_q = \pm 1$ ($q \in Y$,
 sign chosen to satisfy $\sum \mathrm{sign}_q \varphi_q = 0$) is \emph{always}
@@ -561,7 +562,7 @@ over all squarefree coprime triples of that type.
 \end{theorem}
 
 \begin{proof}[Proof sketch]
-By Theorem~F10, $\|\psi_\mathrm{nd}\|_\infty$ is the second smallest of
+By Theorem~\ref{thm:f10}, $\|\psi_\mathrm{nd}\|_\infty$ is the second smallest of
 $\{\min P_a, \min P_b, \min P_c\}$.  For $\omega \ge 6$, every partition type
 has at least one constituent of size $n \ge 3$.  Fix the smallest three primes
 of that constituent and let the remaining primes grow; then $\min P_X$ grows
@@ -618,7 +619,7 @@ $a$-group, forcing $a=2$ in the extremal subfamily) and any $\omega \ge 3$:
 \]
 and the supremum is never achieved at any finite triple.
 
-\emph{Proof (Theorem~F28):} With $a=2$, group minimums $\{2,\min P_b,\min P_c\}$,
+\emph{Proof (Theorem~\ref{thm:pattern}):} With $a=2$, group minimums $\{2,\min P_b,\min P_c\}$,
 $\mathrm{nd}=\min(\min P_b,\min P_c)$; all other $\omega-2$ primes are distinct
 from $\mathrm{nd}$ and hence strictly greater.  Key lemma: $m$ positive integers
 all $> n$ have product $> n^m$ (since each $\ge n+1$, product $\ge (n+1)^m > n^m$).
@@ -678,7 +679,7 @@ divisibility) have been formalized in Lean~4 (\texttt{lean/AbcHeightKernel.lean}
 sections F5--F8), building zero \texttt{sorry} proofs for the $\omega = 3$ and
 $\omega = 4$ (types (1,1,2), (0,2,2)) cases.
 
-The sharp bound for type $(1,1,1)$ (Theorem~F16, Section~\ref{thm:pattern}) has
+The sharp bound for type $(1,1,1)$ (Theorem~\ref{thm:pattern}) has
 been formalized with two Lean~4 theorems (zero \texttt{sorry}):
 \begin{itemize}
   \item \texttt{pasten\_F16\_111\_key}: $2q < p(p+q)$ for $p \ge 2$, $q > 0$
@@ -714,7 +715,7 @@ For $\omega=5$, the type $(1,2,2)$ key inequality is also formalized:
     (Theorem~F26 key inequality, Lean zero \texttt{sorry}).
 \end{itemize}
 
-For the universal pattern (Theorem~F28), the general key lemma and the $\omega=6$
+For the universal pattern (Theorem~\ref{thm:pattern}), the general key lemma and the $\omega=6$
 instance are formalized:
 \begin{itemize}
   \item \texttt{pasten\_F28\_key\_gen}: for $n \ge 1$ naturals each $> p$,
