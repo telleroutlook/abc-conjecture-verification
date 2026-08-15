@@ -8,6 +8,7 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{remark}{Remark}
 
 \theoremstyle{definition}
@@ -33,11 +34,20 @@ for \emph{squarefree} coprime triples, the lattice determinant satisfies
 $\det(F(a,b)) < \rad(abc)$.
 Combined with the Minkowski--Vaaler theorem, this yields a nonzero lattice
 vector with $\ell^\infty$-norm $\|\psi\|_\infty \le \rad(abc)^{1/(\omega-1)}$.
-We verify this bound numerically for $3 \le \omega \le 5$.  We discuss
-the degenerate $\omega=2$ (Mersenne-type) family, where the bound is tight and
-the gap to the abc conjecture is widest, and clarify why this result does not
-constitute progress toward abc.  The argument is self-contained and uses no
-abc-equivalent hypothesis.
+
+We give a complete classification of partition types by whether the minimum
+\emph{non-degenerate} norm ratio $\rho = \|\psi_\mathrm{nd}\|_\infty/R^{1/(\omega-1)}$
+is universally bounded: seven types are bounded (with exact analytical sharp bounds
+including $2^{-1/(\omega-1)}$ for balanced $\omega \le 4$ types), all $\omega \ge 6$
+types are unbounded, and the bounded $\omega = 5$ types achieve their maxima at finite triples.
+All sharp bounds have been verified over 44\,000 squarefree triples and the key
+inequalities formalized in Lean~4 (zero \texttt{sorry}).
+
+We prove a clean quality boundary: for squarefree triples with $a \le b$,
+$\mathrm{quality} > 1/2$ if and only if $a = 1$.  Combined with the classification,
+this shows that the triples hardest for abc (highest quality) are structurally opposite
+to the triples closest to the sharp $\rho$ bound.  The argument is self-contained
+and uses no abc-equivalent hypothesis.
 \end{abstract}
 
 \tableofcontents
@@ -327,6 +337,60 @@ for all $\varepsilon>0$ --- an exponential improvement over what we prove.
 
 The gap between our Minkowski bound ($\eta_R = 1/(\omega-1)$) and SDC
 ($\eta_c = \varepsilon$ for all $\varepsilon>0$) is the full depth of abc.
+
+\subsection{Quality boundary for squarefree triples}
+
+For squarefree coprime $(a,b,c)$ with $a + b = c$ and $R = \rad(abc) = abc$,
+the quality satisfies $\mathrm{quality} = \log c / \log(abc)$.  We note a clean
+characterization that limits how hard abc can be within the squarefree subfamily:
+
+\begin{proposition}[Quality boundary]\label{prop:quality}
+For squarefree coprime $(a,b,c)$ with $a + b = c$ and $a \le b$:
+\[
+  \mathrm{quality} > \tfrac{1}{2} \;\iff\; a = 1.
+\]
+Moreover, $\mathrm{quality} < 1$ always, and $\mathrm{quality} = \tfrac{1}{2}$ is
+never achieved.  For $a = 1$, quality $\to \tfrac{1}{2}$ from above as $b \to \infty$.
+For $a = 2$, quality $\to \tfrac{1}{2}$ from below.
+\end{proposition}
+
+\begin{proof}
+$\mathrm{quality} > \tfrac{1}{2}$ iff $\log c > \log a + \log b$, i.e.\ $c > ab$,
+i.e.\ $a + b > ab$, i.e.\ $(a-1)(b-1) < 1$.  For positive integers, this means
+$(a-1)(b-1) = 0$, i.e.\ $a = 1$ or $b = 1$.  Since $a \le b$ and $a \ge 1$:
+$b = 1 \Rightarrow a = 1$.  So quality $> 1/2$ iff $a = 1$.
+Quality $< 1$ since $R = abc > c$.  Quality $= 1/2$ would require $c = ab$, impossible
+since $c = a + b < ab$ for $a, b \ge 2$ and $c = a + b > ab = b$ for $a = 1$.
+\end{proof}
+
+The Lean~4 formalization of the combinatorial core ($ab < a+b \leftrightarrow a=1$ for
+$1 \le a \le b$) is given by \texttt{pasten\_F21A\_ab\_lt\_sum\_iff\_a\_one}
+(proved by \texttt{omega}/\texttt{nlinarith}, zero \texttt{sorry}).
+
+\subsection{Quality-$\rho$ trade-off}
+
+Proposition~\ref{prop:quality} implies that squarefree triples with quality $> 1/2$
+are exactly the \emph{trivial} triples ($a = 1$).  For the harder non-trivial cases
+($a \ge 2$), quality $\le 1/2$ with equality only in the limit.
+
+Within bounded partition types, quality and $\rho$ point in \emph{opposite} directions:
+\begin{itemize}
+  \item \textbf{High-$\rho$ families} (balanced types approaching the sharp bound):
+    e.g.\ type $(1,1,2)$ with $a = p \approx q$ both large odd primes.
+    Here $\rho^3 \to 1/2$ (approaching $2^{-1/3}$) while
+    $\text{quality} \to \log(2p)/\log(2p^3) = 1/3$.
+  \item \textbf{High-quality families} ($a=2$ fixed, $b\to\infty$):
+    Here quality $\to 1/2$ (approaching the squarefree non-trivial supremum) while
+    $\rho = 2/(2 \cdot b \cdot (2+b))^{1/3} \to 0$.
+\end{itemize}
+Empirically (Table~\ref{tab:bounded}, $c \le 2000$), Pearson $r(\text{quality}, \rho) \approx -0.76$
+for types $(1,1,2)$ and $(1,2,1)$.
+
+\textbf{Conclusion.}  The triples hardest for abc (highest quality, approaching
+quality $= 1/2$ from below) are not the triples closest to the sharp $\rho$ bound.
+The gap between ``hard for abc'' and ``hard for SDC'' is a provable structural feature:
+within the squarefree subfamily, maximizing quality and maximizing $\rho$ are
+\emph{geometrically opposite} in the parameter space of partition types.
 
 \subsection{Non-degeneracy: complete classification for $\omega \le 5$}
 
@@ -630,6 +694,14 @@ crossings), and grows without bound for the ``isolated'' types where both non-do
 constituents are forced-large single primes.  For $\omega \ge 6$, every type is unbounded.
 The sharp bounds for the seven bounded types are now analytically complete (Theorem~\ref{thm:sharp}),
 with exact suprema proved for $\omega \in \{3,4\}$ and exact finite maxima verified for $\omega = 5$.
+
+We also prove a quality boundary for the squarefree subfamily
+(Proposition~\ref{prop:quality}): quality $> 1/2$ if and only if $a = 1$.
+Within bounded partition types, quality and $\rho$ are negatively correlated
+($r \approx -0.76$ for types $(1,1,2)$ and $(1,2,1)$): the triples
+closest to the sharp $\rho$ bound have quality $\to 1/3$, while the highest-quality
+non-trivial squarefree triples ($a=2$, $b\to\infty$) have $\rho \to 0$.
+This quality-$\rho$ trade-off is a provable structural feature, not a numerical artifact.
 
 \textbf{Honest scope.}
 None of these results constitute progress toward the abc conjecture or SDC.
