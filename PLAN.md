@@ -208,7 +208,152 @@ is entertained.
 
 ---
 
-## Part VIII · External review and paper discipline
+## Part IX · Discovery Route IV — Arithmetic Derivative Additive Inequality
+
+**Status:** `EXPLORATION` (discovery/ tier only; nothing in proof/ yet).  
+**Started:** 2026-08-15. Toys: `discovery/m2_directions/t1`–`t5`.
+
+### Motivation
+
+Three known routes to M2 (the key inequality c ≤ K_ε · rad(abc)^{1+ε}) are all blocked:
+
+| Route | Barrier |
+|---|---|
+| Arakelov / Vojta | Requires Vojta's conjecture — strictly harder than abc |
+| IUT / Mochizuki | OB-06 B_j morphism permanently OPEN (Scholze–Stix) |
+| Baker / S-unit | R^{1/3} barrier from B∼c circularity (OB-07) |
+
+T3 (Mason–Stothers template) identified the **unified obstruction**: the arithmetic
+analogue of the polynomial Wronskian needs a "size-drop" axiom (A2) that no known
+object satisfies. T5 identified the precise form this tool would need to take.
+
+### The key equivalence (proved in T5)
+
+Define **Φ(n) = n / rad(n)** (squarefull excess of n).
+
+For coprime a+b=c, each prime divides exactly one of a, b, c, so:
+
+    Φ(a)·Φ(b)·Φ(c) = abc / rad(abc)
+
+**Proved:** abc(ε) ⟺ Φ(c) ≤ K_ε · R^ε for all coprime triples.
+(Since c = rad(c)·Φ(c) ≤ R·Φ(c), so c ≤ K_ε·R^{1+ε} iff Φ(c) ≤ K_ε·R^ε.)
+
+### The precise missing tool (open conjecture)
+
+**Arithmetic Derivative Additive Inequality (ADAI):**
+
+> For all coprime positive integers a, b, c with a + b = c, there exists an
+> effectively computable constant C > 0 such that:
+>
+>     a' + b' + rad(abc) ≥ C · c'
+>
+> where n' denotes the arithmetic derivative of n.
+
+If ADAI holds with any universal C > 0:
+- c' = Σ_{p|c} v_p(c)·(c/p) ≤ (a' + b' + R)/C
+- Since c'/c = Σ_{p|c} v_p(c)/p ≥ 1/(quality·log R) approximately,
+  this would give c ≤ C' · R · (something in a and b) → implying abc.
+
+**Non-circularity check:** ADAI does not assume abc, Szpiro, or any abc-equivalent
+hypothesis. It is a statement purely about the arithmetic derivative (defined
+unconditionally via the Leibniz rule) and the radical.
+
+**Current empirical status (T5):**
+- c'/R ranges 1–20 for small high-quality triples
+- Ratio c'/R grows with k for c = p^k; ADAI may be FALSE as stated
+- Further toy exploration needed before any claim is made
+
+### Toy-first execution plan
+
+Each step uses a toy to probe before any formalization or outsource.
+
+---
+
+#### Step D1 — Refine ADAI: find the correct universal statement ✅ DONE (2026-08-15)
+
+**Toy:** `t6_adai_refined.py`
+
+**Findings:**
+1. **ORIGINAL ADAI IS FALSIFIED.** For (1, 2^k−1, 2^k) with 2^k−1 a Mersenne prime:
+   ratio (a'+b'+R)/c' = (1 + 1 + 2(2^k−1)) / (k·2^{k−1}) ≈ 4/k → 0.
+   Confirmed numerically through k=31.
+
+2. **LOG-CORRECTED ADAI (candidate):** a' + b' + R·log(R) ≥ C·c'
+   - For Mersenne cases: ratio → 4·log(2) ≈ 2.77 as k→∞ (asymptote confirmed).
+   - BUT for non-Mersenne k=36: ratio = 0.374. For (3,125,128): ratio = 0.397.
+   - Not yet falsified (all ratios > 0) but infimum may approach 0 — unclear.
+
+3. **Implication to abc is unclear.** Even if log-corrected ADAI holds,
+   the derivation c ≤ K_ε·R^{1+ε} requires bounding c'/c from below, which
+   is not automatic. The implication path is NOT established.
+
+**Status:** Original ADAI FALSIFIED. Log-corrected form unresolved. Literature check (D2) required before any further formalization.
+
+---
+
+#### Step D2 — Literature check via outsource ✅ DONE (2026-08-15)
+
+**Outsource:** `outsource/OB-08-arithmetic-derivative-additive-inequality.md`
+
+Prompt written and PROMPT_LINT'd (A1–A8 all pass). Key questions:
+- Is log-corrected ADAI known (Barbeau 1961, Ufnarovski–Åhlander 2003, or later)?
+- Is infimum of (a'+b'+R·ln R)/c' equal to 0?
+- Does log-corrected ADAI imply abc (Q3) or only a weaker bound c ≤ R·(log R)^A (Q4)?
+
+Awaiting external review. No formalization proceeds until Q2 (infimum) is resolved.
+
+---
+
+#### Step D3 — Conditional proof attempt: ADAI → abc
+
+**Toy:** `t7_adai_implies_abc.py`
+
+If ADAI holds in some form, trace the implication:
+ADAI → bound on Φ(c) → abc.
+Formalize this as a [THM] with ADAI as a hypothesis.
+
+Non-circularity: the implication direction is pure arithmetic and does not use abc.
+
+---
+
+#### Step D4 — Lean 4 formalization of the equivalence
+
+**Target:** Add to `lean/AbcHeightKernel.lean` (or a new file):
+- `theorem phi_equiv_abc`: Φ(c) ≤ K_ε·R^ε ↔ abc(ε) [as a formal conditional]
+- `theorem adai_implies_abc (h : ADAI) : abc_inequality` [conditional on ADAI as axiom]
+
+This is [THM] (proved, conditional on ADAI), so it can be formalized without
+resolving ADAI itself.
+
+---
+
+#### Step D5 — Decision gate
+
+After D1–D3:
+
+| Finding | Action |
+|---|---|
+| ADAI is FALSE (counterexample found) | Close route; record in obstruction ledger |
+| ADAI is TRUE but already known/equivalent to abc | Record as reformulation; no new route |
+| ADAI is OPEN with no counterexample and no literature | Escalate to formal outsource; add OB-08 |
+| ADAI has a weaker provable form giving c ≤ R^A (A > 1) | Record as partial progress; add to M2 scaffold |
+
+---
+
+### Hard constraints on Route IV
+
+These are identical to the project-wide constraints and apply to all D1–D5:
+
+- **B2 (forbidden leaves):** No known abc triples as input to any proof of ADAI.
+  Toys in discovery/ may READ them; proof/ may not.
+- **B3 (universality):** ADAI must hold for ALL coprime triples, not a finite set.
+- **B4 (honesty):** If ADAI is equivalent to abc, it is NOT a simpler reformulation —
+  it is the same conjecture in different notation.
+- **B5 (no PASS self-report):** Status is the checker's output; ADAI is `[OBL]` until proved.
+
+**This route does NOT claim progress on abc.** It is an exploratory direction, fully
+in `discovery/`. Nothing advances to `proof/` until a valid construction is supplied.
+
 
 ### Outsource discipline
 
