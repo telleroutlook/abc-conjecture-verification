@@ -857,6 +857,52 @@ prime factors is in the "a position" (types (2,1,1)) OR when a single prime stan
 against a 3-prime product (types (0,1,3), (0,3,1)), forcing the lattice to accommodate
 large ψ values by divisibility.
 
+#### Step F8 — Universal Divisibility Lemma and coordinate change ✅ COMPLETE (2026-08-15)
+
+Script: `discovery/m2_directions/t19_universal_divisibility.py`
+**7846 lattice vectors verified (divisibility); 896 Wronskian formula verifications; EXIT_CODE=0.**
+
+**Theorem F8 [proved analytically, elementary arithmetic]:**
+
+**(a) Universal Divisibility Lemma:**
+For any squarefree coprime (a,b,c) with a+b=c, and any ψ ∈ F(a,b):
+  q | ψ_q   for every prime q ∈ P = P_a ∪ P_b ∪ P_c.
+
+Proof: Isolate ψ_q: (R/q)·ψ_q = −∑_{p≠q} sign_p·(R/p)·ψ_p.
+For each p≠q: R/p contains q (since q∈P, q≠p). So q | every RHS coefficient.
+Hence q | (R/q)·ψ_q. Since gcd(q, R/q)=1: q | ψ_q. □
+
+**(b) Coordinate Change Theorem:**
+The map φ_q = ψ_q/q ∈ ℤ (well-defined by (a)) is a bijection:
+  F(a,b) ≅ F̃(a,b) = {φ ∈ ℤ^ω : ∑_{q∈P} sign_q · φ_q = 0}
+where sign_q = +1 if q|ab, −1 if q|c.
+
+F̃ is a rank-(ω−1) integer lattice with **all constraint coefficients ±1** — the simplest form.
+Its determinant is √ω (norm of the all-±1 constraint vector).
+
+**(c) Wronskian and Degeneracy in φ-coordinates:**
+W(a,b,ψ) = a·b·(S_b − S_a) where S_X = ∑_{q|X} φ_q.
+Degenerate iff S_b = S_a (a pure integer condition, independent of prime values!).
+
+**(d) Structural insight:**
+The Pasten lattice, after scaling each coordinate by its prime, is the simplest hyperplane lattice.
+The non-degeneracy geometry is PURELY COMBINATORIAL: which primes can be "crossed" (from
+b-side to a-side with opposite φ-signs) with small max-prime cost.
+
+**Minimum non-degen norm formula (unified):**
+‖ψ_nd‖_∞ = min{max_q q·|φ_q| : φ∈F̃, S_b≠S_a}.
+For most types, the minimum is achieved by φ with exactly two nonzero entries ±1,
+one from P_b-side, one from P_a-side: norm = max(p_b, p_a).
+
+**Degeneracy classification via S_b = S_a (φ-coordinates):**
+| Type | S_a constraint | Degenerate condition |
+|---|---|---|
+| (0,2,2) | S_a=0 | S_b=0, i.e., φ_{q}=-φ_{q'} for q,q'∈P_b |
+| (1,1,2) | S_a=φ_p | S_b=φ_q=S_a: forces φ_p=φ_q (never with φ∈{±1}) |
+| (1,2,1) | S_a=φ_p | S_b=φ_q+φ_r: degen iff φ_p=φ_q+φ_r |
+| (2,1,1) | S_a=φ_p+φ_q | S_b=φ_r=S_a: always satisfiable → all degenerate |
+| (0,1,3) | S_a=0 | S_b=φ_r: degen iff φ_r=0, but non-degen forces |ψ_r|≥r |
+
 ### Hard constraints (same as Part X)
 
 - **B2:** No known abc triples as construction input.
