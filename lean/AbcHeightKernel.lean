@@ -699,3 +699,30 @@ theorem pasten_F23_omega5_rho4_lt_half_real (p1 p2 p3 p4 p5 : ℕ)
     have : (2 * p2 ^ 3 : ℝ) < ((p1 * p3 * p4 * p5 : ℕ) : ℝ) := by exact_mod_cast key
     push_cast at this ⊢; linarith
   linarith [lhs_le]
+
+/-!
+## F23.b: ρ < 1 for type (0,2,3) — analytic proof using F10 nd
+
+For type (0,2,3): a=1, b=p*q (p<q odd primes), c=2*s*t (3 prime factors).
+F10 nd = max(min(Pb), min(Pc)) = max(p, 2) = p.
+ρ⁴ = p⁴/(p*q*2*s*t) = p³/(q*(p*q+1)).
+
+KEY: p³ < q*(p*q+1) for p ≥ 1, p < q.
+PROOF: q*(p*q+1) ≥ (p+1)*(p*(p+1)+1) = (p+1)*(p²+p+1) > p³.
+-/
+
+/-- [THM] F23.b.key: p³ < q*(p*q+1) for 1 ≤ p < q.
+    This proves ρ⁴(F10) < 1 for type (0,2,3) squarefree triples. -/
+theorem pasten_F23b_023_rho4_lt_one_key (p q : ℕ) (hp : 1 ≤ p) (hpq : p + 1 ≤ q) :
+    p ^ 3 < q * (p * q + 1) := by
+  nlinarith [sq_nonneg p, sq_nonneg q, sq_nonneg (q - p)]
+
+/-- [THM] F23.b: For type (0,2,3) with F10 nd = p (smaller of b's primes):
+    ρ⁴ = p³/(q*(p*q+1)) < 1 in ℝ. -/
+theorem pasten_F23b_023_rho4_lt_one_real (p q : ℕ) (hp : 1 ≤ p) (hpq : p + 1 ≤ q) :
+    (p : ℝ) ^ 3 / ((q : ℝ) * ((p : ℝ) * q + 1)) < 1 := by
+  have hq : (0 : ℝ) < (q : ℝ) := by exact_mod_cast (show 0 < q by omega)
+  have hpq_pos : (0 : ℝ) < (p : ℝ) * q + 1 := by positivity
+  rw [div_lt_one (mul_pos hq hpq_pos)]
+  have key := pasten_F23b_023_rho4_lt_one_key p q hp hpq
+  exact_mod_cast key
