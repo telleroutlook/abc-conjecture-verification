@@ -579,3 +579,28 @@ theorem pasten_F14_112_ceven_ratio_cube_lt_half (p q : ℕ) (hp : 1 ≤ p) (hpq 
   push_cast
   nlinarith [sq_nonneg (p : ℝ)]
 
+/-!
+## F21A: Quality boundary theorem for squarefree coprime triples
+
+For squarefree coprime (a,b,c) with a+b=c, a ≤ b:
+  quality = log(c)/log(R) > 1/2  iff  a = 1.
+
+The purely combinatorial core: a*b < a+b ↔ a = 1 (for 1 ≤ a ≤ b, with gcd(a,b)=1
+  when (a,b) = (2,2) is ruled out).
+This is because: a*b < a+b ↔ (a-1)*(b-1) < 1 ↔ a=1 or b=1, and a ≤ b implies b=1→a=1.
+-/
+
+/-- [THM] F21A.key: For 1 ≤ a ≤ b, a*b < a+b iff a = 1. -/
+theorem pasten_F21A_ab_lt_sum_iff_a_one (a b : ℕ) (ha : 1 ≤ a) (hab : a ≤ b) :
+    a * b < a + b ↔ a = 1 := by
+  constructor
+  · intro h
+    by_contra ha1
+    have ha2 : 2 ≤ a := by omega
+    have hb2 : 2 ≤ b := by omega
+    nlinarith
+  · intro h
+    subst h
+    simp
+
+
