@@ -832,6 +832,18 @@ The general bound $\rho^4 < 1/6$ for all type $(2,2,1)$ triples (F29) is formali
 
 All proofs are zero \texttt{sorry}.
 
+Additional lemmas added in the E10/E11/E$_n$/F31 extension:
+\begin{itemize}
+  \item \texttt{pasten\_E10\_lb\_key}: if $\psi_q = \psi_r = 0$ and the $\omega=3$
+    lattice constraint holds, then $W = 0$ (zero \texttt{sorry}).
+  \item \texttt{pasten\_E11\_lb\_key}: same for $\omega=4$ type $(1,1,2)$
+    (zero \texttt{sorry}).
+  \item \texttt{pasten\_F31a}: $(a+2)^a < (2a)^{a+4}$ for all $a \ge 1$;
+    algebraic core of the Quality-$\rho$ Joint Bound (zero \texttt{sorry}).
+  \item \texttt{pasten\_quality\_lt\_half\_core}: $a+b < ab$ for $a \ge 2$, $b \ge 3$;
+    integer core of quality $< 1/2$ (zero \texttt{sorry}).
+\end{itemize}
+
 \section{Conclusion}
 
 We have proved that for squarefree coprime triples $(a,b,c)$ with $a+b=c$ and
@@ -851,7 +863,7 @@ crossing formula (Theorem F10): the minimum non-degenerate norm is the second sm
 of $\{\min P_a, \min P_b, \min P_c\}$, achieved by any cross-group prime pair;
 (d) the universal lower bound (Theorem E$_n$): every non-degenerate $\psi$ satisfies
 $\|\psi\|_\infty \ge \mathrm{nd}$, proved by a clean F8+constraint+Wronskian argument
-and Lean-formalized for $\omega=3,4$ (E10/E11), numerically verified for all types $\omega\le 6$;
+and Lean-formalized for $\omega=3,4$ (E10/E11), numerically verified for all types $\omega\le 7$;
 (e) a complete table of sharp non-degenerate minimum norms for all partition types
 $\omega \in \{3,4,5\}$ (Table in Theorem~\ref{thm:sharp}); (f) the unifying
 pattern $\sup_{\text{balanced}}(\omega) = 2^{-1/(\omega-1)}$ for \emph{all} $\omega \ge 3$
@@ -860,7 +872,10 @@ pattern $\sup_{\text{balanced}}(\omega) = 2^{-1/(\omega-1)}$ for \emph{all} $\om
 Lean-formalized), with $\sup = 6^{-1/4}$ approached by the $a=6$ near-twin-prime subfamily;
 and (h) the corrected bound $\rho^4 < 1/2$ for \emph{all} type $(2,1,2)$ triples (F30,
 Lean-formalized, correcting F25), with $\sup = 2^{-1/4}$ equal to the $(1,2,2)$ value by
-$a \leftrightarrow b$ symmetry.
+$a \leftrightarrow b$ symmetry; and (i) the Quality-$\rho$ Joint Bound (F31,
+Theorem~\ref{thm:f31}): for every non-trivial squarefree triple of any bounded-$\rho$
+type, $\operatorname{quality} + \rho^{\omega-1} < 1$, proved by combining quality $< 1/2$
+(Proposition~\ref{prop:quality}) with $\rho^{\omega-1} < 1/2$ (Theorems F12--F30).
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime

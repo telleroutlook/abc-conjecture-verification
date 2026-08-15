@@ -689,7 +689,8 @@ Together with F10 (upper bound, existence): min non-degenerate norm = nd exactly
 
 **Paper:** Section "E10/E11/E_n: explicit minimum vectors and universal lower bound" in route-v-pasten.tex (Theorems thm:e10, thm:e11, thm:en). PDF 327KB, zero errors.
 
-Numerical confirmation: all ω=4 (T47), ω=5 (T48), ω=6 (T49) types: min_nondeg_norm = F10's nd. ✓
+Numerical confirmation: all ω=4 (T47), ω=5 (T48), ω=6 (T49), ω=7 (T52) types: min_nondeg_norm = F10's nd. ✓
+(ω=7: 9/15 types have accessible triples; all 9 confirm; 6 "no triples found" = search-range limit, not failure.)
 
 **Goal:** T11: numerical check whether the minimum-norm lattice vector in F(a,b)
 is also non-degenerate (Wronskian ≠ 0) for the squarefree triples tested.
