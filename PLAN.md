@@ -1104,44 +1104,40 @@ are genuinely different regimes within the squarefree subfamily.
 
 ---
 
-#### Step F22 — Type (0,2,3) discovery; ω=5 ρ<1 Lean bound ✅ COMPLETE (2026-08-15)
+#### Step F22 — Type (0,2,3) discovery; ω=5 correct ρ classification (2026-08-15) ✅ COMPLETE
 
-**Discovery scripts:** `discovery/m2_directions/t33_omega5_bounded.py` (all ω=5 types),
-inline probe for type (0,2,3) c≤10000.
+**Discovery scripts:** `t33_omega5_bounded.py`, `t34_type023_extremal.py`, `t35_omega5_correct_rho.py`.
 
-**New finding (F22): Type (0,2,3) — missed in F15 analysis**
+**CORRECTION: T33/T34 used wrong ρ formula.**
+F10 nd = second smallest of **{min(Pa), min(Pb), min(Pc)}** (group minimums, not all primes).
+For a=1 (Pa=∅): nd = max(min(Pb), min(Pc)).
+T33/T34 mistakenly used nd = second smallest of ALL primes — this underestimates ρ for
+multi-prime groups.
 
-Type (0,2,3): a=1, b=p₁p₂ (two primes), c=r₁r₂r₃ (three primes), a+b=c.
-Primes: {p₁,p₂,r₁,r₂,r₃} (ω=5); nd = second smallest; R = p₁p₂r₁r₂r₃.
+**Correct ω=5 classification (T35, c≤3000):**
 
-Global maximum: ρ = 0.629842 at (1, 1333, 1334) = (1, 31·43, 2·23·29).
-  Primes: {2,23,29,31,43}, nd=23, R=1778222.
-  Stable: max does NOT increase from c≤5000 to c≤10000. Finite maximum confirmed.
-
-This is the HIGHEST ρ among ALL ω=5 types (surpassing (2,1,2) max 0.6076).
-
-**Complete ω=5 bounded type table (revised):**
-
-| Type (s_a,s_b,s_c) | global max ρ | maximizer (a,b,c) | verified c ≤ |
+| Type (s_a,s_b,s_c) | behavior | max ρ (c≤3000) | maximizer |
 |---|---|---|---|
-| (0,1,4) | 0.2068 | (1,210,211) | 10000 |
-| (0,2,3) | **0.6298** | (1,1333,1334) | 10000 |
-| (1,1,3) | 0.3599 | (7,23,30) | 2000 |
-| (1,2,2) | 0.4999 | (13,22,35) | 2000 |
-| (2,1,2) | 0.6076 | (6,1511,1517) | 5000 |
-| (2,2,1) | 0.6064 | (6,1517,1523) | 5000 |
+| (0,1,4) | **UNBOUNDED** | 54.37 | (1,2957,2958) |
+| (0,4,1) | **UNBOUNDED** | 54.11 | (1,2926,2927) |
+| (3,1,1) | **UNBOUNDED** | 23.22 | (30,2969,2999) |
+| (1,3,1) | **UNBOUNDED** | 5.21 | (1493,1506,2999) |
+| (1,1,3) | **UNBOUNDED** | 5.19 | (1471,1483,2954) |
+| (0,2,3) | bounded, **sup=1** | 0.956 | (1,2021,2022) |
+| (0,3,2) | bounded, **sup=1** | 0.947 | (1,322,323) |
+| (2,2,1) | bounded, finite max | 0.611 | (6,2021,2027) |
+| (2,1,2) | bounded, finite max | 0.608 | (6,1511,1517) |
+| (1,2,2) | bounded, finite max | 0.500 | (13,22,35) |
 
-Note: (s_b,s_c) ↔ (s_c,s_b) symmetric by abc symmetry. Type (0,3,2), (1,3,1), (3,1,1) etc.
-are also bounded; (0,2,3) listed above represents the highest-ρ family.
+**Analytic proof that (0,2,3) has ρ < 1 always (sup=1, never achieved):**
+For a=1, b=p*q (p<q odd primes), c=2*s*t: nd=p, R=2*p*q*s*t.
+ρ^4 = p^3/(q*(p*q+1)) < p^3/(p*q^2) = (p/q)^2 < 1.
+As p/q → 1 (near-equal primes), ρ^4 → 1 from below. Hence sup=1, never achieved.
 
-**Lean F22 (zero sorry, build PASSED):**
-- `pasten_F22_key`: n³ < 2(n+1)(n+2)(n+3) for n≥1 (nlinarith)
-- `pasten_F22_omega5_rho4_lt_R`: p₂⁴ < p₁p₂p₃p₄p₅ for strictly ascending ≥2 (nlinarith)
-- `pasten_F22_omega5_rho_lt_one_real`: ρ⁴ < 1 in ℝ (exact_mod_cast)
-
-**Analytic sketch (why max is finite):** For fixed b=p₁p₂, as b→∞: c=b+1, R≈p₁p₂r₁r₂r₃
-grows faster than nd⁴, so ρ→0. The finite maximum is at the specific b where
-the balance between nd size and R growth is optimal — proven by monotonicity for large b.
+**Lean F22/F23 theorems:** These prove ρ_alt = p₂/R^{1/4} < 2^{-1/4} where p₂ is the
+second-smallest prime overall — NOT the F10 nd for multi-prime groups. They are valid
+geometric bounds on a different quantity (the second prime's contribution), not the
+F-series ρ. Lean build PASSED, zero sorry.
 
 ---
 
@@ -1207,10 +1203,11 @@ Analytical proof (example for (2,1,2)): a=6, r₁=37 fixed.
 | ω=4 (1,2,1) | sup (unachieved) | 2^{-1/3}≈0.794 | not achieved, → via b≈2a |
 | ω=4 (1,1,2) | sup (unachieved) | 2^{-1/3}≈0.794 | not achieved, → via a≈b |
 | ω=4 (0,2,2) | max (achieved) | 3·210^{-1/3}≈0.505 | unique (1,14,15) |
+| ω=5 (0,2,3) | bounded, sup=1 | → 1 (never achieved) | — | NEW F22 |
+| ω=5 (0,3,2) | bounded, sup=1 | → 1 (never achieved) | — | NEW F22 |
 | ω=5 (1,2,2) | max (achieved) | 0.4999 | (13, 22, 35) |
 | ω=5 (2,1,2) | max (achieved) | 0.6076 | (6, 1511, 1517) |
-| ω=5 (2,2,1) | max (achieved) | 0.6064 | (6, 1517, 1523) |
-| ω=5 (0,2,3) | max (achieved) | 0.6298 | (1, 1333, 1334) | NEW F22 |
+| ω=5 (2,2,1) | max (achieved) | **0.6107** | **(6, 2021, 2027)** | updated F22 |
 
 F-series structurally complete for all universally-bounded types.
 

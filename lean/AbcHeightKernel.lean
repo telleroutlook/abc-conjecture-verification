@@ -604,21 +604,22 @@ theorem pasten_F21A_ab_lt_sum_iff_a_one (a b : ℕ) (ha : 1 ≤ a) (hab : a ≤ 
     simp
 
 /-!
-## F22: ρ < 1 bound for ω = 5 (non-trivial non-degeneracy threshold)
+## F22: ρ_alt < 1 for ω = 5 — bound on second-smallest-prime ratio
+
+NOTE: F22/F23 prove bounds on ρ_alt = p₂/R^{1/(ω-1)} where p₂ is the second
+smallest prime among all five. This is DISTINCT from the F10 nd norm, which uses
+second smallest of {min(Pa), min(Pb), min(Pc)} (group minimums). For single-prime
+groups (types (1,1,1), (1,2,1) etc.) they coincide; for multi-prime groups they differ.
 
 For any squarefree coprime triple with ω(abc) = 5, let
   p₁ < p₂ < p₃ < p₄ < p₅  be the five distinct prime factors,
-  nd = p₂   (second smallest = the F10 nd norm for ω=5),
   R = p₁·p₂·p₃·p₄·p₅.
 
-THEOREM F22: ρ = nd/R^{1/4} < 1, i.e., p₂⁴ < R.
+THEOREM F22: p₂⁴ < R (i.e., ρ_alt = p₂/R^{1/4} < 1).
 
-PROOF: p₁ ≥ 2, p₃ ≥ p₂+1, p₄ ≥ p₂+2, p₅ ≥ p₂+3 (distinct integers).
-  p₁·p₃·p₄·p₅ ≥ 2·(p₂+1)·(p₂+2)·(p₂+3) = 2p₂³ + 12p₂² + 22p₂ + 12 > p₂³.
+PROOF: p₁ ≥ 2, p₃ ≥ p₂+1, p₄ ≥ p₂+2, p₅ ≥ p₂+3.
+  p₁·p₃·p₄·p₅ ≥ 2·(p₂+1)·(p₂+2)·(p₂+3) > p₂³ (since (p₂+1)(p₂+2)(p₂+3) > p₂³).
   Hence R = p₂ · p₁·p₃·p₄·p₅ > p₂⁴.
-
-This establishes ρ^4 < 1, ρ < 1, for ALL ω=5 triples.
-Compare: ω≥6 is unbounded (F11). This is the boundary of the bounded regime.
 -/
 
 /-- [THM] F22.key: For n ≥ 1, n³ < 2*(n+1)*(n+2)*(n+3). -/
@@ -648,3 +649,53 @@ theorem pasten_F22_omega5_rho_lt_one_real (p1 p2 p3 p4 p5 : ℕ)
   rw [div_lt_one hR]
   have key := pasten_F22_omega5_rho4_lt_R p1 p2 p3 p4 p5 h1 h12 h23 h34 h45
   exact_mod_cast key
+
+/-!
+## F23: ρ_alt⁴ < 1/2 for ALL ω=5 triples (sharp improvement over F22)
+
+Same ρ_alt = p₂/R^{1/4} (second smallest prime, not F10 nd). See F22 header.
+
+For any 5 strictly-ascending integers p₁ < p₂ < p₃ < p₄ < p₅ with p₁ ≥ 2:
+  ρ_alt⁴ = p₂⁴/(p₁·p₂·p₃·p₄·p₅) < 1/2.
+
+PROOF: p₁·p₃·p₄·p₅ ≥ 2·(p₂+1)·(p₂+2)·(p₂+3) > 2·p₂³.
+  Hence ρ_alt⁴ = p₂³/(p₁·p₃·p₄·p₅) < 1/2.
+
+Gives ρ_alt < 2^{-1/4} ≈ 0.841 for ALL ω=5 triples (a geometric lattice bound).
+-/
+
+/-- [THM] F23.key: For n ≥ 0, n³ < (n+1)·(n+2)·(n+3). -/
+theorem pasten_F23_cube_lt_consec3 (n : ℕ) :
+    n ^ 3 < (n + 1) * (n + 2) * (n + 3) := by
+  nlinarith [sq_nonneg n]
+
+/-- [THM] F23: For strictly-ascending p₁ < p₂ < p₃ < p₄ < p₅ with p₁ ≥ 2:
+    2·p₂³ < p₁·p₃·p₄·p₅, which is equivalent to ρ⁴ < 1/2. -/
+theorem pasten_F23_omega5_rho4_lt_half_key (p1 p2 p3 p4 p5 : ℕ)
+    (h1 : 2 ≤ p1) (h12 : p1 + 1 ≤ p2) (h23 : p2 + 1 ≤ p3)
+    (h34 : p3 + 1 ≤ p4) (h45 : p4 + 1 ≤ p5) :
+    2 * p2 ^ 3 < p1 * p3 * p4 * p5 := by
+  have h4 : p2 + 2 ≤ p4 := by omega
+  have h5 : p2 + 3 ≤ p5 := by omega
+  have hcube := pasten_F23_cube_lt_consec3 p2
+  nlinarith [sq_nonneg p2,
+             Nat.mul_le_mul h1 h23,
+             Nat.mul_le_mul h4 h5,
+             Nat.mul_le_mul (Nat.mul_le_mul h1 h23) (Nat.mul_le_mul h4 h5)]
+
+/-- [THM] F23: For all ω=5 squarefree triples, ρ⁴ = p₂⁴/(p₁p₂p₃p₄p₅) < 1/2 in ℝ. -/
+theorem pasten_F23_omega5_rho4_lt_half_real (p1 p2 p3 p4 p5 : ℕ)
+    (h1 : 2 ≤ p1) (h12 : p1 + 1 ≤ p2) (h23 : p2 + 1 ≤ p3)
+    (h34 : p3 + 1 ≤ p4) (h45 : p4 + 1 ≤ p5) :
+    (p2 : ℝ) ^ 4 / ((p1 : ℝ) * p2 * p3 * p4 * p5) < 1 / 2 := by
+  have hp2 : (0 : ℝ) < (p2 : ℝ) := by exact_mod_cast (show 0 < p2 by omega)
+  have hR : (0 : ℝ) < (p1 : ℝ) * p2 * p3 * p4 * p5 := by positivity
+  rw [div_lt_div_iff hR (by norm_num : (2 : ℝ) > 0)]
+  have key := pasten_F23_omega5_rho4_lt_half_key p1 p2 p3 p4 p5 h1 h12 h23 h34 h45
+  have eq : (p2 : ℝ) ^ 4 * 2 = (p2 : ℝ) * (2 * (p2 : ℝ) ^ 3) := by ring
+  rw [eq]
+  have lhs_le : (p2 : ℝ) * (2 * (p2 : ℝ) ^ 3) < (p2 : ℝ) * ((p1 : ℝ) * p3 * p4 * p5) := by
+    apply mul_lt_mul_of_pos_left _ hp2
+    have : (2 * p2 ^ 3 : ℝ) < ((p1 * p3 * p4 * p5 : ℕ) : ℝ) := by exact_mod_cast key
+    push_cast at this ⊢; linarith
+  linarith [lhs_le]
