@@ -4,7 +4,7 @@
 
 **Non-circularity:** This problem does **not** assume the abc conjecture, Szpiro's conjecture (or any of its variants), Mochizuki's IUT Corollary 3.12, any fitted constant K_ε derived from known triples, or any other assertion directly equivalent to abc. The goal is either a proof that avoids all such inputs, or a precise identification of the obstruction showing why the approach cannot be completed without an abc-equivalent hypothesis.
 
-**Review status (2026-08-15):** PARTIAL — Steps 1–3 independently verified and strengthened below; Claim OB-01 and Steps 4–5 open. See `reviews/OB-01-review-2026-08-15.md` for the full referee report.
+**Review status (2026-08-15):** PARTIAL — Steps 1–3 independently verified and strengthened; Claim OB-01 remains open (equivalent to effective fixed-power weak abc). Two load-bearing statements require major correction: the (1/6+ε) height target is false (§ below), and ordinary/modified Szpiro must be distinguished. See `reviews/OB-01-review-2026-08-15.md` for the first referee report and `~/Downloads/OB-01-independent-referee-report-2026-08-15.md` for the independent report.
 
 ---
 
@@ -43,13 +43,13 @@ The "p² ‖ abc" shorthand in earlier drafts was imprecise; the valuation can b
 **Conductor of E_{a,b,c}.** The arithmetic conductor is N_E = ∏_p p^{f_p}. By Silverman Lemma VIII.11.3(b):
 - For every odd prime p | abc: reduction is multiplicative, so f_p = 1.
 - For odd primes p ∤ abc: good reduction, f_p = 0.
-- At p = 2: standard local analysis gives 0 ≤ f₂ ≤ 8.
+- At p = 2: Barrios–Roy, Theorem 3.7 / Table 7 (taking d=1, since E has a full rational 2-torsion point) gives 0 ≤ f₂ ≤ 5.
 
 Therefore N_E = 2^{f₂} ∏_{p | abc, p odd} p, and since exactly one of a,b,c is even,
 
     R = 2 · ∏_{p | abc, p odd} p,     so
 
-    N_E = 2^{f₂−1} R,    and    log N_E ≤ log R + 7 log 2.
+    N_E = 2^{f₂−1} R,    and    log N_E ≤ log R + 4 log 2.
 
 Note: the bad-reduction set at odd primes is exactly {odd p | abc}; at p = 2 the situation requires separate analysis (e.g. (16,1,17) has good reduction at 2 despite 2 | abc).
 
@@ -76,7 +76,7 @@ For the upper direction: Murty–Pasten Theorem 7.1 gives unconditionally
 
 which for Frey curves yields h_F = O(R log R), far from the O(log R) target of Claim OB-01.
 
-**Quality of a coprime triple.** The quality is q(a,b,c) = log c / log R. Standard abc asserts: for every ε > 0 there are only finitely many coprime triples with q > 1 + ε. Fixed-power weak abc (open; Pasten Conjectures 1.1–1.2, J. Number Theory 254 (2024)) asserts: there exists an effective fixed K with q(a,b,c) ≤ K for all coprime triples.
+**Quality of a coprime triple.** The quality is q(a,b,c) = log c / log R. Standard abc asserts: for every ε > 0 there are only finitely many coprime triples with q > 1 + ε. Fixed-power weak abc (open; Pasten Conjectures 1.1–1.2, J. Number Theory 254 (2024)) asserts: there exists a fixed K (existence only; effectivity is a further strengthening not required by Pasten's statement) with q(a,b,c) ≤ K for all coprime triples.
 
 ---
 
@@ -86,13 +86,13 @@ which for Frey curves yields h_F = O(R log R), far from the O(log R) target of C
 
     h_F(E_{a,b,c}) ≤ C_ε · (1 + ε) · log R.
 
-**Logical status of Claim OB-01 (corrected).** Since C_ε is unconstrained, the factor (1 + ε) is absorbed: Claim OB-01 is equivalent to the existence of an effective fixed K with h_F(E_{a,b,c}) ≤ K log R for all triples. Via the lower bound h_F > (1/6) log c + 1.898… and the upper direction in §5.2 of the referee report, this is in turn equivalent to **effective fixed-power weak abc** (bounded quality q ≤ K₀ for an effective K₀). This is an open conjecture (Pasten 2024, op. cit.) but is **strictly weaker** than standard abc.
+**Logical status of Claim OB-01 (corrected).** Since C_ε is unconstrained, the factor (1 + ε) is absorbed: Claim OB-01 is equivalent to the existence of an effective fixed K with h_F(E_{a,b,c}) ≤ K log R for all triples. Via the lower bound h_F > (1/6) log c + 1.898… and the reverse direction (§5.2 of the first referee report; §6 of the independent report), this is equivalent to **effective fixed-power weak abc** (bounded quality q ≤ K₀ for an effective K₀). Note: Pasten Conjectures 1.1–1.2 only assert existence of K, not effectivity; Claim OB-01 requires the effective strengthening. This is an open conjecture but is **strictly weaker** than standard abc.
 
-To target standard abc strength, the claim would need a fixed leading coefficient, e.g.:
+**The (1/6+ε) log R target is false.** One might think that to target standard abc strength one needs h_F(E_{a,b,c}) ≤ (1/6 + ε) log R + C_ε. This is **unconditionally false**. The family
 
-    h_F(E_{a,b,c}) ≤ (1/6 + ε) log R + C_ε.
+    (a_n, b_n, c_n) = (1, 2^n − 1, 2^n)
 
-That stronger form is what, combined with the lower bound, would give c ≤ K_ε R^{1+ε}. The formulation with C_ε · (1+ε) does NOT imply it. (See referee report §1 for the full ε-absorption argument.)
+is pairwise coprime with a_n + b_n = c_n, and R_n = 2 rad(2^n − 1) < 2^{n+1}. The Murty–Pasten lower bound gives h_F(E_n) > (2n−1)/6 · log 2 + 1.898…, whose slope in n is (1/3) log 2. But (1/6 + ε)(n+1) log 2 has strictly smaller slope for any ε < 1/6, so the upper bound is eventually violated. The relevant conjecture for standard abc strength uses leading coefficient 1/2 + ε (Javanpeykar, Conjecture (h)), not 1/6 + ε. (See independent referee report §8.)
 
 ---
 
@@ -130,9 +130,9 @@ This holds in the Murty–Pasten normalization. In any other standard normalizat
 
 **Established (unconditionally).** For Frey curves E_{a,b,c} with a,b,c pairwise coprime:
 
-    N_E = 2^{f₂−1} R,    0 ≤ f₂ ≤ 8,    so    log N_E ≤ log R + 7 log 2.
+    N_E = 2^{f₂−1} R,    0 ≤ f₂ ≤ 5,    so    log N_E ≤ log R + 4 log 2.
 
-This is tighter by one main-term factor compared to the earlier draft (log R vs 2 log R). Source: Silverman Proposition VIII.11.5 and the conductor table in Barrios–Roy, Pacific J. Math. 318 (2022), Lemma 2.2.
+Source: odd-prime conductor exponents from Silverman, Lemma VIII.11.3(b); the bound f₂ ≤ 5 from Barrios–Roy, Theorem 3.7 / Table 7 (taking d=1, applicable because E has a full rational 2-torsion point).
 
 **Remaining for Step 3:** None — this step is closed. The earlier claim "bad reduction exactly at p | abc" holds for odd p; at p = 2 the bad-reduction membership must be determined separately (see e.g. (16,1,17) which is good at 2 despite 2 | abc).
 
@@ -146,14 +146,16 @@ A fixed-constant Szpiro bound log|Δ_min(E)| ≤ C_Szp log N_E + O(1) for Frey c
 
     2 log c − O(1)  ≤  C_Szp log R + O(1),    i.e.,    log c ≤ (C_Szp/2) log R + O(1).
 
-This is fixed-power weak abc. Via Steps 1–3 and h_F ≤ (1/2) log c + O(1) (from the j-height bound), it would also give Claim OB-01. But:
+This is fixed-power weak abc. Via Steps 1–3 and the reverse direction proved below, it would also give Claim OB-01. But:
 
 - This fixed-constant Szpiro bound is open (Pasten Conjectures 1.1–1.2).
-- The standard abc-equivalent Szpiro form uses exponent 6 + ε (not a fixed constant).
-- Via the Frey-curve construction, the naive 6+ε Szpiro bound gives only c ≤ K_ε R^{3/2}, not c ≤ K_ε R^{1+ε}; the correct indicator-variable conversion requires Proposition VIII.11.5 (Silverman) plus a careful exponent accounting.
+- The ordinary discriminant Szpiro conjecture (|Δ_min| ≤ C_ε N_E^{6+ε}) uses exponent 6+ε, not a fixed constant. Via the Frey-curve construction, ordinary Szpiro applied to this family gives only c ≤ K_ε R^{3/2}, not c ≤ K_ε R^{1+ε}, because |Δ_min| ≫ (abc)² ≫ c⁴ on this family.
+- The form equivalent to standard abc is **modified Szpiro**: max{|c₄|³, c₆²} ≤ C_ε N_E^{6+ε}. For this Frey family c₄ = 16(a²+ab+b²) ≥ (3/4)c², so the sixth root of the modified bound directly controls c and yields the 1+ε exponent. (Silverman, Proposition VIII.11.5(a) treats modified Szpiro; the ordinary form does not suffice here.)
 - Best unconditional result: Stewart–Yu (Duke Math. J. 108 (2001)) gives log c ≤ κ R^{1/3} (log R)³, far from fixed-power.
 
 **What to close for Step 4:** Prove, without assuming abc or Szpiro, that log|Δ_min(E_{a,b,c})| ≤ C_fixed · log N_E + O(1) for a universal constant C_fixed, for all Frey curves. This is equivalent to fixed-power weak abc and is an open problem in the current literature.
+
+**Proved (reverse direction — effective bounded quality implies Claim).** If there exists an effective constant K₀ with log c ≤ K₀ log R for all coprime triples, then Claim OB-01 holds. Proof: the j-invariant satisfies j(E_{a,b,c}) = 256(a²+ab+b²)³ / (abc)², so h(j(E)) ≤ 6 log c + 8 log 2. The unstable discriminant ideal γ divides 2^12 (all odd primes are semi-stable; the 2-adic contribution is bounded by min(v₂(Δ_min), 3v₂(c₄,min)) ≤ 12). By Löbrich, Proposition 3.1 (in Murty–Pasten normalization, shifting by log 4 + (3/2)log π = 3.1034…), this gives h_F(E_{a,b,c}) ≤ (1/2) log c + 3.5387. Substituting log c ≤ K₀ log R and using R ≥ 2 to absorb the additive constant, yields h_F ≤ ((K₀/2) + 3.5387/log 2) log R, which is Claim OB-01 with effective constant. (Independent referee report §6 for full detail.)
 
 ---
 
