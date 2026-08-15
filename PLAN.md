@@ -951,6 +951,46 @@ primes can be found in Pa and Pb, avoiding large single-prime constituents).
   UNBOUNDED: (1,1,3), (1,3,1), (3,1,1) [one constituent has 3 primes].
 
 
+#### Step F10 — General ω: optimal crossing formula ✅ COMPLETE (2026-08-15)
+
+**Discovery script:** `discovery/m2_directions/t21_optimal_crossing_classification.py`
+
+**Theorem F10 [proved analytically, verified numerically ω=3,4,5 c≤300]:**
+
+**OPTIMAL CROSSING FORMULA:**
+For any cross-group pair X≠Y ∈ {Pa, Pb, Pc}, the 2-entry φ-vector with φ_p=1 (p∈X)
+and φ_q=±1 (q∈Y, sign chosen to satisfy ∑sign·φ=0) is ALWAYS non-degenerate
+(S_b ≠ S_a). Its ψ-norm is max(p,q).
+
+Therefore: **min nd norm = second smallest of {min(Pa), min(Pb), min(Pc)}**
+(treating min(∅) = ∞ for empty constituents).
+
+This formula holds universally for all ω — the T20 canonical Pa×Pb crossing was
+suboptimal; T21 uses the global minimum over all three cross-group pairs.
+
+**ω=5 corrected classification (T21, EXIT_CODE=0):**
+
+| Type | #triples | max ratio | T20 said | T21 corrects |
+|---|---|---|---|---|
+| (1,2,2) | 461 | 0.4999 | bounded | bounded ✓ |
+| (2,1,2) | 396 | 0.5941 | bounded | bounded ✓ |
+| (2,2,1) | 395 | 0.5817 | bounded | bounded ✓ |
+| (1,1,3) | 230 | 2.7984 | UNBOUNDED | UNBOUNDED ✓ (formula gives 2nd of {a,b,r₁}=a or b when large) |
+| (1,3,1) | 216 | 2.7982 | UNBOUNDED | UNBOUNDED ✓ |
+| (3,1,1) | 123 | 6.7448 | ALL_DEGEN | UNBOUNDED ✓ (nd vectors exist; min nd = min(b,c) grows) |
+| (0,2,3) | 10 | 0.8735 | — | bounded (new type) |
+| (0,3,2) | 13 | 0.8280 | — | bounded (new type) |
+| (0,4,1) | 1 | 14.5431 | — | UNBOUNDED (single c-prime, large) |
+
+**Key correction from T21:** (3,1,1) is NOT all-degenerate — T20 missed non-degen
+vectors. The actual min nd norm = min(b,c) (the smaller single prime), which grows.
+
+**Universal pattern:**
+- UNBOUNDED iff ∃ a constituent X s.t. n_X ≥ 2 AND both other constituents are
+  single-prime (n_Y = n_Z = 1), forcing min_Y and min_Z to grow in tandem.
+- Equivalently: UNBOUNDED for types {(k≥2,1,1), (0,1,k≥2), (0,k≥2,1)} [up to permutation of ab-side].
+- BOUNDED otherwise (when at least two groups can simultaneously hold small primes).
+
 ### Hard constraints (same as Part X)
 
 - **B2:** No known abc triples as construction input.
