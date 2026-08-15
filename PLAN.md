@@ -94,7 +94,7 @@ Realized as a **proofctl domain adapter** (`~/github/proofctl`, Go), not a fork.
 | Phase | Goal | Gate to advance |
 |---|---|---|
 | **P0 — scaffold** ✅ | spec placed; CLAUDE/PLAN/README; ledger; domain policy + 6 CORE contracts | JSON valid; ledger statuses atomic |
-| **P1 — checker wiring** | wire domain into proofctl: DAG + import-policy + forbidden-leaf checks; bridge checker running on ledger/contracts | checker emits CORE-0/1 pass; CORE-2/3/4 OBL; CORE-5 blocked; adversarial tests pass |
+| **P1 — checker wiring** ✅ complete | wire domain into proofctl: DAG + import-policy + forbidden-leaf checks; bridge checker running on ledger/contracts | checker emits CORE-0/1 ACCEPTED; CORE-2/3/4 REJECTED (OBL); CORE-5 checker ACCEPTED, release gate BLOCKED; proofctl check --all verified 2026-08-15 |
 | **P2 — implication kernel formalized** | formalize CL-03/04/07 (`[THM]`) in the chosen backend; freeze foundation_hash | backend replays all `[THM]` items; no PLACEHOLDER |
 | **P3 — M1 arithmetic source** | build rad function, Faltings heights, arithmetic geometry under B1/B2; freeze `source_lock_hash` before comparison | CORE-1 GLOBALLY_VERIFIED; import barrier machine-checked |
 | **P4 — M2 key inequality (the `[OBL]` frontier)** | attempt an admissible proof of c ≤ K_ε · rad(abc)^(1+ε) WITHOUT abc-equivalent input; requires independent Cor. 3.12 verification for IUT route | CORE-2, CORE-3 pass — or an explicit obstruction is recorded |
@@ -118,11 +118,13 @@ state. 106/106 tests pass. All PLACEHOLDERs frozen. Discovery guard layer live.
 
 ### Current system state (2026-08-15) — FINAL
 
-- **CORE-0/1**: PASS — definitions, implication kernel, non-anticipation barrier verified
-- **CORE-2/3/4**: [OBL] — construction not supplied (honest obstruction recorded)
+- **CORE-0/1**: ACCEPTED — definitions, implication kernel, non-anticipation barrier verified
+  (proofctl check --all: CORE-0 PASS, CORE-1 PASS; attestations in .proofctl/attestations/)
+- **CORE-2/3/4**: REJECTED [OBL] — construction not supplied (honest obstruction recorded)
 - **CORE-3 sub-obligation**: `core3.iut-corollary-312-independently-verified` OPEN
   (Scholze–Stix dispute recorded as blocking reason; this is the correct and honest state)
-- **CORE-5**: correctly BLOCKED (fires only when CORE-2/3/4 pass)
+- **CORE-5**: checker ACCEPTED (mechanical implication valid); release gate correctly BLOCKED
+  (proofctl release --dry-run: BLOCKED — CORE-2/3/4 rejected, required metadata absent)
 - **CL-12**: [OUT] — abc is **not** proved (never self-declared)
 - **CL-13**: [OUT] — Mochizuki's IUT is **not** verified (never self-declared)
 - **P3 deliverables (2026-08-15)**:
