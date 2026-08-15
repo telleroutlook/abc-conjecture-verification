@@ -510,12 +510,19 @@ consistent with Pasten's explicit exclusion.
 
 **Toy:** `t10_minkowski_bound.py`. Results above. H1 confirmed empirically for ω=3–5.
 
-#### Step E2 — Provable squarefree subfamily outsource (OPEN)
+#### Step E2 — Provable squarefree subfamily outsource ✅ WRITTEN (2026-08-15)
 
-**Goal:** Outsource the det(L) ≤ R/√2 bound for squarefree triples.
-**Outsource file:** `outsource/OB-09-pasten-squarefree-det-bound.md` (to be written).
-**Acceptance criteria:** Prove det(L) ≤ C · R for squarefree (a,b,c), ω ≥ 3.
-Run PROMPT_LINT before sending.
+**Outsource:** `outsource/OB-09-pasten-squarefree-det-bound.md`
+
+Proof skeleton (Steps 1–4) fully worked out in the prompt:
+1. det(L) = R · √(∑_{p|abc} 1/p²) — by direct coefficient evaluation.
+2. gcd(|c_p|) = 1 — no prime divides all R/p values simultaneously.
+3. ∑_{p prime} 1/p² ≤ 11/18 < 1 — elementary integral bound.
+4. Combined: det(L) < 0.79 · R < R. ✓
+
+PROMPT_LINT A1–A10: all pass. Numerical anchor verified (det(L)=19 < R=30 for (2,3,5)).
+
+**Status:** awaiting external review (CONFIRMED / PARTIAL / REFUTED).
 
 #### Step E3 — Lean formalization (conditional)
 
