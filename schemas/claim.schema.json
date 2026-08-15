@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/telleroutlook/proofctl/schemas/claim.schema.json",
+  "title": "Claim",
+  "description": "A single mathematical claim in the proof graph.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "statement", "depends_on", "required_assurance"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier for this claim within the proof graph."
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["theorem", "lemma", "definition", "axiom", "conjecture", "assumption"],
+      "description": "The logical kind of this claim."
+    },
+    "statement": {
+      "$ref": "#/definitions/statement"
+    },
+    "depends_on": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "List of claim IDs this claim depends on."
+    },
+    "required_assurance": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/assurance" },
+      "uniqueItems": true,
+      "description": "Assurance types required for this claim to be accepted."
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+      "description": "Content-addressed digest references to evidence blobs."
+    },
+    "checker_policy": {
+      "type": "string",
+      "description": "The ID or path of the checker policy to apply to this claim."
+    },
+    "batch_group": {
+      "type": "string",
+      "description": "If non-empty, groups claims for batch checker invocation."
+    },
+    "cross_domain_deps": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Claim IDs from other domains whose attestations must be accepted first."
+    },
+    "hypotheses": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "Explicit hypotheses of this theorem: claim IDs that must hold for this claim to be valid. Used to compute the assumption transitive closure."
+    },
+    "cross_domain_pins": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim_id"],
+        "properties": {
+          "claim_id": { "type": "string", "minLength": 1 },
+          "expected_digest": { "type": "string" },
+          "source_repo": { "type": "string" }
+        }
+      },
+      "description": "Structured cross-domain dependencies with optional digest pinning."
+    },
+    "formal_backend": {
+      "type": "string",
+      "enum": ["lean4", "coq", "isabelle", "metamath", "smt", "lrat", "none", ""],
+      "description": "Formal proof system for this claim."
+    },
+    "proof_term_digest": {
+      "type": "string",
+      "description": "Content-addressed digest of the proof term or proof script."
+    }
+  },
+  "definitions": {
+    "statement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "digest"],
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human-readable statement of the claim."
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "description": "Content-addressed SHA256 digest of the statement text."
+        }
+      }
+    },
+    "assurance": {
+      "type": "string",
+      "enum": [
+        "formal-kernel",
+        "deterministic-cap",
+        "exact-replay",
+        "reproducible-computation",
+        "independent-review",
+        "ai-review",
+        "assumption"
+      ]
+    }
+  }
+}

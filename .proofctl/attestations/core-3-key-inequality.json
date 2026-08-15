@@ -1,0 +1,61 @@
+{
+  "claim_id": "core-3-key-inequality",
+  "statement_digest": "sha256:7ad9dcc2fca962d9c877903df5c6a1f7dfe3b4e15f75bd0143ab90fcdef6c452",
+  "dependency_digests": [
+    "sha256:a30835600b6ce2473afbb17281eb951a02a854f9ba62cd37c9ad6b5e242da46d"
+  ],
+  "evidence": null,
+  "checker": {
+    "id": "abccv-bridge-v1",
+    "protocol_version": 2,
+    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "schema_digest": "sha256:6d4331a211a431c1c1b6e996d1eb2cb8f464d79af7192399e5fa1ac02fc6db64",
+    "runtime": {
+      "kind": "native",
+      "cmd": [
+        "python3",
+        "checker/check_certificate.py"
+      ],
+      "dependency_manifest_path": "requirements.txt",
+      "schema_path": "schemas/claim.schema.json"
+    },
+    "network": "none"
+  },
+  "outcome": "rejected",
+  "assurance": "",
+  "resources": {
+    "wall_millis": 25,
+    "cpu_millis": 0,
+    "mem_bytes": 0
+  },
+  "start_freshness": "2026-08-15",
+  "end_freshness": "2026-08-15",
+  "self_digest": "sha256:d123dda3241f45c2057ff91bbaefcb42b67d631945acc92eabebe7a512a5e967",
+  "cache_key": "b99a22107af2ec59388633dc5d2de2d9f8545a9b14148a654cbc1671101db662",
+  "toolchain": {
+    "python": "3.14.6"
+  },
+  "replay_mode": "self_consistency",
+  "obligation_results": [
+    {
+      "id": "core3.height-inequality-stated",
+      "verdict": "fail",
+      "witness_digest": "sha256:0436c98681e1bad24f23430b8bc50d67122d0a42f6240a446e48fbf251570611"
+    },
+    {
+      "id": "core3.height-inequality-proved",
+      "verdict": "fail",
+      "witness_digest": "sha256:0436c98681e1bad24f23430b8bc50d67122d0a42f6240a446e48fbf251570611"
+    },
+    {
+      "id": "core3.iut-corollary-312-independently-verified",
+      "verdict": "fail",
+      "witness_digest": "sha256:4df1d450b1d36d4b6dbf2033f68dde4b0d3b645a3ff0fedffed830ac07c9f644"
+    },
+    {
+      "id": "core3.inequality-not-circular",
+      "verdict": "fail",
+      "witness_digest": "sha256:0436c98681e1bad24f23430b8bc50d67122d0a42f6240a446e48fbf251570611"
+    }
+  ]
+}

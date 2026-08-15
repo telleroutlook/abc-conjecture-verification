@@ -66,3 +66,12 @@ discovery/candidates/results/
 proofctl
 proofverify
 *.o
+
+# LaTeX build artifacts (root-level strays from running pdflatex outside papers/)
+/*.aux
+/*.toc
+/*.out
+/route-v-pasten.pdf
+papers/**/*.aux
+papers/**/*.toc
+papers/**/*.out

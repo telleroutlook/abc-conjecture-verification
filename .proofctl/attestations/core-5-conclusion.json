@@ -1,0 +1,52 @@
+{
+  "claim_id": "core-5-conclusion",
+  "statement_digest": "sha256:fbffa786fee6f7d993e55102e332e68fccb49b51fbb83d42da836d1fafd2b1e2",
+  "dependency_digests": [
+    "sha256:7ad9dcc2fca962d9c877903df5c6a1f7dfe3b4e15f75bd0143ab90fcdef6c452",
+    "sha256:67786e1e489fc79e0883c9145a318e718225b187e0014a703dc5762bd6c11473"
+  ],
+  "evidence": null,
+  "checker": {
+    "id": "abccv-bridge-v1",
+    "protocol_version": 2,
+    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "schema_digest": "sha256:6d4331a211a431c1c1b6e996d1eb2cb8f464d79af7192399e5fa1ac02fc6db64",
+    "runtime": {
+      "kind": "native",
+      "cmd": [
+        "python3",
+        "checker/check_certificate.py"
+      ],
+      "dependency_manifest_path": "requirements.txt",
+      "schema_path": "schemas/claim.schema.json"
+    },
+    "network": "none"
+  },
+  "outcome": "accepted",
+  "assurance": "",
+  "resources": {
+    "wall_millis": 190,
+    "cpu_millis": 0,
+    "mem_bytes": 0
+  },
+  "start_freshness": "2026-08-15",
+  "end_freshness": "2026-08-15",
+  "self_digest": "sha256:2607cfd8c354a1f3a48e72b504e1e3008abc134294632a33823d0a05e3bb8be0",
+  "cache_key": "963d1ebd1de672556fe6ffdb84937c21d2caedb6b98aac6e6c9bdc4a252cd893",
+  "toolchain": {
+    "python": "3.14.6"
+  },
+  "replay_mode": "self_consistency",
+  "obligation_results": [
+    {
+      "id": "core5.derive-theorem2-from-passed-artifacts",
+      "verdict": "pass",
+      "witness_digest": "sha256:19d4d204c6e3a54c3bd12887a1729ff9a5698c11cfe9d1aa568d398a41afd977"
+    },
+    {
+      "id": "core5.no-trusted-producer-pass-flag",
+      "verdict": "pass",
+      "witness_digest": "sha256:8b0eaafef7c6a5e633ec9f0f92877fa98c68d4da4667a88c50b25d22ce60ea89"
+    }
+  ]
+}
