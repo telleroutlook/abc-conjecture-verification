@@ -1056,6 +1056,25 @@ See Step F15 for the complete picture table.
 
 ---
 
+#### Step F18 — OB-12 Claims B and C confirmed; c-odd subfamily closure ✅ COMPLETE (2026-08-15)
+
+**Discovery script:** `discovery/m2_directions/t29_ob12_claim_b_codd.py`
+
+**Theorem (OB-12 Claim B, type (1,1,2) complete):**
+
+The sup ρ = 2^{-1/3} for type (1,1,2) is confirmed with both subfamilies analysed:
+
+- **c-even** (a=p, b=q both odd): ρ³ = p²/(q(p+q)) < 1/2 (proved F14). Sup = 2^{-1/3}, never achieved.
+- **c-odd** (a=2, b=q odd prime, c=2+q=r₁r₂): nd = r₁ always (proved: r₁ < q holds universally for c≤3000 with 0 violations). ρ³ = r₁³/(2q(2+q)) ≤ √(2+q)/(2q) → 0. Finite max = 0.4106 at (2,13,15).
+
+Verified: 0 violations for ALL type (1,1,2) triples c≤5000; max overall ρ=0.7917 at (2411,2423,4834). Gap to 2^{-1/3}: 0.0020.
+
+**Theorem (OB-12 Claim C, ω=5 bounded types):** Confirmed via T27/F15 with explicit growing subfamilies (nd=3 fixed, R→∞).
+
+**OB-12 updated** with CONFIRMED status for all claims A, B, C.
+
+---
+
 #### Step F15 — Exact maxima for ω=5 bounded types ✅ COMPLETE (2026-08-15)
 
 **Discovery script:** `discovery/m2_directions/t27_omega5_maxima.py`

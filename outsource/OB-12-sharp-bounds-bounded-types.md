@@ -35,6 +35,23 @@ group minima. Proved analytically: every cross-group 2-entry φ-vector is non-de
 
 ---
 
+## Status update (2026-08-15): ALL CLAIMS CONFIRMED
+
+**Claim A — Type (0,2,2):** CONFIRMED (F14). Unique max at (1,14,15); ρ = 3·210^{−1/3}.
+
+**Claim B — Type (1,1,2):** CONFIRMED (F14 + T29). sup ρ = 2^{−1/3} ≈ 0.7937.
+  - c-even subfamily (a,b both odd primes): nd = a; ρ³ = a²/(b(a+b)) < 1/2 since b>a.
+    Sup = 2^{-1/3} as a/b→1 (never achieved). Verified 0 violations for c ≤ 5000.
+  - c-odd subfamily (a=2, b odd prime, c=2+b=r₁r₂): nd = r₁ always (proved: r₁ < b).
+    ρ³ ≤ √(2+b)/(2b) → 0. Finite max = 0.4106 at (2,13,15). All < 2^{-1/3}.
+
+**Claim C — Types (1,2,2), (2,1,2), (2,2,1):** CONFIRMED (F15/T27).
+  Each type has a growing subfamily with nd=3 fixed while R→∞, so ρ→0.
+  Finite maxima: (1,2,2) ρ=0.4999 at (13,22,35); (2,1,2) ρ=0.6076 at (6,1511,1517);
+  (2,2,1) ρ=0.6064 at (6,1517,1523). Scripts: t27, t29.
+
+---
+
 ## The claims to be proved
 
 From numerical verification (c ≤ 500 for ω≤4; c ≤ 300 for ω=5), seven types are
