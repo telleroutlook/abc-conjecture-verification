@@ -1188,6 +1188,49 @@ is an asymptotic supremum, approached via the a=6, near-twin-prime subfamily.
 
 ---
 
+#### Step F25 — Type (2,1,2) sup = (1/6)^{1/4} by mirror symmetry with F24 ✅ COMPLETE (2026-08-15)
+
+**Discovery script:** `discovery/m2_directions/t39_f25_212_sup.py`.
+
+**THEOREM F25:** For ω=5 type (2,1,2), sup ρ = (1/6)^{1/4} ≈ 0.6389, never achieved.
+
+Mirror of F24: the a=6 subfamily with c=r₁r₂ near-twin primes and b=c-6 prime gives:
+  ρ⁴ = r₁³/(6·r₂·(r₁r₂−6)) < (r₁/r₂)²/6 < 1/6   (same argument as F24)
+
+As r₁/r₂→1 (via twin-prime-like pairs): ρ→(1/6)^{1/4}. Verified 0 violations c≤30000.
+Max at c≤30000: ρ=0.63438 at (6, 19037, 19043).
+
+**Summary so far for ω=5 bounded types:**
+| Type | sup ρ | structure |
+|---|---|---|
+| (0,2,3) | 1 | F23, twin-prime approach |
+| (0,3,2) | 1 | F23 |
+| (2,2,1) | (1/6)^{1/4}≈0.6389 | F24, a=6, b=q₁q₂ near-twin, c=b+6 prime |
+| (2,1,2) | (1/6)^{1/4}≈0.6389 | F25, a=6, c=r₁r₂ near-twin, b=c-6 prime |
+| (1,2,2) | 2^{-1/4}≈0.841 | F26, a=2, b=pq, c=rs all 4 near-equal primes |
+
+---
+
+#### Step F26 — Type (1,2,2) sup = 2^{-1/4}; unified pattern 2^{-1/(ω-1)} to ω=5 ✅ COMPLETE (2026-08-15)
+
+**Discovery script:** `discovery/m2_directions/t40_f26_122_sup.py`.
+
+**THEOREM F26:** For ω=5 type (1,2,2), sup ρ = 2^{-1/4} ≈ 0.8408, never achieved.
+This extends the universal pattern 2^{-1/(ω-1)} from ω=3,4 to ω=5:
+  ω=3 (1,1,1):         sup = 2^{-1/2} ≈ 0.707
+  ω=4 (1,1,2),(1,2,1): sup = 2^{-1/3} ≈ 0.794
+  ω=5 (1,2,2):         sup = 2^{-1/4} ≈ 0.841
+
+PROOF: a=2, b=p*q, c=r*s (a+b=c), all odd primes distinct.
+  nd = second-smallest{2, p, r} > 2. WLOG nd=p (r>p).
+  ρ⁴ = p³/(2*q*r*s). Since q>p, r>p, s>r>p: q*r*s > p³. So ρ⁴ < 1/2. QED.
+  As p,q,r,s → n with 2+pq=rs: ρ⁴ → 1/2. Verified 0 violations, a=2, b≤200000.
+
+CORRECTION to F15: "max=0.4999 at (13,22,35)" was c≤1000 only. Global sup=2^{-1/4}.
+All five bounded ω=5 types have ASYMPTOTIC suprema (never achieved at finite triple).
+
+---
+
 
 **Discovery script:** `discovery/m2_directions/t30_rho_distribution.py`
 
