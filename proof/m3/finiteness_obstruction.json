@@ -1,0 +1,62 @@
+{
+  "certificate_format": "abc-proof-term-v1",
+  "claim_id": "CL-11-obstruction",
+  "statement": "Finiteness of exceptions inherits obstruction from CL-10: cannot be proved without resolving the key inequality",
+  "module": "M3",
+  "proof_kind": "obstruction-record",
+  "premises": [
+    {
+      "claim_id": "CL-10-obstruction",
+      "status": "OBL",
+      "role": "blocking-prerequisite",
+      "note": "CL-10 (key inequality) is OBL with recorded obstruction; finiteness of exceptions depends on the key inequality"
+    },
+    {
+      "claim_id": "CL-01",
+      "status": "DEF",
+      "role": "rad-function-definition"
+    },
+    {
+      "claim_id": "def-exception-set",
+      "status": "DEF",
+      "role": "exception-set-definition",
+      "note": "E_eps = {(a,b,c) coprime, a+b=c : c > K_eps * rad(abc)^(1+eps)}. Finiteness of E_eps is exactly the abc conjecture for this eps."
+    }
+  ],
+  "proof_steps": [
+    {
+      "step": 1,
+      "label": "finiteness-follows-from-key-inequality",
+      "claim": "If the key inequality c <= K_eps * rad(abc)^(1+eps) holds for all but finitely many coprime triples, then E_eps is finite by definition.",
+      "justification": "The exception set E_eps is exactly the set of triples violating the key inequality. If P_ineq holds universally (or with finitely many exceptions), then E_eps has at most those finitely many exceptions. This is a logical tautology: finiteness of E_eps is equivalent to the key inequality holding for all but finitely many triples."
+    },
+    {
+      "step": 2,
+      "label": "finiteness-is-abc",
+      "claim": "Finiteness of E_eps for all eps > 0 IS the abc conjecture (without the quantitative bound K_eps).",
+      "justification": "The abc conjecture states: for all eps > 0, |E_eps| < infinity. Proving finiteness of E_eps without the quantitative bound K_eps is not weaker than abc — it is equivalent to it (the bound K_eps and finiteness are interchangeable in the definition). Therefore any proof of CL-11 that does not use abc as a hypothesis must also provide a proof of the quantitative bound."
+    },
+    {
+      "step": 3,
+      "label": "independent-finiteness-not-known",
+      "claim": "No proof of |E_eps| < infinity is known that does not assume abc or an abc-equivalent assertion.",
+      "justification": "By step 2, proving |E_eps| < infinity independently IS a proof of abc. Since abc is an open problem, no such proof exists. Faltings' theorem (CL-05) gives finiteness for fixed curves of genus >= 2 but does NOT give uniform finiteness over all coprime triples. The finiteness claimed in P_finiteness must be uniform."
+    },
+    {
+      "step": 4,
+      "label": "obstruction-conclusion",
+      "claim": "CL-11 (finiteness proved uniformly without abc-equivalent input) remains OPEN. The obstruction is inherited from CL-10.",
+      "justification": "Steps 1-3 show that CL-11 is equivalent to CL-10 in difficulty: any proof of finiteness requires either the key inequality (step 1, which requires CL-10) or directly provides an abc proof (step 2-3, which violates B2). The obstruction is precisely recorded.",
+      "from": [1, 2, 3]
+    }
+  ],
+  "obstruction_kind": "inherits-from-CL-10",
+  "resolution_required": [
+    "Resolution of CL-10 (the key inequality obstruction) automatically resolves CL-11",
+    "Alternatively: a direct proof of uniform finiteness that does not use abc as hypothesis (which would also resolve CL-10)"
+  ],
+  "qed_claim": "CL-11-obstruction",
+  "forbidden_inputs_used": [],
+  "non_circularity": "No abc assumed; finiteness of exceptions IS the abc conjecture without the quantitative bound. This record documents the precise dependency on CL-10.",
+  "spec_reference": "spec/SPECIFICATION.md §5.1, CL-11"
+}

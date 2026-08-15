@@ -2,21 +2,21 @@
   "contract_version": "2",
   "claim_id": "core-5-conclusion",
   "note": "CORE-5 (spec §5.1). Deterministic application of Theorem 2: from passed CORE-0..CORE-4 artifacts the checker derives the abc conjecture. NO independent mathematical assumption; NO producer-supplied PASS is trusted. Status: THM (CL-03) as an implication; fires only when CORE-2/3/4 (OBL) actually pass.",
-  "statement_digest": "sha256:PLACEHOLDER-core5-abc-statement-digest-fill-on-freeze",
+  "statement_digest": "sha256:6ca9ba70c70347341a3c336a76c7374dc44765d0122627c6c8346b145a953706",
   "dependencies": [
-    {"claim_id": "core-3-key-inequality", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:PLACEHOLDER-core3-abc-statement-digest-OBL"},
-    {"claim_id": "core-4-finiteness", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:PLACEHOLDER-core4-abc-statement-digest-OBL"}
+    {"claim_id": "core-3-key-inequality", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:632ff14abb2d1f700f9603e8104419a65f0cdb6d1e18fa8766139d35048e695b"},
+    {"claim_id": "core-4-finiteness", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:8632aa31505b8c0a4b4292069689a6c89cadeef41fb89aea4f0ed091968f81c3"}
   ],
   "evidence": {
     "mode": "joint",
     "required": [
-      {"role": "theorem-instantiation", "media_type": "application/json", "digest": "sha256:PLACEHOLDER-core5-instantiation"}
+      {"role": "theorem-instantiation", "media_type": "application/json", "digest": "sha256:28fd9b033179bd7466cba75add81258fb4aa3004a1c39511b5af25577b5a925d"}
     ]
   },
   "checker": {
     "protocol": "proofctl-checker/v2",
-    "checker_digest": "sha256:PLACEHOLDER-core5-checker",
-    "schema_digest": "sha256:PLACEHOLDER-core5-schema"
+    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "schema_digest": "sha256:d6393c78fbacc9cfd837fac3da7177aeaaa61ba27b62ca88cdd9e53ca38fe34d"
   },
   "runtime": {"class": "native-dev", "network": "none"},
   "obligations": [

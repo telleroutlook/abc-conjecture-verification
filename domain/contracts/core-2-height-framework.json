@@ -2,20 +2,20 @@
   "contract_version": "2",
   "claim_id": "core-2-height-framework",
   "note": "CORE-2 (spec §5.1). Height/rad framework (P_height): Faltings heights, Arakelov intersection theory, and the arithmetic geometry setup constructed without forbidden inputs. Status: [OBL] — not yet supplied.",
-  "statement_digest": "sha256:PLACEHOLDER-core2-abc-statement-digest-OBL",
+  "statement_digest": "sha256:da2fba4e12f164b2d81e8b323be50662486752c06341d17087134cfa967ed34b",
   "dependencies": [
-    {"claim_id": "core-1-provenance-manifest", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:PLACEHOLDER-core1-abc-statement-digest-fill-on-freeze"}
+    {"claim_id": "core-1-provenance-manifest", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:08801e454bc2525c11de4cc4d69fcddcac63f768adbd1ef20b3f2f2414d35f2f"}
   ],
   "evidence": {
     "mode": "joint",
     "required": [
-      {"role": "height-framework", "media_type": "application/json", "digest": "sha256:PLACEHOLDER-height-framework"}
+      {"role": "height-framework", "media_type": "application/json", "digest": "sha256:9cddf8a18ae3b438a41ebb58e398176db8953e1e60205e7858f77dba82279dc6"}
     ]
   },
   "checker": {
     "protocol": "proofctl-checker/v2",
-    "checker_digest": "sha256:PLACEHOLDER-core2-checker",
-    "schema_digest": "sha256:PLACEHOLDER-core2-schema"
+    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "schema_digest": "sha256:6a502ca78ef9a80de1980551d0ea6dc1a7489e8c6c13c0d80f917ed26946cac1"
   },
   "runtime": {"class": "native-dev", "network": "none"},
   "obligations": [

@@ -1,0 +1,74 @@
+{
+  "certificate_format": "abc-proof-term-v1",
+  "claim_id": "CL-07",
+  "statement": "the provenance barrier is syntactically machine-checkable",
+  "module": "M0",
+  "proof_kind": "algorithmic-decidability",
+  "premises": [
+    {
+      "claim_id": "def-module-graph",
+      "status": "DEF",
+      "role": "module-import-graph",
+      "note": "The module import graph G = (V, E) with V = {M0..M6} (7 nodes) and E from module_import_policy allowed_edges (at most |V|^2 = 49 edges). G is finite."
+    },
+    {
+      "claim_id": "def-forbidden-import-policy",
+      "status": "DEF",
+      "role": "forbidden-import-list",
+      "note": "forbidden_imports: M1/M2/M3 must not import M4/M5/M6. This is a finite list of forbidden (source, target) pairs."
+    }
+  ],
+  "proof_steps": [
+    {
+      "step": 1,
+      "label": "finite-graph",
+      "claim": "The module import graph has finitely many nodes (|V| = 7) and finitely many edges (|E| <= 49).",
+      "justification": "V = {M0, M1, M2, M3, M4, M5, M6}, |V| = 7. E is the set of actual imports, bounded by the syntactic structure of the source files. The repository has finitely many files, each with finitely many import statements."
+    },
+    {
+      "step": 2,
+      "label": "dfs-terminates",
+      "claim": "Depth-first search on a finite directed graph terminates in O(V+E) time.",
+      "justification": "Standard algorithm analysis: DFS visits each node and edge at most once, using a coloring (WHITE/GRAY/BLACK). On 7 nodes and at most 49 edges, this is a constant-time computation.",
+      "base_result": "Cormen et al., Introduction to Algorithms, Chapter 22 (DFS on finite digraphs)"
+    },
+    {
+      "step": 3,
+      "label": "cycle-detection-decidable",
+      "claim": "Cycle detection in the module import graph is decidable: DFS detects a back edge iff a cycle exists.",
+      "justification": "DFS theorem: a directed graph is acyclic iff DFS produces no back edge (GRAY-to-GRAY arc). This is a decidable property on finite graphs (step 1 + step 2).",
+      "from": [1, 2]
+    },
+    {
+      "step": 4,
+      "label": "forbidden-import-scan-decidable",
+      "claim": "The forbidden-import scan is decidable: for each file in proof/m1, proof/m2, proof/m3, scan AST imports against the forbidden list.",
+      "justification": "Python AST parsing is deterministic and terminates on finite source files. The forbidden list is finite. Checking membership in a finite list is decidable.",
+      "from": [1]
+    },
+    {
+      "step": 5,
+      "label": "forbidden-leaf-scan-decidable",
+      "claim": "The forbidden-construction-leaf scan is decidable: regex match against a finite pattern list on finite source files.",
+      "justification": "Regular expression matching terminates on finite input strings. The pattern list is finite. The source files are finite."
+    },
+    {
+      "step": 6,
+      "label": "cl07-conclusion",
+      "claim": "The provenance barrier (DAG acyclicity + forbidden-import + forbidden-leaf) is syntactically machine-checkable.",
+      "justification": "Conjunction of steps 3, 4, 5: each check is decidable and terminates in O(|files| * |patterns|) time. The checker (checker/check_certificate.py CORE-1 handler) implements exactly these three checks.",
+      "from": [3, 4, 5]
+    },
+    {
+      "step": 7,
+      "label": "semantic-independence-not-claimed",
+      "claim": "CL-07 does NOT claim semantic circularity is decidable (CL-08 is [OUT]).",
+      "justification": "The syntactic check decides whether a given import graph violates the stated policy. It does NOT decide whether the mathematical content of two theorems are abc-equivalent. The latter is undecidable in general (no general algorithm decides abc-equivalence of an arbitrary mathematical assertion). CL-08 is [OUT] and has no downstream force.",
+      "note": "This step is explicitly required by the honesty constraints of the spec. The immutable assumption manifest must receive separate mathematical review."
+    }
+  ],
+  "qed_claim": "CL-07",
+  "forbidden_inputs_used": [],
+  "non_circularity": "CL-07 is a claim about algorithm decidability, not about mathematics of abc. It uses no abc triples, no K_epsilon, no Szpiro, no IUT.",
+  "spec_reference": "spec/SPECIFICATION.md §0.3, CL-07, CL-08"
+}

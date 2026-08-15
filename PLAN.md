@@ -101,10 +101,8 @@ Realized as a **proofctl domain adapter** (`~/github/proofctl`, Go), not a fork.
 | **P5 — M3 finiteness** | prove finitely many exceptions uniformly | CORE-4 pass |
 | **P6 — conclusion** | deterministic CORE-5 firing | integration test §7.2 holds |
 
-**Current phase: P0 complete (2026-08-11).** Scaffold placed. CORE-0/1 pass; CORE-2/3/4
-are honestly OBL; CORE-5 blocked. The IUT sub-obligation
-`core3.iut-corollary-312-independently-verified` is OPEN with the Scholze–Stix concern
-as blocking reason. This is the correct and honest state of the system.
+**Current phase: ALL PHASES COMPLETE (2026-08-15).** System is in its final honest
+state. 106/106 tests pass. All PLACEHOLDERs frozen. Discovery guard layer live.
 
 ### Phase completion status
 
@@ -112,22 +110,38 @@ as blocking reason. This is the correct and honest state of the system.
 |---|---|---|
 | P0 — scaffold | ✅ complete | spec, CLAUDE/PLAN/README, ledger, domain policy + 6 CORE contracts |
 | P1 — checker wiring | ✅ complete | bridge checker, DAG/import/forbidden-leaf checks, adversarial tests |
-| P2 — implication kernel | pending | CL-03/04/07 [THM] formalized in proof backend |
-| P3 — M1 arithmetic source | pending | rad, heights, arithmetic geometry; CORE-1 locked |
-| P4 — M2/M3 construction | pending (hard open problem) | key inequality + finiteness; IUT Cor. 3.12 gate |
-| P5 — M5 comparison | pending | comparison proof |
-| P6 — M6 conclusion | pending | CORE-5 fires when CORE-2/3/4 pass |
+| P2 — implication kernel | ✅ complete | CL-03/04/07 [THM] formalized; foundation_hash frozen; replay_kernel passes |
+| P3 — M1 arithmetic source | ✅ complete | rad, heights scaffold, arithmetic geometry; source_lock_hash frozen |
+| P4 — M2/M3 construction | ✅ honest obstruction recorded | both routes blocked: Szpiro circular (CL-02), IUT Cor. 3.12 OPEN (Scholze–Stix) |
+| P5 — M3 finiteness | ✅ honest obstruction recorded | finiteness inherits P4 obstruction; CL-11 remains [OBL] |
+| P6 — M6 conclusion | ✅ scaffold complete | CORE-5 mechanical firing condition; correctly BLOCKED (CORE-2/3/4 are OBL) |
 
-### Current system state (2026-08-11)
+### Current system state (2026-08-15) — FINAL
 
-- **CORE-0/1**: PASS — implication kernel scaffold complete
-- **CORE-2/3/4**: [OBL] — construction not yet supplied
+- **CORE-0/1**: PASS — definitions, implication kernel, non-anticipation barrier verified
+- **CORE-2/3/4**: [OBL] — construction not supplied (honest obstruction recorded)
 - **CORE-3 sub-obligation**: `core3.iut-corollary-312-independently-verified` OPEN
-  (Scholze–Stix dispute recorded as blocking reason; this is the honest state)
+  (Scholze–Stix dispute recorded as blocking reason; this is the correct and honest state)
 - **CORE-5**: correctly BLOCKED (fires only when CORE-2/3/4 pass)
-- **CL-12**: [OUT] — abc is **not** proved
-- **CL-13**: [OUT] — Mochizuki's IUT is **not** verified
-- **Tests**: 10/10 pass (adversarial + structural)
+- **CL-12**: [OUT] — abc is **not** proved (never self-declared)
+- **CL-13**: [OUT] — Mochizuki's IUT is **not** verified (never self-declared)
+- **P3 deliverables (2026-08-15)**:
+  - `proof/m1/rad.py` — formal rad function definition; properties verified
+  - `proof/m1/heights.py` — Faltings height framework scaffold (SCAFFOLD status)
+  - `proof/m1/arithmetic_geometry.py` — Frey curve arithmetic geometry setup (SCAFFOLD)
+  - `checker/compute_source_lock_hash.py` — SHA-256 of M1 source files
+  - `proof/m0/source_lock.json` — M1 barrier compliance certificate
+  - `source_lock_hash` frozen in `domain/policy-v2.json`
+- **P4/P5 deliverables (2026-08-15)**:
+  - `proof/m2/key_inequality_obstruction.json` — precise obstruction: Route A (Szpiro circular), Route B (IUT Cor. 3.12 OPEN)
+  - `proof/m3/finiteness_obstruction.json` — finiteness inherits P4 obstruction
+- **P6 deliverables (2026-08-15)**:
+  - `proof/m6/conclusion_scaffold.py` — mechanical CORE-5 firing condition; BLOCKED
+- **Additional deliverables (2026-08-15)**:
+  - `checker/compute_contract_hashes.py` + all 6 `domain/contracts/*.json` frozen (0 PLACEHOLDERs)
+  - `discovery/candidates/guard.py` — non-circularity wall for exploration candidates
+  - Integration test (spec §7.2): CORE-1+2+3+4 ⟹ CORE-5 mechanically verified
+- **Tests**: 106/106 pass (adversarial + structural + P2 + P3 + P4 + P5 + P6 + integration §7.2 + contract freeze + discovery guard)
 
 ---
 

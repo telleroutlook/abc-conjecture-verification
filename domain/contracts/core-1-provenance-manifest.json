@@ -2,21 +2,21 @@
   "contract_version": "2",
   "claim_id": "core-1-provenance-manifest",
   "note": "CORE-1 (spec §5.1, §3). Immutable assumption + dependency manifest. Enforces the non-anticipation barrier: construction modules M1/M2/M3 have no forbidden imports of M4/M5/M6; DAG acyclic; no forbidden construction leaves (known abc triples, fitted K_epsilon, Szpiro assumed, IUT identification-without-isomorphism). Status: THM (CL-07, syntactic only; CL-08 semantic is OUT).",
-  "statement_digest": "sha256:PLACEHOLDER-core1-abc-statement-digest-fill-on-freeze",
+  "statement_digest": "sha256:08801e454bc2525c11de4cc4d69fcddcac63f768adbd1ef20b3f2f2414d35f2f",
   "dependencies": [
-    {"claim_id": "core-0-abc-definition", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:PLACEHOLDER-core0-abc-statement-digest-fill-on-freeze"}
+    {"claim_id": "core-0-abc-definition", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:aaabb4bb800c92cf942fd762e3abb28c9304facc2c96a4da3c757d8bd7f054cc"}
   ],
   "evidence": {
     "mode": "joint",
     "required": [
-      {"role": "source-dag", "media_type": "application/json", "digest": "sha256:PLACEHOLDER-source-dag"},
-      {"role": "assumption-manifest", "media_type": "application/json", "digest": "sha256:PLACEHOLDER-assumption-manifest"}
+      {"role": "source-dag", "media_type": "application/json", "digest": "sha256:7a9e6cfb44253e83a0896e12e6f156f9d81e2572c39f6acaeeb7f668e2343779"},
+      {"role": "assumption-manifest", "media_type": "application/json", "digest": "sha256:719ce4d2ac224c08642cc831b4f0de4752316845d998ee485fb9bb418fcd1c86"}
     ]
   },
   "checker": {
     "protocol": "proofctl-checker/v2",
-    "checker_digest": "sha256:PLACEHOLDER-core1-checker",
-    "schema_digest": "sha256:PLACEHOLDER-core1-schema"
+    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "schema_digest": "sha256:bb6e62e9182a6d8063758d3f2af453b971452bd02c3e2cf0f0c0e8ddb1b889c8"
   },
   "runtime": {"class": "native-dev", "network": "none"},
   "obligations": [

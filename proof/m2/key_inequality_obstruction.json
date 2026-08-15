@@ -1,0 +1,97 @@
+{
+  "certificate_format": "abc-proof-term-v1",
+  "claim_id": "CL-10-obstruction",
+  "statement": "Key inequality c <= K_eps * rad(abc)^(1+eps) cannot be proved for all coprime triples without abc-equivalent input (obstruction record)",
+  "module": "M2",
+  "proof_kind": "obstruction-record",
+  "premises": [
+    {
+      "claim_id": "CL-01",
+      "status": "DEF",
+      "role": "rad-function-definition"
+    },
+    {
+      "claim_id": "CL-02",
+      "status": "BASE",
+      "role": "abc-szpiro-equivalence",
+      "note": "abc conjecture is equivalent to Szpiro's conjecture for elliptic curves — this equivalence is what makes Route A circular"
+    },
+    {
+      "claim_id": "CL-05",
+      "status": "BASE",
+      "role": "faltings-theorem",
+      "note": "Faltings 1983: every curve of genus >= 2 over Q has finitely many rational points — foundational but does not directly give the quantitative bound"
+    },
+    {
+      "claim_id": "CL-06",
+      "status": "BASE",
+      "role": "mason-stothers",
+      "note": "Mason-Stothers over function fields — provides analogy but the integer case is harder"
+    },
+    {
+      "claim_id": "def-key-inequality",
+      "status": "DEF",
+      "role": "target-statement",
+      "note": "Target: for all coprime a+b=c with a,b,c > 0: c <= K_eps * rad(a*b*c)^(1+eps), with at most finitely many exceptions"
+    }
+  ],
+  "obstruction_routes": [
+    {
+      "name": "Route A: Direct algebraic geometry (Szpiro/Arakelov)",
+      "description": "Associate to each coprime triple (a,b,c) with a+b=c the Frey elliptic curve E: y^2 = x(x-a)(x+b). Bound the height h(E) via Arakelov intersection theory and relate it to c and rad(abc) via the conductor N_E.",
+      "obstruction": "The bound N_E <= C * rad(abc)^2 required for the height inequality is equivalent to Szpiro's conjecture: disc(E) <= C' * N_E^6. By CL-02, Szpiro's conjecture is equivalent to the abc conjecture. Any proof of the conductor bound is therefore a proof of abc.",
+      "why_circular": "Using Szpiro's conjecture (or any formulation equivalent to it) as an input to the height bound violates the forbidden-construction-leaf rule B2 (spec §3.3): 'Szpiro's conjecture assumed without proof' is explicitly forbidden. An independent proof of the conductor bound N_E <= C * rad(abc)^2 is required — and no such proof is known that does not assume abc or Szpiro.",
+      "resolution_path": "A proof of the Frey/Szpiro conductor bound from first principles (Arakelov intersection theory, without assuming abc or Szpiro) would close this route. Such a proof would itself be a proof of abc."
+    },
+    {
+      "name": "Route B: Mochizuki Inter-Universal Teichmüller Theory (IUT)",
+      "description": "Mochizuki's IUTT-I through IUTT-IV constructs 'Hodge theaters' — deformations of the arithmetic of abc triples — and applies Corollary 3.12 of IUTT-III to extract the height inequality c <= K_eps * rad(abc)^(1+eps). This is the most direct published route to the key inequality.",
+      "obstruction": "The sub-obligation core3.iut-corollary-312-independently-verified is OPEN. No machine-replayed formal proof of Corollary 3.12 has been supplied. The Scholze-Stix objection (2018) identifies a specific gap: the identification of objects across different Hodge theaters in IUTT-III requires an explicit isomorphism proof that Mochizuki has not provided in a form that has been independently verified.",
+      "blocking_obligation": "core3.iut-corollary-312-independently-verified",
+      "why_blocked": "The Scholze-Stix concern is specifically about IUTT-III Corollary 3.12: objects in two different Hodge theaters (arithmetic deformations of the same triple) are identified without a proof that the identification preserves the relevant arithmetic structure. Until an explicit isomorphism proof is formalized and machine-replayed (in Lean, Coq, Isabelle, Metamath, or equivalent), this route remains blocked.",
+      "resolution_path": "A machine-replayed formal proof (Lean, Coq, Isabelle, Metamath, or equivalent) of the height inequality that does not use the identification without a proved isomorphism would close this route. This is the core3.iut-corollary-312-independently-verified gate."
+    }
+  ],
+  "proof_steps": [
+    {
+      "step": 1,
+      "label": "route-a-circular",
+      "claim": "Route A (algebraic geometry via Szpiro) is blocked: any proof of N_E <= C * rad(abc)^2 is a proof of Szpiro's conjecture, which is equivalent to abc (CL-02).",
+      "justification": "CL-02 (BASE): abc conjecture is equivalent to Szpiro's conjecture. Therefore using Szpiro as an input violates the forbidden-construction-leaf rule (spec §3.3: 'Szpiro's conjecture assumed without proof'). The circularity is exact: proving the conductor bound IS proving abc.",
+      "from": ["CL-02"]
+    },
+    {
+      "step": 2,
+      "label": "route-b-open-obligation",
+      "claim": "Route B (IUT Corollary 3.12) is blocked: core3.iut-corollary-312-independently-verified is OPEN with Scholze-Stix blocking reason.",
+      "justification": "No machine-replayed formal proof of Mochizuki's Corollary 3.12 (IUTT-III) has been supplied. The Scholze-Stix objection (2018) records that the identification of objects across Hodge theaters lacks an explicit isomorphism proof. This is not a determination that IUT is wrong; it is a determination that the gate has not been passed.",
+      "blocking": "core3.iut-corollary-312-independently-verified"
+    },
+    {
+      "step": 3,
+      "label": "exhaustion-of-known-routes",
+      "claim": "Both known routes to the key inequality are currently blocked.",
+      "justification": "Route A requires an independent conductor bound (equivalent to abc). Route B requires machine-replayed Corollary 3.12. No third route is known that avoids both obstructions. The obstruction is precisely localized.",
+      "from": [1, 2]
+    },
+    {
+      "step": 4,
+      "label": "obstruction-conclusion",
+      "claim": "The obligation CL-10 (key inequality proved without abc-equivalent input) remains OPEN. The obstruction is recorded with precise blocking reasons.",
+      "justification": "This certificate records the obstruction honestly per spec §VI: 'a precisely recorded obstruction at P4 is a valid honest completion'. The system remains in an honest state: CL-10 is OBL, CORE-3 fails, CORE-5 is blocked.",
+      "from": [3]
+    }
+  ],
+  "obstruction_kind": "both-known-routes-blocked",
+  "iut_sub_obligation": "core3.iut-corollary-312-independently-verified",
+  "iut_blocking_reason": "Scholze-Stix (2018): identification of objects across different Hodge theaters in IUTT-III requires an explicit isomorphism proof that has not been formalized or machine-replayed",
+  "resolution_required": [
+    "Either: an independent proof of the Frey/Szpiro conductor bound N_E <= C * rad(abc)^2 not using abc or Szpiro as hypothesis",
+    "Or: a machine-replayed formal proof (Lean/Coq/Isabelle/Metamath) of Mochizuki's Corollary 3.12 (IUTT-III) resolving the Scholze-Stix isomorphism gap",
+    "In either case: the proof must cover ALL coprime triples a+b=c, not just a fixed prime set S"
+  ],
+  "qed_claim": "CL-10-obstruction",
+  "forbidden_inputs_used": [],
+  "non_circularity": "This is an obstruction record, not a proof attempt. No abc triples are used. No K_epsilon is fitted. No abc or Szpiro is assumed as a construction hypothesis. The record documents WHY neither known route provides an admissible proof.",
+  "spec_reference": "spec/SPECIFICATION.md §5.1, PLAN.md §V-bis, CLAUDE.md §Forbidden construction leaves"
+}

@@ -1,0 +1,79 @@
+{
+  "certificate_format": "abc-proof-term-v1",
+  "claim_id": "CL-04",
+  "statement": "certificate existence is equivalent to the abc conjecture (honesty check)",
+  "module": "M6",
+  "proof_kind": "biconditional",
+  "premises": [
+    {
+      "claim_id": "CL-03",
+      "status": "THM",
+      "role": "forward-implication",
+      "note": "Certificate implies abc (Theorem 2, proved in cl03_implication.json)"
+    },
+    {
+      "claim_id": "CL-01",
+      "status": "DEF",
+      "role": "rad-function-definition"
+    },
+    {
+      "claim_id": "def-abc-conjecture",
+      "status": "DEF",
+      "role": "abc-statement"
+    }
+  ],
+  "proof_steps": [
+    {
+      "step": 1,
+      "label": "forward-direction",
+      "claim": "certificate existence -> abc conjecture",
+      "justification": "This is exactly CL-03 (Theorem 2). See cl03_implication.json.",
+      "from": ["CL-03"]
+    },
+    {
+      "step": 2,
+      "label": "converse-setup",
+      "claim": "Assume abc conjecture holds. We construct a certificate.",
+      "justification": "The converse uses abc as a HYPOTHESIS — this is permitted. The abc assumption is not a construction leaf. The [OBL] construction (M1/M2/M3) must not use abc; this converse proof lives in M6 where abc is a hypothesis.",
+      "note": "The abc conjecture is used here as a hypothesis in the converse proof, not as a construction leaf (spec §2.3, B4)."
+    },
+    {
+      "step": 3,
+      "label": "converse-exception-set",
+      "claim": "Assuming abc, the set E_eps = {(a,b,c) coprime, a+b=c : c > K_eps * rad(abc)^(1+eps)} is finite",
+      "justification": "This is the definition of the abc conjecture: it asserts finitely many exceptions. Given abc, E_eps is finite by hypothesis."
+    },
+    {
+      "step": 4,
+      "label": "converse-K_epsilon-construction",
+      "claim": "Define K_eps = max_{(a,b,c) in E_eps} c / rad(abc)^(1+eps). This is a finite maximum over a finite set.",
+      "justification": "The max over a finite set is well-defined. This K_eps is constructed from the hypothesis (abc), not from known abc triples used to fit K_eps. It is a proof-internal construction in the converse direction.",
+      "note": "This construction is ONLY valid in the converse proof where abc is a hypothesis. The [OBL] construction in M2 must derive K_eps independently."
+    },
+    {
+      "step": 5,
+      "label": "converse-certificate",
+      "claim": "The tuple (eps, K_eps, trivial-P_height, P_ineq-from-abc, finiteness-from-step-3) is a valid certificate.",
+      "justification": "Each component: P_height is trivially satisfied (the rad function is already defined via CL-01); P_ineq holds universally by abc hypothesis; P_finiteness holds by step 3.",
+      "from": [3, 4]
+    },
+    {
+      "step": 6,
+      "label": "biconditional",
+      "claim": "Certificate existence <-> abc conjecture",
+      "justification": "Forward: step 1 (CL-03). Converse: steps 2-5 construct a certificate from the abc hypothesis.",
+      "from": [1, 5]
+    },
+    {
+      "step": 7,
+      "label": "honesty-implication",
+      "claim": "The inequality alone (without a construction of K_eps from non-abc input) is NOT a shortcut to abc.",
+      "justification": "The converse uses abc as a hypothesis to construct K_eps. Therefore, if the [OBL] construction derives K_eps from known abc triples or abc-equivalent assertions, it is circular and fails CORE-1 (forbidden construction leaves). The system is honest: the inequality alone has no more content than abc itself.",
+      "note": "This is the honesty check of Theorem 3 (spec §2.3). It prevents the K_eps construction from being a trivial reformulation."
+    }
+  ],
+  "qed_claim": "CL-04",
+  "forbidden_inputs_used": [],
+  "non_circularity": "The forward direction (CL-03) uses no abc input. The converse uses abc as a hypothesis only — this is permitted and recorded explicitly. No construction in M1/M2/M3 uses abc.",
+  "spec_reference": "spec/SPECIFICATION.md Theorem 3"
+}

@@ -1,0 +1,65 @@
+{
+  "certificate_format": "abc-proof-term-v1",
+  "claim_id": "source-lock-m1",
+  "statement": "The M1 arithmetic source (rad, heights, arithmetic_geometry) is constructed under the non-anticipation barrier B1 and without forbidden construction leaves B2; source_lock_hash certifies the content before any comparison module is admitted",
+  "module": "M0",
+  "proof_kind": "structural",
+  "premises": [
+    {
+      "claim_id": "CL-07",
+      "status": "THM",
+      "role": "import-barrier-decidable",
+      "note": "CL-07 establishes the import barrier is syntactically machine-checkable (cl07_syntactic.json)"
+    },
+    {
+      "claim_id": "def-module-import-policy",
+      "status": "DEF",
+      "role": "non-anticipation-policy",
+      "note": "domain/policy-v2.json module_import_policy: M1 may import only M0"
+    },
+    {
+      "claim_id": "def-forbidden-construction-leaves",
+      "status": "DEF",
+      "role": "forbidden-leaf-policy",
+      "note": "spec §3.3 and domain/policy-v2.json forbidden_runtimes: no abc triples, no fitted K_epsilon, no Szpiro assumed, no IUT identification-without-isomorphism, no GRH assumed"
+    }
+  ],
+  "proof_steps": [
+    {
+      "step": 1,
+      "label": "m1-imports-only-m0",
+      "claim": "proof/m1/*.py imports only from proof.m0.provenance and stdlib (math, dataclasses, typing). No import of m4, m5, or m6.",
+      "justification": "Verified by the import barrier check (checker/check_certificate.py _check_import_barrier). All three M1 files (rad.py, heights.py, arithmetic_geometry.py) begin with 'from proof.m0.provenance import ...' and use only stdlib. Running the checker on the current repo confirms core1.no-forbidden-import-M1-M2-M3-into-M4-M5-M6 passes."
+    },
+    {
+      "step": 2,
+      "label": "m1-no-forbidden-patterns",
+      "claim": "proof/m1/*.py contain no forbidden construction leaf patterns: no abc_triple, no fitted_k_epsilon, no szpiro_conjecture, no assume_abc, no hodge_theater_identification, no s_integer_finite, no assume_grh.",
+      "justification": "Verified by the forbidden-leaf scan (checker/check_certificate.py _check_forbidden_leaves). All three M1 files define rad/height/geometry from first principles. Running the checker confirms core1.no-forbidden-construction-leaves passes."
+    },
+    {
+      "step": 3,
+      "label": "m1-assert-zero-free-guards",
+      "claim": "Each M1 source file calls assert_zero_free(__file__) and assert_no_abc_input(...) at import time, enforcing the non-anticipation barrier at runtime as well as statically.",
+      "justification": "proof/m1/rad.py line 20-24, proof/m1/heights.py line 25-29, proof/m1/arithmetic_geometry.py line 23-27: each file calls both guards at module top level.",
+      "from": [1, 2]
+    },
+    {
+      "step": 4,
+      "label": "source-lock-hash-computed",
+      "claim": "The source_lock_hash is the SHA-256 of the canonical content of all .py files in proof/m1/ (excluding __init__.py) in lexicographic order. This hash is stable: it changes if and only if the M1 source changes.",
+      "justification": "checker/compute_source_lock_hash.py computes the hash reproducibly. The hash is recorded in domain/policy-v2.json as source_lock_hash and can be independently verified by running the script."
+    },
+    {
+      "step": 5,
+      "label": "construction-frozen-before-comparison",
+      "claim": "The M1 source lock hash is recorded before any comparison (M4/M5) or conclusion (M6) module content is introduced. The non-anticipation barrier B1 is satisfied: M1 was constructed without seeing the comparison modules.",
+      "justification": "By steps 1-4, M1 imports only M0 and stdlib, contains no forbidden patterns, and its content is hashed. The hash in domain/policy-v2.json is the certificate that M1 was frozen before comparison.",
+      "from": [1, 2, 3, 4]
+    }
+  ],
+  "qed_claim": "source-lock-m1",
+  "forbidden_inputs_used": [],
+  "non_circularity": "This structural certificate makes no claim about the key inequality (CORE-3, CL-10 [OBL]) or finiteness (CORE-4, CL-11 [OBL]). It only certifies that the M1 construction module was built under the correct non-anticipation constraints.",
+  "spec_reference": "spec/SPECIFICATION.md §0.3 (non-anticipation barrier), §3.3 (forbidden construction leaves)"
+}

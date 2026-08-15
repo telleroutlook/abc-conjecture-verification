@@ -2,20 +2,20 @@
   "contract_version": "2",
   "claim_id": "core-4-finiteness",
   "note": "CORE-4 (spec §5.1). Finiteness of exceptions P_finiteness: the set {(a,b,c) coprime, a+b=c : c > rad(abc)^(1+epsilon)} is finite, proved uniformly in a,b,c without assuming abc or restricting to a fixed prime set S. Status: [OBL] — not yet supplied.",
-  "statement_digest": "sha256:PLACEHOLDER-core4-abc-statement-digest-OBL",
+  "statement_digest": "sha256:8632aa31505b8c0a4b4292069689a6c89cadeef41fb89aea4f0ed091968f81c3",
   "dependencies": [
-    {"claim_id": "core-3-key-inequality", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:PLACEHOLDER-core3-abc-statement-digest-OBL"}
+    {"claim_id": "core-3-key-inequality", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:632ff14abb2d1f700f9603e8104419a65f0cdb6d1e18fa8766139d35048e695b"}
   ],
   "evidence": {
     "mode": "joint",
     "required": [
-      {"role": "finiteness-proof", "media_type": "application/json", "digest": "sha256:PLACEHOLDER-finiteness-proof"}
+      {"role": "finiteness-proof", "media_type": "application/json", "digest": "sha256:181e93a2f88ea2cb3e4610666705854278e3d8a06d4bc5086b7e8463b837dd14"}
     ]
   },
   "checker": {
     "protocol": "proofctl-checker/v2",
-    "checker_digest": "sha256:PLACEHOLDER-core4-checker",
-    "schema_digest": "sha256:PLACEHOLDER-core4-schema"
+    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "schema_digest": "sha256:8079b72fc1c936530597f78f35fd70f792071c3bc0557eeb03cf9535710add78"
   },
   "runtime": {"class": "native-dev", "network": "none"},
   "obligations": [

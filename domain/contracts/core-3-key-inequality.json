@@ -2,20 +2,20 @@
   "contract_version": "2",
   "claim_id": "core-3-key-inequality",
   "note": "CORE-3 (spec §5.1, §4.4). Key inequality P_ineq: c <= K_epsilon * rad(abc)^(1+epsilon) for all coprime a+b=c. This is the Mochizuki Corollary 3.12 gate. Includes sub-obligation core3.iut-corollary-312-independently-verified which is OPEN pending a machine-replayed formal proof. The Scholze-Stix dispute is recorded as blocking reason. Status: [OBL].",
-  "statement_digest": "sha256:PLACEHOLDER-core3-abc-statement-digest-OBL",
+  "statement_digest": "sha256:632ff14abb2d1f700f9603e8104419a65f0cdb6d1e18fa8766139d35048e695b",
   "dependencies": [
-    {"claim_id": "core-2-height-framework", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:PLACEHOLDER-core2-abc-statement-digest-OBL"}
+    {"claim_id": "core-2-height-framework", "required_state": "GLOBALLY_VERIFIED", "statement_digest": "sha256:da2fba4e12f164b2d81e8b323be50662486752c06341d17087134cfa967ed34b"}
   ],
   "evidence": {
     "mode": "joint",
     "required": [
-      {"role": "inequality-proof", "media_type": "application/json", "digest": "sha256:PLACEHOLDER-inequality-proof"}
+      {"role": "inequality-proof", "media_type": "application/json", "digest": "sha256:203d2612c8181610fc36f0e900e81787043a96963aa08be2442dd8d1dc8cba8e"}
     ]
   },
   "checker": {
     "protocol": "proofctl-checker/v2",
-    "checker_digest": "sha256:PLACEHOLDER-core3-checker",
-    "schema_digest": "sha256:PLACEHOLDER-core3-schema"
+    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "schema_digest": "sha256:6bb6a89a2f4796e46ddeb4ab837dabf63be7887c6c7dd8d62d0e870d76ee0191"
   },
   "runtime": {"class": "native-dev", "network": "none"},
   "obligations": [

@@ -22,7 +22,9 @@ returned review, add it to PROMPT_LINT.md and re-scan ALL active prompts.
 
 | # | File | Content | Status |
 |---|---|---|---|
-| (no problems yet) | — | — | — |
+| OB-01 | [OB-01-algebraic-geometry-height-bound.md](OB-01-algebraic-geometry-height-bound.md) | Prove or give explicit obstruction for h_F(E_{a,b,c}) ≤ C_ε·(1+ε)·log rad(abc) via Arakelov/Faltings — without Szpiro or IUT | READY — A1-A7 pass |
+| OB-02 | [OB-02-iut-corollary-312-isomorphism.md](OB-02-iut-corollary-312-isomorphism.md) | Supply explicit isomorphism φ: Θ₁ → Θ₂ (volume-preserving) resolving Scholze–Stix; machine-replayable proof of IUT Cor. 3.12 | READY — A1-A7 pass |
+| OB-03 | [OB-03-p-height-framework.md](OB-03-p-height-framework.md) | Construct formally-verified rad/height/discriminant/conductor framework (CORE-2 / CL-09 prerequisite) — no abc-equivalent input | READY — A1-A7 pass |
 
 ## File naming
 

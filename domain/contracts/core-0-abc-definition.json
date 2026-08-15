@@ -2,18 +2,18 @@
   "contract_version": "2",
   "claim_id": "core-0-abc-definition",
   "note": "CORE-0 (spec §5.1). Formal definition of the abc conjecture, the rad function, the certificate tuple, Theorem 2 (certificate implies abc), and Theorem 3 (honesty check: certificate existence is equivalent to abc). Module M0/M4. Status: DEF/THM.",
-  "statement_digest": "sha256:PLACEHOLDER-core0-abc-statement-digest-fill-on-freeze",
+  "statement_digest": "sha256:aaabb4bb800c92cf942fd762e3abb28c9304facc2c96a4da3c757d8bd7f054cc",
   "dependencies": [],
   "evidence": {
     "mode": "joint",
     "required": [
-      {"role": "abc-definition", "media_type": "text/markdown", "digest": "sha256:PLACEHOLDER-abc-definition"}
+      {"role": "abc-definition", "media_type": "text/markdown", "digest": "sha256:96e52b86dd2f8b41caa3fc1046cbdd21793ebe88b2ac9eafab1562cb3fa8a447"}
     ]
   },
   "checker": {
     "protocol": "proofctl-checker/v2",
-    "checker_digest": "sha256:PLACEHOLDER-core0-checker",
-    "schema_digest": "sha256:PLACEHOLDER-core0-schema"
+    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "schema_digest": "sha256:14c1a11a849a3c704220885d9d2632112ab1275df66a24037384904755787733"
   },
   "runtime": {"class": "native-dev", "network": "none"},
   "obligations": [

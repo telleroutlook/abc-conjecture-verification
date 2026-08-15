@@ -1,0 +1,65 @@
+{
+  "certificate_format": "abc-proof-term-v1",
+  "claim_id": "CL-03",
+  "statement": "a certificate (epsilon_bound, K_epsilon, P_height, P_ineq, P_finiteness) implies the abc conjecture",
+  "module": "M6",
+  "proof_kind": "definitional",
+  "premises": [
+    {
+      "claim_id": "CL-01",
+      "status": "DEF",
+      "role": "rad-function-definition",
+      "note": "rad(n) is well-defined and multiplicative for coprime inputs (spec §1.1)"
+    },
+    {
+      "claim_id": "def-abc-conjecture",
+      "status": "DEF",
+      "role": "abc-statement",
+      "note": "abc conjecture: for all epsilon>0 there exists K_epsilon such that for all coprime a+b=c: c < K_epsilon * rad(abc)^(1+epsilon) with finitely many exceptions (spec §1.1)"
+    },
+    {
+      "claim_id": "def-certificate-tuple",
+      "status": "DEF",
+      "role": "certificate-definition",
+      "note": "certificate = (epsilon_bound, K_epsilon, P_height, P_ineq, P_finiteness) as in spec Definition 1"
+    }
+  ],
+  "proof_steps": [
+    {
+      "step": 1,
+      "label": "unfold-abc-conjecture",
+      "claim": "abc conjecture for epsilon := (for all coprime a+b=c: c <= K_eps * rad(abc)^(1+eps)) except finitely many",
+      "justification": "Direct unfolding of Definition 1 of the abc conjecture (spec §1.1). Finitely many exceptions are allowed."
+    },
+    {
+      "step": 2,
+      "label": "unfold-certificate-P_ineq",
+      "claim": "P_ineq in the certificate is a universal statement: for ALL coprime a+b=c, c <= K_eps * rad(abc)^(1+eps)",
+      "justification": "Certificate definition (spec Definition 1, §1.2): P_ineq must be a universal bound over all coprime triples, not agreement on a finite collection (spec §2.1, B3)."
+    },
+    {
+      "step": 3,
+      "label": "unfold-certificate-P_finiteness",
+      "claim": "P_finiteness in the certificate proves: {(a,b,c) coprime, a+b=c : c > K_eps * rad(abc)^(1+eps)} is finite",
+      "justification": "Certificate definition (spec Definition 1, §1.2): P_finiteness provides the finiteness of exceptions."
+    },
+    {
+      "step": 4,
+      "label": "identify-components",
+      "claim": "The conjunction of P_ineq (universal bound with finitely many exceptions) exactly matches the abc conjecture statement for this epsilon",
+      "justification": "Definitional substitution: step 1 = conjunction of steps 2 and 3.",
+      "from": [1, 2, 3]
+    },
+    {
+      "step": 5,
+      "label": "conclusion",
+      "claim": "Given a certificate (epsilon_bound, K_epsilon, P_height, P_ineq, P_finiteness), the abc conjecture holds for epsilon = epsilon_bound",
+      "justification": "Substitution from step 4: the certificate directly witnesses the abc conjecture for this epsilon. No construction leaves used — this is purely definitional.",
+      "from": [4]
+    }
+  ],
+  "qed_claim": "CL-03",
+  "forbidden_inputs_used": [],
+  "non_circularity": "The proof is purely definitional. No abc triples, no fitted K_epsilon, no Szpiro assumed, no IUT used. The certificate definition was constructed to match the abc statement precisely.",
+  "spec_reference": "spec/SPECIFICATION.md Theorem 2"
+}
