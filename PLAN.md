@@ -808,6 +808,55 @@ For squarefree ω=4 type (2,1,1) with a=p₁p₂ (p₁<p₂), b=r, c=s=p₁p₂+
 - Type (2,1,1): UNBOUNDED ratio — no universal non-degenerate bound relative to R^{1/3}.
 - Analogy: ω=3 type (1,1,1) is bounded (ratio < 1); ω=3 type (0,2,1) has bound √(7/6).
 
+#### Step F7a — Type (1,2,1) complete characterization ✅ COMPLETE (2026-08-15)
+
+Script: `discovery/m2_directions/t17_type121_characterization.py`
+**194 triples c≤300 verified, EXIT_CODE=0. Max ratio 0.7853 < 2^{-1/3} = 0.7937.**
+
+**Theorem F7a [proved analytically]:**
+For squarefree ω=4 type (1,2,1) with a=p (prime), b=qr (q<r primes), c=s prime, p+qr=s:
+1. Degenerate vector: (0,q,−r,0) ∈ L₀ with norm r. (ring: prs·q + pqs·(−r)=0; W=0)
+2. Non-degenerate vector: (p,−q,0,0) ∈ L with W=−2pqr≠0, norm max(p,q).
+3. **Degeneracy condition: a > r** (larger prime factor of b), equivalently r < p ≤ 2r.
+4. **Ratio bound: max(p,q)/R^{1/3} ≤ 2^{-1/3} ≈ 0.7937** (universal, proved by calculus).
+   Let t=p/r ∈ (1,2): ratio = t^{2/3}/(2(t+2))^{1/3}, strictly increasing, sup at t→2 is 2^{-1/3}.
+
+**Key difference from type (2,1,1):** type (1,2,1) has a universal upper bound on the
+non-degenerate ratio; type (2,1,1) does not.
+
+#### Step F7b — Types (0,1,3) and (0,3,1) structural analysis ✅ COMPLETE (2026-08-15)
+
+Script: `discovery/m2_directions/t18_types_013_031_structure.py`
+**14 triples type (0,1,3) c≤400 + 9 triples type (0,3,1) b≤200 verified, EXIT_CODE=0.**
+
+**Theorem F7b [proved analytically]:**
+For squarefree ω=4 type (0,1,3): a=1, b=r prime, c=p₁p₂p₃, 1+r=p₁p₂p₃:
+- W = ψ_r, so degenerate iff ψ_r=0.
+- Divisibility: gcd(r, p₁p₂p₃)=1 → r | ψ_r for any non-degenerate vector.
+- **Non-degenerate minimum = r = b** (explicit vector (p₁,0,0,r) achieves norm r).
+- **Ratio = r^{2/3}/(p₁p₂p₃)^{1/3} → ∞** as r grows along primes with 1+r=p₁p₂p₃.
+
+For type (0,3,1): a=1, b=p₁p₂p₃, c=r prime, same structure by b↔c symmetry.
+Non-degenerate minimum = r = c; ratio likewise unbounded.
+
+Both types have large observed ratios: (1,29,30) ratio=3.04, (1,373,374) ratio=7.19.
+
+**Grand classification of ω=4 types (squarefree, canonical a≤b):**
+
+| Type | Condition | Degen? | nd_min | Ratio | Bound |
+|---|---|---|---|---|---|
+| (0,2,2) | a=1, b=pq, c=rs | Never | max(p,r) | ≤ 0.505 | BOUNDED |
+| (1,1,2) | a=p, b=q, c=rs | Never | max(p,r) | ≤ 0.601 | BOUNDED |
+| (1,2,1) | a=p, b=qr, c=s | iff p>r | max(p,q) | ≤ 2^{-1/3}≈0.794 | BOUNDED |
+| (2,1,1) | a=p₁p₂, b=r, c=s | Always | max(p₁,r) | grows ~r^{1/3} | UNBOUNDED |
+| (0,1,3) | a=1, b=r, c=p₁p₂p₃ | Always | r | grows ~r^{2/3} | UNBOUNDED |
+| (0,3,1) | a=1, b=p₁p₂p₃, c=r | Always | r | grows ~r^{2/3} | UNBOUNDED |
+
+**Pattern:** unbounded non-degenerate ratio arises exactly when a constituent with ≥2
+prime factors is in the "a position" (types (2,1,1)) OR when a single prime stands alone
+against a 3-prime product (types (0,1,3), (0,3,1)), forcing the lattice to accommodate
+large ψ values by divisibility.
+
 ### Hard constraints (same as Part X)
 
 - **B2:** No known abc triples as construction input.
