@@ -491,3 +491,31 @@ theorem pasten_F10_PbPc_nd (a b : ℤ) (ha : a ≠ 0) (hb : b ≠ 0) :
 theorem pasten_F10_crossing_nd (a b t : ℤ) (ha : a ≠ 0) (hb : b ≠ 0) (ht : t ≠ 0) :
     a * b * t ≠ 0 :=
   mul_ne_zero (mul_ne_zero ha hb) ht
+
+/-!
+## F16: Sharp bound 2^{-1/2} for type (1,1,1)
+
+For squarefree type (1,1,1): a=p, b=q, c=r (all prime, p ≤ q ≤ r, p+q=r).
+  nd = q (second smallest of {p,q,r}).
+  R = p*q*r.
+  ρ² = q / (p*(p+q)).
+
+THEOREM F16: ρ² < 1/2 for ALL type (1,1,1) triples.
+Proof: 2q < p*(p+q) ← p²+q*(p-2) ≥ 4 > 0 since p≥2.
+Sharpness: p=2, q→∞ with r=q+2 prime → ρ² → 1/2.
+-/
+
+/-- [THM] F16.key: The integer inequality underpinning ρ < 1/√2 for type (1,1,1). -/
+theorem pasten_F16_111_key (p q : ℕ) (hp : 2 ≤ p) (hq : 0 < q) :
+    2 * q < p * (p + q) := by
+  nlinarith
+
+/-- [THM] F16: For type (1,1,1), ρ² = q/(p*(p+q)) < 1/2 as a real inequality. -/
+theorem pasten_F16_111_ratio_sq_lt_half (p q : ℕ) (hp : 2 ≤ p) (hq : 0 < q) :
+    (q : ℝ) / ((p : ℝ) * ((p : ℝ) + (q : ℝ))) < 1 / 2 := by
+  have hpq : (p : ℝ) * ((p : ℝ) + (q : ℝ)) > 0 := by
+    positivity
+  rw [div_lt_div_iff hpq (by norm_num : (2 : ℝ) > 0)]
+  have key := pasten_F16_111_key p q hp hq
+  push_cast
+  linarith
