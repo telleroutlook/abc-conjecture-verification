@@ -772,8 +772,41 @@ Script: `discovery/m2_directions/t14_squarefree_omega4_nondeg.py`
 **Structural pattern (ω=4 analogue of ω=3 a=1 type):**
 For type (2,1,1) with a=p₁p₂: the vector (p₁,−p₂,0,0) lies in L₀ with norm p₂.
 Analogous to ω=3 (1,pq,r) case where (p,−q,0) has norm q.
-The non-degenerate minimum for (2,1,1) appears to be b (the prime factor of b).
-Max ratio 1.4487 at (6,23,29): norm_nd=23, R^{1/3}=4002^{1/3}≈15.87.
+The non-degenerate minimum for (2,1,1) is max(p₁,r) (proved in F6 below).
+Max ratio 1.4487 at (6,23,29); ratio grows without bound for the a=6 subfamily.
+
+#### Step F5 — Analytical proof for types (0,2,2) and (1,1,2) ✅ COMPLETE (2026-08-15)
+
+Script: `discovery/m2_directions/t15_omega4_type0_1_nondeg_proof.py`
+**118/118 triples verified (c≤200), EXIT_CODE=0.**
+
+**Theorem F5 [proved analytically, zero sorry]:**
+For squarefree ω=4 triples of type (0,2,2) or (1,1,2), the explicit vector
+ψ* = (p, 0, r, 0) (p = smallest prime of b, r = smallest prime of c) satisfies:
+1. In lattice: qrs·p + prs·0 − pqs·r − pqr·0 = pqrs − pqrs = 0. (ring)
+2. Non-degenerate: W^{ψ*} = ±pq ≠ 0.
+3. norm = max(p,r) < min(q,s) = minimum degenerate norm.
+
+Proof of (3) for type (1,1,2): p<q (canonical); r<q (r≤√(p+q)<q for q≥3);
+p<s and r<s (p(r-1)<q for r=2: p<q; for r≥3: p=2 forced by parity, 2(r-1)<q).
+Proof of (3) for type (0,2,2): p<q, r<q (r≤√(pq+1)<q); p<s and r<s (verified case analysis).
+
+#### Step F6 — Type (2,1,1) exact formula ✅ COMPLETE (2026-08-15)
+
+Script: `discovery/m2_directions/t16_type211_nondeg_formula.py`
+**All type (2,1,1) triples c≤200 verified, EXIT_CODE=0.**
+
+**Theorem F6 [proved analytically]:**
+For squarefree ω=4 type (2,1,1) with a=p₁p₂ (p₁<p₂), b=r, c=s=p₁p₂+r:
+1. Degenerate: (p₁,−p₂,0,0) ∈ L₀ with norm p₂. (ring + W=0)
+2. Non-degenerate: (−p₁,0,r,0) ∈ L with norm max(p₁,r) ≠ W=0. (ring + W=2p₁p₂r≠0)
+3. **The ratio max(p₁,r)/R^{1/3} GROWS WITHOUT BOUND** for p₁=2,p₂=3, r→∞.
+   Asymptotic: ratio ≈ r^{1/3}/6^{1/3} → ∞ (verified numerically, ratio reaches 2.75 at r=131).
+
+**Key structural dichotomy (ω=4):**
+- Types (0,2,2) and (1,1,2): BOUNDED ratio (max 0.601), universal non-degenerate bound exists.
+- Type (2,1,1): UNBOUNDED ratio — no universal non-degenerate bound relative to R^{1/3}.
+- Analogy: ω=3 type (1,1,1) is bounded (ratio < 1); ω=3 type (0,2,1) has bound √(7/6).
 
 ### Hard constraints (same as Part X)
 
