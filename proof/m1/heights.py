@@ -1,8 +1,14 @@
 """
-proof/m1/heights.py — Faltings height framework scaffold (M1 module).
+proof/m1/heights.py — Height framework scaffold (M1 module).
 
 This module provides the conceptual framework for Weil heights, logarithmic
-heights, and Faltings heights as needed for the abc key inequality (CL-09 / CORE-2).
+heights, and the discriminant height of Frey curves, as needed for the abc key
+inequality (CL-09 / CORE-2).
+
+NOTE on terminology (established by OB-03 independent review, 2026-08-15):
+  h_Delta(E) := (1/12) * log|Delta_min(E)|   is the "discriminant height".
+  The true Faltings height (Arakelov-theoretic) also contains an archimedean
+  period term; the two are NOT equal and must NOT be conflated.
 
 STATUS: SCAFFOLD. These are definitions and structural descriptions, not
 a completed proof of P_height. The CONSTRUCTION_STATUS constant records
@@ -62,25 +68,28 @@ def log_weil_height_rational(p: int, q: int) -> float:
 class FreyCurveData:
     """
     Data associated to the Frey curve E_{a,b,c}: y^2 = x(x - a)(x + b)
-    for a coprime triple a + b = c (a, b, c > 0, gcd(a,b) = gcd(b,c) = gcd(a,c) = 1).
+    for a coprime triple a + b = c with a odd, b even (a, b, c > 0, gcd(a,b)=1).
 
-    This curve was introduced by Frey (1986) to relate the abc conjecture
-    to elliptic curves. The key properties:
+    Exact Weierstrass invariants (proved in OB-03 independent review, 2026-08-15;
+    source: Silverman, AEC 2nd ed., Chapter III §1):
+      a1=0, a2=b-a, a3=0, a4=-ab, a6=0
+      b2 = 4(b-a),  b4 = -2ab,  b6 = 0,  b8 = -(ab)^2
+      c4 = 16(a^2 + ab + b^2)
+      Delta = 16(abc)^2          (exact identity, no O(1) error)
+      Delta_min = 2^(4-12s) * (abc)^2,  s in {0,1}
 
-      discriminant: Delta = (abc)^2 * 2^4  (up to 6th-power factors from the minimal model)
-      j-invariant:  j = 2^8 * (a^2 - ab + b^2)^3 / (abc)^2  (schematic)
-      conductor:    N_E | rad(abc)^2  (this is what would need to be proved for the key inequality)
+    Discriminant height (NOT the Faltings height):
+      h_Delta(E) := (1/12) * log|Delta_min|
+                 <= (1/6) * log(abc) + (1/3) * log(2)      [OB-03-B, proved]
 
-    For the abc conjecture, the relevant bound is:
-      log|Delta| ~ 2 log c  (since Delta ~ (abc)^2 and c ~ ab for large c)
-      log N_E ~ 2 log rad(abc)
-    so the Szpiro ratio ~ log|Delta| / log N_E ~ log c / log rad(abc),
-    and bounding this ratio is equivalent to the abc conjecture.
+    Conductor bound (proved in OB-03-C, using Tate algorithm + Silverman ATEC IV.10.4):
+      N_E <= 2^7 * rad(abc)
+    Equivalently: log N_E <= log(rad(abc)) + 7*log(2).
+    The divisibility claim "N_E | rad(abc)^2" is FALSE; (1,8,9) is a counterexample
+    (N_E=48, rad(abc)^2=36).
 
-    STATUS: This is a framework scaffold. The conductor bound N_E | rad(abc)^2
-    is known (Ogg-Szpiro formula, conditional on semistable reduction), but the
-    KEY STEP — bounding log|Delta| / log N_E uniformly — is the content of
-    Szpiro's conjecture, which is equivalent to abc and is unproved over the integers.
+    KEY STEP (unproved — content of Szpiro's conjecture, equivalent to abc):
+    Bounding log|Delta| / log N_E uniformly for all coprime triples.
     """
     a: int
     b: int
@@ -98,39 +107,33 @@ class FreyCurveData:
         return cls(a=a, b=b, c=c, rad_abc=rad(a) * rad(b) * rad(c))
 
     def discriminant_schematic(self) -> int:
-        """Schematic discriminant Δ = 16 * (abc)^2. Not the minimal model discriminant."""
-        return 16 * self.a * self.b * self.c
+        """Exact discriminant Delta = 16*(abc)^2 of the displayed integral model."""
+        return 16 * (self.a * self.b * self.c) ** 2
 
     def log_discriminant_schematic(self) -> float:
         return math.log(self.discriminant_schematic())
 
     def conductor_upper_bound(self) -> int:
         """
-        Conductor upper bound: N_E divides rad(abc)^2.
+        Conductor upper bound: N_E <= 2^7 * rad(abc).
 
-        This is a structural bound from the theory of elliptic curves
-        (the conductor is supported on the primes of bad reduction,
-        which are the primes dividing abc, hence dividing rad(abc)).
-        The exact exponent in the conductor formula requires the full
-        Ogg-Szpiro formula and semistable reduction theory.
+        Proved unconditionally in OB-03-C (Tate algorithm + Silverman ATEC
+        Theorem IV.10.4).  The false claim "N_E | rad(abc)^2" has been removed;
+        (a,b,c)=(1,8,9) is an explicit counterexample (N_E=48 > rad(abc)^2=36).
 
-        STATUS: structural framework; not a complete proof.
+        STATUS: structural framework; the bound is proved for a odd, b even triples.
         """
-        return self.rad_abc ** 2
+        return (2 ** 7) * self.rad_abc
 
     def log_conductor_upper_bound(self) -> float:
         return math.log(self.conductor_upper_bound())
 
     def schematic_szpiro_ratio(self) -> float:
         """
-        Schematic Szpiro ratio: log|Δ| / log N_E  (using upper bounds).
+        Schematic Szpiro ratio: log|Delta| / log(conductor_upper_bound).
 
-        For the abc conjecture, this ratio needs to be bounded uniformly.
-        A bound of (1+ε) on this ratio for all but finitely many curves
-        is equivalent to Szpiro's conjecture (and hence abc).
-
-        STATUS: This function computes the ratio using schematic values.
-        It is NOT a proof that the ratio is bounded.
+        STATUS: uses schematic values.  Not a proof that the ratio is bounded.
+        Bounding this uniformly for all coprime triples is Szpiro's conjecture (abc).
         """
         log_d = self.log_discriminant_schematic()
         log_n = self.log_conductor_upper_bound()
@@ -145,24 +148,25 @@ class FreyCurveData:
 @dataclass
 class FaltingsHeightScaffold:
     """
-    Conceptual scaffold for the Faltings height of an elliptic curve.
+    Conceptual scaffold for heights of an elliptic curve.
 
-    The Faltings height h_F(E) is defined via the Arakelov intersection
-    pairing on the arithmetic surface associated to the Néron model of E.
-    It satisfies the Faltings-Parshin finiteness theorem: for any number
-    field K and any bound B, the set
-       {E/K : h_F(E) <= B}
-    is finite (up to K-isomorphism). This is Faltings theorem (CL-05, BASE).
+    TERMINOLOGY (corrected per OB-03 review, 2026-08-15):
+      h_Delta(E) := (1/12)*log|Delta_min(E)|  is the DISCRIMINANT height.
+      The TRUE Faltings height (Arakelov-theoretic) additionally contains the
+      archimedean period term; the two differ and must not be conflated.
+      Reference: de Jong–Shokrieh (2022) §1.4, citing Faltings (1984) Thm 7 /
+      Silverman (1986) Prop 1.1.
+
+    The Faltings finiteness theorem (CL-05, BASE): for any number field K
+    and bound B, {E/K : h_F(E) <= B} is finite up to K-isomorphism.
 
     For the key inequality, we need a bound of the form:
        h_F(E_{a,b,c}) <= (1+ε) * log rad(abc) + C_ε
-    for all but finitely many abc triples. Establishing this bound
-    uniformly (for ALL coprime triples, not just a fixed prime set)
-    is the content of CORE-2 (P_height, CL-09 [OBL]).
+    for all coprime triples (not just a fixed prime set S).
+    Establishing this uniformly is the content of CORE-2 (P_height, CL-09 [OBL]).
 
-    STATUS: SCAFFOLD. The height is defined conceptually here;
-    actual computation of h_F requires Arakelov intersection theory
-    and goes beyond the current module.
+    STATUS: SCAFFOLD. Height defined conceptually; actual computation of h_F
+    requires Arakelov intersection theory and goes beyond the current module.
     """
     frey_data: FreyCurveData
     status: str = HEIGHT_FRAMEWORK_STATUS

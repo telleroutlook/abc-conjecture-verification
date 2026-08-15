@@ -56,8 +56,8 @@
       "M3": ["M4", "M5", "M6"]
     }
   },
-  "source_lock_hash": "sha256:09342e8a93e8c11e274789524f7083e006721d3c79b6c68790f3a317ce126941",
-  "source_lock_hash_note": "SHA-256 of M1 source files (proof/m1/*.py excluding __init__) in lexicographic order. Frozen at P3 completion (2026-08-15). Reproducible via checker/compute_source_lock_hash.py. Must be computed before any comparison/conclusion modules are admitted.",
+  "source_lock_hash": "sha256:d094dff9cf5dda3feb1a19d0201845cfdb74bab98269212db3b16da34541c131",
+  "source_lock_hash_note": "SHA-256 of M1 source files (proof/m1/*.py excluding __init__) in lexicographic order. Updated 2026-08-15 to include ob03_frey_framework.py (OB-03 independent review verified computations). Reproducible via checker/compute_source_lock_hash.py. Must be computed before any comparison/conclusion modules are admitted.",
   "iut_policy": {
     "note": "IUT-specific policy. Corollary 3.12 of IUTT-III must be independently machine-replayed. The Scholze-Stix dispute is recorded as a blocking obligation. This policy does not adjudicate the dispute.",
     "required_iut_obligation": "core3.iut-corollary-312-independently-verified",
