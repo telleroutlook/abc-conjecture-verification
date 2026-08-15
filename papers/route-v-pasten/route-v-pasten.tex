@@ -725,6 +725,23 @@ For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also 
   $\{kq\}\cup\{kr\}$ (verified numerically for $q\le 73$, \texttt{t54}).
 \end{proof}
 
+\begin{corollary}[F32c: Frobenius number of the norm spectrum]\label{cor:f32c}
+  For a twin-prime triple $(2,q,r=q+2)$ with $q \ge 5$, the largest positive integer
+  that is \emph{not} a non-degenerate norm is $q\cdot r - q - r = q^2 - 2$.
+  Every integer $\ge q^2 - 1$ is an achievable non-degenerate norm.
+\end{corollary}
+
+\begin{proof}
+  By Theorem~\ref{thm:f32b} the achievable norms are the numerical semigroup
+  $\langle q, r \rangle = \langle q, q+2 \rangle$.
+  Since $q$ is an odd prime $\ge 5$ and $r = q+2$ is prime, $\gcd(q,r)=1$.
+  The Sylvester--Frobenius theorem gives Frobenius number
+  $q \cdot r - q - r = q(q+2) - q - (q+2) = q^2 - 2$.
+  Direct check: $q^2 - 2 \equiv -2 \not\equiv 0 \pmod{q}$ and
+  $q^2 - 2 = (q+2)(q-2)+2 \equiv 2 \not\equiv 0 \pmod{q+2}$,
+  confirming $q^2-2$ is not in $\langle q, r \rangle$.
+\end{proof}
+
 \begin{remark}[Note on all type $(1,1,1)$ triples having $p=2$]
   For any type $(1,1,1)$ triple $(p,q,r)$ with $p < q$, we have $r = p+q$.
   If $p \ge 3$, both $p$ and $q$ are odd, so $r = p+q$ is even and composite.
@@ -962,7 +979,8 @@ and (j) the second-minimum and complete spectrum results for type $(1,1,1)$: the
 second minimum non-degenerate norm equals $r$ (F32a, Theorem~\ref{thm:f32a}),
 and for every twin-prime triple with $q \ge 5$ the full spectrum of achievable
 non-degenerate norms is exactly $\{kq:k\ge 1\} \cup \{kr:k\ge 1\}$
-(F32b, Theorem~\ref{thm:f32b}), both Lean-formalized.
+(F32b, Theorem~\ref{thm:f32b}), both Lean-formalized; the Frobenius number of the
+spectrum is $q^2-2$ (Corollary~\ref{cor:f32c}).
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
