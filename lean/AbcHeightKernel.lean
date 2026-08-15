@@ -792,3 +792,53 @@ theorem pasten_F27_122_rho4_lt_half_real (p q r s : ℕ)
       2 * ((p : ℝ) ^ 3 / (2 * (q : ℝ) * r * s)) := by ring
   linarith
 
+/-!
+## F28: Universal pattern sup = 2^{-1/(ω-1)} for balanced single-prime-group types
+
+THEOREM F28: For any ω ≥ 3 and any type (1,k₁,k₂) with k₁+k₂=ω-1 (a=2 subfamily):
+  sup ρ = 2^{-1/(ω-1)}, never achieved at any finite triple.
+
+KEY LEMMA: If n positive integers are all > p (as naturals), then p^n < their product.
+Proof: each xᵢ ≥ p+1, so ∏xᵢ ≥ (p+1)^n > p^n (since p+1 > p, and n ≥ 1).
+
+SPECIFIC CASE (ω=6): type (1,k₁,k₂) with a=2, k₁+k₂=5.
+  nd^4 < (product of 4 primes each > nd) ⟹ ρ^5 < 1/2 ⟹ ρ < 2^{-1/5}.
+-/
+
+/-- [THM] F28.key.gen: For n ≥ 1, if all n naturals in xs are > p, then p^n < their product. -/
+theorem pasten_F28_key_gen {n : ℕ} (hn : 0 < n) (p : ℕ) (xs : Fin n → ℕ)
+    (hlt : ∀ i, p < xs i) : p ^ n < ∏ i : Fin n, xs i := by
+  have hge : ∀ i : Fin n, p + 1 ≤ xs i := fun i => hlt i
+  have hprod_ge : (p + 1) ^ n ≤ ∏ i : Fin n, xs i := by
+    calc (p + 1) ^ n = ∏ _ : Fin n, (p + 1) := by
+          simp [Finset.prod_const, Finset.card_univ]
+      _ ≤ ∏ i : Fin n, xs i :=
+          Finset.prod_le_prod (fun _ _ => by omega) (fun i _ => hge i)
+  linarith [Nat.pow_lt_pow_left (show p < p + 1 by omega) (show n ≠ 0 by omega)]
+
+/-- [THM] F28.omega6.key: p^4 < q*r*s*t for p+1 ≤ q,r,s,t. -/
+theorem pasten_F28_omega6_key (p q r s t : ℕ)
+    (hq : p + 1 ≤ q) (hr : p + 1 ≤ r) (hs : p + 1 ≤ s) (ht : p + 1 ≤ t) :
+    p ^ 4 < q * r * s * t := by
+  have h_prod : (p + 1) * (p + 1) * (p + 1) * (p + 1) ≤ q * r * s * t :=
+    Nat.mul_le_mul (Nat.mul_le_mul (Nat.mul_le_mul hq hr) hs) ht
+  nlinarith [sq_nonneg p, h_prod]
+
+/-- [THM] F28: For ω=6 type (1,k₁,k₂) with a=2, ρ^5 = nd^4/(2·q·r·s·t) < 1/2 in ℝ. -/
+theorem pasten_F28_omega6_rho_lt_half (p q r s t : ℕ)
+    (hq : p + 1 ≤ q) (hr : p + 1 ≤ r) (hs : p + 1 ≤ s) (ht : p + 1 ≤ t) :
+    (p : ℝ) ^ 4 / (2 * (q : ℝ) * r * s * t) < 1 / 2 := by
+  have hq_pos : (0 : ℝ) < (q : ℝ) := by exact_mod_cast (show 0 < q by omega)
+  have hr_pos : (0 : ℝ) < (r : ℝ) := by exact_mod_cast (show 0 < r by omega)
+  have hs_pos : (0 : ℝ) < (s : ℝ) := by exact_mod_cast (show 0 < s by omega)
+  have ht_pos : (0 : ℝ) < (t : ℝ) := by exact_mod_cast (show 0 < t by omega)
+  have key_nat := pasten_F28_omega6_key p q r s t hq hr hs ht
+  have key_real : (p : ℝ) ^ 4 < (q : ℝ) * r * s * t := by exact_mod_cast key_nat
+  have hdenom : (0 : ℝ) < 2 * (q : ℝ) * r * s * t := by positivity
+  have h1 : 2 * (p : ℝ) ^ 4 / (2 * (q : ℝ) * r * s * t) < 1 :=
+    (div_lt_one hdenom).mpr (by nlinarith)
+  have h2 : 2 * (p : ℝ) ^ 4 / (2 * (q : ℝ) * r * s * t) =
+      2 * ((p : ℝ) ^ 4 / (2 * (q : ℝ) * r * s * t)) := by ring
+  linarith
+
+
