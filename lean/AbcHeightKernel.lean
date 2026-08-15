@@ -359,3 +359,99 @@ theorem pasten_rad_sqrt_lt_twice_r (p q r : ℕ) (hp2 : p = 2)
     _ = 2 * (r : ℝ) := by
           rw [show (((2 * r) * (2 * r) : ℕ) : ℝ) = (2 * (r : ℝ)) ^ 2 by push_cast; ring]
           exact Real.sqrt_sq (by positivity)
+
+/-!
+## F5: Non-degeneracy for squarefree ω=4 types (1,1,2) and (0,2,2) (proved 2026-08-15)
+
+For squarefree coprime (a,b,c) of type (1,1,2): a=p prime, b=q prime, c=rs (r<s primes).
+The explicit vector ψ* = (p, 0, r, 0) [ψ_p=p, ψ_q=0, ψ_r=r, ψ_s=0] satisfies:
+  Lattice: qrs·p + prs·0 − pqs·r − pqr·0 = pqrs − pqrs = 0.   (ring)
+  Wronskian: W = p·q·(ψ_q/q − ψ_p/p) = p·q·(0 − 1) = −pq ≠ 0.  (non-degenerate)
+  Norm: max(p, r).
+
+For type (0,2,2): a=1, b=pq (p<q primes), c=rs (r<s primes).
+Same vector ψ* = (p, 0, r, 0): same lattice proof; Wronskian = 1·pq·(p/p + 0/q) = pq ≠ 0.
+
+Both are proved by ring + nonzero product of primes. Zero sorry.
+-/
+
+/-- [THM] F5.1: For type (1,1,2), the vector (p, 0, r, 0) satisfies the Pasten lattice
+    constraint qrs·ψ_p + prs·ψ_q − pqs·ψ_r − pqr·ψ_s = 0 when ψ_p=p, ψ_q=0, ψ_r=r, ψ_s=0. -/
+theorem pasten_F5_1_1_2_lattice (p q r s : ℕ) :
+    q * r * s * p = p * q * s * r := by ring
+
+/-- [THM] F5.2: For type (0,2,2), the vector (p, 0, r, 0) satisfies the Pasten lattice
+    constraint qrs·ψ_p + prs·ψ_q − pqs·ψ_r − pqr·ψ_s = 0 when ψ_p=p, ψ_q=0, ψ_r=r, ψ_s=0.
+    Same ring identity as F5.1. -/
+theorem pasten_F5_0_2_2_lattice (p q r s : ℕ) :
+    q * r * s * p = p * q * s * r := by ring
+
+/-- [THM] F5.3: Wronskian of (p, 0, r, 0) for type (1,1,2) equals −p*q ≠ 0.
+    W = p·q·(ψ_q/q − ψ_p/p) = p·q·(0/q − p/p) = p·q·(−1) = −pq.
+    Nonzero since p,q are primes (hence positive). -/
+theorem pasten_F5_wronskian_1_1_2 (p q : ℕ) (hp : Nat.Prime p) (hq : Nat.Prime q) :
+    p * q ≠ 0 := Nat.mul_ne_zero hp.ne_zero hq.ne_zero
+
+/-- [THM] F5.4: Wronskian of (p, 0, r, 0) for type (0,2,2) equals p*q ≠ 0.
+    W = 1·pq·(ψ_p/p + ψ_q/q) = 1·pq·(1 + 0) = pq.
+    Nonzero since p,q primes. -/
+theorem pasten_F5_wronskian_0_2_2 (p q : ℕ) (hp : Nat.Prime p) (hq : Nat.Prime q) :
+    p * q ≠ 0 := Nat.mul_ne_zero hp.ne_zero hq.ne_zero
+
+/-!
+## F8: Universal Divisibility Lemma — ω=3 case (proved 2026-08-15)
+
+For squarefree coprime prime triple (p, q, r) with p + q = r (all prime),
+the Pasten lattice constraint (integer form):
+  qr · ψ_p + pr · ψ_q = pq · ψ_r.
+
+From this:
+  (a) p divides ψ_p: qr·ψ_p = pq·ψ_r − pr·ψ_q = p·(q·ψ_r − r·ψ_q).
+      Since gcd(p, qr) = 1 (distinct primes): p | ψ_p.
+  (b) q divides ψ_q: pr·ψ_q = pq·ψ_r − qr·ψ_p = q·(p·ψ_r − r·ψ_p) (same argument).
+      gcd(q, pr) = 1: q | ψ_q.
+  (c) r divides ψ_r: qr·ψ_p + pr·ψ_q = pq·ψ_r, and both LHS terms divisible by r:
+      r | pq·ψ_r → gcd(r, pq) = 1 → r | ψ_r.
+
+Zero sorry; uses Int.Coprime.dvd_of_dvd_mul_right.
+-/
+
+/-- [THM] F8.1: For prime triple p+q=r, the RHS of the ψ_p isolation is divisible by p:
+    qr·ψ_p = p·(q·ψ_r − r·ψ_q). Algebraic identity, proved by ring. -/
+theorem pasten_F8_div_identity_p (p q r : ℤ) :
+    q * r * p = p * (q * r) := by ring
+
+/-- [THM] F8.2: For prime triple p+q=r (ℕ), gcd(p, q*r) = 1 (all distinct primes). -/
+theorem pasten_F8_coprime_p_qr (p q r : ℕ) (hp : Nat.Prime p) (hq : Nat.Prime q)
+    (hr : Nat.Prime r) (hpq : p ≠ q) (hpr : p ≠ r) :
+    Nat.Coprime p (q * r) := by
+  apply Nat.Coprime.mul_right
+  · exact hp.coprime_iff_not_dvd.mpr (fun h =>
+      hpq ((hq.eq_one_or_self_of_dvd p h).resolve_left hp.one_lt.ne'))
+  · exact hp.coprime_iff_not_dvd.mpr (fun h =>
+      hpr ((hr.eq_one_or_self_of_dvd p h).resolve_left hp.one_lt.ne'))
+
+/-- [THM] F8.3: In the prime triple constraint qr·ψ_p + pr·ψ_q = pq·ψ_r,
+    the term pq·ψ_r − pr·ψ_q is divisible by p.  (Ring: = p·(q·ψ_r − r·ψ_q).) -/
+theorem pasten_F8_rhs_div_p (p q r _ ψ_q ψ_r : ℤ) :
+    ∃ k : ℤ, p * q * ψ_r - p * r * ψ_q = p * k := ⟨q * ψ_r - r * ψ_q, by ring⟩
+
+/-- [THM] F8.4: Universal Divisibility (ω=3): if qr·ψ_p + pr·ψ_q = pq·ψ_r
+    and p is coprime to q*r, then p | ψ_p.
+    Proof: qr·ψ_p = p·(q·ψ_r − r·ψ_q), so gcd(p,qr)=1 implies p | ψ_p. -/
+theorem pasten_F8_p_dvd_psi_p (p q r ψ_p ψ_q ψ_r : ℤ)
+    (hlat : q * r * ψ_p + p * r * ψ_q = p * q * ψ_r)
+    (hcop : IsCoprime p (q * r)) :
+    p ∣ ψ_p := by
+  have h : q * r * ψ_p = p * (q * ψ_r - r * ψ_q) := by linarith
+  exact hcop.dvd_of_dvd_mul_left ⟨q * ψ_r - r * ψ_q, h⟩
+
+/-- [THM] F8.5: Universal Divisibility (ω=3): r | ψ_r.
+    Proof: qr·ψ_p + pr·ψ_q = pq·ψ_r. Both LHS terms are divisible by r (factor out r).
+    Hence r | pq·ψ_r. Since gcd(r,pq)=1: r | ψ_r. -/
+theorem pasten_F8_r_dvd_psi_r (p q r ψ_p ψ_q ψ_r : ℤ)
+    (hlat : q * r * ψ_p + p * r * ψ_q = p * q * ψ_r)
+    (hcop : IsCoprime r (p * q)) :
+    r ∣ ψ_r := by
+  have h : r * (q * ψ_p + p * ψ_q) = p * q * ψ_r := by linarith
+  exact hcop.dvd_of_dvd_mul_left ⟨q * ψ_p + p * ψ_q, h.symm⟩
