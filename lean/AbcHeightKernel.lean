@@ -1132,3 +1132,10 @@ theorem pasten_F32a_upper (q : ℕ) :
     q² - 2q - 4 < 0, which fails for q ≥ 5. -/
 theorem pasten_F32b_ineq (q : ℕ) (hq : 5 ≤ q) : 2 * q + 4 ≤ q ^ 2 := by nlinarith
 
+/-- [THM] F33_gap: Integer core of second-minimum gap for type (1,1,2).
+    If the second minimum N satisfies N ≤ 2*r1, then k*r1 ≥ N for all k ≥ 2.
+    This shows no non-degenerate norm lies strictly in (r1, N) for type (1,1,2):
+    any such norm would equal r1*|phi_{r1}| with |phi_{r1}| ≥ 2, giving r1*k ≥ 2*r1 ≥ N. -/
+theorem pasten_F33_gap (r1 N k : ℕ) (hk : 2 ≤ k) (hN : N ≤ 2 * r1) : N ≤ k * r1 := by
+  nlinarith
+

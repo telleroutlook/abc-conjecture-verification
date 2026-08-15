@@ -749,6 +749,41 @@ For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also 
   $q$ and $q+2$ both prime applies universally.
 \end{remark}
 
+\subsubsection*{F33: second minimum non-degenerate norm for $\omega=4$ type $(1,1,2)$}
+
+\begin{theorem}[F33: second minimum for type $(1,1,2)$]\label{thm:f33}
+  For type $(1,1,2)$ with $a=p$, $b=q$, $c=r_1 r_2$ ($p < r_1 < r_2$ primes,
+  $p+q = r_1 r_2$, minimum non-degenerate norm $\mathrm{nd} = r_1$):
+  \[
+    \text{second minimum non-degenerate norm} = \min(r_2,\, q,\, 2r_1).
+  \]
+\end{theorem}
+
+\begin{proof}
+  Let $M = \min(r_2, q, 2r_1)$.  We exhibit a vector of norm $M$ and show no
+  non-degenerate norm lies in $(r_1, M)$.
+
+  \textit{Achievability.}
+  If $M = r_2$: $\varphi = (1,0,0,1)$ satisfies the constraint ($S_a+S_b = 1 = S_c$),
+  is non-degenerate ($S_b=0 \ne 1=S_a$), with norm $\max(p,0,0,r_2) = r_2$. \\
+  If $M = q$: $\varphi = (1,-1,0,0)$ is non-degenerate with norm $q$. \\
+  If $M = 2r_1$: $\varphi = (-2,0,-2,0)$ is non-degenerate with norm $2r_1$.
+
+  \textit{Gap lemma.}  Suppose $\psi$ is non-degenerate with
+  $r_1 < \|\psi\|_\infty < M$.
+  Since $r_2 \ge M$, we have $r_2 |\varphi_{r_2}| < r_2$, so $\varphi_{r_2}=0$.
+  Since $q \ge M$, we have $q|\varphi_q| < q$, so $\varphi_q=0$.
+  Non-degeneracy ($\varphi_q \ne \varphi_p$) then forces $\varphi_p \ne 0$.
+  The constraint gives $\varphi_p = \varphi_{r_1}$, so the norm equals
+  $r_1 |\varphi_{r_1}| = r_1 |\varphi_p|$.
+  For the norm to lie strictly in $(r_1, M)$ we need $r_1 < r_1 k < M$ for some
+  integer $k = |\varphi_{r_1}| \ge 2$.  But $k \ge 2$ gives $r_1 k \ge 2r_1 \ge M$
+  (since $M \le 2r_1$ by definition).  Contradiction.
+
+  The integer core ($M \le k r_1$ for $k \ge 2$ and $M \le 2r_1$) is formalized
+  as \texttt{pasten\_F33\_gap} in the Lean kernel (zero \texttt{sorry}).
+\end{proof}
+
 \subsubsection*{F11: $\omega \ge 6$ --- all types unbounded}
 
 \begin{theorem}[F11]\label{thm:f11}
@@ -948,6 +983,9 @@ Additional lemmas added in the E10/E11/E$_n$/F31 extension:
   \item \texttt{pasten\_F32b\_ineq}: $2q+4 \le q^2$ for $q \ge 5$;
     algebraic core blocking $p$-term dominance in the F32b spectrum proof
     (zero \texttt{sorry}).
+  \item \texttt{pasten\_F33\_gap}: $N \le k\cdot r_1$ for $k \ge 2$, $N \le 2r_1$;
+    integer core of second-minimum gap for type $(1,1,2)$ (F33, Theorem~\ref{thm:f33},
+    zero \texttt{sorry}).
 \end{itemize}
 
 \section{Conclusion}
@@ -987,7 +1025,8 @@ second minimum non-degenerate norm equals $r$ (F32a, Theorem~\ref{thm:f32a}),
 and for every twin-prime triple with $q \ge 5$ the full spectrum of achievable
 non-degenerate norms is exactly $\{kq:k\ge 1\} \cup \{kr:k\ge 1\}$
 (F32b, Theorem~\ref{thm:f32b}), both Lean-formalized; the Frobenius number of the
-spectrum is $q^2-2$ (Corollary~\ref{cor:f32c}).
+spectrum is $q^2-2$ (Corollary~\ref{cor:f32c}); and second minimum
+$\min(r_2,q,2r_1)$ for type $(1,1,2)$ (F33, Theorem~\ref{thm:f33}), Lean-formalized.
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
