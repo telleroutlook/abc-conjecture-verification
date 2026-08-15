@@ -4,13 +4,15 @@
 
 **Non-circularity:** This problem does **not** assume the abc conjecture, Szpiro's conjecture (or any of its variants), Mochizuki's IUT Corollary 3.12, any fitted constant K_ε derived from known triples, or any other assertion directly equivalent to abc. The goal is either a proof that avoids all such inputs, or a precise identification of the obstruction showing why the approach cannot be completed without an abc-equivalent hypothesis.
 
+**Review status (2026-08-15):** PARTIAL — Steps 1–3 independently verified and strengthened below; Claim OB-01 and Steps 4–5 open. See `reviews/OB-01-review-2026-08-15.md` for the full referee report.
+
 ---
 
 ## All definitions (self-contained — everything is here)
 
 **Coprime triple.** A triple (a, b, c) of positive integers is *coprime* if gcd(a, b) = gcd(b, c) = gcd(a, c) = 1 and a + b = c.
 
-**rad function.** For a positive integer n, rad(n) = ∏_{p | n, p prime} p (product of distinct prime factors). Convention: rad(1) = 1. For a coprime triple (a, b, c), rad(abc) = rad(a) · rad(b) · rad(c) since gcd(a,b) = gcd(a,c) = gcd(b,c) = 1.
+**rad function.** For a positive integer n, rad(n) = ∏_{p | n, p prime} p (product of distinct prime factors). Convention: rad(1) = 1. For a coprime triple (a, b, c), rad(abc) = rad(a) · rad(b) · rad(c) since gcd(a,b) = gcd(a,c) = gcd(b,c) = 1. Write R = rad(abc) throughout.
 
 **Frey elliptic curve.** For a coprime triple (a, b, c) with a + b = c, the Frey curve is
 
@@ -18,62 +20,63 @@
 
 This is an elliptic curve when a, b, c are nonzero (which holds since a, b, c ≥ 1 and gcd(a,b) = 1 implies c ≥ 2).
 
-**Discriminant of E_{a,b,c}.** The discriminant of the Weierstrass model y² = x(x − a)(x + b) is
+**Discriminant of E_{a,b,c}.** The Weierstrass model y² = x(x−a)(x+b) has invariants
 
-    Δ = 16 · a² · b² · c²  = 16 · (abc)².
+    c₄ = 16(a² + ab + b²),    Δ_W = 16 a² b² c² = 16(abc)².
 
-(Here we use the standard formula Δ = −16 · 4p³ − 27q² for y² = x³ + px + q; converting x(x−a)(x+b) = x³ + (b−a)x² − abx to the form y² = x³ + px + q by completing the square, the discriminant of the cubic factor is (b−a)² + 4ab·1... see step 1 for the explicit reduction to minimal model.)
+**Minimal discriminant.** By Silverman, *The Arithmetic of Elliptic Curves*, 2nd ed. (2009), Lemma VIII.11.3(a), the global minimal discriminant takes exactly one of two values:
 
-**Minimal discriminant.** For E_{a,b,c} (a, b, c coprime positive integers summing to c), after passing to the global minimal Weierstrass model, the minimal discriminant Δ_min satisfies:
+    |Δ_min(E_{a,b,c})| ∈ { 16(abc)² , 2⁻⁸(abc)² }.
 
-    |Δ_min| = 2^{−8} · (abc)² · (product of local correction factors at 2).
+The two cases correspond to the unique Weierstrass change of variables u ∈ {1, 2} admitted by the minimality condition (u⁴ | 288). Consequently:
 
-More precisely (Connell 1994 / Silverman AEC, §VII.1): for a, b, c pairwise coprime, the minimal discriminant has
+    2 log(abc) − 8 log 2  ≤  log |Δ_min|  ≤  2 log(abc) + 4 log 2.   [★]
 
-    v_p(Δ_min) = 2 v_p(abc)   for odd primes p,
-    v_2(Δ_min) = 2 v_2(abc) − 8   (with possible correction ±6 depending on 2-adic valuation of a, b).
+Both bounds are sharp: (a,b,c) = (1,1,2) achieves the upper bound; (a,b,c) = (16,1,17) achieves the lower bound.
 
-A safe uniform lower bound (sufficient for this problem) is:
+For odd prime p | abc, coprimeness forces v_p(abc) = v_p(exactly one of a,b,c), and one checks p ∤ c₄, so
 
-    log |Δ_min| ≥ 2 log(abc) − 8 log 2 − 6 log 2 = 2 log(abc) − 14 log 2.
+    v_p(Δ_min) = 2 v_p(abc).          (Silverman, Lemma VIII.11.3(b))
 
-**Conductor of E_{a,b,c}.** The arithmetic conductor N_E is defined by N_E = ∏_p p^{f_p}, where the local exponents f_p are
+The "p² ‖ abc" shorthand in earlier drafts was imprecise; the valuation can be arbitrarily large.
 
-    f_p = 0            if E has good reduction at p,
-    f_p = 1            if E has multiplicative reduction at p,
-    f_p = 2 + δ_p      if E has additive reduction at p (δ_p ≥ 0 from wild part).
+**Conductor of E_{a,b,c}.** The arithmetic conductor is N_E = ∏_p p^{f_p}. By Silverman Lemma VIII.11.3(b):
+- For every odd prime p | abc: reduction is multiplicative, so f_p = 1.
+- For odd primes p ∤ abc: good reduction, f_p = 0.
+- At p = 2: standard local analysis gives 0 ≤ f₂ ≤ 8.
 
-Key facts:
-- E_{a,b,c} has bad reduction exactly at primes p | abc (Frey 1986).
-- rad(N_E) = rad(2abc) (all bad-reduction primes divide 2abc).
-- For odd primes p | abc: f_p ∈ {1, 2} (multiplicative or tame additive).
-- For p = 2: f_2 ≤ 8 (bounded wild part for curves over Q_2).
+Therefore N_E = 2^{f₂} ∏_{p | abc, p odd} p, and since exactly one of a,b,c is even,
 
-Therefore:
+    R = 2 · ∏_{p | abc, p odd} p,     so
 
-    log N_E ≤ Σ_{p | abc} f_p log p ≤ Σ_{p | abc} (2 + δ_p) log p ≤ 2 log rad(abc) + Σ_p δ_p log p.
+    N_E = 2^{f₂−1} R,    and    log N_E ≤ log R + 7 log 2.
 
-Since δ_p = 0 for odd p (Frey curves are semistable at odd primes — Serre 1987), and δ_2 ≤ 6:
+Note: the bad-reduction set at odd primes is exactly {odd p | abc}; at p = 2 the situation requires separate analysis (e.g. (16,1,17) has good reduction at 2 despite 2 | abc).
 
-    log N_E ≤ 2 log rad(abc) + 6 log 2.
+**Faltings height.** The Faltings height h_F(E) is defined via Arakelov theory. We use the normalization of Murty–Pasten (*Modular forms and effective Diophantine approximation*, J. Number Theory 133 (2013), Theorems 5.1, 5.4):
 
-**Faltings height.** The Faltings height of an elliptic curve E/Q is defined via Arakelov theory as:
+    12 h_F(E) = log|Δ_E| − log(|Δ(τ_E)| · (Im τ_E)⁶) + 12 log(2π).
 
-    h_F(E) = − (1/[Q:Q]) Σ_{v place of Q} log ‖ω‖_v
+Their Theorem 5.4 gives the unconditional lower bound
 
-where ω is a Néron differential on the minimal model of E, and ‖·‖_v are normalized metrics at each place. An explicit formula for the Faltings height in terms of the minimal discriminant and period is (Silverman, *Advanced Topics in the Arithmetic of Elliptic Curves*, Chapter II, Theorem 1.1):
+    12 h_F(E) > log|Δ_E| + 28.326.
 
-    h_F(E) = (1/12) log |Δ_min(E)| − (1/2) log(2π) − (1/2) log Ω_E + O(1)
+Combined with [★] and abc ≥ c:
 
-where Ω_E = ∫_{E(C)} |ω ∧ ω̄| is the real period. For comparison purposes, the *naive height* of E relative to its j-invariant satisfies h(j(E)) = h_F(E) + O(1) (bounded constant independent of E).
+    h_F(E_{a,b,c}) > (1/6) log c + (28.326 − 8 log 2) / 12
+                   = (1/6) log c + 1.8984….
 
-A simpler equivalent form used in this problem: since the real period Ω_E satisfies 0 < Ω_E ≤ C_0 (bounded above by a universal constant for elliptic curves with |Δ_min| ≥ 1), we have the lower bound
+Under any other standard normalization, this becomes h_F ≥ (1/6) log c − C for a universal constant C.
 
-    h_F(E) ≥ (1/12) log |Δ_min(E)| − C_1
+The comparison h(j(E)) = h_F(E) + O(1) with O(1) uniform over all elliptic curves is **not** valid; the precise comparison contains log(1 + h(j)) terms (Löbrich, JTNB 29 (2017), Proposition 3.1).
 
-for a universal constant C_1 > 0.
+For the upper direction: Murty–Pasten Theorem 7.1 gives unconditionally
 
-**Quality of a coprime triple.** The quality of (a, b, c) is q(a,b,c) = log c / log rad(abc). The abc conjecture (in Masser–Oesterlé form) asserts: for every ε > 0, there exists K_ε > 0 such that c ≤ K_ε · rad(abc)^{1+ε} for all coprime triples — equivalently, q(a,b,c) ≤ 1 + ε except for finitely many triples.
+    h_F(E) < 0.1 N_E log N_E + 11,
+
+which for Frey curves yields h_F = O(R log R), far from the O(log R) target of Claim OB-01.
+
+**Quality of a coprime triple.** The quality is q(a,b,c) = log c / log R. Standard abc asserts: for every ε > 0 there are only finitely many coprime triples with q > 1 + ε. Fixed-power weak abc (open; Pasten Conjectures 1.1–1.2, J. Number Theory 254 (2024)) asserts: there exists an effective fixed K with q(a,b,c) ≤ K for all coprime triples.
 
 ---
 
@@ -81,13 +84,15 @@ for a universal constant C_1 > 0.
 
 **Claim OB-01.** For every ε > 0 there exists a constant C_ε > 0, computable from ε alone (no abc triples, no fitted parameters), such that for **all** coprime triples (a, b, c) with a + b = c and a, b, c ≥ 1:
 
-    h_F(E_{a,b,c}) ≤ C_ε · (1 + ε) · log rad(abc).
+    h_F(E_{a,b,c}) ≤ C_ε · (1 + ε) · log R.
 
-Equivalently (using the lower bound on h_F from the minimal discriminant):
+**Logical status of Claim OB-01 (corrected).** Since C_ε is unconstrained, the factor (1 + ε) is absorbed: Claim OB-01 is equivalent to the existence of an effective fixed K with h_F(E_{a,b,c}) ≤ K log R for all triples. Via the lower bound h_F > (1/6) log c + 1.898… and the upper direction in §5.2 of the referee report, this is in turn equivalent to **effective fixed-power weak abc** (bounded quality q ≤ K₀ for an effective K₀). This is an open conjecture (Pasten 2024, op. cit.) but is **strictly weaker** than standard abc.
 
-    (1/12) log |Δ_min(E_{a,b,c})| ≤ C_ε · (1 + ε) · log rad(abc) + O(1).
+To target standard abc strength, the claim would need a fixed leading coefficient, e.g.:
 
-Note: since log |Δ_min| ≥ 2 log c − O(1) (see Step 2), this claim implies the quantitative abc inequality c ≤ exp(C_ε (1+ε) log rad(abc) + O(1)) = K_ε' · rad(abc)^{1+ε}, i.e., the abc conjecture. A proof of Claim OB-01 would therefore constitute a proof of the abc conjecture.
+    h_F(E_{a,b,c}) ≤ (1/6 + ε) log R + C_ε.
+
+That stronger form is what, combined with the lower bound, would give c ≤ K_ε R^{1+ε}. The formulation with C_ε · (1+ε) does NOT imply it. (See referee report §1 for the full ε-absorption argument.)
 
 ---
 
@@ -95,112 +100,105 @@ Note: since log |Δ_min| ≥ 2 log c − O(1) (see Step 2), this claim implies t
 
 ### Step 1 — Minimal discriminant formula
 
-**Draft.** For E_{a,b,c} : y² = x(x−a)(x+b), the model y² = x³ + (b−a)x² − abx has discriminant Δ_Weierstrass = 16a²b²c² = 16(abc)². The global minimal model is obtained by removing p^12-powers (Tate algorithm). For odd p, since a, b, c are pairwise coprime, at most one of a, b, c is divisible by p, so p²‖(abc) means p‖(exactly one of a,b,c), giving v_p(Δ_Weierstrass) = 2. The Tate algorithm at an odd prime p with v_p(Δ) = 2 does NOT reduce the model (the model is already minimal at p), so v_p(Δ_min) = v_p(Δ_Weierstrass) = 2v_p(abc) for odd p.
+**Established (unconditionally, by referee).** For E_{a,b,c} : y² = x(x−a)(x+b):
 
-At p = 2: the analysis depends on the 2-adic residues of a, b, c. Since a + b = c and exactly one of {a,b,c} can be even (gcd(a,b) = 1; if a,b both odd then c is even; if one of a,b is even then the other two are odd), the 2-adic part introduces a correction of at most ±8 in v_2(Δ_min) relative to 2v_2(abc).
+    |Δ_min(E_{a,b,c})| ∈ { 16(abc)², 2⁻⁸(abc)² }.
 
-**What to close for Step 1:** Provide an exact formula (or a uniform ±O(1) estimate) for log|Δ_min(E_{a,b,c})| valid for ALL coprime triples, handling all 2-adic cases. Specifically: confirm or correct the claim
+Hence
 
-    2 log(abc) − 14 log 2 ≤ log |Δ_min(E_{a,b,c})| ≤ 2 log(abc) + 8 log 2
+    2 log(abc) − 8 log 2  ≤  log|Δ_min|  ≤  2 log(abc) + 4 log 2.
 
-and verify the lower bound is tight (or improve it).
+Source: Silverman AEC 2nd ed., Lemma VIII.11.3(a). Both bounds are achieved (see §2.3 of the referee report).
+
+**Remaining for Step 1:** None — this step is closed. The earlier draft's bounds (−14 log 2 lower, +8 log 2 upper) are correct but non-optimal; the above are tight.
 
 ---
 
 ### Step 2 — Faltings height lower bound in terms of log c
 
-**Draft.** From Step 1, log |Δ_min| ≥ 2 log(abc) − C_2 for a universal constant C_2. Since a, b ≥ 1 and a + b = c, we have abc = a · b · c ≥ 1 · 1 · c = c, so
+**Established (unconditionally).** By Murty–Pasten Theorems 5.1 and 5.4:
 
-    log |Δ_min| ≥ 2 log c − C_2.
+    h_F(E_{a,b,c}) > (1/6) log c + 1.898…
 
-Combined with h_F ≥ (1/12) log |Δ_min| − C_1:
+This holds in the Murty–Pasten normalization. In any other standard normalization it reads h_F ≥ (1/6) log c − C for a universal constant C.
 
-    h_F(E_{a,b,c}) ≥ (1/6) log c − C_3.
-
-**What to close for Step 2:** Confirm that h_F ≥ (1/6) log c − C_3 for a universal C_3 > 0. This is a LOWER bound on h_F and does not require abc. It tells us h_F grows at least like log c, so bounding h_F from above by log rad(abc) is equivalent to bounding log c by log rad(abc).
+**Remaining for Step 2:** None — this step is closed. Citation correction: the earlier draft cited Silverman *Advanced Topics* Ch. II Thm 1.1; that reference does not support the stated formula. Use Murty–Pasten (2013) throughout.
 
 ---
 
-### Step 3 — Conductor upper bound in terms of rad(abc)
+### Step 3 — Conductor upper bound in terms of R
 
-**Draft.** From the definitions: N_E ≤ 2^8 · (rad(abc)/2)² · ... More precisely, for Frey curves E_{a,b,c} with a,b,c pairwise coprime:
+**Established (unconditionally).** For Frey curves E_{a,b,c} with a,b,c pairwise coprime:
 
-    log N_E ≤ 2 log rad(abc) + 6 log 2.
+    N_E = 2^{f₂−1} R,    0 ≤ f₂ ≤ 8,    so    log N_E ≤ log R + 7 log 2.
 
-This follows from: (i) bad primes of E are exactly the prime divisors of abc; (ii) E is semistable at all odd primes (Frey 1986, Serre 1987); (iii) f_p ≤ 2 for all p | abc.
+This is tighter by one main-term factor compared to the earlier draft (log R vs 2 log R). Source: Silverman Proposition VIII.11.5 and the conductor table in Barrios–Roy, Pacific J. Math. 318 (2022), Lemma 2.2.
 
-**What to close for Step 3:** Verify (or refute) the semistability claim for all odd primes p | abc. Specifically: confirm that for every odd prime p | abc with (a,b,c) any coprime triple, the Frey curve E_{a,b,c} has multiplicative (hence semistable) reduction at p, so f_p = 1 and the conductor contribution is exactly log p (not 2 log p). If this holds, then log N_E ≤ log rad(abc) + O(1) (not 2 log rad(abc)), which would be stronger.
+**Remaining for Step 3:** None — this step is closed. The earlier claim "bad reduction exactly at p | abc" holds for odd p; at p = 2 the bad-reduction membership must be determined separately (see e.g. (16,1,17) which is good at 2 despite 2 | abc).
 
 ---
 
 ### Step 4 — Szpiro-type height-conductor bound (the critical step)
 
-**Draft.** A *Szpiro-type bound* for an elliptic curve E/Q is a bound of the form
+**Status: OPEN.**
 
-    log |Δ_min(E)| ≤ C_Szp · log N_E + O(1)
+A fixed-constant Szpiro bound log|Δ_min(E)| ≤ C_Szp log N_E + O(1) for Frey curves would, via Steps 1–3, give
 
-for some constant C_Szp > 0. Szpiro's conjecture asserts that C_Szp = 6 + ε works for every ε > 0.
+    2 log c − O(1)  ≤  C_Szp log R + O(1),    i.e.,    log c ≤ (C_Szp/2) log R + O(1).
 
-If this bound held with some explicit C_Szp, then from Steps 1–3:
+This is fixed-power weak abc. Via Steps 1–3 and h_F ≤ (1/2) log c + O(1) (from the j-height bound), it would also give Claim OB-01. But:
 
-    (1/12) log |Δ_min| ≥ (1/6) log c − C_3   (Step 2, lower bound on lhs)
-    log |Δ_min| ≤ C_Szp · log N_E + O(1)       (Szpiro-type bound, UNPROVED)
-    log N_E ≤ 2 log rad(abc) + O(1)             (Step 3)
+- This fixed-constant Szpiro bound is open (Pasten Conjectures 1.1–1.2).
+- The standard abc-equivalent Szpiro form uses exponent 6 + ε (not a fixed constant).
+- Via the Frey-curve construction, the naive 6+ε Szpiro bound gives only c ≤ K_ε R^{3/2}, not c ≤ K_ε R^{1+ε}; the correct indicator-variable conversion requires Proposition VIII.11.5 (Silverman) plus a careful exponent accounting.
+- Best unconditional result: Stewart–Yu (Duke Math. J. 108 (2001)) gives log c ≤ κ R^{1/3} (log R)³, far from fixed-power.
 
-Combining: (1/6) log c ≤ (C_Szp/12) · 2 log rad(abc) + O(1), i.e., log c ≤ (C_Szp/6 · 2) log rad(abc) + O(1).
-
-Setting C_ε = C_Szp/3 gives the height bound in Claim OB-01.
-
-**What to close for Step 4:** The Szpiro-type bound log |Δ_min(E)| ≤ C_Szp · log N_E + O(1) is equivalent to Szpiro's conjecture (for Frey curves). Szpiro's conjecture is equivalent to the abc conjecture (Szpiro–Oesterlé–Masser, 1985; see Hindry–Silverman, "Sur le nombre de points de torsion rationnels sur une courbe elliptique", 1988). Therefore, this step CANNOT be closed without an abc-equivalent hypothesis.
+**What to close for Step 4:** Prove, without assuming abc or Szpiro, that log|Δ_min(E_{a,b,c})| ≤ C_fixed · log N_E + O(1) for a universal constant C_fixed, for all Frey curves. This is equivalent to fixed-power weak abc and is an open problem in the current literature.
 
 ---
 
 ### Step 5 — Obstruction analysis
 
-**Draft.** The obstruction to completing the proof skeleton is precisely at Step 4.
+**Status: the earlier draft's argument was incorrect; a weaker correct statement follows.**
 
-To demonstrate the obstruction concretely: consider the family of triples (a_n, b_n, c_n) such that c_n / rad(abc_n)^{1+ε} → ∞ (if abc fails — i.e., a family of triples with quality q(a_n,b_n,c_n) → ∞). For such a family, E_{a_n,b_n,c_n} would have
+The correct structural picture is:
 
-    log |Δ_min(E_{a_n,b_n,c_n})| ≥ 2 log c_n − C_2   →   ∞
+1. Steps 1–3 reduce Claim OB-01 to the existence of an effective K with log c ≤ K log R (fixed-power weak abc / bounded quality).
+2. Step 4 is exactly this open conjecture.
+3. Claim OB-01 does **not** imply standard abc (the ε-absorption argument, referee §1, shows the formulation with unconstrained C_ε cannot achieve 1+ε exponent).
 
-while
+The earlier Step 5 draft argued: "if standard abc fails, one can find a family with q_n → ∞, and then the Szpiro ratio would be unbounded." This is **wrong**: standard abc failing at some fixed ε means c_n / R_n^{1+ε} → ∞, but this does not imply q_n = log c_n / log R_n → ∞ (the log-ratio need not diverge). The claim q_n → ∞ describes failure of fixed-power weak abc, which is a strictly stronger statement.
 
-    log N_{E_{a_n,b_n,c_n}} ≤ 2 log rad(a_n b_n c_n) + O(1)   ≤   (2/(1+ε)) log c_n + O(1).
-
-The ratio log |Δ_min| / log N_E → 2 log c_n / ((2/(1+ε)) log c_n) = (1+ε) → 1+ε as n → ∞. The Szpiro ratio for these curves approaches 1+ε · 6 in the limit (the factor of 6 comes from the Δ_min ↔ N_E relationship for triples with large quality ratio). Any proof of Step 4 that does not use abc as a hypothesis must bound this ratio universally — which IS the abc conjecture.
-
-**What to close for Step 5:** Either (a) exhibit an explicit family of Frey curves where log |Δ_min(E)| / log N_E is unbounded (which would DISPROVE Szpiro's conjecture and hence abc), or (b) provide a proof that log |Δ_min(E)| / log N_E is universally bounded for Frey curves, with an explicit bound, that does NOT assume Szpiro or abc. Either outcome resolves Claim OB-01.
+**What to close for Step 5:** Either (a) exhibit an explicit family of Frey curves where log|Δ_min(E)| / log N_E is unbounded (which would disprove fixed-power weak Szpiro and hence fixed-power weak abc), or (b) prove log|Δ_min(E)| / log N_E ≤ C universally for Frey curves without assuming Szpiro or abc. Either outcome resolves Claim OB-01.
 
 ---
 
 ## Acceptance criteria
 
-1. **CONFIRMED-PROOF**: A complete proof of h_F(E_{a,b,c}) ≤ C_ε (1+ε) log rad(abc) for ALL coprime triples (a,b,c), with C_ε depending only on ε (no abc triples, no Szpiro assumed, no abc-equivalent hypothesis at any step). Must include an explicit formula for C_ε.
+1. **CONFIRMED-PROOF**: A complete proof of h_F(E_{a,b,c}) ≤ K log R for ALL coprime triples (a,b,c), with effective K depending on no abc triples or fitted parameters. (This would establish fixed-power weak abc, an open conjecture.)
 
-2. **CONFIRMED-OBSTRUCTION**: A precise identification of the step in the proof skeleton where an abc-equivalent hypothesis is unavoidable, together with an explicit family of elliptic curves demonstrating why the Szpiro-type step cannot be closed without such a hypothesis. Acceptable outcome.
+2. **CONFIRMED-OBSTRUCTION**: A precise identification of the step where an abc-equivalent or fixed-power-weak-abc-equivalent hypothesis is unavoidable, together with an explicit family showing the Szpiro-type step cannot be closed.
 
-3. **PARTIAL**: A complete proof of one or more of Steps 1–3 with a precise statement of what remains open at Step 4 or Step 5.
+3. **PARTIAL**: A complete proof of one or more of Steps 1–3 (already achieved) with a precise statement of what remains open at Step 4.
 
-4. **INCONCLUSIVE**: A clear statement of the current literature state on the Szpiro conjecture for Frey curves, with references, and identification of which sub-problem is the current frontier.
+4. **INCONCLUSIVE**: A clear statement of the current literature state with references and identification of the open frontier.
 
-**Not accepted**: "This follows from Szpiro's conjecture" (equivalent to abc — not a proof). "This follows from the abc conjecture" (circular). "This is well-known" without citation and explicit proof sketch.
+**Not accepted:** "This follows from Szpiro's conjecture." "This follows from the abc conjecture." "This is well-known" without citation and proof sketch. "Claim OB-01 implies standard abc" — this is incorrect (see ε-absorption argument, referee §1).
 
 ---
 
 ## Numerical anchor (sanity only — not an input to the proof)
 
-For (a, b, c) = (1, 8, 9): these are coprime (gcd(1,8)=gcd(1,9)=gcd(8,9)=1) and 1 + 8 = 9. ✓
+For (a, b, c) = (1, 8, 9): coprime, 1 + 8 = 9. ✓
 
-- rad(abc) = rad(1 · 8 · 9) = rad(1) · rad(8) · rad(9) = 1 · 2 · 3 = 6.
-- log rad(abc) = log 6 ≈ 1.792.
-- log c = log 9 ≈ 2.197.
-- Quality: q = log 9 / log 6 ≈ 1.226.
-- Frey curve: E_{1,8,9} : y² = x(x − 1)(x + 8) = x³ + 7x² − 8x.
-- Discriminant of Weierstrass model: Δ_W = 16 · (1·8·9)² = 16 · 5184 = 82944.
-- log |Δ_W| = log 82944 ≈ 11.33.
-- h_F estimate ≈ (1/12) log |Δ_min| ≈ 0.94.
-- (1+ε) log rad(abc) = (1+0.5) · 1.792 ≈ 2.688.
+- R = rad(1·8·9) = 1·2·3 = 6.
+- log R = 1.79176…,  log c = 2.19722…,  q = 1.22629….
+- Weierstrass: Δ_W = 16(1·8·9)² = 82944 = 2¹⁰·3⁴; j = 1556068/81.
+- The model is already minimal: v₂(Δ_W) = 10 < 12, v₃(c₄) = 0 (multiplicative at 3). So Δ_min = 82944.
+- (1/12) log|Δ_min| = 0.9438… — this is the **finite/non-Archimedean contribution only**, not the Faltings height.
+- The actual Faltings height depends on normalization:
+  - Murty–Pasten normalization: h_F(E_{1,8,9}) ≈ 3.377.
+  - Deligne normalization: h_F(E_{1,8,9}) ≈ 0.274.
+  The two differ by a fixed normalization constant; neither equals 0.9438.
 
-Sanity check: h_F(E_{1,8,9}) ≈ 0.94 ≤ 2.688 ✓ for ε = 0.5.
-
-**Label**: This is a sanity check only — it does not constitute evidence that the bound holds universally, and the (1,8,9) triple is not used anywhere in the proof construction.
+**Label**: sanity check only. The triple (1,8,9) is not used anywhere in the proof construction. The "sanity check ✓" in earlier drafts used an incorrect identification of 0.9438 with h_F; under the Murty–Pasten normalization h_F ≈ 3.377 > (1+0.5)·log 6 ≈ 2.688, so the inequality in that draft's check does not hold for ε = 0.5 under that normalization — though this has no bearing on the Claim itself since C_ε is unconstrained.
