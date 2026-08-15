@@ -603,4 +603,48 @@ theorem pasten_F21A_ab_lt_sum_iff_a_one (a b : ℕ) (ha : 1 ≤ a) (hab : a ≤ 
     subst h
     simp
 
+/-!
+## F22: ρ < 1 bound for ω = 5 (non-trivial non-degeneracy threshold)
 
+For any squarefree coprime triple with ω(abc) = 5, let
+  p₁ < p₂ < p₃ < p₄ < p₅  be the five distinct prime factors,
+  nd = p₂   (second smallest = the F10 nd norm for ω=5),
+  R = p₁·p₂·p₃·p₄·p₅.
+
+THEOREM F22: ρ = nd/R^{1/4} < 1, i.e., p₂⁴ < R.
+
+PROOF: p₁ ≥ 2, p₃ ≥ p₂+1, p₄ ≥ p₂+2, p₅ ≥ p₂+3 (distinct integers).
+  p₁·p₃·p₄·p₅ ≥ 2·(p₂+1)·(p₂+2)·(p₂+3) = 2p₂³ + 12p₂² + 22p₂ + 12 > p₂³.
+  Hence R = p₂ · p₁·p₃·p₄·p₅ > p₂⁴.
+
+This establishes ρ^4 < 1, ρ < 1, for ALL ω=5 triples.
+Compare: ω≥6 is unbounded (F11). This is the boundary of the bounded regime.
+-/
+
+/-- [THM] F22.key: For n ≥ 1, n³ < 2*(n+1)*(n+2)*(n+3). -/
+theorem pasten_F22_key (n : ℕ) (hn : 1 ≤ n) :
+    n ^ 3 < 2 * (n + 1) * (n + 2) * (n + 3) := by
+  nlinarith [sq_nonneg n]
+
+/-- [THM] F22: For strictly-ascending integers p₁ < p₂ < p₃ < p₄ < p₅ with p₁ ≥ 2,
+    p₂⁴ < p₁·p₂·p₃·p₄·p₅, i.e., ρ < 1 for all ω=5 squarefree triples. -/
+theorem pasten_F22_omega5_rho4_lt_R (p1 p2 p3 p4 p5 : ℕ)
+    (h1 : 2 ≤ p1) (h12 : p1 + 1 ≤ p2) (h23 : p2 + 1 ≤ p3)
+    (h34 : p3 + 1 ≤ p4) (h45 : p4 + 1 ≤ p5) :
+    p2 ^ 4 < p1 * p2 * p3 * p4 * p5 := by
+  have h4 : p2 + 2 ≤ p4 := by omega
+  have h5 : p2 + 3 ≤ p5 := by omega
+  have hp2 : 1 ≤ p2 := by omega
+  nlinarith [sq_nonneg p2, pasten_F22_key p2 hp2,
+             Nat.mul_le_mul_right p5 h34,
+             Nat.mul_le_mul h23 h45]
+
+/-- [THM] F22.real: ρ⁴ = p₂⁴/(p₁·p₂·p₃·p₄·p₅) < 1 in ℝ. -/
+theorem pasten_F22_omega5_rho_lt_one_real (p1 p2 p3 p4 p5 : ℕ)
+    (h1 : 2 ≤ p1) (h12 : p1 + 1 ≤ p2) (h23 : p2 + 1 ≤ p3)
+    (h34 : p3 + 1 ≤ p4) (h45 : p4 + 1 ≤ p5) :
+    (p2 : ℝ) ^ 4 / ((p1 : ℝ) * p2 * p3 * p4 * p5) < 1 := by
+  have hR : (0 : ℝ) < (p1 : ℝ) * p2 * p3 * p4 * p5 := by positivity
+  rw [div_lt_one hR]
+  have key := pasten_F22_omega5_rho4_lt_R p1 p2 p3 p4 p5 h1 h12 h23 h34 h45
+  exact_mod_cast key
