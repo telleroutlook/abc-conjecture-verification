@@ -1196,6 +1196,39 @@ where quality = log(q+2)/log(2q(q+2)) and ρ² = q/(2(q+2)).
 
 ---
 
+#### Step F32a — Second minimum nondeg norm for type (1,1,1) ✅ COMPLETE (2026-08-16)
+
+**Theorem F32a (proved):** For type (1,1,1) triple (2,q,r=q+2), second minimum
+non-degenerate norm = r = q+2. No non-degenerate vector has norm strictly between q and r.
+
+**Proof:** Upper bound: φ=(0,1,1) gives norm r. Lower bound: any vector with norm in (q,r)
+must have φ_r=0, giving norm = q|φ_p|; no integer k satisfies q < kq < q+2 for q≥3
+(since kq ≥ 2q ≥ q+3 > q+2 for q≥3). 
+
+**Lean:** `pasten_F32a_gap` (q+2 ≤ k·q for k≥2, q≥3), `pasten_F32a_upper` (max(0,q,q+2)=q+2).
+**Paper:** Theorem thm:f32a in F32a subsection.
+**Commit:** 7946536.
+
+---
+
+#### Step F32b — Complete spectrum for type (1,1,1), q≥5 ✅ COMPLETE (2026-08-16)
+
+**Theorem F32b (proved):** For type (1,1,1) triple (2,q,r=q+2) with q≥5, achievable
+non-degenerate norms = {k·q : k≥1} ∪ {k·r : k≥1} exactly.
+
+**Proof:** Achievability: (k,-k,0) for kq, (0,k,k) for kr. Completeness for φ_r≠0:
+if p-term 2|α| dominates both q|β| and r|γ|, then (q-2)(q+2) < 2q → q²-2q-4 < 0,
+impossible for q≥5. Exception: (2,3,5) has q=3 < 2p=4; norms like 16 are achievable
+there. All type (1,1,1) triples have p=2 (since p+q even otherwise).
+
+**Key insight:** q²-2q-4 ≥ 0 for all q≥5 (fails only for q≤3).
+**Lean:** `pasten_F32b_ineq` (2q+4 ≤ q² for q≥5). Build: 2005 jobs, zero errors.
+**Discovery:** `t54_spectrum_omega3.py` — verified for all twin-prime q≤73.
+**Paper:** Theorem thm:f32b in F32b section (extends F32a section). Referenced in conclusion item (j).
+**Commit:** b41d8bf.
+
+---
+
 #### Step F22 — Type (0,2,3) discovery; ω=5 correct ρ classification (2026-08-15) ✅ COMPLETE
 
 **Discovery scripts:** `t33_omega5_bounded.py`, `t34_type023_extremal.py`, `t35_omega5_correct_rho.py`.
