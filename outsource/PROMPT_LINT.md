@@ -85,11 +85,70 @@ for character (modulo trailing whitespace).
 ## A11 — Conductor vs radical conflation
 
 The conductor N(E) of an elliptic curve is NOT equal to rad(abc) or rad(abc)². The
-correct statement is: rad(N_E) | rad(2abc), and log N_E ≤ 2 log rad(abc) + 8 log 2
-(for Frey curves). Any stronger divisibility claim must be verified. Reference failure:
-for (a,b,c)=(1,8,9) the Frey curve has conductor N=48; rad(abc)²=36 and 48 ∤ 36, so
-"N_E | rad(abc)²" and "N_E ≤ rad(abc)²" are both false for this example.
-grep: `N_E.*=.*rad`, `N_E.*≤.*rad`, `conductor.*=.*rad`, `N\(E\).*rad`.
+correct statement is: rad(N_E) | rad(2abc), and log N_E ≤ log rad(abc) + 7 log 2
+(for Frey curves, a-odd/b-even subfamily). Any stronger divisibility claim must be
+verified. Reference failure: for (a,b,c)=(1,8,9) the Frey curve has conductor N=48;
+rad(abc)²=36 and 48 ∤ 36, so "N_E | rad(abc)²" and "N_E ≤ rad(abc)²" are both false.
+grep: `N_E.*=.*rad`, `N_E.*≤.*rad`, `conductor.*=.*rad`, `N\(E\).*rad`,
+      `N_E.*rad(2abc)`, `divides.*rad(2`, `delta.*divides.*rad`.
+Verify: for the numerical anchor triple, check N_E ≤ 2⁷ · R manually.
+
+## A12 — Discriminant height vs Faltings height conflation
+
+`(1/12) log|Δ_min(E)|` is the *discriminant height* h_Δ, NOT the Faltings height h_F.
+The Faltings height also contains a complex-period / modular-form Archimedean term whose
+difference from h_Δ is NOT uniformly bounded by a constant independent of the curve
+(Löbrich, JTNB 29 (2017), Proposition 3.1). Any prompt that labels `(1/12)log|Δ_min|`
+as "Faltings height" or writes `h_F ≈ (1/12)log|Δ_min|` and treats the O(1) as
+universally bounded must be corrected. Reference failure: OB-01 and OB-03 both wrote
+this equation, leading the referee to flag the citation of Silverman AT as wrong.
+grep: `h_F.*1/12.*log`, `Faltings.*1/12`, `naive.*Faltings`, `approximately.*Faltings`,
+      `h_F.*≈.*log.*Delta`, `h_F.*=.*log.*Delta`.
+
+## A13 — Discriminant upper bound in log c (not log(abc))
+
+The bound `log|Δ_min(E_{a,b,c})| ≤ 2 log c + C` for a UNIFORM constant C is FALSE.
+The correct upper bound is `2 log(abc) + 4 log 2`. When a,b are both large, log(abc)
+far exceeds log c. The family (a,b,c)=(1,2n,2n+1) gives log|Δ_min| ≥ 2 log(2n(2n+1))
++ O(1) while 2 log c = 2 log(2n+1), and the gap is unbounded.
+CHECK: if a prompt states an upper bound `log|Δ_min| ≤ f(c) + C` with f depending only
+on c (not abc), verify this is mathematically correct before shipping. In general the
+correct form has log(abc) on the RHS.
+grep: `log.*Delta.*≤.*2.*log c`, `≤.*2 log(c)`, `upper.*log c`, `2 log c.*C`.
+
+## A14 — Vacuous quantifier (ε not in conclusion)
+
+If a claim reads `∀ε>0 ∃(something): P(object, ε_free)` where ε does not appear in P,
+then the ε is vacuous and the claim is just `∃(something): P(object)`. Two failure modes:
+(1) OB-01 style: `h_F ≤ C_ε·(1+ε)·log R` — since C_ε is unconstrained, absorbing (1+ε)
+into C_ε makes ε vacuous; this claim is only O(log R), NOT standard abc.
+(2) OB-03-D style: `∀ε>0 ∃ triple: q > 1` — ε is absent from the predicate q>1.
+CHECK: for every `∀ε>0` quantifier in a claim, confirm ε appears in the conclusion
+predicate with a *fixed* leading coefficient (not hidden inside an unconstrained constant).
+grep: `forall.*eps.*exists`, `C_\varepsilon.*(1.*varepsilon)`, `∀ε.*∃.*C_`,
+      `C_eps.*1.*eps`, `\(1\+\\varepsilon\).*C_`.
+
+## A15 — Parity coverage completeness
+
+If a construction says "assume a odd, b even — possible by permuting a,b", verify this
+covers ALL coprime triples. It does NOT: if both a and b are odd (e.g. (1,1,2), (1,3,4)),
+permuting still leaves both odd. The claim must either:
+(a) explicitly restrict to the a-odd/b-even subfamily, OR
+(b) handle the both-odd case separately.
+Reference failure: OB-03 wrote "a odd, b even (possible by permuting a,b)" without
+qualifying the scope. The both-odd family is a strictly different case.
+grep: `permuting a.*b`, `WLOG.*b even`, `odd.*even.*permut`, `by symmetry.*even`,
+      `possible by permuting`, `renaming`.
+
+## A10 addendum — Prose numerical computations also require verification
+
+A10 (numerical anchor script self-consistency) only triggers on inline Python snippets.
+Any PROSE numerical computation (e.g., "quality = log c / log rad(abc) ≈ X") must also
+be verified by hand or by a quick script. Reference failure: OB-03 Step 4 wrote
+"quality log 9 / log 72 ≈ 0.514" — the denominator should be log rad(72) = log 6,
+not log 72; the correct value is log 9 / log 6 ≈ 1.226.
+CHECK: for every "≈" or "=" followed by a floating-point value in any proof step, run
+`python3 -c "import math; print(math.log(9)/math.log(6))"` (or equivalent) to confirm.
 
 ---
 
