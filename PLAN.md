@@ -654,7 +654,42 @@ Build: PASS ✓
 
 **Review:** `outsource/reviews/OB-11-review-2026-08-15.md` — CONFIRMED (corrected proof).
 
+---
 
+#### Step E11 — Theorem E11 (ω=4 type (1,1,2) min-norm vector) ✅ COMPLETE (2026-08-16)
+
+**Toys:** `discovery/m2_directions/t46c_e11_correct.py` (310 triples, all match)
+
+**Bug in t46/t46b:** Original scripts required r1>q — impossible for actual (1,1,2) triples (which have r1<q). Corrected in t46c.
+
+**THEOREM E11:** For ω=4 type (1,1,2) with a=p, b=q, c=r1·r2 (p,q,r1,r2 distinct primes, p+q=r1·r2, r1<r2):
+  min non-degenerate norm = r1 = F10's nd = second_smallest{p,q,r1}.
+  Optimal vector: ψ=(-p,0,-r1,0), φ=(-1,0,-1,0). Wronskian W=pq≠0.
+  Proof: uses F8 + constraint + group minimum argument.
+
+**Lean formalization** (zero sorry, build passes, commit 4c0195d):
+- `pasten_E11_vec_in_lattice`, `pasten_E11_vec_nondeg`, `pasten_E11_vec_norm`
+- `pasten_E11_lb_key`: if ψ_q=ψ_r1=ψ_r2=0 and constraint holds, then W=0 (lower bound key lemma)
+
+---
+
+#### Step E_n — Universal lower bound theorem ✅ COMPLETE (2026-08-16)
+
+**Toys:** T47 (all ω=4 types, 1s), T48 (all ω=5 types, 1s), T49 (all ω=6 types, 1s)
+
+**THEOREM E_n:** For ANY squarefree coprime triple (a,b,c), every non-degenerate ψ in the Pasten lattice satisfies ‖ψ‖_∞ ≥ nd = second_smallest{min(Pa), min(Pb), min(Pc)}.
+
+**Proof:** If ‖ψ‖_∞ < nd, all Pb∪Pc primes ≥ nd force φ_Pb=0 and φ_Pc=0 → constraint gives φ_Pa=0 → Wronskian=0. Contradiction. □
+
+Together with F10 (upper bound, existence): min non-degenerate norm = nd exactly.
+
+**Lean formalization** (zero sorry, commit 98969c8):
+- `pasten_E10_lb_key` (ω=3) and `pasten_E11_lb_key` (ω=4 type (1,1,2)) as key lemmas
+- General proof documented as comment in lean/AbcHeightKernel.lean
+
+**Paper:** Section "E10/E11/E_n: explicit minimum vectors and universal lower bound" in route-v-pasten.tex (Theorems thm:e10, thm:e11, thm:en). PDF 327KB, zero errors.
+
+Numerical confirmation: all ω=4 (T47), ω=5 (T48), ω=6 (T49) types: min_nondeg_norm = F10's nd. ✓
 
 **Goal:** T11: numerical check whether the minimum-norm lattice vector in F(a,b)
 is also non-degenerate (Wronskian ≠ 0) for the squarefree triples tested.
