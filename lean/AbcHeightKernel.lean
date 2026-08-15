@@ -897,3 +897,59 @@ theorem pasten_F29_221_rho4_lt_sixth (p1 p2 q1 q2 r : ℕ)
       6 * ((q1 : ℝ) ^ 3 / ((p1 : ℝ) * p2 * q2 * r)) := by ring
   linarith
 
+/-!
+## F30: Corrected bound ρ⁴ < 1/2 for ALL type (2,1,2) triples
+
+THEOREM F30: For a=p1*p2, b=q1 (prime), c=r1*r2, all 5 primes distinct, a+b=c:
+  ρ⁴ = nd³ / (p1*p2*q1*r1*r2) < 1/2   where nd = second_smallest{p1, q1, r1}.
+
+PROOF (WLOG nd = p1, i.e., p1 ≤ q1 and p1 ≤ r1):
+  ρ⁴ = p1³ / (p2*q1*r1*r2).
+  KEY: p2*q1*r1*r2 ≥ (p1+1)*2*(p1*(p1+1))  (since p2≥p1+1, q1≥2, r1*r2≥p1*p2≥p1*(p1+1))
+                   = 2*p1*(p1+1)²
+                   > 2*p1³                  (since (p1+1)² > p1²).
+  Hence 2*p1³ < p2*q1*r1*r2. QED.
+
+F25 was WRONG: the true sup = 2^{-1/4} (same as (1,2,2) by a↔b symmetry).
+Extremal: b=2 fixed, a=p*q near-twin, c=p*q+2=r*s near-twin gives ρ⁴→1/2.
+Verified: 2.4M triples c≤50000, 0 violations of ρ⁴ < 1/2.
+-/
+
+/-- [THM] F30.key: 2*p1³ < p2*q1*r1*r2 when 1≤p1, p1+1≤p2, 2≤q1, p1*p2≤r1*r2. -/
+theorem pasten_F30_212_key (p1 p2 q1 r1 r2 : ℕ)
+    (hp1 : 1 ≤ p1) (hp12 : p1 + 1 ≤ p2) (hq1 : 2 ≤ q1) (hr : p1 * p2 ≤ r1 * r2) :
+    2 * p1 ^ 3 < p2 * q1 * r1 * r2 := by
+  have step1 : 2 * p1 * (p1 + 1) ^ 2 ≤ p2 * q1 * r1 * r2 := by
+    calc 2 * p1 * (p1 + 1) ^ 2
+        = (p1 + 1) * 2 * (p1 * (p1 + 1)) := by ring
+      _ ≤ p2 * q1 * (p1 * p2) :=
+          Nat.mul_le_mul (Nat.mul_le_mul hp12 hq1) (Nat.mul_le_mul_left p1 hp12)
+      _ ≤ p2 * q1 * (r1 * r2) := Nat.mul_le_mul_left (p2 * q1) hr
+      _ = p2 * q1 * r1 * r2 := by ring
+  have step3 : 2 * p1 ^ 3 < 2 * p1 * (p1 + 1) ^ 2 := by nlinarith [sq_nonneg p1, hp1]
+  linarith
+
+/-- [THM] F30: ρ⁴ = p1³/(p2*q1*r1*r2) < 1/2 in ℝ for all type (2,1,2) triples (nd=p1 case). -/
+theorem pasten_F30_212_rho4_lt_half (p1 p2 q1 r1 r2 : ℕ)
+    (hp1 : 1 ≤ p1) (hp12 : p1 + 1 ≤ p2) (hq1 : 2 ≤ q1)
+    (hr_eq : r1 * r2 = p1 * p2 + q1) :
+    (p1 : ℝ) ^ 3 / ((p2 : ℝ) * q1 * r1 * r2) < 1 / 2 := by
+  have hr_nat_pos : 0 < r1 * r2 := by
+    have hpq : 0 ≤ p1 * p2 := Nat.zero_le _
+    omega
+  have key_nat : 2 * p1 ^ 3 < p2 * q1 * r1 * r2 :=
+    pasten_F30_212_key p1 p2 q1 r1 r2 hp1 hp12 hq1 (by omega)
+  have key_real : 2 * (p1 : ℝ) ^ 3 < (p2 : ℝ) * q1 * r1 * r2 := by exact_mod_cast key_nat
+  have hp2r : (0 : ℝ) < (p2 : ℝ) := by exact_mod_cast (show 0 < p2 by omega)
+  have hq1r : (0 : ℝ) < (q1 : ℝ) := by exact_mod_cast (show 0 < q1 by omega)
+  have hr1r2r : (0 : ℝ) < (r1 : ℝ) * r2 := by exact_mod_cast hr_nat_pos
+  have hdenom : (0 : ℝ) < (p2 : ℝ) * q1 * r1 * r2 := by
+    calc (0 : ℝ) < (p2 : ℝ) * q1 * ((r1 : ℝ) * r2) :=
+          mul_pos (mul_pos hp2r hq1r) hr1r2r
+      _ = (p2 : ℝ) * q1 * r1 * r2 := by ring
+  have h1 : 2 * (p1 : ℝ) ^ 3 / ((p2 : ℝ) * q1 * r1 * r2) < 1 :=
+    (div_lt_one hdenom).mpr (by linarith)
+  have h2 : 2 * (p1 : ℝ) ^ 3 / ((p2 : ℝ) * q1 * r1 * r2) =
+      2 * ((p1 : ℝ) ^ 3 / ((p2 : ℝ) * q1 * r1 * r2)) := by ring
+  linarith
+

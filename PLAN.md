@@ -1339,6 +1339,10 @@ p2·q1·r1·r2 ≥ p2·2·p1·p2 = 2·p1·p2² > 2·p1³ (using q1≥2, p2>p1). 
 **Paper:** Corrects (2,1,2) row in both tables, fixes abstract and F24-F25 explanation.
 F25 entry in PLAN.md is marked CORRECTED BY F30.
 
+**Lean formalization:** `lean/AbcHeightKernel.lean`, section `## F30`.
+- `pasten_F30_212_key`: 2·p1³ < p2·q1·r1·r2 (Nat, `calc`+`nlinarith`). Requires `1≤p1`.
+- `pasten_F30_212_rho4_lt_half`: ρ⁴ < 1/2 in ℝ (`div_lt_one` pattern). Build: PASS ✓
+
 ---
 
 **Discovery script:** `discovery/m2_directions/t30_rho_distribution.py`

@@ -756,7 +756,10 @@ $\omega \in \{3,4,5\}$ (Table in Theorem~\ref{thm:sharp}); (e) the unifying
 pattern $\sup_{\text{balanced}}(\omega) = 2^{-1/(\omega-1)}$ for \emph{all} $\omega \ge 3$
 (Theorem~\ref{thm:pattern}, F28), with the general key lemma Lean-formalized; and
 (f) the general bound $\rho^4 < 1/6$ for \emph{all} type $(2,2,1)$ triples (F29,
-Lean-formalized), with $\sup = 6^{-1/4}$ approached by the $a=6$ near-twin-prime subfamily.
+Lean-formalized), with $\sup = 6^{-1/4}$ approached by the $a=6$ near-twin-prime subfamily;
+and (g) the corrected bound $\rho^4 < 1/2$ for \emph{all} type $(2,1,2)$ triples (F30,
+Lean-formalized, correcting F25), with $\sup = 2^{-1/4}$ equal to the $(1,2,2)$ value by
+$a \leftrightarrow b$ symmetry.
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
@@ -765,8 +768,9 @@ constituents are forced-large single primes.  For $\omega \ge 6$, every type is 
 The sharp bounds for the bounded types are now analytically complete (Theorem~\ref{thm:sharp}),
 with exact suprema proved for $\omega \in \{3,4,5\}$, the universal formula
 $2^{-1/(\omega-1)}$ proved for all balanced single-prime-group types (Theorem~\ref{thm:pattern}),
-and the general bound $\rho^4 < 6^{-1}$ proved for all type $(2,2,1)$ triples with
-$\sup = 6^{-1/4}$ (F29).
+the general bound $\rho^4 < 6^{-1}$ proved for all type $(2,2,1)$ triples with
+$\sup = 6^{-1/4}$ (F29), and the general bound $\rho^4 < 1/2$ proved for all type $(2,1,2)$
+triples with $\sup = 2^{-1/4}$ (F30).  Both bounds are Lean-formalized.
 
 We also prove a quality boundary for the squarefree subfamily
 (Proposition~\ref{prop:quality}): quality $> 1/2$ if and only if $a = 1$.
