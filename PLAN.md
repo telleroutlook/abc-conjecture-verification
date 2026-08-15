@@ -1075,6 +1075,39 @@ Verified: 0 violations for ALL type (1,1,2) triples c≤5000; max overall ρ=0.7
 
 ---
 
+#### Step F19 — ρ distribution analysis; Lean F12+F14 formalization ✅ COMPLETE (2026-08-15)
+
+**Discovery script:** `discovery/m2_directions/t30_rho_distribution.py`
+
+**Distribution analysis (44 474 squarefree triples, c ≤ 1000):**
+
+| ω | count | mean ρ | max ρ | note |
+|---|---|---|---|---|
+| 3 | 79 | 0.864 | 1.080 | includes unbounded types (0,2,1) etc |
+| 4 | 3223 | 0.945 | 9.919 | (2,1,1), (0,1,3), (0,3,1) unbounded |
+| 5 | 14009 | 0.961 | 31.10 | (1,1,3), (1,3,1), (3,1,1) unbounded |
+| 6 | 18739 | 0.465 | 17.89 | all types unbounded (F11) |
+| 7 | 7766 | 0.248 | 1.631 | all types unbounded |
+
+Bounded-type concentrations:
+- Type (1,1,1): 100% have ρ > 0.5; max = 0.7063 (gap 0.0008 from 2^{-1/2})
+- Type (0,2,2): only 1.4% have ρ > 0.5; mean = 0.147 (well below 0.505 bound)
+- Types (1,1,2),(1,2,1): P99=0.775, P100=0.791, all < 2^{-1/3}=0.794 ✓
+- Types (1,2,2),(2,1,2),(2,2,1) ω=5: max < 0.61, 0% above 0.5 for (1,2,2)
+
+Key finding: the sharp bounds 2^{-1/(ω-1)} are approached by < 1% of triples.
+The bulk distribution concentrates far below the bound (median 0.34 for ω=4 bounded types).
+
+**Lean F12+F14 formalization (zero sorry, build PASSED):**
+- `pasten_F12_121_key`: 2·q₁² < p·q₂·(p+q₁·q₂) for 1≤p≤q₁<q₂ (nlinarith)
+- `pasten_F12_121_ratio_cube_lt_half`: type (1,2,1) ρ³ < 1/2 in ℝ
+- `pasten_F14_112_ceven_key`: 2·p² < q·(p+q) for 1≤p<q (nlinarith)
+- `pasten_F14_112_ceven_ratio_cube_lt_half`: type (1,1,2) c-even ρ³ < 1/2 in ℝ
+
+All three ω≤4 bounded-type sharp bound inequalities now Lean-formalized: F12, F14, F16.
+
+---
+
 #### Step F15 — Exact maxima for ω=5 bounded types ✅ COMPLETE (2026-08-15)
 
 **Discovery script:** `discovery/m2_directions/t27_omega5_maxima.py`

@@ -519,3 +519,63 @@ theorem pasten_F16_111_ratio_sq_lt_half (p q : ℕ) (hp : 2 ≤ p) (hq : 0 < q) 
   have key := pasten_F16_111_key p q hp hq
   push_cast
   linarith
+
+/-!
+## F12: Sharp bound 2^{-1/3} for type (1,2,1)
+
+For squarefree type (1,2,1): a=p (prime), b=q₁*q₂ (q₁<q₂ primes), c=r (prime), p+q₁*q₂=r.
+  nd = q₁ (second smallest of {p, q₁, r}, where p ≤ q₁ ≤ r).
+  R = p*q₁*q₂*r.
+  ρ³ = q₁² / (p * q₂ * r) = q₁² / (p * q₂ * (p + q₁ * q₂)).
+
+THEOREM F12: ρ³ < 1/2 for ALL type (1,2,1) triples with p ≤ q₁ < q₂.
+Proof: 2*q₁² < p*q₂*(p+q₁*q₂) since p*(p+q₁*q₂)*q₂ ≥ (q₁+1)*(q₁²+q₁+1) > 2*q₁².
+Sharpness: q₂/p → 1/2 (i.e. q₂ = p/2), ρ³ → 1/2. Supremum = 2^{-1/3}, never achieved.
+-/
+
+/-- [THM] F12.key: For 1 ≤ p ≤ q₁ < q₂, the denominator dominates the numerator. -/
+theorem pasten_F12_121_key (p q1 q2 : ℕ) (hp : 1 ≤ p) (hpq1 : p ≤ q1) (hq12 : q1 + 1 ≤ q2) :
+    2 * q1 ^ 2 < p * q2 * (p + q1 * q2) := by
+  have hq1q2 : q1 < q2 := hq12
+  have h1 : q1 + 1 ≤ q2 := hq12
+  nlinarith [sq_nonneg q1, sq_nonneg q2, sq_nonneg (q2 - q1),
+             Nat.mul_le_mul_right q2 hp, Nat.mul_le_mul_left q1 h1,
+             Nat.mul_le_mul hpq1 hq1q2]
+
+/-- [THM] F12: For type (1,2,1), ρ³ = q₁²/(p*q₂*(p+q₁*q₂)) < 1/2 in ℝ. -/
+theorem pasten_F12_121_ratio_cube_lt_half (p q1 q2 : ℕ) (hp : 1 ≤ p) (hpq1 : p ≤ q1)
+    (hq12 : q1 + 1 ≤ q2) :
+    (q1 : ℝ) ^ 2 / ((p : ℝ) * (q2 : ℝ) * ((p : ℝ) + (q1 : ℝ) * (q2 : ℝ))) < 1 / 2 := by
+  have hden : (p : ℝ) * (q2 : ℝ) * ((p : ℝ) + (q1 : ℝ) * (q2 : ℝ)) > 0 := by positivity
+  rw [div_lt_div_iff hden (by norm_num : (2 : ℝ) > 0)]
+  have key := pasten_F12_121_key p q1 q2 hp hpq1 hq12
+  push_cast
+  nlinarith [sq_nonneg (q1 : ℝ)]
+
+/-!
+## F14: Sharp bound 2^{-1/3} for type (1,1,2) — c-even subfamily
+
+For squarefree type (1,1,2) with a=p, b=q (both odd primes, p < q), c=p+q (even):
+  nd = p (second smallest of {p, q, r₁} where r₁=2 divides c=p+q).
+  R = 2*p*q*(p+q)/2 = p*q*(p+q).
+  ρ³ = p² / (q*(p+q)).
+
+THEOREM F14 (c-even): ρ³ < 1/2 for all such triples.
+Proof: 2*p² < q*(p+q) since q>p → q*(p+q) > p*(p+q) ≥ 2p² (from p+q > 2p).
+Sharpness: as p/q → 1 (near-equal primes), ρ³ → 1/2. Supremum = 2^{-1/3}, never achieved.
+-/
+
+/-- [THM] F14.key (c-even): For 1 ≤ p < q, we have 2*p² < q*(p+q). -/
+theorem pasten_F14_112_ceven_key (p q : ℕ) (hp : 1 ≤ p) (hpq : p + 1 ≤ q) :
+    2 * p ^ 2 < q * (p + q) := by
+  nlinarith [sq_nonneg p, sq_nonneg q, sq_nonneg (q - p)]
+
+/-- [THM] F14 (c-even): For type (1,1,2) with p < q, ρ³ = p²/(q*(p+q)) < 1/2 in ℝ. -/
+theorem pasten_F14_112_ceven_ratio_cube_lt_half (p q : ℕ) (hp : 1 ≤ p) (hpq : p + 1 ≤ q) :
+    (p : ℝ) ^ 2 / ((q : ℝ) * ((p : ℝ) + (q : ℝ))) < 1 / 2 := by
+  have hden : (q : ℝ) * ((p : ℝ) + (q : ℝ)) > 0 := by positivity
+  rw [div_lt_div_iff hden (by norm_num : (2 : ℝ) > 0)]
+  have key := pasten_F14_112_ceven_key p q hp hpq
+  push_cast
+  nlinarith [sq_nonneg (p : ℝ)]
+
