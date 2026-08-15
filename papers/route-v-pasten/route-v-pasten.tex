@@ -684,6 +684,54 @@ For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also 
   \texttt{pasten\_F32a\_gap} and \texttt{pasten\_F32a\_upper} in the Lean kernel.
 \end{proof}
 
+\begin{theorem}[F32b: complete norm spectrum for type $(1,1,1)$, $q \ge 5$]\label{thm:f32b}
+  Let $(2, q, r)$ be a twin-prime triple with $q \ge 5$.
+  The set of achievable non-degenerate norms is exactly
+  \[
+    \{ k\,q : k \ge 1 \} \;\cup\; \{ k\,r : k \ge 1 \}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  \textit{Achievability.}  The vector $\varphi = (k,-k,0)$ has norm $kq$
+  (non-degenerate since $S_b=-k\ne k=S_a$); $\varphi=(0,k,k)$ has norm $kr$.
+
+  \textit{Completeness.}  Let $(\alpha,\beta)\in\mathbb{Z}^2$ with $\alpha\ne\beta$,
+  $\gamma:=\alpha+\beta$.  If $\gamma=0$ then norm $=q|\alpha|$, done.
+  Suppose $\gamma\ne 0$.  We show $\max(q|\beta|, r|\gamma|) \ge p|\alpha| = 2|\alpha|$;
+  this forces the norm to equal $q|\beta|$ or $r|\gamma|$, hence a multiple of $q$ or $r$.
+
+  Assume for contradiction that $2|\alpha| > r|\gamma|$ and $2|\alpha| > q|\beta|$.
+  By the triangle inequality $|\beta| \ge |\alpha|-|\gamma|$, so
+  $q|\beta| \ge q(|\alpha|-|\gamma|)$.  The second assumption gives
+  $q(|\alpha|-|\gamma|) < 2|\alpha|$, i.e.\ $(q-2)|\alpha| < q|\gamma|$.
+  The first assumption gives $|\gamma| < 2|\alpha|/r = 2|\alpha|/(q+2)$.
+  Substituting:
+  \[
+    (q-2)|\alpha| \;<\; q \cdot \tfrac{2|\alpha|}{q+2}
+    \;\implies\;
+    (q-2)(q+2) \;<\; 2q
+    \;\implies\;
+    q^2 - 4 \;<\; 2q
+    \;\implies\;
+    q^2 - 2q - 4 \;<\; 0.
+  \]
+  For $q \ge 5$ this contradicts $q^2 \ge 2q+5$
+  (formalized as \texttt{pasten\_F32b\_ineq} in the Lean kernel).
+
+  \textit{Exception.}  The triple $(2,3,5)$ ($q=3 < 2p=4$) is the unique exception:
+  $\varphi=(8,-5,3)$ gives norm $16$, not a multiple of $3$ or $5$.
+  For all other twin-prime triples ($q \ge 5$), the spectrum is exactly
+  $\{kq\}\cup\{kr\}$ (verified numerically for $q\le 73$, \texttt{t54}).
+\end{proof}
+
+\begin{remark}[Note on all type $(1,1,1)$ triples having $p=2$]
+  For any type $(1,1,1)$ triple $(p,q,r)$ with $p < q$, we have $r = p+q$.
+  If $p \ge 3$, both $p$ and $q$ are odd, so $r = p+q$ is even and composite.
+  Therefore every type $(1,1,1)$ triple satisfies $p=2$; the twin-prime condition
+  $q$ and $q+2$ both prime applies universally.
+\end{remark}
+
 \subsubsection*{F11: $\omega \ge 6$ --- all types unbounded}
 
 \begin{theorem}[F11]\label{thm:f11}

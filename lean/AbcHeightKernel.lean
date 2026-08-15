@@ -1125,3 +1125,10 @@ theorem pasten_F32a_gap (q k : ℕ) (hq : 3 ≤ q) (hk : 2 ≤ k) :
 theorem pasten_F32a_upper (q : ℕ) :
     max (max 0 q) (q + 2) = q + 2 := by omega
 
+/-- [THM] F32b_ineq: integer core of F32b spectrum completeness.
+    For q ≥ 5: 2q + 4 ≤ q², i.e., (q-2)(q+2) ≥ 2q.
+    This is the key inequality that blocks p-term dominance for q ≥ 5:
+    the condition for p=2 to dominate both the q-term and r-term reduces to
+    q² - 2q - 4 < 0, which fails for q ≥ 5. -/
+theorem pasten_F32b_ineq (q : ℕ) (hq : 5 ≤ q) : 2 * q + 4 ≤ q ^ 2 := by nlinarith
+
