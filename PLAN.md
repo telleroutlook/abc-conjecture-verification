@@ -1229,6 +1229,31 @@ there. All type (1,1,1) triples have p=2 (since p+q even otherwise).
 
 ---
 
+#### Step F32c — Frobenius number of type-(1,1,1) norm spectrum ✅ COMPLETE (2026-08-16)
+
+**Corollary F32c:** Frobenius number of the numerical semigroup {kq}∪{kr} is q²-2.
+Every integer ≥ q²-1 is achievable; q²-2 is the largest non-achievable norm.
+Proof: gcd(q,r)=1 (both odd primes), Sylvester-Frobenius: qr-q-r = q²-2.
+
+**Paper:** Corollary cor:f32c. Referenced in conclusion item (j). Commit: e4e2014.
+
+---
+
+#### Step F33 — Second minimum nondeg norm for type (1,1,2) ✅ COMPLETE (2026-08-16)
+
+**Theorem F33 (proved):** For type (1,1,2) with a=p, b=q, c=r1*r2 (p < r1 < r2) and nd=r1:
+  second minimum non-degenerate norm = min(r2, q, 2*r1).
+
+**Proof:** Three achievability vectors + gap lemma: norm in (r1, M) with M=min(r2,q,2r1)≤2r1
+forces norm = r1*k for integer k≥2, giving r1*k ≥ 2r1 ≥ M. Contradiction.
+
+**Lean:** `pasten_F33_gap` (N ≤ k*r1 for k≥2, N≤2r1; trivially by nlinarith, zero sorry).
+Build: 2005 jobs, zero errors.
+**Discovery:** `t55_second_min_112.py` — all 20 tested type-(1,1,2) triples PASS.
+**Paper:** Theorem thm:f33 added; cited in conclusion + formal verification section. Commit: bb4d433.
+
+---
+
 #### Step F22 — Type (0,2,3) discovery; ω=5 correct ρ classification (2026-08-15) ✅ COMPLETE
 
 **Discovery scripts:** `t33_omega5_bounded.py`, `t34_type023_extremal.py`, `t35_omega5_correct_rho.py`.
