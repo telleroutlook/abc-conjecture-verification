@@ -6,9 +6,13 @@ IUT Corollary 3.12, known abc triples, or any fitted parameter K_ε. It asks onl
 construction of a formally-verified height and rad framework as a building block — not for
 the key inequality itself.
 
-**Review status (2026-08-15):** PARTIAL-ABC (with corrections). After applying the
-corrections below, OB-03-A through OB-03-D are all provable unconditionally. See
-`reviews/OB-03-review-2026-08-15.md` for the full referee report.
+**Review status (2026-08-15):** PARTIAL-FORMALIZATION (ordinary math COMPLETE after
+corrections; no machine proof artifacts submitted). After applying the corrections below,
+OB-03-A through OB-03-D are all provable unconditionally for all coprime abc-triples
+(parity restriction removed; see below). See `reviews/OB-03-review-2026-08-15.md` for
+the first referee report and
+`reviews/OB-03-independent-referee-report-2026-08-15-clean.md` for the independent
+Gate-A report.
 
 ---
 
@@ -29,12 +33,13 @@ Properties required: (1) rad(n) = rad(|n|); (2) rad(p^k) = p for any prime p, k 
 
 Write R = rad(abc) throughout.
 
-**Parity restriction.** Steps 2–3 use the Frey curve construction under the assumption
-**a odd, b even** (so c is odd). This covers exactly those coprime triples where one of
-{a, b} is even; it does NOT cover both-odd triples such as (1, 1, 2). For both-odd triples
-(where c = a+b is even), the roles of a and b cannot be exchanged to make b even without
-changing the problem. A full treatment of all coprime triples requires handling the both-odd
-case separately. Within the a-odd/b-even sub-family, all results below are unconditional.
+**Parity note (restriction removed).** Earlier drafts assumed a odd, b even. This
+restriction is **unnecessary**: for any coprime abc-triple, a²+ab+b² is always odd
+(if exactly one of a,b is even, the three terms sum to odd; if both are odd, all three
+terms are odd), so v₂(c₄) = 4 in all cases. Exactly one of a,b,c is always even (since
+gcd(a,b)=1 forces them not both even; if both odd then c=a+b is even). The proof of B
+and C goes through identically for all coprime abc-triples without a separate both-odd
+case. The conventional labeling a odd, b even is dropped hereafter.
 
 **The quality of an abc-triple.** q(a, b, c) = log c / log rad(abc).
 
@@ -54,10 +59,12 @@ This is NOT the Faltings height. The Faltings height is an Arakelov-theoretic he
 also involves the Archimedean (complex period / modular form) contribution; see Murty–Pasten
 (J. Number Theory 133, 2013), Theorem 5.1 for the precise formula. The two heights agree
 only up to a normalization-dependent additive term that is NOT uniformly bounded by a
-constant independent of the curve (see Löbrich, JTNB 29 (2017), Proposition 3.1).
+constant independent of the curve (Murty–Pasten Theorem 5.1; Löbrich, JTNB 29 (2017),
+Proposition 3.1 is related but compares different height notions and does not alone imply
+the unboundedness of h_Δ − h_F).
 For this framework, h_Δ is the object being bounded; it is explicitly NOT claimed to equal h_F.
 
-**The Frey curve.** For a coprime triple (a, b, c) with a + b = c, **a odd, b even**, c odd:
+**The Frey curve.** For a coprime triple (a, b, c) with a + b = c, a,b,c ≥ 1, gcd(a,b)=1:
 ```
 E_{a,b,c} : y² = x(x − a)(x + b)
 ```
@@ -67,7 +74,8 @@ a₁ = a₃ = a₆ = 0,   a₂ = b − a,   a₄ = −ab
 b₂ = 4(b−a),   b₄ = −2ab,   b₆ = 0,   b₈ = −a²b²
 c₄ = 16(a² + ab + b²),   Δ_W = 16(abc)²
 ```
-Since a is odd and b is even, a²+ab+b² is odd, so v₂(c₄) = 4.
+For any coprime abc-triple, exactly one of a,b,c is even; in all cases a²+ab+b² is odd
+(checked case by case), so v₂(c₄) = 4 universally.
 The global minimal discriminant takes exactly one of two values
 (Silverman AEC 2nd ed., Lemma VIII.11.3(a)):
 ```
@@ -91,8 +99,9 @@ while c = 2n+1 grows as n, giving log|Δ_min| ≥ 2 log(2n(2n+1)) − O(1) which
 faster than 2 log c = 2 log(2n+1). The correct universal upper bound uses log(abc), not log c.
 
 **The framework need (CORE-2 / CL-09).** P_height is a construction that provides:
-1. A formally-verified implementation of rad(n) satisfying the three properties above.
-2. A formally-verified computation of h_Δ(E_{a,b,c}) for any given abc-triple (a odd, b even).
+1. A rigorously proved implementation of rad(n) satisfying the three properties above,
+   with executable sanity checks (not a proof-assistant machine certificate).
+2. A rigorously proved computation of h_Δ(E_{a,b,c}) for any coprime abc-triple.
 3. A bound of the form: `log|Δ_min(E_{a,b,c})| ≤ 2 log(abc) + (4 log 2)` — equivalently,
    `h_Δ(E_{a,b,c}) ≤ (1/6) log(abc) + (1/3) log 2`. (The earlier form `2 log c + C` is false.)
 4. An upper bound: `log N_E ≤ log R + 7 log 2` (equivalently `log N_E ≤ 2 log R + 7 log 2`
@@ -104,27 +113,50 @@ any abc-equivalent hypothesis to establish.
 
 ---
 
+## Allowed prior results (closed list)
+
+The following results are admitted without proof in this problem. No other unproved
+results may be used. Source citations must be verified against the stated theorem numbers
+before any result below is relied upon in a claim.
+
+1. **Unique factorization / FTA.** Used in OB-03-A.
+2. **Silverman, AEC 2nd ed. (2009), Lemma VIII.11.3(a),(b).** Global minimal discriminant
+   for the Frey curve. No parity assumption in the lemma itself.
+   Official page: https://link.springer.com/book/10.1007/978-0-387-09494-6
+3. **Silverman, ATEC (1994), Theorem IV.10.4.** Local conductor exponent bound
+   f_p ≤ 2 + 3v_p(3) + 6v_p(2); gives f₂ ≤ 8 over Q₂.
+   Official page: https://link.springer.com/book/10.1007/978-1-4612-0851-8
+4. **Silverman, AEC 2nd ed. (2009), Chapter III §1 + Proposition VII.1.3.** Weierstrass
+   invariant formulas and existence of global minimal model.
+5. **Murty–Pasten, J. Number Theory 133 (2013), Theorem 5.1.** Faltings height formula
+   for Frey curves (Archimedean term not uniformly bounded); used only to justify that
+   h_Δ ≠ h_F.
+   Preprint: https://people.math.harvard.edu/~hpasten/preprints/modabcJNT.pdf
+6. **Stein–Watkins (2002), Tables 2–3.** Numerical cross-check of local conductor
+   exponent at 2; not a proof ingredient.
+   Paper: https://wstein.org/papers/stein-watkins/ants.pdf
+
 ## The theorem / claim to be verified
 
 **Claim OB-03**: Construct and formally verify the following framework, which does NOT
 assume abc, Szpiro, or any abc-equivalent hypothesis:
 
-**OB-03-A (rad function).** Provide a formally-verified (in Python, Lean, Coq, Isabelle,
-or Metamath) proof that for all non-zero integers n:
+**OB-03-A (rad function).** Provide a rigorously proved (with executable sanity checks
+in Python, Lean, Coq, Isabelle, or Metamath) proof that for all non-zero integers n:
 ```
 rad(n) = ∏_{p prime, p|n} p
 ```
 satisfies: rad multiplicative for coprimes, rad(p^k) = p, rad(1) = 1.
 
 **OB-03-B (discriminant height bound).** For the Frey curve E_{a,b,c} with a + b = c,
-a,b,c ≥ 1 coprime, **a odd, b even**: prove the explicit bound
+a,b,c ≥ 1 coprime: prove the explicit bound
 ```
 h_Δ(E_{a,b,c}) = (1/12) log|Δ_min(E_{a,b,c})| ≤ (1/6) log(abc) + C
 ```
 for the explicit constant C = (1/3) log 2, with a proof requiring NO abc-equivalent
 hypothesis. Note: h_Δ is the discriminant height, not the Faltings height.
 
-**OB-03-C (conductor bound).** For the same Frey curve (a odd, b even): prove the explicit
+**OB-03-C (conductor bound).** For the same Frey curve (all coprime abc-triples): prove the explicit
 upper bound
 ```
 log N_E ≤ log R + 7 log 2     (equivalently  N_E ≤ 2⁷ R)
@@ -166,13 +198,12 @@ No approximation: Δ_W = 16(abc)² exactly.
 
 For odd primes p|abc: coprimeness forces p to divide exactly one of a,b,c, hence
 p∤c₄ (checked case by case), so the model is already minimal at p. The minimization
-parameter s can only be in {0,1} from v₂(c₄)=4 (since a odd, b even makes a²+ab+b² odd).
-This gives |Δ_min| ∈ {16(abc)², 2⁻⁸(abc)²} and bound [★].
+parameter s can only be in {0,1} from v₂(c₄)=4 (a²+ab+b² is always odd for any coprime
+triple; see parity note above). This gives |Δ_min| ∈ {16(abc)², 2⁻⁸(abc)²} and bound [★].
 
-**Status:** CLOSED. Exact constants C = (1/3)log2 for the upper bound.
+**Status:** CLOSED for all coprime abc-triples. Exact constant C = (1/3)log2 for the upper bound.
 
-**What to close for Step 2:** None for the (a odd, b even) subfamily. For the both-odd
-subfamily, a separate argument is needed.
+**What to close for Step 2:** None. Parity restriction removed; proof covers all coprime triples.
 
 ---
 
@@ -185,7 +216,7 @@ reduction). Therefore:
 N_E = 2^{f₂} · ∏_{p|abc, p odd} p
 ```
 Silverman, *Advanced Topics*, Theorem IV.10.4 gives 0 ≤ f₂ ≤ 8.
-Since b is even and a,c are odd, exactly one of a,b,c is even, so
+For any coprime triple exactly one of a,b,c is even, so
 ∏_{p|abc, p odd} p = R/2 and:
 ```
 N_E = 2^{f₂} · (R/2) ≤ 2⁷R,   log N_E ≤ log R + 7 log 2.
@@ -218,32 +249,41 @@ the conclusion predicate.
 
 ## Acceptance criteria
 
-1. **COMPLETE**: All four sub-claims (A, B, C, D) formally verified with explicit constants
-   C = (1/3) log 2 and C_2 = 7 log 2. Framework ready as input to CORE-3.
-2. **PARTIAL-ABC**: Sub-claims A and D complete; B and C partial with explicit gaps.
+1. **COMPLETE-MATH**: All four sub-claims (A, B, C, D) rigorously proved with explicit
+   constants C = (1/3) log 2 and C_2 = 7 log 2, for all coprime abc-triples. Framework
+   ready as input to CORE-3. (No machine proof artifacts — use PARTIAL-FORMALIZATION
+   until Lean/Coq/Isabelle kernel output is supplied.)
+2. **PARTIAL-FORMALIZATION**: Ordinary math proofs complete; formal machine verification
+   not yet submitted.
 3. **PARTIAL-D**: Sub-claims A, B, C complete; D requires only a single verified example.
 4. **INCONCLUSIVE**: Any sub-claim found to require abc-equivalent input — identify which step.
 
-**Current status after corrections:** All four sub-claims are CLOSED for the (a odd, b even)
-sub-family. The both-odd subfamily (e.g. a=b=odd) requires a separate argument for B and C.
+**Current status after corrections:** `PARTIAL-FORMALIZATION`. All four sub-claims are
+CLOSED (ordinary math) for all coprime abc-triples. No machine proof artifacts submitted.
 
 ---
 
 ## Numerical anchor (sanity only, not an input to the proof)
 
-For (a, b, c) = (1, 8, 9) (a odd, b even; gcd(1,8)=1, 1+8=9):
+For (a, b, c) = (1, 8, 9) (gcd(1,8)=1, 1+8=9):
 
 - rad(1·8·9) = rad(72) = 2·3 = 6.   R = 6.
 - Exact discriminant: Δ_min = 82944 = 2¹⁰·3⁴.
   (Both v₂=10<12 and v₃=4<12 confirm the model is globally minimal.)
 - log|Δ_min| = 11.3259…
-- h_Δ = (1/12)·11.3259… = 0.9438…   [discriminant height, NOT Faltings height]
+- h_Δ = (1/12)·11.3259… = 0.94383…   [discriminant height, NOT Faltings height]
 - Faltings height (LMFDB normalization): h_F ≈ −0.2988  [different from h_Δ; this
   illustrates they are not the same quantity]
 - Conductor: N_E = 2⁴·3 = 48  (Stein–Watkins Table 3 for f₂=4; f₃=1 from multiplicative reduction)
 - Bound check: N_E = 48 ≤ 2⁷·R = 128·6 = 768  ✓
 - Earlier claim N_E ≤ rad(144)² = 36 is FALSE: 48 > 36.
 - Quality: q = log 9 / log 6 ≈ 1.226 > 1.  ✓  (witnesses OB-03-D)
-- h_Δ upper bound check: 0.9438 ≤ (1/6)log(72) + (1/3)log2 ≈ 0.7105 + 0.2310 = 0.9415…
-  This is marginally tight; exact integer arithmetic confirms 0.9438… = (1/12)log 82944
-  and the bound holds as 82944 = 2⁴·(72)² ≤ 2⁴·(abc)².
+- h_Δ upper bound check: (1/6)log(72) + (1/3)log2 = 0.71278… + 0.23105… = 0.94383…
+  The bound is **exactly tight**: (1/12)log(82944) = (1/6)log(72) + (1/3)log(2) holds
+  as an identity since 82944 = 2⁴·72². (Earlier drafts incorrectly showed 0.9415; the
+  correct right-hand side is 0.94383…, equal to h_Δ.)
+
+**Separate counterexamples for the two false old claims:**
+- (1,8,9): N_E = 48 > 36 = rad(2·1·8·9)² refutes N_E | rad(2abc)². But rad(N_E) = rad(48) = 6 = rad(72) = rad(abc), so (1,8,9) cannot refute rad(N_E) = rad(2abc).
+- (3,16,19): refutes rad(N_E) = rad(2abc). Apply x=4x', y=8y'−12x' to get y'²−3x'y' = x'³+x'²−3x'; discriminant = 3249 = 3²·19²; good reduction at 2, multiplicative at 3 and 19; N_E = 3·19 = 57; rad(N_E) = 57; rad(2abc) = rad(2·3·16·19) = 2·3·19 = 114 ≠ 57.
+
