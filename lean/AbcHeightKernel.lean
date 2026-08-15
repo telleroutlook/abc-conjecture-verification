@@ -953,3 +953,41 @@ theorem pasten_F30_212_rho4_lt_half (p1 p2 q1 r1 r2 : ℕ)
       2 * ((p1 : ℝ) ^ 3 / ((p2 : ℝ) * q1 * r1 * r2)) := by ring
   linarith
 
+/-!
+## E10: Minimum-norm vector in ω=3 Pasten lattice is non-degenerate
+
+For ω=3 squarefree coprime (a,b,c) with a=p, b=q, c=r=p+q all prime:
+  Lattice L = {ψ ∈ ℤ³ : qr·ψ_p + pr·ψ_q = pq·ψ_r}
+  v = (p, -q, 0) is in L, has ‖v‖_∞ = q = nd (second-smallest prime), and is non-degenerate.
+
+CORRECTION: OB-11 Step 1 claimed min norm = r, achieved by (p,0,r).
+  WRONG: v=(p,-q,0) ∈ L has norm q < r and is non-degenerate.
+  CORRECT min norm = q = second_smallest{p,q,r}, consistent with F10.
+
+PROOF of non-degeneracy: Wronskian W(v) = p·(-q) − q·p = −2pq ≠ 0. □
+PROOF of minimality:
+  If ψ_r = 0: constraint gives q·ψ_p + p·ψ_q = 0. Since gcd(p,q)=1, p | ψ_p.
+              Write ψ_p = p·t, ψ_q = −q·t. Nonzero → |t|≥1 → ‖ψ‖_∞ = q·|t| ≥ q.
+  If ψ_r ≠ 0: gcd(r,pq)=1 → r | ψ_r → |ψ_r| ≥ r > q → ‖ψ‖_∞ ≥ r > q.
+  So min norm = q, verified by toy script T44 (all ω=3 twin-prime triples ≤200).
+-/
+
+/-- [THM] E10.mem: v=(p,-q,0) lies in the ω=3 Pasten lattice constraint. -/
+theorem pasten_E10_vec_in_lattice (p q r : ℕ) (hr : r = p + q) :
+    (q : ℤ) * r * p + (p : ℤ) * r * (-(q : ℤ)) = (p : ℤ) * q * 0 := by
+  push_cast [hr]; ring
+
+/-- [THM] E10.nondeg: v=(p,-q,0) is non-degenerate (Wronskian ≠ 0) when p,q ≥ 2. -/
+theorem pasten_E10_vec_nondeg (p q : ℕ) (hp : 2 ≤ p) (hq : 2 ≤ q) :
+    (p : ℤ) * (-(q : ℤ)) - (q : ℤ) * (p : ℤ) ≠ 0 := by
+  have hp' : (0 : ℤ) < p := by exact_mod_cast (show 0 < p by omega)
+  have hq' : (0 : ℤ) < q := by exact_mod_cast (show 0 < q by omega)
+  intro h
+  nlinarith [mul_pos hp' hq']
+
+/-- [THM] E10.norm: ‖(p,-q,0)‖_∞ = q when p ≤ q. -/
+theorem pasten_E10_vec_norm (p q : ℕ) (hpq : p ≤ q) :
+    max (max p q) 0 = q := by
+  simp [max_def]
+  omega
+

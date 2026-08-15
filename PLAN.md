@@ -608,18 +608,49 @@ a≥2, and omega=3: the minimum-norm vector in F(a,b) is non-degenerate.
 
 **Proof sketch (elementary, complete for omega=3 squarefree):**
 When a≥2 and omega=3: Pa={p}, Pb={q}, Pc={r} (partition (1,1,1) only possibility).
-- Lattice constraint: qr·ψ_p + pr·ψ_q = pq·ψ_r. Since r∤pq: r|ψ_r, minimum ψ_r=r.
-- Minimum lattice vectors: v₁=(p,0,r) and v₂=(0,q,r), both norm r.
-- Wronskian: W^{v₁} = p·0 - q·p = -qp ≠ 0; W^{v₂} = p·q - q·0 = pq ≠ 0. NON-DEGENERATE.
-- Degenerate generator: v₀=(p,q,2r), norm 2r > r. So degenerate minimum > lattice minimum.
+- Lattice constraint: qr·ψ_p + pr·ψ_q = pq·ψ_r.
+- **CORRECTED min norm = q = max(p,q) < r** (OB-11 Step 1 claimed r — WRONG, see E10).
+- Minimum lattice vector: v=(p,-q,0), norm q. W^v = p·(-q) - q·p = -2pq ≠ 0. NON-DEGENERATE.
+- Degenerate generator: v₀=(p,q,2r), norm 2r > q. So degenerate minimum 2r > q = lattice minimum.
 
 **Status:** ELEMENTARY PROOF COMPLETE for squarefree omega=3 a≥2 case.
-Outsource: `outsource/OB-10-pasten-nondeg-a-ge-2.md` for independent verification.
+Outsource: `outsource/OB-11-pasten-nondeg-a-ge-2.md` for independent verification.
+Review: `outsource/reviews/OB-11-review-2026-08-15.md` — CONFIRMED (with corrected proof).
 
 **Corollary (combining E9+OB-09):** For squarefree coprime (a,b,c) with a+b=c,
 a≥2, omega=3: there exists a NON-DEGENERATE ψ ∈ F(a,b) with
-  ||ψ||_∞ ≤ det(L)^{1/2} < R^{1/2}
-unconditionally (no separate non-degeneracy argument needed).
+  ||ψ||_∞ = q = nd  ≤  det(L)^{1/2} < R^{1/2}
+unconditionally (no separate non-degeneracy argument needed). Bound is q not r.
+
+#### Step E10 — Theorem E10 (OB-11 corrected) + Lean formalization ✅ COMPLETE (2026-08-15)
+
+**Toy:** `discovery/m2_directions/t44_ob11_e10_min_norm.py`
+
+**KEY FINDING:** OB-11's proof sketch contained a critical error in Step 1 (claimed
+min norm = r, achieved by (p,0,r)). The CORRECT minimum-norm vector is v=(p,-q,0),
+which has norm q = max(p,q) < r. This is consistent with F10: nd = second_smallest{p,q,r} = q.
+
+**T44 brute-force confirmation:** All 15 omega=3 twin-prime triples (p<q<200):
+- Min norm = q (not r) in every case.
+- v=(p,-q,0) is always in L, always non-degenerate (W=-2pq≠0).
+- OB-11 Step 1 wrong for all 15 triples; F10 correct for all 15.
+
+**CORRECTED THEOREM E10:** For ω=3 squarefree coprime (a,b,c) with a=p, b=q, c=r=p+q (all prime):
+  min norm = q = second_smallest{p,q,r},   achieved by v=(p,-q,0).
+  W^v = p·(-q) - q·p = -2pq ≠ 0.  The minimum-norm vector is NON-DEGENERATE.
+
+**Proof (elementary):**
+- ψ_r=0 case: q·ψ_p+p·ψ_q=0, gcd(p,q)=1 → ψ_p=p·t, ψ_q=-q·t. Min |t|=1 → norm=q.
+- ψ_r≠0 case: gcd(r,pq)=1 → r|ψ_r → |ψ_r|≥r>q → norm≥r>q.
+- So min norm = q, at v=(p,-q,0); W=-2pq≠0 (non-degenerate). □
+
+**Lean formalization** (section `## E10` in `lean/AbcHeightKernel.lean`, zero sorry):
+- `pasten_E10_vec_in_lattice`: v=(p,-q,0) satisfies qr·ψ_p+pr·ψ_q=pq·ψ_r.
+- `pasten_E10_vec_nondeg`: Wronskian p·(-q)-q·p ≠ 0 when p,q≥2.
+- `pasten_E10_vec_norm`: ‖(p,-q,0)‖_∞ = q when p≤q.
+Build: PASS ✓
+
+**Review:** `outsource/reviews/OB-11-review-2026-08-15.md` — CONFIRMED (corrected proof).
 
 
 
