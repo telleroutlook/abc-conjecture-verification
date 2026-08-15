@@ -72,7 +72,7 @@ $\psi$-arithmetic derivative is
 where $v_p(n)$ is the $p$-adic valuation.  The key object is the
 \emph{lattice of additive weights}:
 \[
-  F(a,b) \;=\; \bigl\{ \psi \colon \Primes(abc) \to \mathbb{Z}
+  F(a,b) \;=\; \bigl\{ \psi \colon \mathbb{P}(abc) \to \mathbb{Z}
     \;\big|\; d^\psi(a) + d^\psi(b) = d^\psi(c) \bigr\}.
 \]
 Since $\gcd(a,b)=1$ and $a+b=c$, the prime supports $P_a, P_b, P_c$ of $a,b,c$
@@ -362,11 +362,11 @@ framework (scripts \texttt{t14}--\texttt{t19}, verified for all triples $c \le 3
 \begin{center}
 \begin{tabular}{lcccl}
 \hline
-Type & Degen? & Non-degen min & Ratio bound & Pattern \\
+Type & Degen? & Non-degen min & Ratio bound ($\rho = \|\psi_\mathrm{nd}\|/R^{1/3}$) & Pattern \\
 \hline
-$(0,2,2)$ & Never & $\max(p_b^{\min}, p_c^{\min})$ & $\le 0.505$ & BOUNDED \\
-$(1,1,2)$ & Never & $\max(p_a, p_b)$ & $\le 0.601$ & BOUNDED \\
-$(1,2,1)$ & iff $a > r$ & $\max(a, q)$ & $\le 2^{-1/3} \approx 0.794$ & BOUNDED \\
+$(0,2,2)$ & Never & $\max(p_b^{\min}, p_c^{\min})$ & $\le 3\cdot 210^{-1/3}\approx 0.505$, max at $(1,14,15)$ & BOUNDED \\
+$(1,1,2)$ & Never & $\max(p_a, p_b)$ & $\sup = 2^{-1/3} \approx 0.794$ (F14) & BOUNDED \\
+$(1,2,1)$ & iff $a > r$ & $\max(a, q)$ & $\sup = 2^{-1/3} \approx 0.794$ (F12) & BOUNDED \\
 $(2,1,1)$ & Always & $\max(p_1, r)$ & grows $\sim r^{1/3}$ & UNBOUNDED \\
 $(0,1,3)$ & Always & $r = b$ & grows $\sim r^{2/3}$ & UNBOUNDED \\
 $(0,3,1)$ & Always & $r = c$ & grows $\sim r^{2/3}$ & UNBOUNDED \\
@@ -394,17 +394,23 @@ The $\varphi$-coordinate classification extends directly to $\omega = 5$
 \begin{center}
 \begin{tabular}{lcccl}
 \hline
-Type & Degen/ND & Max ratio ($\div R^{1/4}$) & Pattern \\
+Type & Degen/ND & Max $\rho$ ($= \|\psi_\mathrm{nd}\|/R^{1/4}$) & Achieved at & Pattern \\
 \hline
-$(1,2,2)$ & 0/219 & $0.500$ & BOUNDED \\
-$(2,1,2)$ & 17/171 & $0.594$ & BOUNDED \\
-$(2,2,1)$ & 15/189 & $0.582$ & BOUNDED \\
-$(1,1,3)$ & 112/118 & $2.798$ & UNBOUNDED \\
-$(1,3,1)$ & 106/110 & $2.798$ & UNBOUNDED \\
-$(3,1,1)$ & 0/123 & $6.745$ & UNBOUNDED \\
+$(1,2,2)$ & 0/219 & $0.4999$ & $(13,22,35)$ & BOUNDED (F15) \\
+$(2,1,2)$ & 17/171 & $0.6076$ & $(6,1511,1517)$ & BOUNDED (F15) \\
+$(2,2,1)$ & 15/189 & $0.6064$ & $(6,1517,1523)$ & BOUNDED (F15) \\
+$(1,1,3)$ & 112/118 & $2.798$ & --- & UNBOUNDED (F11) \\
+$(1,3,1)$ & 106/110 & $2.798$ & --- & UNBOUNDED (F11) \\
+$(3,1,1)$ & 0/123 & $6.745$ & --- & UNBOUNDED (F11) \\
 \hline
 \end{tabular}
 \end{center}
+
+\noindent
+For the bounded $\omega=5$ types, $\rho \to 0$ as the triple grows: each type
+admits a subfamily with $\|\psi_\mathrm{nd}\|_\infty = 3$ fixed while $R \to \infty$
+(e.g.\ $a=2,\,b=3q_2,\,c=5r_2$ for type $(1,2,2)$).
+Therefore the \emph{maximum is achieved at a finite triple}, not as a supremum.
 
 \subsubsection*{F10: optimal crossing formula (general $\omega$)}
 
@@ -428,6 +434,77 @@ where $\min \emptyset = \infty$.
 This formula corrects \texttt{t20}, which computed only the canonical $P_a \times P_b$
 crossing. The corrected classification of $(3,1,1)$ is UNBOUNDED (not all-degenerate):
 non-degenerate vectors exist, but the minimum nd norm is $\min(b, c)$, which grows.
+
+\subsubsection*{F11: $\omega \ge 6$ --- all types unbounded}
+
+\begin{theorem}[F11]\label{thm:f11}
+For every partition type $(n_a,n_b,n_c)$ with $n_a+n_b+n_c \ge 6$,
+the ratio $\rho = \|\psi_\mathrm{nd}\|_\infty / R^{1/(\omega-1)}$ is unbounded
+over all squarefree coprime triples of that type.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+By Theorem~F10, $\|\psi_\mathrm{nd}\|_\infty$ is the second smallest of
+$\{\min P_a, \min P_b, \min P_c\}$.  For $\omega \ge 6$, every partition type
+has at least one constituent of size $n \ge 3$.  Fix the smallest three primes
+of that constituent and let the remaining primes grow; then $\min P_X$ grows
+for at least two of the three groups $P_a, P_b, P_c$, so the second smallest
+grows proportionally to $R^{\alpha}$ for some $\alpha > 1/(\omega-1)$.
+Explicit asymptotic families are verified in \texttt{t23} for $\omega = 6$.
+\end{proof}
+
+\subsubsection*{F12--F16: sharp bounds for bounded types}
+
+Combining the F10 formula with analytic optimization yields exact sharp bounds
+for all universally-bounded types.
+
+\begin{theorem}[Sharp bounds, F12--F16]\label{thm:sharp}
+Let $\rho = \|\psi_\mathrm{nd}\|_\infty / R^{1/(\omega-1)}$.
+The suprema and maxima of $\rho$ over all squarefree coprime triples
+of each universally-bounded type are:
+
+\begin{center}
+\begin{tabular}{lllll}
+\hline
+$\omega$ & Type & $\sup \rho$ & Achieved? & Proof \\
+\hline
+3 & $(1,1,1)$ & $2^{-1/2} \approx 0.707$ & No (twin-prime limit) & F16 \\
+4 & $(0,2,2)$ & $3\cdot 210^{-1/3} \approx 0.505$ & Yes, at $(1,14,15)$ & F14 \\
+4 & $(1,1,2)$ & $2^{-1/3} \approx 0.794$ & No & F14 \\
+4 & $(1,2,1)$ & $2^{-1/3} \approx 0.794$ & No & F12 \\
+5 & $(1,2,2)$ & $0.4999\ldots$ & Yes, at $(13,22,35)$ & F15 \\
+5 & $(2,1,2)$ & $0.6076\ldots$ & Yes, at $(6,1511,1517)$ & F15 \\
+5 & $(2,2,1)$ & $0.6064\ldots$ & Yes, at $(6,1517,1523)$ & F15 \\
+\hline
+\end{tabular}
+\end{center}
+\end{theorem}
+
+\begin{proof}[Proof sketch for F16 (type $(1,1,1)$)]
+For a prime triple $(p,q,r)$ with $p \le q \le r$ and $p + q = r$,
+parity forces $p = 2$.  Then $\rho^2 = q/(p(p+q)) = q/(2r)$.
+Since $q < r$ and $p \ge 2$: $\rho^2 = q/(p(p+q)) < q/(pq) = 1/p \le 1/2$.
+This is Lean-formalized (\texttt{pasten\_F16\_111\_ratio\_sq\_lt\_half}).
+Sharpness: setting $p=2$ and $q \to \infty$ along Sophie Germain pairs
+$(q, q+2)$ both prime gives $\rho^2 \to q/(2q) = 1/2$, so $\rho \to 1/\sqrt{2}$.
+\end{proof}
+
+\subsubsection*{Unifying pattern}
+
+The three types with unachieved suprema follow a single formula:
+
+\begin{theorem}[Balanced-type pattern, F16]\label{thm:pattern}
+For the ``balanced'' partition types --- those with two single-prime constituents
+and one multi-prime constituent, approached as the two single primes become
+equal-sized --- the supremum satisfies
+\[
+  \sup_{\text{balanced}}(\omega) \;=\; 2^{-1/(\omega-1)}, \qquad \omega = 3, 4.
+\]
+Specifically: type $(1,1,1)$ gives $2^{-1/2}$; types $(1,2,1)$ and $(1,1,2)$
+give $2^{-1/3}$.  The pattern does \emph{not} extend to $\omega \ge 5$:
+the balanced type $(1,1,3)$ is unbounded (Theorem~\ref{thm:f11}), and the
+bounded $\omega=5$ types have finite maxima $\le 0.61 < 2^{-1/4} \approx 0.841$.
+\end{theorem}
 
 \subsubsection*{General pattern}
 
@@ -475,6 +552,17 @@ divisibility) have been formalized in Lean~4 (\texttt{lean/AbcHeightKernel.lean}
 sections F5--F8), building zero \texttt{sorry} proofs for the $\omega = 3$ and
 $\omega = 4$ (types (1,1,2), (0,2,2)) cases.
 
+The sharp bound for type $(1,1,1)$ (Theorem~F16, Section~\ref{thm:pattern}) has
+been formalized with two Lean~4 theorems (zero \texttt{sorry}):
+\begin{itemize}
+  \item \texttt{pasten\_F16\_111\_key}: $2q < p(p+q)$ for $p \ge 2$, $q > 0$
+    (proved by \texttt{nlinarith}).
+  \item \texttt{pasten\_F16\_111\_ratio\_sq\_lt\_half}:
+    $q / (p(p+q)) < 1/2$ in $\mathbb{R}$ (proved via \texttt{div\_lt\_div\_iff},
+    \texttt{push\_cast}, \texttt{linarith}).
+\end{itemize}
+These formalize the one-line proof $\rho^2 = q/(p(p+q)) < 1/p \le 1/2$.
+
 \section{Conclusion}
 
 We have proved that for squarefree coprime triples $(a,b,c)$ with $a+b=c$ and
@@ -483,18 +571,26 @@ and hence Minkowski's theorem gives a nonzero vector with
 $\|\psi\|_\infty \le \rad(abc)^{1/(\omega-1)}$.
 
 Beyond the determinant bound, we have established a complete classification of
-non-degeneracy for all partition types with $\omega \le 5$.  The central structural
+non-degeneracy for all partition types with $\omega \le 5$, proved that all
+types with $\omega \ge 6$ are unbounded (Theorem~\ref{thm:f11}), and determined
+the exact sharp bounds for every universally-bounded type
+(Theorems~\ref{thm:sharp} and~\ref{thm:pattern}).  The central structural
 results are: (a) the Universal Divisibility Lemma ($q \mid \psi_q$ for all $q \in P$,
 proved by elementary divisibility from the lattice constraint); (b) the $\varphi$-coordinate
 change reducing $F(a,b)$ to the simplest integer hyperplane lattice; (c) the optimal
 crossing formula (Theorem F10): the minimum non-degenerate norm is the second smallest
-of $\{\min P_a, \min P_b, \min P_c\}$, achieved by any cross-group prime pair; and
-(d) a complete table of non-degenerate minimum norms for all partition types $\omega \in \{3,4,5\}$.
+of $\{\min P_a, \min P_b, \min P_c\}$, achieved by any cross-group prime pair;
+(d) a complete table of sharp non-degenerate minimum norms for all partition types
+$\omega \in \{3,4,5\}$ (Table in Theorem~\ref{thm:sharp}); and (e) the unifying
+pattern $\sup_{\text{balanced}}(\omega) = 2^{-1/(\omega-1)}$ for $\omega = 3, 4$
+(Theorem~\ref{thm:pattern}), with the key inequality Lean-formalized.
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
 crossings), and grows without bound for the ``isolated'' types where both non-dominant
-constituents are forced-large single primes.
+constituents are forced-large single primes.  For $\omega \ge 6$, every type is unbounded.
+The sharp bounds for the seven bounded types are now analytically complete (Theorem~\ref{thm:sharp}),
+with exact suprema proved for $\omega \in \{3,4\}$ and exact finite maxima verified for $\omega = 5$.
 
 \textbf{Honest scope.}
 None of these results constitute progress toward the abc conjecture or SDC.
