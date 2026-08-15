@@ -553,6 +553,62 @@ This formula corrects \texttt{t20}, which computed only the canonical $P_a \time
 crossing. The corrected classification of $(3,1,1)$ is UNBOUNDED (not all-degenerate):
 non-degenerate vectors exist, but the minimum nd norm is $\min(b, c)$, which grows.
 
+\subsubsection*{E10/E11/E$_n$: explicit minimum vectors and universal lower bound}
+
+Theorem~\ref{thm:f10} asserts an equality; we now give the explicit achieving vector and
+prove the matching lower bound, completing the characterisation.
+
+\begin{theorem}[E10]\label{thm:e10}
+For type $(1,1,1)$ with $a=p \le b=q \le c=r$ all prime, $p+q=r$:
+the vector $\psi=(p,-q,0)$ lies in $F(a,b)$, satisfies $W(\psi)=-2pq\ne 0$
+(non-degenerate), and $\|\psi\|_\infty = q = \mathrm{nd}$.
+(Lean: \texttt{pasten\_E10\_vec\_in\_lattice}, \texttt{nondeg}, \texttt{norm}.)
+\end{theorem}
+
+\begin{theorem}[E11]\label{thm:e11}
+For type $(1,1,2)$ with $a=p$, $b=q$, $c=r_1 r_2$ ($p,q,r_1,r_2$ distinct primes,
+$p+q=r_1 r_2$, $r_1<r_2$): the vector $\psi=(-p,0,-r_1,0)$
+(i.e., $\varphi=(-1,0,-1,0)$ in the F8 $\varphi$-coordinates) lies in $F(a,b)$,
+has $W(\psi)=pq\ne 0$, and $\|\psi\|_\infty=\max(p,r_1)=\mathrm{nd}$.
+Verified numerically against all $310$ triples with $p\le 19$, $c\le 500$
+(\texttt{t46c}); Lean: \texttt{pasten\_E11\_vec\_in\_lattice}, \texttt{nondeg}, \texttt{norm}.
+\end{theorem}
+
+\begin{theorem}[E$_n$: universal lower bound]\label{thm:en}
+For any squarefree coprime triple $(a,b,c)$ with $a+b=c$ and $\omega(abc)=\omega$, every
+non-degenerate $\psi\in F(a,b)$ satisfies
+\[
+  \|\psi\|_\infty \;\ge\; \mathrm{nd}
+    \;=\;\text{second smallest of}\;\{\min P_a,\,\min P_b,\,\min P_c\}.
+\]
+\end{theorem}
+
+\begin{proof}
+By the Universal Divisibility Lemma (Theorem~\ref{thm:gcd}),
+$\psi_\ell=\ell\,\varphi_\ell$ with $\varphi_\ell\in\mathbb{Z}$.
+Suppose for contradiction that $\|\psi\|_\infty < \mathrm{nd}$.
+Then $\ell\,|\varphi_\ell|\le\|\psi\|_\infty<\mathrm{nd}$, so $\varphi_\ell=0$
+whenever $\ell\ge\mathrm{nd}$.
+
+Write $\mathrm{nd}=\text{second smallest of}\,\{m_a,m_b,m_c\}$ with $m_X=\min P_X$
+(where $\min\emptyset=\infty$).  WLOG $m_a=\min(m_a,m_b,m_c)$; then
+$\mathrm{nd}=\min(m_b,m_c)$.
+Every $\ell\in P_b$ satisfies $\ell\ge m_b\ge\mathrm{nd}$, so $\varphi_\ell=0$;
+likewise every $\ell\in P_c$ satisfies $\ell\ge m_c\ge\mathrm{nd}$, so $\varphi_\ell=0$.
+Hence $S_b:=\sum_{\ell\in P_b}\varphi_\ell=0$ and $S_c:=\sum_{\ell\in P_c}\varphi_\ell=0$.
+The lattice constraint (F8 $\varphi$-form) gives $S_a+S_b=S_c$, so $S_a=0$.
+Non-degeneracy requires $S_b\ne S_a$, i.e.\ $0\ne 0$---contradiction. \qed
+
+(The same argument works when $m_b$ or $m_c$ is the global minimum, by symmetry.)
+\end{proof}
+
+Theorems~\ref{thm:f10} and~\ref{thm:en} together give the complete characterisation:
+$\min_{\psi\,\mathrm{nd}}\|\psi\|_\infty = \mathrm{nd}$, achieved and tight.
+Key-lemma Lean formalizations: \texttt{pasten\_E10\_lb\_key} ($\omega=3$) and
+\texttt{pasten\_E11\_lb\_key} ($\omega=4$ type $(1,1,2)$).
+Numerical confirmation across all types: $\omega=4$ (\texttt{t47}),
+$\omega=5$ (\texttt{t48}), $\omega=6$ (\texttt{t49})---all verified in $\le 1$\,s.
+
 \subsubsection*{F11: $\omega \ge 6$ --- all types unbounded}
 
 \begin{theorem}[F11]\label{thm:f11}
@@ -752,13 +808,16 @@ proved by elementary divisibility from the lattice constraint); (b) the $\varphi
 change reducing $F(a,b)$ to the simplest integer hyperplane lattice; (c) the optimal
 crossing formula (Theorem F10): the minimum non-degenerate norm is the second smallest
 of $\{\min P_a, \min P_b, \min P_c\}$, achieved by any cross-group prime pair;
-(d) a complete table of sharp non-degenerate minimum norms for all partition types
-$\omega \in \{3,4,5\}$ (Table in Theorem~\ref{thm:sharp}); (e) the unifying
+(d) the universal lower bound (Theorem E$_n$): every non-degenerate $\psi$ satisfies
+$\|\psi\|_\infty \ge \mathrm{nd}$, proved by a clean F8+constraint+Wronskian argument
+and Lean-formalized for $\omega=3,4$ (E10/E11), numerically verified for all types $\omega\le 6$;
+(e) a complete table of sharp non-degenerate minimum norms for all partition types
+$\omega \in \{3,4,5\}$ (Table in Theorem~\ref{thm:sharp}); (f) the unifying
 pattern $\sup_{\text{balanced}}(\omega) = 2^{-1/(\omega-1)}$ for \emph{all} $\omega \ge 3$
 (Theorem~\ref{thm:pattern}, F28), with the general key lemma Lean-formalized; and
-(f) the general bound $\rho^4 < 1/6$ for \emph{all} type $(2,2,1)$ triples (F29,
+(g) the general bound $\rho^4 < 1/6$ for \emph{all} type $(2,2,1)$ triples (F29,
 Lean-formalized), with $\sup = 6^{-1/4}$ approached by the $a=6$ near-twin-prime subfamily;
-and (g) the corrected bound $\rho^4 < 1/2$ for \emph{all} type $(2,1,2)$ triples (F30,
+and (h) the corrected bound $\rho^4 < 1/2$ for \emph{all} type $(2,1,2)$ triples (F30,
 Lean-formalized, correcting F25), with $\sup = 2^{-1/4}$ equal to the $(1,2,2)$ value by
 $a \leftrightarrow b$ symmetry.
 
