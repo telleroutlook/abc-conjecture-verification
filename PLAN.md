@@ -1188,25 +1188,26 @@ is an asymptotic supremum, approached via the a=6, near-twin-prime subfamily.
 
 ---
 
-#### Step F25 — Type (2,1,2) sup = (1/6)^{1/4} by mirror symmetry with F24 ✅ COMPLETE (2026-08-15)
+#### Step F25 — Type (2,1,2) sup = (1/6)^{1/4} by mirror symmetry with F24 ⚠️ CORRECTED BY F30
 
 **Discovery script:** `discovery/m2_directions/t39_f25_212_sup.py`.
 
-**THEOREM F25:** For ω=5 type (2,1,2), sup ρ = (1/6)^{1/4} ≈ 0.6389, never achieved.
+**THEOREM F25 (ORIGINAL — WRONG):** For ω=5 type (2,1,2), sup ρ = (1/6)^{1/4} ≈ 0.6389.
 
-Mirror of F24: the a=6 subfamily with c=r₁r₂ near-twin primes and b=c-6 prime gives:
-  ρ⁴ = r₁³/(6·r₂·(r₁r₂−6)) < (r₁/r₂)²/6 < 1/6   (same argument as F24)
+The a=6 extremal family for (2,1,2) gives ρ→(1/6)^{1/4} from below, but this is NOT the
+true supremum. Other families (b=2, near-twin semiprime a and c) exceed (1/6)^{1/4}.
 
-As r₁/r₂→1 (via twin-prime-like pairs): ρ→(1/6)^{1/4}. Verified 0 violations c≤30000.
-Max at c≤30000: ρ=0.63438 at (6, 19037, 19043).
+**⚠️ CORRECTED (2026-08-15, F30):** sup(2,1,2) = 2^{-1/4} ≈ 0.841 (same as (1,2,2)).
+6 violations of ρ < (1/6)^{1/4} found at c≤25,021. The "0 violations at c≤30,000" claim
+was from a buggy/pre-correction verification. See F30 for the correct proof.
 
-**Summary so far for ω=5 bounded types:**
+**Summary for ω=5 bounded types (CORRECTED):**
 | Type | sup ρ | structure |
 |---|---|---|
 | (0,2,3) | 1 | F23, twin-prime approach |
 | (0,3,2) | 1 | F23 |
-| (2,2,1) | (1/6)^{1/4}≈0.6389 | F24, a=6, b=q₁q₂ near-twin, c=b+6 prime |
-| (2,1,2) | (1/6)^{1/4}≈0.6389 | F25, a=6, c=r₁r₂ near-twin, b=c-6 prime |
+| (2,2,1) | (1/6)^{1/4}≈0.639 | F24+F29 (a=6 family + general proof) |
+| (2,1,2) | 2^{-1/4}≈0.841 | F30 (a↔b symmetry with (1,2,2)); F25 was WRONG |
 | (1,2,2) | 2^{-1/4}≈0.841 | F26, a=2, b=pq, c=rs all 4 near-equal primes |
 
 ---
@@ -1312,6 +1313,31 @@ Max ρ = 0.62995 at (6, 5183, 5189) [a=6, b=71·73, c=5189]; gap to sup: 0.009.
 **Lean formalization:** `lean/AbcHeightKernel.lean`, section `## F29`.
 - `pasten_F29_221_key`: 6·q1³ < p1·p2·q2·r (Nat, 4-step `calc`+`nlinarith`).
 - `pasten_F29_221_rho4_lt_sixth`: ρ⁴ < 1/6 in ℝ (`div_lt_one` pattern). Build: PASS ✓
+
+#### Step F30 — Correction: type (2,1,2) has sup = 2^{-1/4}, not (1/6)^{1/4} ✅ COMPLETE (2026-08-15)
+
+**Discovery scripts:** `discovery/m2_directions/t43_f30_212_general_bound.py`, `t43b_f30_212_correction.py`.
+
+**FINDING:** F25 was wrong. The a=6 extremal family for (2,1,2) approaches (1/6)^{1/4} but is
+NOT the global supremum. The b=2 near-twin-semiprime family gives ρ→2^{-1/4}>>(1/6)^{1/4}.
+
+**6 violations of ρ < (1/6)^{1/4} found** at c≤25,021, disproving F25.
+Max ρ = 0.7410 at (24881, 2, 24883) = (139·179, 2, 149·167). Well below 2^{-1/4}≈0.841.
+0 violations of ρ < 2^{-1/4} for 2,475,742 triples at c≤50,000.
+
+**THEOREM F30:** For ω=5 type (2,1,2): sup ρ = 2^{-1/4} ≈ 0.841. Never achieved.
+
+**PROOF (by a↔b symmetry):** ρ = nd^4/R depends only on group_mins{min(Pa),min(Pb),min(Pc)} and R,
+both invariant under swapping a↔b. So any (2,1,2) triple (a,b,c) gives a (1,2,2) triple (b,a,c)
+with identical ρ. Hence sup(2,1,2) = sup(1,2,2) = 2^{-1/4} (proved by F26/F27).
+
+**Direct proof:** WLOG nd=p1. ρ⁴=p1³/(p2·q1·r1·r2). Since r1·r2=p1·p2+q1≥p1·p2:
+p2·q1·r1·r2 ≥ p2·2·p1·p2 = 2·p1·p2² > 2·p1³ (using q1≥2, p2>p1). ρ⁴<1/2. □
+
+**Extremal:** b=2, a=p1·p2 near-twin, c=p1·p2+2=r1·r2 near-twin. As all four primes→n: ρ⁴→1/2.
+
+**Paper:** Corrects (2,1,2) row in both tables, fixes abstract and F24-F25 explanation.
+F25 entry in PLAN.md is marked CORRECTED BY F30.
 
 ---
 

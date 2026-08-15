@@ -39,8 +39,8 @@ We give a complete classification of partition types by whether the minimum
 \emph{non-degenerate} norm ratio $\rho = \|\psi_\mathrm{nd}\|_\infty/R^{1/(\omega-1)}$
 is universally bounded: nine types are bounded (with exact analytical sharp bounds
 including $2^{-1/(\omega-1)}$ for balanced types at $\omega = 3, 4, 5$, $\sup\rho = 1$
-for two $\omega = 5$ types with $a=1$, and $\sup\rho = 6^{-1/4}$ for two further
-$\omega = 5$ types). All $\omega \ge 6$ types are unbounded.
+for two $\omega = 5$ types with $a=1$, $\sup\rho = 2^{-1/4}$ for type $(2,1,2)$,
+and $\sup\rho = 6^{-1/4}$ for type $(2,2,1)$). All $\omega \ge 6$ types are unbounded.
 All nine bounded $\omega = 5$ types have asymptotic suprema (never achieved).
 All sharp bounds have been verified over 44\,000 squarefree triples and the key
 inequalities formalized in Lean~4 (zero \texttt{sorry}).
@@ -299,7 +299,7 @@ $(0,2,2)$, $\omega=4$ & 69     & 0.147 & 0.505 & $3{\cdot}210^{-1/3}{\approx}0.5
 $(1,1,2)$, $\omega=4$ & 1\,029 & 0.356 & 0.781 & $2^{-1/3}{\approx}0.794$  & 30.0\% & BOUNDED \\
 $(1,2,1)$, $\omega=4$ & 1\,036 & 0.372 & 0.791 & $2^{-1/3}{\approx}0.794$  & 31.9\% & BOUNDED \\
 $(1,2,2)$, $\omega=5$ & 3\,450 & 0.104 & 0.817 & $2^{-1/4}{\approx}0.8408$ (not achieved) & 0.0\% & BOUNDED \\
-$(2,1,2)$, $\omega=5$ & 3\,115 & 0.093 & 0.634 & $6^{-1/4}{\approx}0.6389$ (not achieved) & 0.3\% & BOUNDED \\
+$(2,1,2)$, $\omega=5$ & 3\,115 & 0.093 & 0.634 & $2^{-1/4}{\approx}0.841$ (not achieved) & 0.3\% & BOUNDED \\
 $(2,2,1)$, $\omega=5$ & 3\,006 & 0.089 & 0.611 & $6^{-1/4}{\approx}0.6389$ (not achieved) & 0.4\% & BOUNDED \\
 $(0,2,3)$, $\omega=5$ & --- & --- & --- & $\sup = 1$ (not achieved) & --- & BOUNDED \\
 $(0,3,2)$, $\omega=5$ & --- & --- & --- & $\sup = 1$ (not achieved) & --- & BOUNDED \\
@@ -491,7 +491,7 @@ The $\varphi$-coordinate classification extends directly to $\omega = 5$
 Type & Degen/ND & Max $\rho$ ($= \|\psi_\mathrm{nd}\|/R^{1/4}$) & Achieved at & Pattern \\
 \hline
 $(1,2,2)$ & 0/219 & $2^{-1/4}{\approx}0.8408$ (sup) & --- & BOUNDED, sup$=2^{-1/4}$ (F26) \\
-$(2,1,2)$ & 17/171 & $6^{-1/4}{\approx}0.6389$ (sup) & --- & BOUNDED, sup$=6^{-1/4}$ (F25) \\
+$(2,1,2)$ & 17/171 & $2^{-1/4}{\approx}0.841$ (sup) & --- & BOUNDED, sup$=2^{-1/4}$ (F30) \\
 $(2,2,1)$ & 15/189 & $6^{-1/4}{\approx}0.6389$ (sup) & --- & BOUNDED, sup$=6^{-1/4}$ (F24) \\
 $(0,2,3)$ & ---    & $< 1$ (sup $= 1$) & --- & BOUNDED, sup$=1$ (F23) \\
 $(0,3,2)$ & ---    & $< 1$ (sup $= 1$) & --- & BOUNDED, sup$=1$ (F23) \\
@@ -511,16 +511,18 @@ for $a=2$, $b=pq$, $c=rs$ with all four odd primes near equal and $2+pq=rs$,
 $\rho^4 = p^3/(2qrs) < 1/2$ since $q,r,s > p$ (Theorem~F26).
 As all four primes $\to n$: $\rho^4 \to 1/2$; $\sup\rho = 2^{-1/4} \approx 0.8408$.
 Verified: 0 violations of $\rho < 2^{-1/4}$ for $a=2$, $b \le 200\,000$.
-Types $(2,1,2)$ and $(2,2,1)$ share $\sup\rho = 6^{-1/4} \approx 0.6389$ (Theorems~F24--F25),
-approached but never achieved by the mirror $a=6$ families:
-\begin{itemize}
-\item $(2,2,1)$: $a=6$, $b=q_1 q_2$ near-twin primes, $c=6+b$ prime.
-  $\rho^4 = q_1^3/(6 q_2(6+q_1 q_2)) < (q_1/q_2)^2/6 < 1/6$.
-\item $(2,1,2)$: $a=6$, $c=r_1 r_2$ near-twin primes, $b=c-6$ prime.
-  $\rho^4 = r_1^3/(6 r_2(r_1 r_2-6)) < (r_1/r_2)^2/6 < 1/6$.
-\end{itemize}
-Both give $\rho \to 6^{-1/4}$ as the near-twin ratio $\to 1$.
-Verified: 0 violations of $\rho < 6^{-1/4}$ for each type at $c \le 30\,000$.
+Types $(2,1,2)$ and $(1,2,2)$ share $\sup\rho = 2^{-1/4} \approx 0.8409$: by the $a \leftrightarrow b$
+symmetry of $\rho$ (which depends only on $\{\min P_a,\min P_b,\min P_c\}$ and $R$),
+any $(2,1,2)$ triple $(a,b,c)$ gives a $(1,2,2)$ triple $(b,a,c)$ with the same~$\rho$.
+Hence $\sup\rho$ for $(2,1,2)$ equals $\sup\rho$ for $(1,2,2)$, proved $= 2^{-1/4}$ by F26.
+The extremal family: $b=2$ (fixed), $a=p_1 p_2$, $c=p_1 p_2+2=r_1 r_2$ near-twin semiprimes;
+$\mathrm{nd}=p_1$, $\rho^4 = p_1^3/(2\,p_2\,r_1\,r_2) < 1/2$ (since $p_2\,r_1\,r_2 \ge p_1 p_2^2 > p_1^3$).
+As $p_1{\approx}p_2{\approx}r_1{\approx}r_2{\to}n$: $\rho^4 \to 1/2$.
+Verified: 0 violations of $\rho < 2^{-1/4}$ for $2{,}475{,}742$ triples at $c \le 50{,}000$
+(6 violations of the old incorrect bound $6^{-1/4}$; the old F25 claim was wrong).
+
+Type $(2,2,1)$ has $\sup\rho = 6^{-1/4} \approx 0.6389$ (Theorem~F24, general bound F29),
+approached but never achieved by the $a=6$ extremal family (see above).
 Types $(0,2,3)$ and $(0,3,2)$ have $a=1$ (empty $P_a$), giving only two non-empty prime
 groups; their F10 nd $= \max(\min P_b, \min P_c)$ satisfies $\rho < 1$ always
 (Theorem~F23: $\rho^4 = p^3/(q(pq+1)) < (p/q)^2 < 1$ for $p < q$), but $\sup\rho = 1$
@@ -588,7 +590,7 @@ $\omega$ & Type & $\sup \rho$ & Achieved? & Proof \\
 4 & $(1,1,2)$ & $2^{-1/3} \approx 0.794$ & No & F14 \\
 4 & $(1,2,1)$ & $2^{-1/3} \approx 0.794$ & No & F12 \\
 5 & $(1,2,2)$ & $0.4999\ldots$ & Yes, at $(13,22,35)$ & F15 \\
-5 & $(2,1,2)$ & $0.6076\ldots$ & Yes, at $(6,1511,1517)$ & F15 \\
+5 & $(2,1,2)$ & $2^{-1/4} \approx 0.841$ & No ($b{=}2$ twin-semiprime limit) & F30 \\
 5 & $(2,2,1)$ & $0.6064\ldots$ & Yes, at $(6,1517,1523)$ & F15 \\
 \hline
 \end{tabular}
