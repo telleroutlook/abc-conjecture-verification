@@ -1075,6 +1075,35 @@ Verified: 0 violations for ALL type (1,1,2) triples c≤5000; max overall ρ=0.7
 
 ---
 
+#### Step F21 — Quality boundary theorem and quality-ρ trade-off ✅ COMPLETE (2026-08-15)
+
+**Discovery scripts:** `t31_quality_rho.py`, `t32_quality_boundary.py`
+
+**Theorem F21A (quality > 1/2 criterion, proved):**
+
+For a squarefree coprime triple (a,b,c) with a+b=c, a≤b:
+  quality = log(c)/log(R) > 1/2  iff  a = 1.
+
+Proof: quality > 1/2 ↔ c > ab ↔ a+b > ab ↔ (a-1)(b-1) < 2.
+For integers: a=1 → (0)(b-1)=0 < 2 ✓; a≥2,b≥3 → ≥ 2; a=b=2 disqualified by gcd.
+Verified: 0 violations for squarefree triples c≤1000.
+
+**Corollaries:**
+- quality < 1 always (R = abc > c for squarefree, a,b≥1).
+- quality = 1/2 never achieved. a=1 → 1/2 from ABOVE; a=2 → from BELOW.
+
+**Theorem F21B (quality-ρ trade-off, type (1,1,2)):**
+- High-ρ: p≈q near-equal odd primes → ρ→2^{-1/3}, quality→1/3.
+- High-quality: a=2 fixed, q→∞ → quality→1/2, ρ→0.
+- Pearson corr(quality, ρ) ≈ −0.76; triples hardest for abc ≠ triples closest to sharp ρ bound.
+
+**Structural finding:** The quality-ρ trade-off is a provable structural feature —
+not an artifact. For squarefree bounded types, maximizing ρ and maximizing quality
+point in opposite directions. This quantifies how "hard for SDC" and "hard for abc"
+are genuinely different regimes within the squarefree subfamily.
+
+---
+
 #### Step F19 — ρ distribution analysis; Lean F12+F14 formalization ✅ COMPLETE (2026-08-15)
 
 **Discovery script:** `discovery/m2_directions/t30_rho_distribution.py`
