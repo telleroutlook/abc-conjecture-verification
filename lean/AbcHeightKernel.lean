@@ -133,3 +133,45 @@ example : Real.log 48 ≤ Real.log 6 + 7 * Real.log 2 := by
   have : Real.log 48 = Real.log (6 * 2 ^ 3) := by norm_num
   rw [this, Real.log_mul (by norm_num) (by positivity), Real.log_pow]
   push_cast; linarith [Real.log_pos (show (1:ℝ) < 2 by norm_num)]
+
+/-! ## D4: Conditional theorem — ADAI-log implies arithmetic derivative bound
+
+Route IV (discovery/m2_directions/t6, t7) identified the **log-corrected ADAI**
+conjecture:
+
+  a′ + b′ + R·log(R) ≥ C·c′   for all coprime a+b=c, some universal C > 0
+
+where n′ is the arithmetic derivative and R = rad(abc).
+
+This is an OPEN conjecture (not proved, not falsified as of 2026-08-15).
+The original ADAI (without log factor) was FALSIFIED by Mersenne counterexamples.
+
+The theorem below is [THM] CONDITIONAL on `adai_log_holds` as an explicit
+hypothesis. It does NOT prove abc — it only establishes the intermediate step
+c′ ≤ (a′+b′+R·log R)/C by simple division.
+
+Non-circularity: no abc conjecture, Szpiro, IUT, or known abc triples are used.
+-/
+
+/-- ADAI-log: if C·x ≤ y then x ≤ y/C (the algebraic core of the conditional bound). -/
+theorem adai_log_implies_deriv_bound (C x y : ℝ) (hC : 0 < C)
+    (hADAI : C * x ≤ y) :
+    x ≤ y / C := by
+  have hxC : x * C ≤ y := by linarith
+  calc x = x * C * (1 / C) := by field_simp
+       _ ≤ y * (1 / C) := by
+           apply mul_le_mul_of_nonneg_right hxC; positivity
+       _ = y / C := by ring
+
+/-- Conditional weak bound: if ADAI-log holds for (da, db, dc, R) with constant C,
+    then dc ≤ (da + db + R·log R) / C.
+    [THM] conditional on the ADAI-log hypothesis. Does NOT imply abc. -/
+theorem adai_log_implies_weak_deriv_bound
+    (C da db dc R : ℝ) (hC : 0 < C) (_ : 0 < R)
+    (hADAI : C * dc ≤ da + db + R * Real.log R) :
+    dc ≤ (da + db + R * Real.log R) / C :=
+  adai_log_implies_deriv_bound C dc _ hC hADAI
+
+-- The log-corrected ADAI (if true) gives quality ≤ 2 only, not abc.
+-- For c = 2^k with 2^k−1 Mersenne prime: (a′+b′+R·logR)/c′ → 4·log2 ≈ 2.77 (O(1)·c).
+-- This is recorded as a note; see discovery/m2_directions/t6_adai_refined.py.

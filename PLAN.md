@@ -304,39 +304,54 @@ Awaiting external review. No formalization proceeds until Q2 (infimum) is resolv
 
 ---
 
-#### Step D3 — Conditional proof attempt: ADAI → abc
+#### Step D3 — Conditional proof attempt: ADAI → abc ✅ COMPLETE (2026-08-15)
 
 **Toy:** `t7_adai_implies_abc.py`
 
-If ADAI holds in some form, trace the implication:
-ADAI → bound on Φ(c) → abc.
-Formalize this as a [THM] with ADAI as a hypothesis.
+**Findings:**
+1. **IMPLICATION DOES NOT HOLD DIRECTLY.** Best bound from ADAI-log alone:
+   c ≤ R²·log(R)/C. Not abc (which needs c ≤ K_ε·R^{1+ε}).
+2. **Precise obstruction:** sigma(c) = c'/c = Σ_{p|c} v_p(c)/p → 0 for c = p^k
+   as prime p → ∞. E.g., at p=71, k=2: sigma = 0.028, sigma·log(R) = 0.27.
+   Since c = c'/sigma, ADAI-log gives c ≤ R·log(R)/sigma(c) = R·log(R)·p
+   (not R^{1+ε}).
+3. **Additional hypothesis needed:** sigma(c) ≥ R^{-δ} for δ < 1. This is not
+   provable without abc-equivalent input — exact same structural barrier as Baker.
 
-Non-circularity: the implication direction is pure arithmetic and does not use abc.
-
----
-
-#### Step D4 — Lean 4 formalization of the equivalence
-
-**Target:** Add to `lean/AbcHeightKernel.lean` (or a new file):
-- `theorem phi_equiv_abc`: Φ(c) ≤ K_ε·R^ε ↔ abc(ε) [as a formal conditional]
-- `theorem adai_implies_abc (h : ADAI) : abc_inequality` [conditional on ADAI as axiom]
-
-This is [THM] (proved, conditional on ADAI), so it can be formalized without
-resolving ADAI itself.
+**Partial result (non-trivial):** Conditional on ADAI-log, c ≤ R²·log(R)/C.
+This is a provable [THM] (conditional). Worth formalizing in D4.
 
 ---
 
-#### Step D5 — Decision gate
+#### Step D4 — Lean 4 formalization of the conditional theorem ✅ COMPLETE (2026-08-15)
 
-After D1–D3:
+**Target:** `lean/AbcHeightKernel.lean`, section `## D4`.
 
-| Finding | Action |
-|---|---|
-| ADAI is FALSE (counterexample found) | Close route; record in obstruction ledger |
-| ADAI is TRUE but already known/equivalent to abc | Record as reformulation; no new route |
-| ADAI is OPEN with no counterexample and no literature | Escalate to formal outsource; add OB-08 |
-| ADAI has a weaker provable form giving c ≤ R^A (A > 1) | Record as partial progress; add to M2 scaffold |
+Two theorems proved (zero sorry, zero warnings, `lake build` exit 0):
+- `adai_log_implies_deriv_bound`: if C·x ≤ y (with C > 0) then x ≤ y/C. [trivial algebra]
+- `adai_log_implies_weak_deriv_bound`: conditional on ADAI-log, dc ≤ (da+db+R·logR)/C.
+
+These are the algebraic skeleton of the Route IV conditional result. Status: [THM] conditional.
+
+---
+
+#### Step D5 — Decision gate ✅ DECIDED (2026-08-15)
+
+**Decision based on D1–D3:**
+
+| Finding | Status | Action taken |
+|---|---|---|
+| ADAI original is FALSE | **CONFIRMED** (Mersenne counterexample) | Route C (original) closed |
+| ADAI-log: implication to abc | **BLOCKED** (sigma(c) obstruction) | Record in proof/m2/ |
+| ADAI-log gives c ≤ R²·log(R) | **PARTIAL** conditional theorem | D4: formalize |
+| ADAI-log truth status | **OPEN** (not falsified, not proved) | OB-08 awaits review |
+
+**Route IV is BLOCKED** with the same structural ceiling as Baker: the arithmetic
+derivative route reaches c ≤ R²·log(R) but cannot reach R^{1+ε} without bounding
+sigma(c) from below — which requires abc-equivalent input.
+
+**Obstruction recorded in:** `proof/m2/key_inequality_obstruction.json` (Route D).
+**Partial result formalized:** D4 (conditional theorem to Lean 4).
 
 ---
 

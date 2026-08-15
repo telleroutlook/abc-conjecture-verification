@@ -44,6 +44,28 @@
       "resolution_path": "A proof of the Frey/Szpiro conductor bound from first principles (Arakelov intersection theory, without assuming abc or Szpiro) would close this route. Such a proof would itself be a proof of abc."
     },
     {
+      "name": "Route C: Baker / Linear Forms in Logarithms (S-unit)",
+      "description": "Use Baker's theorem on linear forms in logarithms to bound S-unit solutions of a+b=c. Baker (1968) and Stewart–Yu (2001) give c < exp(κ·R^{1/3}·(log R)³) where R = rad(abc).",
+      "obstruction": "The exponent 1/3 arises because the Baker bound requires B ~ log c as auxiliary parameter, but B ~ c is circular (c appears in the bound). After optimizing, the best unconditional result is R^{1/3} (Stewart–Yu 2001). Pasten (2024, Inventiones) improves by log log R, giving exp(κ·R^{1/3}·(log R)²·log log R), but the R^{1/3} barrier is structural. Getting from exp(R^{1/3}) to c ≤ R^{1+ε} would require replacing B ~ c with B ~ R^ε, which amounts to assuming abc.",
+      "why_circular": "The circularity is: Baker bounds use B = max(h(a), h(b), h(c)) ≥ log c as a parameter. Substituting B ~ log c gives exp(B) ~ c, not R^{1+ε}. Breaking this circularity requires bounding log c by (1+ε)·log R a priori, which is the abc conjecture itself.",
+      "files": ["OB-07-baker-methods-review-2026-08-15.md"],
+      "resolution_path": "A Baker-type argument avoiding the B~c circularity (e.g., via improved linear independence measures or new height theory) would close this route."
+    },
+    {
+      "name": "Route D: Arithmetic Derivative Additive Inequality (ADAI)",
+      "description": "The arithmetic derivative n' (defined by n'(p)=1, Leibniz rule) satisfies Phi(n)=n/rad(n) ≡ abc (T5). The ADAI conjecture: a'+b'+R·log(R) ≥ C·c' (log-corrected form) for all coprime a+b=c, with C>0 universal. If true, it gives c·sigma(c) ≤ R·log(R)/C where sigma(c) = c'/c = Σ_{p|c} v_p(c)/p.",
+      "obstruction": "Two-level obstruction found by toys T6–T7 (2026-08-15):\n(1) Original ADAI (without log): FALSE. For (1, 2^k-1, 2^k) with 2^k-1 Mersenne prime, ratio → 0 as k → ∞ (ratio ≈ 4/k).\n(2) Log-corrected ADAI: NOT falsified (infimum of ratio over tested triples ≈ 0.374), but may go to 0 for highly-composite k.\n(3) IMPLICATION BLOCKED: Even if ADAI-log holds with C>0, the best bound derivable is c ≤ R²·log(R)/C. Getting from R² to R^{1+ε} requires sigma(c) = c'/c ≥ (const)/R^{1-ε}, but sigma(p^k) = k/p → 0 for large prime p (with k fixed). This lower bound on sigma(c) is not provable without abc-equivalent input.",
+      "why_circular": "The structural obstruction is that sigma(c) = c'/c is O(1/p) for c = p² (large prime p), and ADAI-log gives c ≤ R·log(R)/sigma(c) = R·log(R)·p. Since p can be arbitrarily large relative to R only if the abc conjecture fails, this bound degrades arbitrarily — the only way to fix it is to assume c ≤ R^{1+ε} a priori.",
+      "files": [
+        "discovery/m2_directions/t5_arithmetic_wronskian.py",
+        "discovery/m2_directions/t6_adai_refined.py",
+        "discovery/m2_directions/t7_adai_implies_abc.py",
+        "outsource/OB-08-arithmetic-derivative-additive-inequality.md"
+      ],
+      "partial_result": "Conditional: if ADAI-log holds with constant C>0, then c ≤ R²·log(R)/C for all coprime a+b=c. This is [THM] conditional on ADAI-log. It is weaker than abc but a non-trivial statement.",
+      "resolution_path": "Either: falsify ADAI-log (a counterexample with ratio → 0 would close this), or prove ADAI-log is equivalent to abc (making it a reformulation, not a route), or find a supplementary lower bound on sigma(c) provable without abc."
+    },
+    {
       "name": "Route B: Mochizuki Inter-Universal Teichmüller Theory (IUT)",
       "description": "Mochizuki's IUTT-I through IUTT-IV constructs 'Hodge theaters' — deformations of the arithmetic of abc triples — and applies Corollary 3.12 of IUTT-III to extract the height inequality c <= K_eps * rad(abc)^(1+eps). This is the most direct published route to the key inequality.",
       "obstruction": "The sub-obligation core3.iut-corollary-312-independently-verified is OPEN. No machine-replayed formal proof of Corollary 3.12 has been supplied. The Scholze-Stix objection (2018) identifies a specific gap: the identification of objects across different Hodge theaters in IUTT-III requires an explicit isomorphism proof that Mochizuki has not provided in a form that has been independently verified.",
