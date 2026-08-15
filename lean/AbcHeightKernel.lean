@@ -513,11 +513,13 @@ theorem pasten_F16_111_key (p q : ℕ) (hp : 2 ≤ p) (hq : 0 < q) :
 /-- [THM] F16: For type (1,1,1), ρ² = q/(p*(p+q)) < 1/2 as a real inequality. -/
 theorem pasten_F16_111_ratio_sq_lt_half (p q : ℕ) (hp : 2 ≤ p) (hq : 0 < q) :
     (q : ℝ) / ((p : ℝ) * ((p : ℝ) + (q : ℝ))) < 1 / 2 := by
-  have hpq : (p : ℝ) * ((p : ℝ) + (q : ℝ)) > 0 := by
-    positivity
-  rw [div_lt_div_iff hpq (by norm_num : (2 : ℝ) > 0)]
+  have hpq : (p : ℝ) * ((p : ℝ) + (q : ℝ)) > 0 := by positivity
   have key := pasten_F16_111_key p q hp hq
-  push_cast
+  have key_r : 2 * (q : ℝ) < (p : ℝ) * ((p : ℝ) + (q : ℝ)) := by exact_mod_cast key
+  have h1 : 2 * (q : ℝ) / ((p : ℝ) * ((p : ℝ) + (q : ℝ))) < 1 :=
+    (div_lt_one hpq).mpr (by linarith)
+  have h2 : 2 * (q : ℝ) / ((p : ℝ) * ((p : ℝ) + (q : ℝ))) =
+      2 * ((q : ℝ) / ((p : ℝ) * ((p : ℝ) + (q : ℝ)))) := by ring
   linarith
 
 /-!
@@ -546,11 +548,17 @@ theorem pasten_F12_121_key (p q1 q2 : ℕ) (hp : 1 ≤ p) (hpq1 : p ≤ q1) (hq1
 theorem pasten_F12_121_ratio_cube_lt_half (p q1 q2 : ℕ) (hp : 1 ≤ p) (hpq1 : p ≤ q1)
     (hq12 : q1 + 1 ≤ q2) :
     (q1 : ℝ) ^ 2 / ((p : ℝ) * (q2 : ℝ) * ((p : ℝ) + (q1 : ℝ) * (q2 : ℝ))) < 1 / 2 := by
+  have hp_pos : (0 : ℝ) < (p : ℝ) := by exact_mod_cast (show 0 < p by omega)
+  have hq2_pos : (0 : ℝ) < (q2 : ℝ) := by exact_mod_cast (show 0 < q2 by omega)
   have hden : (p : ℝ) * (q2 : ℝ) * ((p : ℝ) + (q1 : ℝ) * (q2 : ℝ)) > 0 := by positivity
-  rw [div_lt_div_iff hden (by norm_num : (2 : ℝ) > 0)]
   have key := pasten_F12_121_key p q1 q2 hp hpq1 hq12
-  push_cast
-  nlinarith [sq_nonneg (q1 : ℝ)]
+  have key_r : 2 * (q1 : ℝ) ^ 2 < (p : ℝ) * (q2 : ℝ) * ((p : ℝ) + (q1 : ℝ) * (q2 : ℝ)) := by
+    exact_mod_cast key
+  have h1 : 2 * (q1 : ℝ) ^ 2 / ((p : ℝ) * (q2 : ℝ) * ((p : ℝ) + (q1 : ℝ) * (q2 : ℝ))) < 1 :=
+    (div_lt_one hden).mpr (by linarith)
+  have h2 : 2 * (q1 : ℝ) ^ 2 / ((p : ℝ) * (q2 : ℝ) * ((p : ℝ) + (q1 : ℝ) * (q2 : ℝ))) =
+      2 * ((q1 : ℝ) ^ 2 / ((p : ℝ) * (q2 : ℝ) * ((p : ℝ) + (q1 : ℝ) * (q2 : ℝ)))) := by ring
+  linarith
 
 /-!
 ## F14: Sharp bound 2^{-1/3} for type (1,1,2) — c-even subfamily
@@ -573,11 +581,15 @@ theorem pasten_F14_112_ceven_key (p q : ℕ) (hp : 1 ≤ p) (hpq : p + 1 ≤ q) 
 /-- [THM] F14 (c-even): For type (1,1,2) with p < q, ρ³ = p²/(q*(p+q)) < 1/2 in ℝ. -/
 theorem pasten_F14_112_ceven_ratio_cube_lt_half (p q : ℕ) (hp : 1 ≤ p) (hpq : p + 1 ≤ q) :
     (p : ℝ) ^ 2 / ((q : ℝ) * ((p : ℝ) + (q : ℝ))) < 1 / 2 := by
+  have hq_pos : (0 : ℝ) < (q : ℝ) := by exact_mod_cast (show 0 < q by omega)
   have hden : (q : ℝ) * ((p : ℝ) + (q : ℝ)) > 0 := by positivity
-  rw [div_lt_div_iff hden (by norm_num : (2 : ℝ) > 0)]
   have key := pasten_F14_112_ceven_key p q hp hpq
-  push_cast
-  nlinarith [sq_nonneg (p : ℝ)]
+  have key_r : 2 * (p : ℝ) ^ 2 < (q : ℝ) * ((p : ℝ) + (q : ℝ)) := by exact_mod_cast key
+  have h1 : 2 * (p : ℝ) ^ 2 / ((q : ℝ) * ((p : ℝ) + (q : ℝ))) < 1 :=
+    (div_lt_one hden).mpr (by linarith)
+  have h2 : 2 * (p : ℝ) ^ 2 / ((q : ℝ) * ((p : ℝ) + (q : ℝ))) =
+      2 * ((p : ℝ) ^ 2 / ((q : ℝ) * ((p : ℝ) + (q : ℝ)))) := by ring
+  linarith
 
 /-!
 ## F21A: Quality boundary theorem for squarefree coprime triples
@@ -636,15 +648,23 @@ theorem pasten_F22_omega5_rho4_lt_R (p1 p2 p3 p4 p5 : ℕ)
   have h4 : p2 + 2 ≤ p4 := by omega
   have h5 : p2 + 3 ≤ p5 := by omega
   have hp2 : 1 ≤ p2 := by omega
-  nlinarith [sq_nonneg p2, pasten_F22_key p2 hp2,
-             Nat.mul_le_mul_right p5 h34,
-             Nat.mul_le_mul h23 h45]
+  have step1 : p2 ^ 3 < p1 * p3 * p4 * p5 := by
+    have hkey := pasten_F22_key p2 hp2
+    have h_prod : 2 * (p2 + 1) * (p2 + 2) * (p2 + 3) ≤ p1 * p3 * p4 * p5 :=
+      Nat.mul_le_mul (Nat.mul_le_mul (Nat.mul_le_mul h1 h23) h4) h5
+    linarith
+  nlinarith [step1, hp2]
 
 /-- [THM] F22.real: ρ⁴ = p₂⁴/(p₁·p₂·p₃·p₄·p₅) < 1 in ℝ. -/
 theorem pasten_F22_omega5_rho_lt_one_real (p1 p2 p3 p4 p5 : ℕ)
     (h1 : 2 ≤ p1) (h12 : p1 + 1 ≤ p2) (h23 : p2 + 1 ≤ p3)
     (h34 : p3 + 1 ≤ p4) (h45 : p4 + 1 ≤ p5) :
     (p2 : ℝ) ^ 4 / ((p1 : ℝ) * p2 * p3 * p4 * p5) < 1 := by
+  have hp1 : (0 : ℝ) < (p1 : ℝ) := by exact_mod_cast (show 0 < p1 by omega)
+  have hp2' : (0 : ℝ) < (p2 : ℝ) := by exact_mod_cast (show 0 < p2 by omega)
+  have hp3' : (0 : ℝ) < (p3 : ℝ) := by exact_mod_cast (show 0 < p3 by omega)
+  have hp4' : (0 : ℝ) < (p4 : ℝ) := by exact_mod_cast (show 0 < p4 by omega)
+  have hp5' : (0 : ℝ) < (p5 : ℝ) := by exact_mod_cast (show 0 < p5 by omega)
   have hR : (0 : ℝ) < (p1 : ℝ) * p2 * p3 * p4 * p5 := by positivity
   rw [div_lt_one hR]
   have key := pasten_F22_omega5_rho4_lt_R p1 p2 p3 p4 p5 h1 h12 h23 h34 h45
@@ -688,17 +708,21 @@ theorem pasten_F23_omega5_rho4_lt_half_real (p1 p2 p3 p4 p5 : ℕ)
     (h1 : 2 ≤ p1) (h12 : p1 + 1 ≤ p2) (h23 : p2 + 1 ≤ p3)
     (h34 : p3 + 1 ≤ p4) (h45 : p4 + 1 ≤ p5) :
     (p2 : ℝ) ^ 4 / ((p1 : ℝ) * p2 * p3 * p4 * p5) < 1 / 2 := by
+  have hp1 : (0 : ℝ) < (p1 : ℝ) := by exact_mod_cast (show 0 < p1 by omega)
   have hp2 : (0 : ℝ) < (p2 : ℝ) := by exact_mod_cast (show 0 < p2 by omega)
+  have hp3' : (0 : ℝ) < (p3 : ℝ) := by exact_mod_cast (show 0 < p3 by omega)
+  have hp4' : (0 : ℝ) < (p4 : ℝ) := by exact_mod_cast (show 0 < p4 by omega)
+  have hp5' : (0 : ℝ) < (p5 : ℝ) := by exact_mod_cast (show 0 < p5 by omega)
   have hR : (0 : ℝ) < (p1 : ℝ) * p2 * p3 * p4 * p5 := by positivity
-  rw [div_lt_div_iff hR (by norm_num : (2 : ℝ) > 0)]
   have key := pasten_F23_omega5_rho4_lt_half_key p1 p2 p3 p4 p5 h1 h12 h23 h34 h45
-  have eq : (p2 : ℝ) ^ 4 * 2 = (p2 : ℝ) * (2 * (p2 : ℝ) ^ 3) := by ring
-  rw [eq]
-  have lhs_le : (p2 : ℝ) * (2 * (p2 : ℝ) ^ 3) < (p2 : ℝ) * ((p1 : ℝ) * p3 * p4 * p5) := by
-    apply mul_lt_mul_of_pos_left _ hp2
-    have : (2 * p2 ^ 3 : ℝ) < ((p1 * p3 * p4 * p5 : ℕ) : ℝ) := by exact_mod_cast key
-    push_cast at this ⊢; linarith
-  linarith [lhs_le]
+  have key2 : 2 * (p2 : ℝ) ^ 4 < (p1 : ℝ) * p2 * p3 * p4 * p5 := by
+    have k : (2 * p2 ^ 3 : ℝ) < ((p1 * p3 * p4 * p5 : ℕ) : ℝ) := by exact_mod_cast key
+    push_cast at k ⊢; nlinarith
+  have h1' : 2 * (p2 : ℝ) ^ 4 / ((p1 : ℝ) * p2 * p3 * p4 * p5) < 1 :=
+    (div_lt_one hR).mpr (by linarith)
+  have h2 : 2 * (p2 : ℝ) ^ 4 / ((p1 : ℝ) * p2 * p3 * p4 * p5) =
+      2 * ((p2 : ℝ) ^ 4 / ((p1 : ℝ) * p2 * p3 * p4 * p5)) := by ring
+  linarith
 
 /-!
 ## F23.b: ρ < 1 for type (0,2,3) — analytic proof using F10 nd
@@ -715,7 +739,10 @@ PROOF: q*(p*q+1) ≥ (p+1)*(p*(p+1)+1) = (p+1)*(p²+p+1) > p³.
     This proves ρ⁴(F10) < 1 for type (0,2,3) squarefree triples. -/
 theorem pasten_F23b_023_rho4_lt_one_key (p q : ℕ) (hp : 1 ≤ p) (hpq : p + 1 ≤ q) :
     p ^ 3 < q * (p * q + 1) := by
-  nlinarith [sq_nonneg p, sq_nonneg q, sq_nonneg (q - p)]
+  have h : p * (p * p) ≤ p * (q * q) :=
+    Nat.mul_le_mul_left p (Nat.mul_le_mul (by omega) (by omega))
+  nlinarith [show p ^ 3 = p * (p * p) from by ring,
+             show q * (p * q + 1) = p * (q * q) + q from by ring]
 
 /-- [THM] F23.b: For type (0,2,3) with F10 nd = p (smaller of b's primes):
     ρ⁴ = p³/(q*(p*q+1)) < 1 in ℝ. -/
@@ -726,3 +753,42 @@ theorem pasten_F23b_023_rho4_lt_one_real (p q : ℕ) (hp : 1 ≤ p) (hpq : p + 1
   rw [div_lt_one (mul_pos hq hpq_pos)]
   have key := pasten_F23b_023_rho4_lt_one_key p q hp hpq
   exact_mod_cast key
+
+/-! ## F27: ρ⁴ < 1/2 for type (1,2,2) — key inequality, proves sup = 2^{-1/4}
+
+For type (1,2,2) with a=2 (single prime), b=p*q (p<q odd primes), c=r*s (r<s odd primes):
+F10 nd = second-smallest{2, p, r} = p (when r>p, which is the nd=p case).
+ρ⁴ = p³/(2*q*r*s). Since q>p, r>p, s>r>p: q*r*s > p³, so 2*q*r*s > 2*p³ > p³.
+Hence ρ⁴ < 1/2, i.e., sup ρ ≤ 2^{-1/4}.
+As all four primes tend to n: ρ⁴ → 1/2, so sup ρ = 2^{-1/4}.
+
+This EXTENDS the pattern sup = 2^{-1/(ω-1)} from ω=3,4 to the type (1,2,2) at ω=5.
+-/
+
+/-- [THM] F27.key: p³ < q*r*s when p < q, p < r, r < s (all ≥ 2).
+    Core of the F26 proof: nd³ < product of the three other primes. -/
+theorem pasten_F27_122_rho4_key (p q r s : ℕ)
+    (hpq : p + 1 ≤ q) (hpr : p + 1 ≤ r) (hrs : r + 1 ≤ s) :
+    p ^ 3 < q * r * s := by
+  have h_qr : (p + 1) * (p + 1) ≤ q * r := Nat.mul_le_mul hpq hpr
+  have h_s : p + 2 ≤ s := by omega
+  have h_qrs : (p + 1) * (p + 1) * (p + 2) ≤ q * r * s := Nat.mul_le_mul h_qr h_s
+  nlinarith [sq_nonneg p]
+
+/-- [THM] F27: For type (1,2,2) with a=2, b=p*q (p<q), c=r*s (r<s), and p<r:
+    ρ⁴ = p⁴/(2*p*q*r*s) = p³/(2*q*r*s) < 1/2 in ℝ. -/
+theorem pasten_F27_122_rho4_lt_half_real (p q r s : ℕ)
+    (hpq : p + 1 ≤ q) (hpr : p + 1 ≤ r) (hrs : r + 1 ≤ s) :
+    (p : ℝ) ^ 3 / (2 * (q : ℝ) * r * s) < 1 / 2 := by
+  have hq : (0 : ℝ) < (q : ℝ) := by exact_mod_cast (show 0 < q by omega)
+  have hr : (0 : ℝ) < (r : ℝ) := by exact_mod_cast (show 0 < r by omega)
+  have hs : (0 : ℝ) < (s : ℝ) := by exact_mod_cast (show 0 < s by omega)
+  have key_nat := pasten_F27_122_rho4_key p q r s hpq hpr hrs
+  have key_real : (p : ℝ) ^ 3 < (q : ℝ) * r * s := by exact_mod_cast key_nat
+  have hdenom : (0 : ℝ) < 2 * (q : ℝ) * r * s := by positivity
+  have h1 : 2 * (p : ℝ) ^ 3 / (2 * (q : ℝ) * r * s) < 1 :=
+    (div_lt_one hdenom).mpr (by nlinarith)
+  have h2 : 2 * (p : ℝ) ^ 3 / (2 * (q : ℝ) * r * s) =
+      2 * ((p : ℝ) ^ 3 / (2 * (q : ℝ) * r * s)) := by ring
+  linarith
+
