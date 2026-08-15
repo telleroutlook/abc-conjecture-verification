@@ -1,5 +1,39 @@
 # Problem OB-02 — IUT Corollary 3.12: explicit isomorphism for the Θ-link
 
+> **REFEREE VERDICT (2026-08-15): REJECT AS STATED — INCONCLUSIVE + LOCALIZATION only.**
+> See `OB-02-independent-referee-report.md` (archived in Downloads).
+>
+> **Defects preventing A/B answer:**
+> 1. D1 is ill-typed: `vol`, `n`, `V-boundary`, LV1–LV3 are not well-formed; it does not
+>    equal the IUT log-volume of IUTT-III Proposition 3.9.
+> 2. D2 misidentifies the Θ-link as a function-field morphism φ_F: F₁→F₂. IUTT-III
+>    Definition 3.8(ii) defines a full poly-isomorphism of prime-strips — no F₁→F₂ map
+>    exists. Asking for "the formula of φ_F on a generator" is a category error.
+> 3. Corollary 3.12 is misquoted. The actual statement is −|log Θ| ≥ −|log q| (log-volume
+>    comparison of pilots). The discriminant-conductor bound log|Δ| ≤ (1+ε)log N + C is
+>    only reached after IUTT-IV Theorem 1.10 and Corollary 2.3.
+> 4. Scholze–Stix objection mischaracterised: the core issue is j²-scaling of concrete
+>    pilot embeddings in one-dimensional real vector spaces, not volume-preservation of a
+>    function-field map.
+> 5. Numerical anchor: actual conductor of E_{1,8,9} is N=48, not N=6; the Python snippet
+>    outputs `2*log(N)=3.5835`, not the stated `7.1595`.
+>
+> **Precise IUT localization (INCONCLUSIVE outcome):**
+> The actual dispute lives at IUTT-III Corollary 3.12 proof steps **(xi-e)→(xi-f)**:
+> step (xi-e) produces a half-line ℝ_{≤ −|log Θ|} of possible output log-volumes;
+> step (xi-f) places −|log q| in that region. The unresolved question is whether the
+> abstract/concrete pilot embeddings, their j²-scaling, and the real-vector-space
+> comparison maps form a compatible commutative diagram — not whether an undefined φ_F
+> preserves an Arakelov degree.
+>
+> **Revision requirements before re-send (per referee §9):**
+> - Use IUTT-I Def 3.1, IUTT-III Def 3.8, Prop 3.9 verbatim; delete D1 toy triple.
+> - Replace φ_F requirement with the actual prime-strip poly-isomorphisms.
+> - State Cor 3.12 as written; define −|log q|, −|log Θ|, procession normalization, Ind1–3.
+> - Write the core sub-proposition as a commutative diagram with j²-scaling and all pilots.
+> - Separate Mochizuki's claim, Scholze–Stix's objection, and the compatibility proposition.
+> - Fix conductor to N=48 or remove the abc/Frey section entirely.
+
 **Type:** arithmetic geometry / inter-universal Teichmüller theory  
 **Non-circularity:** This problem does **not** assume the abc conjecture, Szpiro's conjecture,
 any abc-equivalent hypothesis, or any known abc triple as analytic input. It asks whether

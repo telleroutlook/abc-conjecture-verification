@@ -137,7 +137,7 @@ log |Δ_min| ≥ 2 log c − C for some computable C.
 log N_E = Σ_p f_p log p, where f_p is the Artin conductor exponent at p.
 For p | abc and p odd: f_p = 1 or 2 depending on additive vs multiplicative reduction.
 For p = 2: f_2 can be up to 8 (bounded 2-adic contribution).
-Therefore: N_E | rad(2abc)² and log N_E ≤ 2 log rad(abc) + 8 log 2.
+Therefore: rad(N_E) | rad(2abc) and log N_E ≤ 2 log rad(abc) + 8 log 2.
 
 **What to close for Step 3**: A formally-verified proof of: log N_E ≤ 2 log rad(abc) + C₂
 for C₂ = 8 log 2 + O(1). This uses the theory of Néron models and Ogg's formula — the
@@ -184,7 +184,11 @@ q(a,b,c) > 1, with explicitly computed rad(abc) and log c / log rad(abc).
 
 For (a,b,c) = (1, 8, 9) (coprime: gcd(1,8)=1, 1+8=9):
 - rad(1) = 1, rad(8) = 2, rad(9) = 3. So rad(abc) = rad(1·8·9) = rad(72) = 2·3 = 6.
-- log |Δ_min(E_{1,8,9})| ≈ 2(log 1 + log 8 + log 9) − 8 log 2 = 0 + 2·2.079 + 2·2.197 − 5.545 ≈ 3.067
-- (1/12) · 3.067 ≈ 0.256. This is a sanity check for Step 2; it is NOT an input to the proof.
-- N_E ≤ rad(2·1·8·9)² = rad(144)² = 6² = 36. log 36 ≈ 3.58. 2 log rad(9) + C₂: 2 log 6 + C₂ = 3.58 + C₂. ✓
+- log |Δ_min(E_{1,8,9})| ≈ log(16 · (1·8·9)²) = log(16 · 5184) = log(82944) ≈ 11.33
+  (The formula log|Δ_min| = 2log(abc) − 8log2 + O(1) has O(1) ≈ +12log2 here; the
+   leading 16 = 2⁴ factor accounts for +4log2 ≈ 2.77 of that. Do not drop the O(1) numerically.)
+- (1/12) · 11.33 ≈ 0.944. This is a sanity check for Step 2; it is NOT an input to the proof.
+- log N_E ≤ 2 log rad(abc) + 8 log 2: actual N=48, log 48 ≈ 3.87 ≤ 2 log 6 + 8 log 2 ≈ 3.58 + 5.55 = 9.13 ✓.
+  NOTE: N=48 > rad(abc)²=36, so "N_E | rad(2abc)²" and "N_E ≤ rad(2abc)²" are FALSE for this example.
+  The correct bound is the log inequality log N_E ≤ 2 log rad(abc) + 8 log 2, not a divisibility claim.
 - Quality q(1,8,9) = log 9 / log 6 ≈ 2.197 / 1.792 ≈ 1.226 > 1. This confirms OB-03-D is feasible.

@@ -55,6 +55,42 @@ CHECK: does the prompt say "see spec §X" or reference another file instead of r
 the definition inline? Every symbol and formula must appear in the prompt itself.
 grep: `see spec`, `as defined in`, `from CLAUDE.md`, `as above`.
 
+## A8 — IUT object type mismatch
+
+When a prompt models IUT structures, verify that each mathematical object has the correct
+type as defined in the cited source. Specifically: the Θ-link (IUTT-III Definition 3.8)
+is a **full poly-isomorphism of prime-strips**, NOT a function-field morphism φ_F: F₁→F₂.
+No formula for φ_F on generators can be requested if the cited definition does not
+construct such a morphism — that is a category error, not an open sub-problem.
+grep: `φ_F`, `function field morphism`, `morphism φ_F:`, `F_1 → F_2`, `induced morphism on F`.
+
+## A9 — Theorem verbatim check
+
+Every theorem/corollary cited from IUT must be stated exactly as written in its published
+source — paraphrasing into a different claim is a reject. Concretely: IUTT-III Corollary
+3.12 ("Log-volume Estimates for Θ-Pilot Objects") states −|log Θ| ≥ −|log q|, NOT a
+discriminant-conductor bound log|Δ| ≤ (1+ε)log N + C. Run:
+`grep -n 'Corollary 3.12' outsource/<file>.md` and verify the stated content against the
+source PDF (IUTT-III §3.12 title and statement).
+grep: `Corollary 3.12`, `Cor. 3.12`, `log.*Delta.*log.*N`, `discriminant.*conductor.*inequality`.
+
+## A10 — Numerical anchor script self-consistency
+
+Run every inline Python snippet in the prompt and confirm stdout matches the stated
+expected output exactly. A mismatch is a reject. Reference failure: OB-02 stated
+`2*log(N)=7.1595` but the command had `N=6`, which outputs `2*log(N)=3.5835`.
+Run: `python3 -c "<paste snippet>"` and compare against stated expected output character
+for character (modulo trailing whitespace).
+
+## A11 — Conductor vs radical conflation
+
+The conductor N(E) of an elliptic curve is NOT equal to rad(abc) or rad(abc)². The
+correct statement is: rad(N_E) | rad(2abc), and log N_E ≤ 2 log rad(abc) + 8 log 2
+(for Frey curves). Any stronger divisibility claim must be verified. Reference failure:
+for (a,b,c)=(1,8,9) the Frey curve has conductor N=48; rad(abc)²=36 and 48 ∤ 36, so
+"N_E | rad(abc)²" and "N_E ≤ rad(abc)²" are both false for this example.
+grep: `N_E.*=.*rad`, `N_E.*≤.*rad`, `conductor.*=.*rad`, `N\(E\).*rad`.
+
 ---
 
 *Add new checks here as referees return findings. Each check is a command or derivation
