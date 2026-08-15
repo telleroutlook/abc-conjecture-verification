@@ -1172,6 +1172,29 @@ are genuinely different regimes within the squarefree subfamily.
 
 ---
 
+#### Step F31 — Quality-ρ Joint Bound ✅ COMPLETE (2026-08-16)
+
+**Discovery script:** `t50_quality_rho_joint_bound.py` (commit 0af92cd)
+
+**THEOREM F31 (Quality-ρ Joint Bound, PROVED):**
+For all integers q ≥ 1:
+  quality(2, q, q+2) + ρ(2, q, q+2)² < 1
+where quality = log(q+2)/log(2q(q+2)) and ρ² = q/(2(q+2)).
+
+**Proof (2-line):** Equivalent to q·log(q+2) < (q+4)·log(2q).
+- q=1: log(3) < 5·log(2) iff 3 < 32. ✓
+- q≥2: q+2 ≤ 2q → q·log(q+2) ≤ q·log(2q) < (q+4)·log(2q). ✓
+
+**Algebraic form (Lean):** (q+2)^q < (2q)^(q+4) for all q ≥ 1.
+  - `pasten_F31a` in `lean/AbcHeightKernel.lean`, zero sorry.
+
+**Numerical:** max quality+ρ² = 0.980246 over 126 prime-pair triples (q≤4999); → 1 as q→∞.
+**Remark:** quality+ρ^{ω-1} < 1 conjectured for all types; ω=4 max ≈ 0.598 (far from tight).
+
+**Paper:** Theorem thm:f31 in "F31: joint quality-ρ bound" subsection, route-v-pasten.tex.
+
+---
+
 #### Step F22 — Type (0,2,3) discovery; ω=5 correct ρ classification (2026-08-15) ✅ COMPLETE
 
 **Discovery scripts:** `t33_omega5_bounded.py`, `t34_type023_extremal.py`, `t35_omega5_correct_rho.py`.

@@ -1095,3 +1095,17 @@ theorem pasten_E11_lb_key (p q r1 r2 : ℕ) (hq : 1 ≤ q) (hr1 : 1 ≤ r1) (hr2
   have hψp : ψp = 0 := (mul_eq_zero.mp hmem).resolve_left hc
   simp [hψp]
 
+/-- [THM] F31a: (a+2)^a < (2*a)^(a+4) for all a ≥ 1.
+    Algebraic core of the Quality-ρ Joint Bound (F31):
+    quality(2,q,q+2) + ρ²(2,q,q+2) < 1 for all integer q ≥ 1.
+    Proof: a=1 by norm_num (3 < 32); a≥2 by (a+2 ≤ 2a) and (a < a+4). -/
+theorem pasten_F31a (a : ℕ) (ha : 1 ≤ a) :
+    (a + 2) ^ a < (2 * a) ^ (a + 4) := by
+  obtain rfl | ha2 := Nat.eq_or_lt_of_le ha
+  · norm_num
+  · have h1 : a + 2 ≤ 2 * a := by omega
+    have h2 : 1 < 2 * a := by omega
+    calc (a + 2) ^ a
+        ≤ (2 * a) ^ a := Nat.pow_le_pow_left h1 a
+      _ < (2 * a) ^ (a + 4) := Nat.pow_lt_pow_right h2 (by omega)
+

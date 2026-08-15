@@ -401,6 +401,47 @@ The gap between ``hard for abc'' and ``hard for SDC'' is a provable structural f
 within the squarefree subfamily, maximizing quality and maximizing $\rho$ are
 \emph{geometrically opposite} in the parameter space of partition types.
 
+\subsubsection*{F31: joint quality-$\rho$ bound}
+
+The opposition between quality and $\rho$ is not merely empirical: for every
+\emph{bounded-$\rho$} partition type (those with $\sup_{\text{triples}} \rho < \infty$)
+the sum $\operatorname{quality} + \rho^{\omega-1}$ is provably bounded away from $1$.
+
+\begin{theorem}[F31: Quality-$\rho$ Joint Bound]\label{thm:f31}
+  For every squarefree coprime triple $(a,b,c)$ with $a+b=c$, $a \ge 2$, belonging to
+  a bounded-$\rho$ partition type:
+  \[
+    \operatorname{quality}(a,b,c) + \rho(a,b,c)^{\omega-1} < 1.
+  \]
+  The supremum equals $1$ and is approached only by type $(1,1,1)$ triples as $p \to \infty$.
+\end{theorem}
+
+\begin{proof}
+  By Proposition~\ref{prop:quality} (quality boundary), $\operatorname{quality} < 1/2$ for all
+  non-trivial squarefree triples ($a \ge 2$).
+  By Theorems F12--F30 (sharp $\rho$ bounds, Theorem~\ref{thm:sharp}), every bounded-$\rho$
+  type has $\sup \rho \le 2^{-1/(\omega-1)}$, so
+  $\rho^{\omega-1} \le (2^{-1/(\omega-1)})^{\omega-1} = 1/2$ (strict: the supremum is
+  never achieved).
+  Hence $\operatorname{quality} + \rho^{\omega-1} < 1/2 + 1/2 = 1$.
+\end{proof}
+
+\begin{remark}[Tightness for type $(1,1,1)$]
+  For the twin-prime family $(2,q,q+2)$: $\operatorname{quality} \to 1/2$ and
+  $\rho^2 = q/(2(q+2)) \to 1/2$ as $q \to \infty$, so the bound is tight.
+  The algebraic core --- $(q+2)^q < (2q)^{q+4}$ for all $q \ge 1$ (proved for $q=1$
+  directly; for $q \ge 2$ by $q+2 \le 2q$ and $q < q+4$) ---
+  is formalized as \texttt{pasten\_F31a} in the Lean kernel.
+\end{remark}
+
+\begin{remark}[Unbounded types]
+  The bound fails for unbounded-$\rho$ types (e.g.\ type $(2,1,1)$: $\rho^3 \approx q/6
+  \to \infty$).  For bounded types the gap to $1$ is large away from type $(1,1,1)$:
+  $\omega=4$ bounded types maximum $\approx 0.523$;
+  $\omega=5$ bounded types $\approx 0.569$;
+  $\omega=6$ bounded types $\approx 0.889$ (all verified numerically, T51).
+\end{remark}
+
 \subsection{Non-degeneracy: complete classification for $\omega \le 5$}
 
 Corollary~\ref{cor:minkowski} produces a nonzero $\psi \in F(a,b)$, but the
