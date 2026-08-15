@@ -93,6 +93,25 @@ grep: `N_E.*=.*rad`, `N_E.*≤.*rad`, `conductor.*=.*rad`, `N\(E\).*rad`,
       `N_E.*rad(2abc)`, `divides.*rad(2`, `delta.*divides.*rad`.
 Verify: for the numerical anchor triple, check N_E ≤ 2⁷ · R manually.
 
+## A12 — Minkowski in a hyperplane requires Vaaler (1979)
+
+When applying Minkowski's theorem to bound coordinates of the shortest lattice vector
+in a rank-r sublattice L ⊂ ℤⁿ that sits inside a hyperplane of ℝⁿ (n > r):
+Minkowski's theorem alone bounds coordinates in *some* orthonormal basis of the ambient
+subspace, NOT the ambient ℤⁿ coordinates. Recovering ‖v‖_∞ ≤ det(L)^{1/r} in the
+ambient ℤⁿ coordinates additionally requires **Vaaler's theorem (1979)**:
+every central hyperplane section of [−1,1]^n has (n−1)-volume ≥ 2^{n−1}.
+
+CHECK: if a prompt uses Minkowski's theorem to bound ‖ψ‖_∞ for ψ ∈ L ⊂ ℤ^P where
+L is defined by a single linear constraint (the Pasten lattice setup), verify the
+citation is "Minkowski + Vaaler (1979)", not "Minkowski alone."
+Source failure: OB-09 Corollary C stated "Minkowski gives ‖ψ‖_∞ ≤ det(L)^{1/(ω−1)}"
+— correct conclusion but incomplete citation; Vaaler (1979) is required.
+Reference: Vaaler, J.D. "A geometric inequality with applications to linear forms."
+Pacific J. Math. 83 (1979), no. 2, 543–553.
+grep (in any outsource or proof file using Minkowski): `Minkowski.*‖ψ‖`, `Minkowski.*ambient`,
+     `geometry of numbers.*bound`, `shortest vector.*det`.
+
 ## A12 — Discriminant height vs Faltings height conflation
 
 `(1/12) log|Δ_min(E)|` is the *discriminant height* h_Δ, NOT the Faltings height h_F.

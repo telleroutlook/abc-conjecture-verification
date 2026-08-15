@@ -510,24 +510,34 @@ consistent with Pasten's explicit exclusion.
 
 **Toy:** `t10_minkowski_bound.py`. Results above. H1 confirmed empirically for ω=3–5.
 
-#### Step E2 — Provable squarefree subfamily outsource ✅ WRITTEN (2026-08-15)
+#### Step E2 — Provable squarefree subfamily outsource ✅ CONFIRMED (2026-08-15)
 
-**Outsource:** `outsource/OB-09-pasten-squarefree-det-bound.md`
+**Outsource:** `outsource/OB-09-pasten-squarefree-det-bound.md`  
+**Review:** `outsource/reviews/OB-09-review-2026-08-15.md`
 
-Proof skeleton (Steps 1–4) fully worked out in the prompt:
-1. det(L) = R · √(∑_{p|abc} 1/p²) — by direct coefficient evaluation.
-2. gcd(|c_p|) = 1 — no prime divides all R/p values simultaneously.
-3. ∑_{p prime} 1/p² ≤ 11/18 < 1 — elementary integral bound.
-4. Combined: det(L) < 0.79 · R < R. ✓
+All four steps verified by independent re-derivation + 14,158 triple stress-test (zero failures):
+- det(L) = R · √(Σ_{p∈P} 1/p²) with gcd(c_p) = 1 (Theorem B, gap patched: one implicit
+  sentence added — any prime dividing gcd must lie in P; c_ℓ = R/ℓ omits ℓ; contradiction).
+- Σ_{p prime} 1/p² ≤ 11/18 < 1 (integral bound; true value ≈ 0.4522).
+- det(L) ≤ √(11/18) · R < 0.79R < R. ✓
+- Observed det(L)/R: 0.50–0.665, approaching √P(2) ≈ 0.6725 as ω grows.
 
-PROMPT_LINT A1–A10: all pass. Numerical anchor verified (det(L)=19 < R=30 for (2,3,5)).
+**New flag (Vaaler):** Corollary C needs "Minkowski + Vaaler (1979)" not Minkowski alone.
+Vaaler's theorem bounds the (n−1)-volume of hyperplane sections; required for ambient-
+coordinate ‖ψ‖_∞ bound. Correct conclusion; incomplete citation. Recorded in A12 of PROMPT_LINT.
 
-**Status:** awaiting external review (CONFIRMED / PARTIAL / REFUTED).
+#### Step E3 — Lean formalization (requires Vaaler)
 
-#### Step E3 — Lean formalization (conditional)
+**Prerequisite:** E2 CONFIRMED ✓  
+**Gate:** Mathlib must have Vaaler's theorem or an equivalent hyperplane section bound.
+Check before writing Lean: `grep -r "Vaaler\|hyperplane.*section\|volume.*section" ~/.elan/...`
 
-If OB-09 closes, formalize the squarefree subfamily bound in `lean/AbcHeightKernel.lean`.
-This would be [THM] conditional on Minkowski's theorem (to be cited as [BASE]).
+If Vaaler is absent from Mathlib, options:
+(a) Formalize only Theorems A and B (the det(L) < R bound) — no Minkowski step.
+(b) Add Vaaler as an `axiom` with exact citation (Vaaler 1979, Pacific J. Math. 83).
+(c) Use a weaker Minkowski form (l₂ norm) that does not need Vaaler.
+
+**Status:** OPEN — pending Mathlib Vaaler check.
 
 ### Hard constraints (same as Part IX)
 

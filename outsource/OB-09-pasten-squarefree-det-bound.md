@@ -106,6 +106,15 @@ The lattice L contains a nonzero vector ψ (possibly degenerate) with
 separate question — **not part of the acceptance criteria below.** We ask only for
 Theorems A and B.
 
+**Vaaler's theorem required for ambient-coordinate bound (flagged by review 2026-08-15):**
+Minkowski's theorem bounds coordinates in some orthonormal basis of the (ω−1)-dimensional
+span of L, not automatically in the ambient coordinates ψ(p). Since L sits in a hyperplane
+of ℤ^P, recovering ‖ψ‖_∞ ≤ det(L)^{1/(ω−1)} in ambient coordinates additionally requires
+**Vaaler's theorem (1979)**: every central hyperplane section of [−1,1]^n has (n−1)-volume
+≥ 2^{n−1}. Combined with Minkowski's convex-body theorem, this does recover the stated
+bound — the conclusion is correct, but the citation should be "Minkowski + Vaaler (1979)"
+not "Minkowski alone." Load-bearing for E3 Lean formalization.
+
 ---
 
 ## Proof skeleton to be closed
@@ -121,18 +130,21 @@ So ‖c‖₂ = R · √(∑_{p ∈ P} 1/p²).
 **What to close for Step 1:** This is algebraic. Confirm the formula is correct given
 the definitions above.
 
-### Step 2 — Prove gcd(|c_p| : p ∈ P) = 1 (Theorem B)
+### Step 2 — Prove gcd(|c_p| : p ∈ P) = 1 (Theorem B) [patched 2026-08-15]
 
 The values |c_p| = R/p range over {R/p : p ∈ P}.  
-Since R = ∏_{q ∈ P} q, we have R/p = ∏_{q ∈ P, q ≠ p} q.
+Since R = ∏_{q ∈ P} q (squarefree), we have R/p = ∏_{q ∈ P, q ≠ p} q.
 
-A prime ℓ ∈ P divides gcd iff ℓ | R/p for all p ∈ P.  
-But ℓ ∤ R/ℓ (since R/ℓ = ∏_{q ≠ ℓ} q, which does not contain ℓ).  
-So no prime divides all values → gcd = 1.
+Each R/p is a product of primes from P only. So any prime ℓ dividing
+gcd(|c_p| : p ∈ P) must already lie in P (since it divides some R/p, hence some
+prime factor of R/p, which is a prime from P).
 
-**What to close for Step 2:** Check this argument works for any finite set P of distinct
-primes. In particular, confirm the edge cases: |P| = 2 (omega = 2) and |P| = 1 
-(degenerate, not applicable since ω ≥ 2).
+Take p = ℓ: R/ℓ = ∏_{q ∈ P, q ≠ ℓ} q omits ℓ entirely, so ℓ ∤ R/ℓ.
+But ℓ must divide every |c_p| including |c_ℓ| = R/ℓ — contradiction.
+Hence no prime divides the gcd, so gcd = 1.
+
+Edge case |P| = 2, P = {p, q}: |c_p| = q, |c_q| = p, gcd(p,q) = 1. ✓
+Edge case |P| = 1 excluded by ω ≥ 2.
 
 ### Step 3 — Prove ∑_{p prime} 1/p² < 1 (key analytic bound)
 
