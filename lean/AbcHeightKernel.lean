@@ -1,5 +1,6 @@
 import Mathlib.Data.Nat.PrimeFin
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 /-!
 # OB-04: Lean 4 formal verification of the P_height framework (CORE-2)
@@ -198,15 +199,78 @@ Non-circularity: no abc conjecture, Szpiro, IUT, or known abc triples used or as
 axiom prime_recip_sq_sum_lt_one :
     ∑' (p : {p : ℕ // p.Prime}), (1 : ℝ) / (p : ℝ) ^ 2 < 1
 
-/-- For a finite set P of distinct primes, ∑_{p ∈ P} 1/p² < ∑_{all primes} 1/p² < 1. -/
+/-- For a finite set P of distinct primes, ∑_{p ∈ P} 1/p² < 1.
+    Elementary proof: 1/n² ≤ 1/(n-1) - 1/n for n ≥ 2, so the sum over
+    P ⊆ Ico 2 (max P + 1) telescopes to ≤ 1 - 1/max(P) < 1. No tsum needed. -/
 theorem finite_prime_recip_sq_lt_one (P : Finset ℕ) (hP : ∀ p ∈ P, Nat.Prime p) :
     ∑ p ∈ P, (1 : ℝ) / (p : ℝ) ^ 2 < 1 := by
-  have hbound : ∑ p ∈ P, (1 : ℝ) / (p : ℝ) ^ 2 ≤
-      ∑' (p : {p : ℕ // p.Prime}), (1 : ℝ) / (p : ℝ) ^ 2 := by
-    apply le_tsum (summable_of_ne_finset_zero (s := P.image (⟨·, ·⟩ ∘ hP · ·)) _)
-    · sorry  -- summability of 1/p² over primes; standard but requires tsum API
-    · sorry  -- finite sum ≤ infinite sum; standard
-  linarith [prime_recip_sq_sum_lt_one]
+  rcases P.eq_empty_or_nonempty with rfl | hne
+  · simp
+  set M := P.max' hne
+  have hM_mem : M ∈ P := Finset.max'_mem P hne
+  have hM_ge2 : 2 ≤ M := (hP M hM_mem).two_le
+  have hM_pos : (0 : ℝ) < (M : ℝ) := by exact_mod_cast (show 0 < M by omega)
+  have hP_sub : P ⊆ Finset.Ico 2 (M + 1) := fun p hp =>
+    Finset.mem_Ico.mpr ⟨(hP p hp).two_le, Nat.lt_succ_of_le (Finset.le_max' P p hp)⟩
+  -- For n ≥ 2: 1/n² ≤ 1/(n-1) - 1/n  (key bound; proved via field_simp + nlinarith)
+  have hterm : ∀ n ∈ Finset.Ico 2 (M + 1),
+      (1 : ℝ) / (n : ℝ) ^ 2 ≤ 1 / ((n : ℝ) - 1) - 1 / (n : ℝ) := by
+    intro n hn
+    have hn2 : 2 ≤ n := (Finset.mem_Ico.mp hn).1
+    have hn_pos : (0 : ℝ) < (n : ℝ) := by exact_mod_cast (show 0 < n by omega)
+    have hn1_pos : (0 : ℝ) < (n : ℝ) - 1 := by
+      linarith [show (1 : ℝ) < (n : ℝ) from by exact_mod_cast (show 1 < n by omega)]
+    -- Show 1/(n-1) - 1/n - 1/n² ≥ 0  (equals 1/(n²·(n-1)) > 0)
+    have h_diff_nn : (0 : ℝ) ≤ 1 / ((n : ℝ) - 1) - 1 / (n : ℝ) - 1 / (n : ℝ) ^ 2 := by
+      have h_eq : (1:ℝ) / ((n:ℝ)-1) - 1/(n:ℝ) - 1/(n:ℝ)^2 = 1 / ((n:ℝ)^2 * ((n:ℝ)-1)) := by
+        have h1 : (n:ℝ) - 1 ≠ 0 := ne_of_gt hn1_pos
+        have h2 : (n:ℝ) ≠ 0 := ne_of_gt hn_pos
+        field_simp [h1, h2]; ring
+      rw [h_eq]
+      positivity
+    linarith
+  -- Telescoping: ∑_{n ∈ Ico 2 (M+1)} (1/(n-1) - 1/n) = 1 - 1/M  (induction on M)
+  have h_tele : ∀ k : ℕ, 2 ≤ k →
+      ∑ n ∈ Finset.Ico 2 (k + 1), ((1 : ℝ) / ((n : ℝ) - 1) - 1 / (n : ℝ)) = 1 - 1 / (k : ℝ) := by
+    intro k hk
+    induction k with
+    | zero => omega
+    | succ j ih =>
+      rcases Nat.lt_or_ge j 2 with hj | hj
+      · -- base case j+1 = 2 (since 2 ≤ j+1 and j < 2 forces j = 1)
+        have hj1 : j = 1 := by omega
+        subst hj1
+        have h23 : Finset.Ico 2 3 = {2} := by decide
+        rw [h23, Finset.sum_singleton]
+        norm_num
+      · -- inductive step: j ≥ 2
+        have ih' := ih hj
+        have hj_pos : (0 : ℝ) < (j : ℝ) := by exact_mod_cast (show 0 < j by omega)
+        have hj1_pos : (0 : ℝ) < (j : ℝ) + 1 := by linarith
+        rw [show j + 1 + 1 = (j + 1) + 1 from rfl,
+            Finset.sum_Ico_succ_top (show 2 ≤ j + 1 from by omega), ih']
+        push_cast
+        field_simp [ne_of_gt hj_pos, ne_of_gt hj1_pos]
+        ring
+  -- Apply telescoping with k = M
+  have h_tele_M := h_tele M hM_ge2
+  -- Non-negative terms outside P in Ico 2 (M+1)
+  have h_nonneg : ∀ n ∈ Finset.Ico 2 (M + 1), n ∉ P →
+      (0 : ℝ) ≤ 1 / ((n : ℝ) - 1) - 1 / (n : ℝ) := by
+    intro n hn _
+    have hn2 : 2 ≤ n := (Finset.mem_Ico.mp hn).1
+    have hn_pos : (0 : ℝ) < (n : ℝ) := by exact_mod_cast (show 0 < n by omega)
+    have hn1_pos : (0 : ℝ) < (n : ℝ) - 1 := by
+      linarith [show (1 : ℝ) < (n : ℝ) from by exact_mod_cast (show 1 < n by omega)]
+    have h_eq : (1:ℝ)/((n:ℝ)-1) - 1/(n:ℝ) = 1 / ((n:ℝ) * ((n:ℝ)-1)) := by field_simp; ring
+    rw [h_eq]; positivity
+  calc ∑ p ∈ P, (1 : ℝ) / (p : ℝ) ^ 2
+      ≤ ∑ p ∈ P, (1 / ((p : ℝ) - 1) - 1 / (p : ℝ)) :=
+          Finset.sum_le_sum (fun p hp => hterm p (hP_sub hp))
+    _ ≤ ∑ n ∈ Finset.Ico 2 (M + 1), (1 / ((n : ℝ) - 1) - 1 / (n : ℝ)) :=
+          Finset.sum_le_sum_of_subset_of_nonneg hP_sub h_nonneg
+    _ = 1 - 1 / (M : ℝ) := h_tele_M
+    _ < 1 := by linarith [div_pos one_pos hM_pos]
 
 /-- The Pasten constraint coefficient identity:
     For squarefree n and prime p | n, the integer coefficient is R/p where R = rad(n).
@@ -214,11 +278,7 @@ theorem finite_prime_recip_sq_lt_one (P : Finset ℕ) (hP : ∀ p ∈ P, Nat.Pri
 theorem pasten_coeff_sq_sum (P : Finset ℕ) (R : ℕ) (hR : R = ∏ p ∈ P, p)
     (hpos : 0 < R) :
     ∑ p ∈ P, ((R : ℝ) / p) ^ 2 = (R : ℝ) ^ 2 * ∑ p ∈ P, (1 : ℝ) / (p : ℝ) ^ 2 := by
-  simp_rw [div_pow, ← Finset.mul_sum]
-  congr 1
-  congr 1
-  ext p
-  ring
+  rw [Finset.mul_sum]; congr 1; ext p; simp [div_pow]; ring
 
 /-- Determinant bound: for squarefree coprime triple with distinct prime set P and
     radical R, the squared Euclidean norm of the coefficient vector satisfies
@@ -238,10 +298,12 @@ theorem pasten_coeff_norm_sq_lt_rad_sq (P : Finset ℕ) (hP : ∀ p ∈ P, Nat.P
 theorem pasten_det_lt_rad (P : Finset ℕ) (hP : ∀ p ∈ P, Nat.Prime p)
     (R : ℕ) (hR : R = ∏ p ∈ P, p) (hpos : 0 < R) :
     Real.sqrt (∑ p ∈ P, ((R : ℝ) / p) ^ 2) < (R : ℝ) := by
-  rw [Real.sqrt_lt' ]
-  constructor
-  · positivity
-  · exact pasten_coeff_norm_sq_lt_rad_sq P hP R hR hpos
+  have hR_pos : (0 : ℝ) < (R : ℝ) := by exact_mod_cast hpos
+  calc Real.sqrt (∑ p ∈ P, ((R : ℝ) / p) ^ 2)
+      < Real.sqrt ((R : ℝ) ^ 2) :=
+          Real.sqrt_lt_sqrt (Finset.sum_nonneg fun p _ => sq_nonneg _)
+            (pasten_coeff_norm_sq_lt_rad_sq P hP R hR hpos)
+    _ = (R : ℝ) := Real.sqrt_sq hR_pos.le
 
 /-- AXIOM: Minkowski + Vaaler (1979) ambient-coordinate shortest vector bound.
     For a rank-(k-1) integer lattice L ⊂ ℤ^k defined by a single linear constraint
@@ -252,4 +314,4 @@ theorem pasten_det_lt_rad (P : Finset ℕ) (hP : ∀ p ∈ P, Nat.Prime p)
     The Vaaler component is needed because L sits in a hyperplane of ℤ^k. -/
 axiom minkowski_vaaler_pasten (k : ℕ) (hk : 2 ≤ k) (det_L R : ℝ)
     (hdet : det_L < R) (hR : 0 < R) :
-    ∃ norm_bound : ℝ, norm_bound < R ^ ((1 : ℝ) / (k - 1)) ∧ 0 < norm_bound
+    ∃ norm_bound : ℝ, norm_bound < R ^ ((1 : ℝ) / ((k : ℝ) - 1)) ∧ 0 < norm_bound
