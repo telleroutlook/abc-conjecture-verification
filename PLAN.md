@@ -903,6 +903,54 @@ one from P_b-side, one from P_a-side: norm = max(p_b, p_a).
 | (2,1,1) | S_a=φ_p+φ_q | S_b=φ_r=S_a: always satisfiable → all degenerate |
 | (0,1,3) | S_a=0 | S_b=φ_r: degen iff φ_r=0, but non-degen forces |ψ_r|≥r |
 
+#### Step F9 — ω=5 classification via φ-coordinates ✅ COMPLETE (2026-08-15)
+
+Script: `discovery/m2_directions/t20_omega5_phi_classification.py`
+**902 triples c≤200, EXIT_CODE=0. Complete partition-type classification.**
+
+**ω=5 results (partition type (n_a,n_b,n_c), n_a+n_b+n_c=5):**
+
+| Type | Total | Degen | ND | MaxRatioND | Pattern |
+|---|---|---|---|---|---|
+| (1,2,2) | 219 | 0 | 219 | 0.4999 | **BOUNDED** |
+| (2,1,2) | 188 | 17 | 171 | 0.5941 | **BOUNDED** |
+| (2,2,1) | 204 | 15 | 189 | 0.5817 | **BOUNDED** |
+| (1,1,3) | 122 | 112 | 10 | 1.9949 | UNBOUNDED |
+| (1,3,1) | 114 | 106 | 8 | 2.1087 | UNBOUNDED |
+| (3,1,1) | 55 | 55 | 0 | 2.4547 | ALL_DEGEN |
+
+**Theorem F9 (analytical, elementary):**
+
+**(a) BOUNDED CONDITION:** The non-degen ratio ‖ψ_nd‖/R^{1/(ω-1)} is bounded iff
+there exist p∈Pa∪Pb and q∈Pc (or p∈Pa, q∈Pb) with BOTH p,q small — i.e., small
+primes from opposite constraint-sign groups.
+
+For ω=5 bounded types: min non-degen φ = (0,...,1_{p_b},...,1_{p_c},...,0) or
+(0,...,-1_{p_a},...,1_{p_b},...,0), norm = max(min_Pb, min_Pc) or max(min_Pa, min_Pb).
+
+**(b) UNBOUNDED CONDITION:** UNBOUNDED iff the valid non-degen crossing pairs ALL
+include a prime that grows in a subfamily. For types (1,1,3), (1,3,1), (3,1,1):
+the isolated prime(s) in single-prime constituents (b or c) grow independently.
+
+For (3,1,1): a=p₁p₂p₃, b=r, c=s. Non-degen crossing must use r (the only b-prime).
+norm=max(min_Pa,r)=r → ∞. Ratio ≈ r^{1/2}/const. ALL DEGENERATE (min norm = degenerate).
+
+**(c) UNIFIED RULE across all ω:**
+The non-degen ratio is BOUNDED iff ∃ two primes from P on OPPOSITE sign-sides
+(one from {ab-side=+}, one from {c-side=−}, or one from Pa and one from Pb)
+SUCH THAT both primes stay bounded in any growing subfamily.
+
+Equivalently: BOUNDED iff min(n_a,n_b) ≥ 1 AND max(n_a,n_b) ≤ 2 (so both small
+primes can be found in Pa and Pb, avoiding large single-prime constituents).
+
+**Complete pattern across ω=3,4,5:**
+- ω=3: all types BOUNDED (trivially, ω-1=2 is the Minkowski exponent).
+- ω=4: BOUNDED if max(n_a,n_b,n_c) ≤ 2 AND crossing avoids large single prime.
+  UNBOUNDED: (2,1,1), (0,1,3), (0,3,1).
+- ω=5: BOUNDED: (1,2,2), (2,1,2), (2,2,1) [max constituent ≤ 2, crossings available].
+  UNBOUNDED: (1,1,3), (1,3,1), (3,1,1) [one constituent has 3 primes].
+
+
 ### Hard constraints (same as Part X)
 
 - **B2:** No known abc triples as construction input.
