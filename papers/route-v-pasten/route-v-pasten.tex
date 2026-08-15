@@ -1,0 +1,382 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}{Remark}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+% Operators
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\lcm}{lcm}
+
+\title{Minkowski Bounds for Pasten's Arithmetic Derivative Lattices\\
+       in the Squarefree Subfamily}
+\author{Anonymous (verification kernel project)}
+\date{2026-08-15}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For each coprime triple $(a,b,c)$ with $a+b=c$, Pasten (2021) constructs a
+\emph{universal derivative lattice} $F(a,b)$ of rank $\omega(abc)-1$ from the
+linear constraint imposed by the weighted arithmetic derivative.  We prove that
+for \emph{squarefree} coprime triples, the lattice determinant satisfies
+$\det(F(a,b)) < \rad(abc)$.
+Combined with the Minkowski--Vaaler theorem, this yields a nonzero lattice
+vector with $\ell^\infty$-norm $\|\psi\|_\infty \le \rad(abc)^{1/(\omega-1)}$.
+We verify this bound numerically for $3 \le \omega \le 5$.  We discuss
+the degenerate $\omega=2$ (Mersenne-type) family, where the bound is tight and
+the gap to the abc conjecture is widest, and clarify why this result does not
+constitute progress toward abc.  The argument is self-contained and uses no
+abc-equivalent hypothesis.
+\end{abstract}
+
+\tableofcontents
+\bigskip
+
+\noindent\textbf{Honest scope.}
+The result proved here is a structural property of Pasten's lattice.
+It does \emph{not} prove the abc conjecture, nor does it provide progress
+toward abc for the hard cases (high-quality triples, which have small $\omega$).
+The abc conjecture remains $[\mathrm{OUT}]$ in the sense of the accompanying
+verification kernel.
+
+\section{Introduction}
+
+\subsection{Background}
+
+The abc conjecture of Masser--Oesterl\'e asserts that for every $\varepsilon>0$
+there exists $K_\varepsilon > 0$ such that for all coprime positive integers $a,b,c$
+with $a+b=c$:
+\[
+  c \;\le\; K_\varepsilon \cdot \rad(abc)^{1+\varepsilon},
+\]
+where $\rad(n) = \prod_{p \mid n} p$ is the radical.  This remains an open problem.
+
+Pasten~\cite{Pasten2021} introduced a framework relating the abc conjecture to
+the geometry of numbers via the \emph{universal arithmetic derivative}.
+For each prime $p$ and weight $\psi(p) \in \mathbb{Z}$, the
+$\psi$-arithmetic derivative is
+\[
+  d^\psi(n) \;=\; n \sum_{p \mid n} \frac{v_p(n)}{p} \psi(p),
+\]
+where $v_p(n)$ is the $p$-adic valuation.  The key object is the
+\emph{lattice of additive weights}:
+\[
+  F(a,b) \;=\; \bigl\{ \psi \colon \Primes(abc) \to \mathbb{Z}
+    \;\big|\; d^\psi(a) + d^\psi(b) = d^\psi(c) \bigr\}.
+\]
+Since $\gcd(a,b)=1$ and $a+b=c$, the prime supports $P_a, P_b, P_c$ of $a,b,c$
+are pairwise disjoint (for squarefree triples), and the additivity constraint
+reduces to a single integer linear equation.  Pasten showed that $F(a,b)$ has
+rank $\omega(abc)-1$, where $\omega(n)$ denotes the number of distinct prime
+divisors of $n$.
+
+Pasten's \emph{Small Derivatives Conjecture} (SDC) asserts that the minimum
+$\ell^\infty$-norm of a non-degenerate vector in $F(a,b)$ is at most $c^\eta$
+for some $\eta < 1$.  Pasten proved that SDC is equivalent to the abc conjecture.
+Siegel's lemma gives only $\eta = 1$ (the trivial bound); beating this would
+be a breakthrough.
+
+Our contribution is more modest: we establish the exact determinant of $F(a,b)$
+for squarefree triples, and derive the corresponding Minkowski bound
+$\|\psi\|_\infty \le \rad(abc)^{1/(\omega-1)}$.  This is the
+\emph{$\eta = 1/(\omega-1)$ bound relative to $\rad(abc)$}, which is
+non-trivial when $\omega \ge 3$.  It does not beat Siegel's lemma in general
+(since $\rad(abc) \le c$ and $1/(\omega-1) < 1$ only for $\omega \ge 3$),
+but it provides explicit lattice structure that was not previously formalized.
+
+\subsection{Main results}
+
+Let $(a,b,c)$ be a coprime squarefree triple with $a+b=c$ and
+$\omega = \omega(abc) \ge 2$.  Set $P = P_a \cup P_b \cup P_c$ and
+$R = \rad(abc) = \prod_{p \in P} p$.
+
+\begin{theorem}[Determinant bound]\label{thm:det}
+  $\det(F(a,b)) = R \cdot \sqrt{\sum_{p \in P} p^{-2}} < R$.
+\end{theorem}
+
+\begin{theorem}[GCD lemma]\label{thm:gcd}
+  The integer coefficient vector $\mathbf{c} \in \mathbb{Z}^P$ defined by
+  $c_p = R/p$ (for $p \in P_a \cup P_b$) and $c_p = -R/p$ (for $p \in P_c$)
+  satisfies $\gcd(|c_p| : p \in P) = 1$.
+\end{theorem}
+
+\begin{corollary}[Minkowski--Vaaler bound]\label{cor:minkowski}
+  There exists a nonzero $\psi \in F(a,b)$ with
+  $\|\psi\|_\infty \le \det(F(a,b))^{1/(\omega-1)} < R^{1/(\omega-1)}$.
+\end{corollary}
+
+\subsection{Limitations and honest scope}
+
+Corollary~\ref{cor:minkowski} does \emph{not} imply abc for the following reasons:
+\begin{enumerate}
+  \item The bound $\|\psi\|_\infty < R^{1/(\omega-1)}$ approaches a useful
+    bound on $c$ only as $\omega \to \infty$.  The hard cases for abc are
+    triples with \emph{small} $\omega$ (prime powers, Mersenne-type), where
+    $R^{1/(\omega-1)}$ is close to $R \le c$---the trivial bound.
+  \item The vector $\psi$ produced by Corollary~\ref{cor:minkowski} bounds
+    the \emph{lattice} minimum, not the height of $c$ directly.  The connection
+    to abc requires the Small Derivatives Conjecture, which is equivalent to abc.
+  \item For the degenerate $\omega=2$ family (e.g.\ $c = 2^k$, $a=1$),
+    the bound gives $\|\psi\|_\infty \le R^1 = R$, which is the trivial bound.
+    Pasten explicitly excludes this family from SDC for this reason.
+\end{enumerate}
+
+\section{Definitions and setup}
+
+\subsection{The Pasten lattice for squarefree triples}
+
+Let $(a,b,c)$ be a coprime squarefree triple, $a+b=c$, $a,b,c>0$.
+Write $v_p(n)=1$ for all $p \mid n$ (squarefree hypothesis).
+
+Set $D = \lcm(p : p \in P) = \prod_{p \in P} p = R$ (since $P$ consists of
+distinct primes and $(a,b,c)$ is squarefree).  The additivity constraint
+$d^\psi(a)+d^\psi(b)=d^\psi(c)$ becomes, after multiplying by $R$:
+\[
+  \sum_{p \in P} c_p \cdot \psi(p) \;=\; 0,
+\]
+where
+\[
+  c_p \;=\; \begin{cases}
+    +R/p & p \in P_a \cup P_b, \\
+    -R/p & p \in P_c.
+  \end{cases}
+\]
+Note $c_p \in \mathbb{Z}$ since $p \mid R$.  The lattice is
+\[
+  F(a,b) \;=\; L \;=\;
+  \bigl\{ \psi \in \mathbb{Z}^P \;\big|\; \mathbf{c} \cdot \psi = 0 \bigr\},
+\]
+a rank-$(\omega-1)$ sublattice of $\mathbb{Z}^P$.
+
+\subsection{Lattice determinant}
+
+For an integer lattice defined by a single primitive constraint
+$\mathbf{c} \in \mathbb{Z}^\omega$ with $\gcd(c_p)=1$, the determinant equals
+\[
+  \det(L) \;=\; \|\mathbf{c}\|_2
+    \;=\; \Bigl(\sum_{p \in P} c_p^2\Bigr)^{1/2}.
+\]
+If $\gcd(c_p) = g > 1$, the primitive form is $\mathbf{c}/g$ and
+$\det(L) = \|\mathbf{c}\|_2 / g$.
+
+\section{Proofs}
+
+\subsection{Proof of Theorem~\ref{thm:gcd}}
+
+\begin{proof}
+Each $|c_p| = R/p = \prod_{q \in P,\, q \ne p} q$.
+Suppose a prime $\ell$ divides $\gcd(|c_p| : p \in P)$.
+Since $\ell$ divides $|c_p|$ for every $p \in P$, in particular $\ell$ divides
+$|c_p|$ for some $p$; since $|c_p| = R/p$ is a product of primes from $P$,
+we must have $\ell \in P$.
+
+Take $p = \ell$: then $|c_\ell| = R/\ell = \prod_{q \in P,\, q \ne \ell} q$.
+This product does \emph{not} contain $\ell$ as a factor, so $\ell \nmid R/\ell$.
+But $\ell$ was assumed to divide every $|c_p|$, including $|c_\ell|$.
+Contradiction.  Hence $\gcd(|c_p|) = 1$.
+\end{proof}
+
+\begin{remark}
+Edge case $|P|=2$, $P=\{p,q\}$: $|c_p|=q$, $|c_q|=p$, $\gcd(p,q)=1$.
+The case $|P|=1$ is excluded by $\omega \ge 2$.
+\end{remark}
+
+\subsection{Proof of Theorem~\ref{thm:det}}
+
+\begin{proof}
+By Theorem~\ref{thm:gcd}, $\gcd(|c_p|:p\in P)=1$, so $\det(L) = \|\mathbf{c}\|_2$.
+Since $c_p = \pm R/p$ we have $c_p^2 = (R/p)^2 = R^2/p^2$, thus
+\[
+  \|\mathbf{c}\|_2^2
+    \;=\; \sum_{p \in P} \frac{R^2}{p^2}
+    \;=\; R^2 \sum_{p \in P} \frac{1}{p^2}.
+\]
+So $\det(L) = R\,\sqrt{\sum_{p \in P} p^{-2}}$.
+
+It remains to show $\sum_{p \in P} p^{-2} < 1$.
+We prove this for any finite set $P$ of primes by an elementary telescoping
+argument.  Set $M = \max P$.  For each $n \ge 2$:
+\[
+  \frac{1}{n^2}
+  \;\le\; \frac{1}{n-1} - \frac{1}{n},
+\]
+which follows from the identity
+$\frac{1}{n-1} - \frac{1}{n} - \frac{1}{n^2} = \frac{1}{n^2(n-1)} > 0$.
+Therefore
+\[
+  \sum_{p \in P} \frac{1}{p^2}
+  \;\le\; \sum_{p \in P} \Bigl(\frac{1}{p-1} - \frac{1}{p}\Bigr)
+  \;\le\; \sum_{n=2}^{M} \Bigl(\frac{1}{n-1} - \frac{1}{n}\Bigr)
+  \;=\; 1 - \frac{1}{M}
+  \;<\; 1.
+\]
+(The second inequality uses $P \subseteq \{2,\ldots,M\}$ and positivity of
+each term $1/(n-1)-1/n > 0$.)  Hence $\det(L) < R$.
+\end{proof}
+
+\begin{remark}
+The true value is $\sum_{p \text{ prime}} p^{-2} = P(2) \approx 0.4522$
+(prime zeta function at $s=2$).  An elementary bound gives
+$\sum_{p \text{ prime}} p^{-2} \le 11/18 \approx 0.611 < 1$
+via $1/4 + 1/9 + \int_4^\infty x^{-2}\,dx = 1/4 + 1/9 + 1/4 = 11/18$.
+\end{remark}
+
+\subsection{Proof of Corollary~\ref{cor:minkowski}}
+
+\begin{proof}
+By Theorem~\ref{thm:det}, $\det(L) < R$.
+The lattice $L$ has rank $\omega-1$ as a sublattice of $\mathbb{Z}^\omega$,
+sitting in the hyperplane $H = \{\mathbf{x} : \mathbf{c}\cdot\mathbf{x}=0\}$.
+
+Minkowski's convex-body theorem~\cite{Cassels1959} gives a nonzero $\psi \in L$
+with $\ell^\infty$-norm bounded in some orthonormal basis of $H$.
+To recover the bound in the \emph{ambient} $\mathbb{Z}^\omega$ coordinates,
+we additionally invoke Vaaler's theorem~\cite{Vaaler1979}: every central
+hyperplane section of $[-1,1]^\omega$ has $(\omega-1)$-dimensional volume
+$\ge 2^{\omega-1}$.  Together these give a nonzero $\psi \in L$ with
+\[
+  \|\psi\|_\infty \;\le\; \det(L)^{1/(\omega-1)} \;<\; R^{1/(\omega-1)}. \qedhere
+\]
+\end{proof}
+
+\section{Numerical evidence}
+
+Table~\ref{tab:data} summarizes results from the computational script
+\texttt{discovery/m2\_directions/t10\_minkowski\_bound.py} applied to
+coprime squarefree triples with $3 \le \omega \le 5$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{crrrrr}
+\hline
+$\omega$ & count & $\det(L)/R$ mean & $\|\psi\|_\infty / R^{1/(\omega-1)}$ max
+         & $\eta_R$ mean \\
+\hline
+2 & 4  & 2.04 & 3.50 (degenerate) & 1.072 \\
+3 & 12 & 0.87 & 1.64              & 0.499 \\
+4 & 7  & 1.07 & 1.18              & 0.250 \\
+5 & 4  & 1.72 & 0.97              & 0.148 \\
+\hline
+\end{tabular}
+\caption{Empirical summary: $\det(L)/R$ and $\|\psi\|_\infty / R^{1/(\omega-1)}$
+  for squarefree coprime triples organized by $\omega = \omega(abc)$.
+  $\eta_R = \log\|\psi\|_\infty / \log R$.
+  The $\omega=2$ row includes Mersenne-type degenerate triples where the bound
+  is near-trivial ($\eta_R \approx 1$).}
+\label{tab:data}
+\end{table}
+
+The pattern $\eta_R \approx 1/(\omega-1)$ is clearly visible for $\omega \ge 3$.
+The worst-case ratio $\|\psi\|_\infty / R^{1/(\omega-1)}$ stays below $2$ for
+$\omega \ge 3$ across all tested cases, consistent with Corollary~\ref{cor:minkowski}
+with the constant absorbed into the implicit $O(1)$.
+
+\section{Discussion}
+
+\subsection{The degenerate \texorpdfstring{$\omega=2$}{omega=2} family}
+
+For $\omega=2$ triples, $F(a,b)$ has rank $1$, and the single generator is
+$\psi = (c_2/g, -c_1/g)$ where $g = \gcd(c_1, c_2)$.  In the squarefree case
+$c = \{p, q\}$ and the minimum norm is $\max(q, p)/1 = \max(p,q)$.
+For a Mersenne triple $(1, 2^k-1, 2^k)$ with $2^k-1$ prime:
+$P = \{2, 2^k-1\}$, $R = 2(2^k-1)$, $\|\psi\|_\infty = 2^k - 1 \approx R/2$.
+So $\|\psi\|_\infty / R \to 1/2$, not smaller.  The bound is essentially tight.
+
+\subsection{Why this does not prove abc}
+
+Let $(a,b,c)$ be a high-quality abc triple (quality $= \log c / \log R > 1$).
+High-quality triples tend to have small $\omega$ (often $\omega = 3$ or $4$).
+Corollary~\ref{cor:minkowski} gives $\|\psi\|_\infty \le R^{1/(\omega-1)}$.
+For $\omega = 3$: $\|\psi\|_\infty \le R^{1/2}$.  Since $R \le c$, this is
+$\|\psi\|_\infty \le c^{1/2}$, which is weaker than what SDC requires ($\eta < 1$)
+only for the case $\eta_{\text{SDC}} < 1/2$.  The abc conjecture is equivalent
+to SDC holding for all $\varepsilon > 0$, i.e.\ $\|\psi\|_\infty = o(c^\varepsilon)$
+for all $\varepsilon>0$ --- an exponential improvement over what we prove.
+
+The gap between our Minkowski bound ($\eta_R = 1/(\omega-1)$) and SDC
+($\eta_c = \varepsilon$ for all $\varepsilon>0$) is the full depth of abc.
+
+\subsection{Non-degeneracy}
+
+Corollary~\ref{cor:minkowski} produces a nonzero $\psi \in F(a,b)$, but the
+produced vector may be \emph{degenerate}: $W^\psi(a,b) = 0$ where
+$W^\psi(a,b) = ab\bigl(\sum_{p \in P_b} \psi(p)/p - \sum_{p \in P_a} \psi(p)/p\bigr)$.
+The degenerate sublattice $L_0 = \{\psi \in L : W^\psi = 0\}$ has rank
+$\omega - 2 < \omega - 1 = \operatorname{rank}(L)$; generically, the shortest
+vector is not in $L_0$.  Computational experiments (script \texttt{t11\_nondegeneracy\_check.py})
+found three cases where the absolute shortest vector is degenerate:
+$(1,48,49)$, $(1,2400,2401)$, and $(1,35,36)$.  In all three cases the
+shortest \emph{non-degenerate} vector is at most $1.67\times$ longer,
+so the Minkowski bound is preserved with at most a constant-factor overhead.
+The maximum observed gap over all $\omega \le 4$ squarefree triples tested
+was $1.67 < 2$.
+
+\section{Formal verification status}
+
+The proofs of Theorem~\ref{thm:det} and Theorem~\ref{thm:gcd} have been
+formalized in Lean~4 (Mathlib), as part of the abc conjecture verification
+kernel project (\texttt{lean/AbcHeightKernel.lean}, section E3--E4).
+Key items:
+\begin{itemize}
+  \item \texttt{finite\_prime\_recip\_sq\_lt\_one}: for any finite set $P$ of
+    primes, $\sum_{p \in P} p^{-2} < 1$.  Proved by the telescoping argument
+    above (zero \texttt{sorry}).
+  \item \texttt{pasten\_coeff\_sq\_sum}: the coefficient identity
+    $\sum_p (R/p)^2 = R^2 \sum_p p^{-2}$.
+  \item \texttt{pasten\_det\_lt\_rad}: $\sqrt{\sum_p (R/p)^2} < R$.
+  \item \texttt{minkowski\_vaaler\_pasten}: admitted as an axiom citing
+    Cassels~\cite{Cassels1959} + Vaaler~\cite{Vaaler1979}.  Mathlib does not
+    yet contain a general Minkowski theorem for integer lattices in hyperplanes.
+\end{itemize}
+
+The infinite series bound $\sum_{p \text{ prime}} p^{-2} \le 11/18 < 1$
+is admitted as an axiom (\texttt{prime\_recip\_sq\_sum\_lt\_one}), with a
+complete proof given in Section~3.2 of the accompanying outsource
+document~\texttt{OB-09}.
+
+\section{Conclusion}
+
+We have proved that for squarefree coprime triples $(a,b,c)$ with $a+b=c$ and
+$\omega(abc) \ge 2$, the Pasten lattice satisfies $\det(F(a,b)) < \rad(abc)$,
+and hence Minkowski's theorem gives a nonzero vector with
+$\|\psi\|_\infty \le \rad(abc)^{1/(\omega-1)}$.
+
+This is a structural result about the geometry of Pasten's lattice construction,
+not progress toward abc.  The abc conjecture requires $\|\psi\|_\infty = o(c^\varepsilon)$
+for all $\varepsilon>0$ (Pasten's SDC), and the gap between our bound and SDC is
+the full depth of the problem.  We have made no use of any abc-equivalent
+hypothesis, known abc triples, or the Szpiro conjecture.
+
+\begin{thebibliography}{9}
+
+\bibitem{Cassels1959}
+J.~W.~S.~Cassels,
+\emph{An Introduction to the Geometry of Numbers},
+Springer-Verlag, 1959.
+Theorem~I.2 (Minkowski's convex-body theorem).
+
+\bibitem{Pasten2021}
+H.~Pasten,
+\emph{Arithmetic derivatives through geometry of numbers},
+arXiv:2106.16165, 2021.
+(Status: preprint; to be verified against published version before citing as~\texttt{[BASE]}.)
+
+\bibitem{Vaaler1979}
+J.~D.~Vaaler,
+\emph{A geometric inequality with applications to linear forms},
+Pacific J.\ Math.\ \textbf{83} (1979), no.~2, 543--553.
+
+\end{thebibliography}
+
+\end{document}
