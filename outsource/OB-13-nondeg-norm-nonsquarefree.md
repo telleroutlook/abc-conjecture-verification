@@ -87,9 +87,14 @@ $\{m_a, m_b, m_c\}$ (i.e.\ the median when all three are distinct).
 **Theorem (E_n).**  $\mathrm{nd}(a,b) = \mathrm{nd}_{\mathrm{sq}}$ for all squarefree
 coprime triples $a + b = c$.
 
-Moreover, for all squarefree triples $\mathrm{nd}(a,b) \leq R^{1/(\omega^*-1)}$
-(the Minkowski bound), so a non-degenerate short vector always exists within the
-Minkowski ball.
+**Note (2026-08-16 — CORRECTED).**  The previously stated "Moreover" clause
+$\mathrm{nd}(a,b) \leq R^{1/(\omega^*-1)}$ for squarefree triples is **FALSE**.
+Counterexample: $(1,6,7)$ — squarefree, $\mathrm{nd}=7$, $R=42$,
+$R^{1/(\omega^*-1)}=\sqrt{42}\approx 6.48$, so $\mathrm{nd}=7 > 6.48$.
+A stronger counterexample: $(1,30,31)$ — squarefree, $\mathrm{nd}=31$, $R=930$,
+$R^{1/3}\approx 9.76$, so $\mathrm{nd}=31 \gg 9.76$.
+The correct provable upper bound (see Step 3 below) is
+$\mathrm{nd}(a,b) \leq v_{\max}\cdot\mathrm{med}(m_a,m_b,m_c)$.
 
 ---
 
@@ -102,11 +107,18 @@ $$
 \mathrm{nd}(a,b) \;\leq\; C \cdot v_{\max}^A \cdot R^{1/(\omega^*-1)}.  \tag{OB-13A}
 $$
 
-**Minimal version (Conjecture OB-13B).**  The specific bound
+**Minimal version (Conjecture OB-13B) — REFUTED (2026-08-16).**  The specific bound
 $$
 \mathrm{nd}(a,b) \;\leq\; v_{\max} \cdot R^{1/(\omega^*-1)}  \tag{OB-13B}
 $$
-holds for all coprime $a + b = c$ (i.e.\ $C = 1$, $A = 1$).
+does **NOT** hold in general.  Squarefree counterexamples:
+$(1,6,7)$: $\mathrm{nd}=7$, $v_{\max}=1$, $R^{1/2}\approx 6.48$;
+$(1,30,31)$: $\mathrm{nd}=31$, $v_{\max}=1$, $R^{1/3}\approx 9.76$.
+
+**Revised correct upper bound (proved):**
+$$
+\mathrm{nd}(a,b) \;\leq\; v_{\max} \cdot \mathrm{med}(m_a, m_b, m_c).  \tag{OB-13B'}
+$$
 
 **Structural sub-question OB-13C.**  Find a closed-form expression for
 $\mathrm{nd}(a,b)$ analogous to the squarefree formula $\mathrm{nd}_{\mathrm{sq}}$
@@ -170,7 +182,13 @@ $\mathrm{nd}(a,b) = $ (second smallest of $\{m_a' , m_b', m_c'\}$) for
 appropriately re-weighted group minima $m_g' = \min_{p \in P_g}\, p / v_p(g)$?
 The numerical anchor (Section~6 below) suggests this may not be exact.
 
-### Step 3 — Upper bound $\mathrm{nd}(a,b) \leq v_{\max} \cdot R^{1/(\omega^*-1)}$ **[PROVED]**
+### Step 3 — Upper bound $\mathrm{nd}(a,b) \leq v_{\max} \cdot \mathrm{med}(m_a, m_b, m_c)$ **[PROVED]**
+
+**Note (2026-08-16):** The original Step 3 claimed to prove OB-13B in full
+($\mathrm{nd} \leq v_{\max}\cdot R^{1/(\omega^*-1)}$).  The first inequality below is
+correct and proved.  The second step (med $\leq R^{1/(\omega^*-1)}$) is **FALSE** in
+general: e.g.\ $(1,6,7)$ has $\mathrm{med}=7$ and $R^{1/2}\approx 6.48$.
+Hence **OB-13B is REFUTED**.  The proved bound is the first inequality only.
 
 **Proof.**  For each ordered pair of primes $(p, q)$ with $p \in P_g$ and $q \in P_{g'}$
 from two distinct groups $g \neq g'$, let $g_0 = \gcd(v_p(g\text{-factor}),\, v_q(g'\text{-factor}))$
@@ -192,17 +210,18 @@ The norm is $\|\varphi^{(p,q)}\| = \max(p \cdot v_q/g,\; q \cdot v_p/g)$.
 Taking the minimum over all such pairs:
 $$
 \mathrm{nd}(a,b) \;\leq\; \min_{(p,q)\text{ cross-group}} \max\!\Bigl(p\cdot\tfrac{v_q}{g},\;
-q\cdot\tfrac{v_p}{g}\Bigr) \;\leq\; v_{\max}\cdot \mathrm{med}(m_a, m_b, m_c),
+q\cdot\tfrac{v_p}{g}\Bigr) \;\leq\; v_{\max}\cdot \mathrm{med}(m_a, m_b, m_c).
 $$
-where $\mathrm{med}$ denotes the median (second smallest of the three group minima).
-Finally, $\mathrm{med}(m_a,m_b,m_c)^{\omega^*-1} \leq R$ because the $\omega^*-1$
-primes of $R$ other than the smallest all exceed the median, giving
-$R \geq m_{\min} \cdot \mathrm{med}^{\omega^*-1} \geq \mathrm{med}^{\omega^*-1}$.
-Hence $\mathrm{med} \leq R^{1/(\omega^*-1)}$ and the bound follows. $\square$
+This completes the proof of $\mathrm{nd}(a,b) \leq v_{\max}\cdot\mathrm{med}(m_a,m_b,m_c)$. $\square$
 
-**Numerical verification:** `discovery/m2_directions/t59_ob13_verify.py` checks all
-test triples; the all-pairs GCD construction matches or improves upon the brute-force
-nd for all but two cases (see OB-13C discussion below), and OB-13B holds in all cases.
+**Remark.** The further step $\mathrm{med}(m_a,m_b,m_c) \leq R^{1/(\omega^*-1)}$ does
+\emph{not} hold in general (counterexample: $(1,6,7)$ with med$=7$, $R^{1/2}\approx6.48$),
+so OB-13B ($\mathrm{nd}\leq v_{\max}\cdot R^{1/(\omega^*-1)}$) is **REFUTED**.
+
+**Numerical verification (revised):** The all-pairs GCD construction confirms
+$\mathrm{nd}(a,b) \leq v_{\max}\cdot\mathrm{med}(m_a,m_b,m_c)$ in all 9 anchor cases,
+but OB-13B fails for the squarefree triples $(1,6,7)$ and $(1,30,31)$
+(verified by brute-force enumeration).
 
 ### Step 4 — Exact formula for $\omega=3$: 2D lattice SVP **[DISCOVERY TIER]**
 

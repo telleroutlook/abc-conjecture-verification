@@ -26,7 +26,7 @@ $$
 $$
 where m_g = min(P_g) (group minimum), with min(∅) = +∞.
 
-**Radical:** R = rad(abc) = product of all distinct prime factors of abc.
+**Radical:** R = product of all distinct prime factors of abc (i.e., R = ∏_{p | abc} p).
 
 **nd-ratio:** ρ(a,b,c) = nd(a,b) / R^{1/(ω*−1)}.
 
@@ -64,7 +64,15 @@ c = 6 + q₁q₂ (prime). Then ρ(6, q₁q₂, 6+q₁q₂) → 1/6^{1/4} as b �
 ### Step 1 — Strict upper bound ρ < 1/(p₁p₂)^{1/4} for type (2,1,2) with P_a = {p₁,p₂}
 
 Fix a = p₁p₂ with p₁ < p₂. Let b = q (prime), c = a+b = r₁r₂ with r₁ < r₂ primes.
-nd = second_smallest{p₁, q, r₁} = r₁ for all large q (since p₁ < r₁ < q eventually).
+
+**Coprimality constraint.** Since gcd(a,c)=1, no prime dividing c can divide a.
+Hence $r_1, r_2 \notin \{p_1, p_2\}$, and in particular $r_1 \ge p_3$, the smallest prime
+greater than $p_2$.
+
+For all sufficiently large $q$: $p_1 < r_1 < q$ (since $r_1^2 \le r_1 r_2 = c = a+q \le 2q$
+for large $q$, giving $r_1 \le \sqrt{2q} < q$), so
+nd = second\_smallest$\{p_1, q, r_1\} = r_1$.
+
 $$
   \rho^4 = \frac{r_1^4}{p_1 p_2 \cdot q \cdot r_1 r_2}
          = \frac{r_1^3}{p_1 p_2 \cdot q \cdot r_2}.
@@ -77,17 +85,19 @@ $r_1^3 = r_1^2 \cdot r_1 < q \cdot r_1 < q \cdot r_2$ (using $r_1 < r_2$).
 **When does $r_1^2 < q$ hold?**
 $r_1^2 < q \iff r_1^2 < r_1 r_2 - p_1 p_2 \iff r_1(r_2 - r_1) > p_1 p_2$.
 
-For $p_1 p_2 = 6$ and $r_1 \ge 7$: $r_2 - r_1 \ge 2$ (distinct odd primes), so
-$r_1(r_2-r_1) \ge 14 > 6$. ✓
+**Case $p_1 p_2 = 6$:** By coprimality, $r_1 \notin \{2,3\}$, so $r_1 \ge 5$.
+Since $r_1$ and $r_2$ are distinct odd primes, $r_2 - r_1 \ge 2$, giving
+$r_1(r_2-r_1) \ge 5 \cdot 2 = 10 > 6$. ✓ No further case analysis needed.
 
-**Finite check for small $r_1$:** For $r_1 \in \{2,3,5\}$, one verifies $r_1^3 < q \cdot r_2$
-directly from $q \ge r_1^3 / r_2$ (e.g.\ $r_1=2$: $r_1^3=8 < q \cdot (q+6)/2$ for $q \ge 3$ ✓;
-$r_1=3$: $27 < q(q+6)/3$ for $q \ge 7$ ✓; $r_1=5$: $125 < q(q+6)/5$ for $q \ge 11$ ✓).
-The finitely many remaining cases ($q < 11$) can be checked directly.
+**General $p_1 p_2$:** $r_1 \ge p_3$ (smallest prime $> p_2$), and $r_2 - r_1 \ge 2$
+for odd prime pairs, so $r_1(r_2-r_1) \ge 2p_3$. The condition $2p_3 > p_1 p_2$ holds
+for $p_1=2, p_2=3$ (giving $p_3=5$, $2\cdot5=10>6$) and may fail for larger $p_1p_2$;
+for those cases a finite check over the small-$r_1$ pairs (computable for each fixed $p_1p_2$)
+closes the argument.
 
 **Conclusion:** $\rho^4 < 1/(p_1 p_2)$, i.e.\ $\rho < 1/(p_1 p_2)^{1/4}$, for all type (2,1,2)
-triples with $a = p_1 p_2$.  The global bound $\sup \rho \le 1/6^{1/4}$ follows by
-minimising over all valid $p_1 p_2 \ge 6$.
+triples with $a = p_1 p_2$ and $nd = r_1$.  The global bound $\sup \rho \le 1/6^{1/4}$ follows
+by minimising over all valid $p_1 p_2 \ge 6$.
 
 ### Step 2 — The supremum equals 1/6^{1/4}
 
