@@ -972,7 +972,14 @@ is determined by a one-dimensional lattice.
   the constraint ($k \cdot (-m/g) + m \cdot (k/g) = 0$),
   has $W = k/g + m/g = (k+m)/g \ne 0$,
   and norm $\max(pm/g,\, qk/g)$.
-  Hence $\mathrm{nd}(a,b) \le \max(pm/g, qk/g) \le \min(r, \max(pm/g, qk/g))$.
+  Hence $\mathrm{nd}(a,b) \le \max(pm/g, qk/g)$.
+  When $\max(pm/g, qk/g) \le r$ this gives the desired upper bound
+  $\mathrm{nd}(a,b) \le \min(r, \max(pm/g, qk/g))$.
+  When $\max(pm/g, qk/g) > r$ (pairwise regime, which forces $m=1$ for actual
+  triples $a = p^k$, $b = q$, $c = p^k + q$ prime), the upper bound
+  $\mathrm{nd}(a,b) \le r$ follows from
+  Theorem~\ref{thm:nd_k11} (the vector $\varphi_p = 0$, $\varphi_q = 1$, $\varphi_r = 1$
+  has norm $r$ when $m = 1$).
 
   \textit{Lower bound — $\varphi_r = 0$ case.}
   The constraint reduces to $k\varphi_p + m\varphi_q = 0$.
