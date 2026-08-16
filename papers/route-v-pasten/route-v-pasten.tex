@@ -862,10 +862,14 @@ has rank $\omega^* - 1$.
   $\langle u, v\rangle = \sum_i p_i^2\, u_i v_i$ yields a reduced basis $\{b_1,\ldots,b_{\omega^*-1}\}$
   with Gram--Schmidt vectors $b_1^*,\ldots,b_{\omega^*-1}^*$.
 \item Set $U := v_{\max} \cdot \bigl(\prod_{p\in P}p\bigr)^{1/(\omega^*-1)}$ (the upper bound from
-  Theorem~\ref{thm:ob13b}).  An enumeration over reduced coordinates $c_j \in \mathbb{Z}$
-  with $|c_j| \le R_j := \lceil U / \|b_j^*\|_W \rceil$ (for $j = \omega^*\!-\!1, \ldots, 1$,
-  evaluated innermost-first) recovers the shortest non-degenerate vector,
-  hence $\mathrm{nd}(a,b)$ exactly.  The values $R_j$ are computable after Step~2.
+  Theorem~\ref{thm:ob13b}).  A standard depth-first enumeration over coordinates
+  $c_{\omega^*-1},\ldots,c_1$ with half-width
+  \[
+    R_j \;:=\; \left\lceil \frac{U}{\|b_j^*\|_W} \right\rceil
+  \]
+  at level $j$ (center updated from outer coordinates at each level; see proof)
+  recovers the shortest non-degenerate vector, hence $\mathrm{nd}(a,b)$ exactly.
+  The values $R_j$ are computable after Step~2.
   A uniform bound is $R_j \le 2^{(\omega^*-2)/2} U / p_1$
   where $p_1 = \min P$.
 \end{enumerate}
@@ -886,12 +890,18 @@ The non-degeneracy constraint ($W \ne 0$) eliminates the degenerate sublattice $
 
 \emph{Step~3}: let $\varphi^* = \sum_j c_j b_j$ be the nd-minimiser.
 By Theorem~\ref{thm:ob13b}, $\|\varphi^*\|_W \le U$.
-For the last coordinate: $c_{\omega^*-1} = \langle \varphi^*, b_{\omega^*-1}^*\rangle_W /
-\|b_{\omega^*-1}^*\|_W^2$, so $|c_{\omega^*-1}| \le \|\varphi^*\|_W / \|b_{\omega^*-1}^*\|_W \le U /
-\|b_{\omega^*-1}^*\|_W = R_{\omega^*-1}$.
-For inner coordinates, fixing the outer ones reduces the problem to a projected
-sub-lattice whose shortest non-degenerate vector still has weighted norm $\le U$,
-giving $|c_j| \le U/\|b_j^*\|_W = R_j$ for each~$j$.
+Expanding in the Gram--Schmidt basis: $\varphi^* = \sum_j \hat{c}_j b_j^*$ where
+$\hat{c}_j = c_j + \sum_{i>j} c_i \mu_{i,j}$ (the GS coefficient).  Cauchy--Schwarz
+in the weighted inner product gives
+$|\hat{c}_j| \le \|\varphi^*\|_W / \|b_j^*\|_W \le U/\|b_j^*\|_W$.
+Hence $c_j = \hat{c}_j - T_j$ where $T_j := \sum_{i>j} c_i \mu_{i,j}$ is
+determined by the outer coordinates $c_{j+1},\ldots,c_{\omega^*-1}$, and
+$|c_j - (-T_j)| \le R_j$.
+The enumeration proceeds outermost-first ($j = \omega^*\!-\!1$ down to $1$);
+at level $j$, with all $c_i$ ($i>j$) fixed, the center $-T_j$ is computed and
+$c_j$ is searched in $[-T_j - R_j,\,-T_j + R_j]$.
+For $j = \omega^*\!-\!1$ (outermost), $T_{\omega^*-1} = 0$, so the range is
+$[-R_{\omega^*-1}, R_{\omega^*-1}]$.
 Since $\|b_j^*\|_W^2 \ge (1/2)^{j-1}\|b_1\|_W^2 \ge (1/2)^{j-1} p_1^2$ (Lov\'{a}sz
 condition with $\delta=3/4$; every non-zero $L$-vector has $\|\cdot\|_W \ge p_1$),
 the uniform bound $R_j \le 2^{(j-1)/2} U / p_1 \le 2^{(\omega^*-2)/2} U / p_1$ follows.
