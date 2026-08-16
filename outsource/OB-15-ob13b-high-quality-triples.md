@@ -94,13 +94,23 @@ cases all have a single large prime in Pc or Pb with med = that large prime > R^
 Example: (1,6,7): med = 7, R^{1/2} = √42 ≈ 6.48. But R = 42 > 7 = c, so R < c fails.
 The R < c constraint appears to prevent this failure mode.
 
-**Observation 4 (ω* ≤ 4 for R < c — empirical).** Brute-force search over all c ≤ 10000
-finds no R < c triple with ω* ≥ 5. This is consistent with Observation 1' (c not prime)
-and the structure c = p₁^{e₁}·...·pₖ^{eₖ} with at least one eᵢ ≥ 2. This observation
-is **not proved** for large c: for c = p² with large prime p, a triple with ω* = 5 and
-R = p·q₁q₂q₃q₄ < p² (where q₁q₂q₃q₄ < p, four small primes) is not ruled out by
-the current argument. If ω* ≤ 4 were proved for R < c, (KEY) would reduce to a
-finite case analysis over ω* ∈ {2, 3, 4}.
+**Observation 4 (ω* ≤ 4 for R < c — DISPROVED for large c).** Brute-force search
+over c ≤ 10000 finds no R < c triple with ω* ≥ 5. However, this bound is **false** for
+large c. Explicit counterexample:
+
+| Triple | c | ω* | R | R < c? | nd | OB-15? |
+|--------|---|----|---|--------|-----|--------|
+| (1, 67092480, 67092481) | 8191² | **6** | 22,361,430 | ✓ | ≤ 21 | ✓ |
+
+Here c = 8191² (8191 is the Mersenne prime 2¹³−1), b = 8191²−1 = 2¹⁴·3²·5·7·13,
+R = 2·3·5·7·13·8191 = 22,361,430 < 67,092,481 = c. ω*=6 (primes 2,3,5,7,13,8191).
+
+OB-15 holds here with nd ≤ 21 via within-group construction in Pb:
+φ_2=1, φ_3=−7 (all other φ=0). Constraint: 14·1+2·(−7)=0=2·0 ✓. W=−6≠0. ‖φ‖=21.
+Then v_max·R^{1/(ω*-1)} = 14·22361430^{1/5} ≈ 413, and 21 ≤ 413. ✓
+
+The within-group construction (enabled by v_2(b)=14 ≠ v_3(b)=2) bypasses the (KEY)
+inequality entirely. This shows the proof must rely on within-group for high-ω* cases.
 
 ---
 
@@ -172,9 +182,9 @@ in these specific cases (likely requiring a direct argument about med when R < c
 
 | Gap | Status | Blocking case | Path forward |
 |-----|--------|--------------|--------------|
-| Gap 1: KEY unproved | **OPEN** | (1,48,49): med=7 > R^{1/2}≈6.48, KEY fails | Non-KEY construction for single-prime-c triples; or prove ω*≤4 for R<c then case-split |
+| Gap 1: KEY unproved | **OPEN** | (1,48,49): med=7 > R^{1/2}≈6.48, KEY fails | Non-KEY construction for single-prime-c triples; within-group when available |
 | Gap 2: same-valuation case | **OPEN** | Squarefree a,b with c non-squarefree | Cross-group bound + direct R<c argument |
-| ω*≤4 for R<c | **EMPIRICAL ONLY** | No counterexample for c≤10000; not proved for large c | New sub-problem OB-15A |
+| ω*≤4 for R<c | **DISPROVED** | (1,8191²-1,8191²): ω*=6, R<c | OB-15 still holds (nd≤21 ≤ v_max·R^{1/5}≈413) via within-group |
 
 ---
 
