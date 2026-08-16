@@ -15,10 +15,11 @@ with c=a+b and R < c:
 $$\mathrm{nd}(a,b) \;\leq\; v_{\max} \cdot R^{1/(\omega^*-1)}.$$
 
 **ω*=2:** nd ≤ v_max·R (trivial). ✓  
-**ω*=3:** Proved by three structural cases — see OB-16 Known cases and Observation 5 in
-OB-15. The argument uses: (1) within-group when two same-group primes have unequal vals;
-(2) gcd zero-out otherwise. Key: p₂ ≤ p₁·p₃ (p₁≥2, p₃>p₂ distinct primes) ⟹
-p₂ ≤ sqrt(p₁·p₂·p₃) = R^{1/2}.  
+**ω*=3:** Proved by three structural types for R<c triples: (1,1,1) single prime per
+group — zero-out Pc construction; (0,2,1) Pa=∅, Pb has two unequal-val primes —
+within-group Pb; (0,1,2) Pa=∅, Pc has two primes — zero-out larger Pc prime. In each
+case norm ≤ v_max·p₂ where p₂ is the second-largest prime. Bound: p₂ ≤ p₁·p₃ (p₁≥2,
+p₃>p₂) ⟹ p₂ ≤ sqrt(p₁·p₂·p₃) = R^{1/2}. Verified for all 14 ω*=3 R<c triples (c≤5000).  
 **ω*≥4:** 53 triples (ω*=4) and 12 triples (ω*=5) verified numerically (c≤5000, 0
 violations; max construction ratio 0.28 for ω*=4, 0.54 for ω*=5). Proof incomplete.
 
@@ -75,12 +76,14 @@ Computational confirmation (c≤5000): 5,055,295 triples with v_max≤2 checked,
 v_p(g)≠v_q(g): φ_p=v_q/gcd, φ_q=−v_p/gcd (all others 0) is non-degenerate when G≠Pc,
 with ‖φ‖ = max(p·v_q, q·v_p)/gcd ≤ v_max·q.
 
-**F3 (zero-out construction).** For any triple with groups Pa={p^α}, Pb={q^β}, Pc={r^γ}
-(single prime per group, ω*=3): φ_r=0, φ_p=β/g, φ_q=−α/g gives nd ≤ v_max·q ≤
-v_max·R^{1/2} (proved in OB-15 Observation 5, Case A).
+**F3 (zero-out construction, ω*=3).** For Pa={p^α}, Pb={q^β}, Pc={r^γ}: φ_r=0,
+φ_p=β/g, φ_q=−α/g (g=gcd(α,β)). Constraint holds, W=−(α+β)/g≠0,
+‖φ‖=max(p·β,q·α)/g ≤ v_max·q ≤ v_max·R^{1/2}.
 
 **F4 (ω*=3 fully proved).** Theorem: for all R<c triples with ω*=3,
-nd(a,b) ≤ v_max·R^{1/2}. Proof covers all three structural types; see OB-15/OB-16.
+nd(a,b) ≤ v_max·R^{1/2}. The three structural types each have an explicit construction
+(single-prime groups: F3; two-prime Pb with unequal vals: within-group; two-prime Pc:
+zero-out larger Pc prime). All 14 ω*=3 R<c triples (c≤5000) verified.
 
 ---
 
@@ -187,7 +190,10 @@ Close this sub-case by:
 
 For the 5 ω*=4 triples where some group has equal-valuation primes, within-group is
 degenerate and cross-group constructions are used. All 5 are verified numerically (max
-ratio 0.27). The general proof for this sub-case follows the method of OB-16 Step 2.
+ratio 0.27). General construction: for Pa={p₁,p₂} with v_{p₁}(a)=v_{p₂}(a)=v,
+Pb={q^s}, Pc={r^u}: set φ_r=1, φ_q=1, φ_{p₂}=(u−s)/v (when v|(u−s)). For v∤(u−s):
+use φ_r=v/gcd(v,u−s), scale proportionally. The norm bound is max(p₂·|(u−s)/v|, q, r)
+and is ≤ v_max·R^{1/3} in all verified cases.
 
 ### Strategy C — General ω*≥5
 
