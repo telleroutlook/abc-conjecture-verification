@@ -1003,6 +1003,46 @@ is determined by a one-dimensional lattice.
   When $k = m = 1$ (squarefree), $\mathrm{nd} = q$, recovering E$_n$.
 \end{remark}
 
+\begin{corollary}[Valuation regime is independent of $n$]\label{cor:nd_kmn_val}
+  Let $a = p^k$, $b = q^m$, $c = r^n$ be coprime with $P_a=\{p\}$, $P_b=\{q\}$,
+  $P_c=\{r\}$ and $p < q < r$.  Set $g = \gcd(k,m)$ and
+  $N_0 = \max(pm/g,\, qk/g)$.
+  If $N_0 \le r$ (valuation regime), then
+  \[
+    \mathrm{nd}(a,b) \;=\; N_0 \;=\; \max\!\left(\frac{pm}{g},\;\frac{qk}{g}\right),
+  \]
+  \emph{regardless of the exponent $n = v_r(c)$}.
+\end{corollary}
+
+\begin{proof}
+  The witness $\varphi_p = -m/g$, $\varphi_q = k/g$, $\varphi_r = 0$ satisfies
+  $k(-m/g) + m(k/g) = 0 = n \cdot 0$ for any $n$, has $W = (k+m)/g \ne 0$,
+  and achieves norm $N_0$.  The lower bound argument of
+  Theorem~\ref{thm:nd_km1} is verbatim: when $\varphi_r = 0$ the constraint
+  reduces to $k\varphi_p + m\varphi_q = 0$, giving norm $\ge N_0$; when
+  $\varphi_r \ne 0$, norm $\ge r \ge N_0$.  Neither case involves $n$.
+\end{proof}
+
+\begin{remark}[Mixed witnesses in the pairwise regime]
+\label{rem:mixed_witness}
+  Theorems~\ref{thm:nd_km1} and~\ref{cor:nd_kmn_val} require $p_c = r$ to be
+  the \emph{largest} prime.  When the group-$c$ prime is \emph{not} the largest,
+  neither the valuation-regime formula nor the three-pure formula
+  $\min(N_0, N_1, N_2)$ is guaranteed correct: a fully mixed (no-zero-coordinate)
+  witness can achieve a smaller norm than any pure branch.
+
+  The canonical example is $(5, 27, 32)$, i.e.\
+  $p_a = 5 > p_b = 3 > p_c = 2$, $k=1$, $m=3$, $n=5$.
+  The three pure branches give $N_0 = N_1 = 15$, $N_2 = 25$,
+  so $\min(N_0,N_1,N_2) = 15$.  But the mixed vector
+  $(\varphi_{p_a}, \varphi_{p_b}, \varphi_{p_c}) = (-1, 2, 1)$
+  satisfies $1 \cdot (-1) + 3 \cdot 2 = 5 \cdot 1$, has $W = 3 \ne 0$,
+  and achieves norm $\max(5, 6, 2) = 6$.
+  Script T70 verifies $\mathrm{nd}(5, 27) = 6$ by exhaustive search.
+  In such cases the exact nd is computed by the LLL algorithm of
+  Theorem~\ref{thm:ob13c}.
+\end{remark}
+
 \begin{corollary}[Minimum depends only on the smallest $c$-prime]\label{cor:nd_smallc}
   Let $a + b = c$ be coprime with $P_a = \{p\}$, $P_b = \{q\}$ (one prime each),
   and $P_c$ any finite set of primes with $r_1 = \min P_c > q > p$.
@@ -1393,10 +1433,13 @@ Additional lemmas added in the E10/E11/E$_n$/F31 extension:
     integer core of $\mathrm{nd} \ge p_2$ in Theorem~\ref{thm:nd_omega2}
     (zero \texttt{sorry}).
   \item Three type $(k,1,1)$ integer kernel lemmas for Theorem~\ref{thm:nd_k11}
-    (zero \texttt{sorry}): \texttt{pasten\_nd\_k11\_r\_branch} ($r \le rx$ for
-    $x \ge 1$; $\varphi_r \ne 0$ branch); \texttt{pasten\_nd\_k11\_valuation\_branch}
-    ($qk \le qkx$; $\varphi_r{=}0$ branch); \texttt{pasten\_nd\_k11\_norm\_equals\_qk}
-    ($\max(px, qkx) = qkx$ for $p < q$; q-component dominates).
+    (zero \texttt{sorry}):
+    {\footnotesize\texttt{pasten\_nd\_k11\_r\_branch}} ($r \le rx$ for $x \ge 1$;
+    $\varphi_r \ne 0$ branch);
+    {\footnotesize\texttt{pasten\_nd\_k11\_valuation\_branch}} ($qk \le qkx$;
+    $\varphi_r{=}0$ branch);
+    {\footnotesize\texttt{pasten\_nd\_k11\_norm\_equals\_qk}} ($\max(px, qkx) = qkx$
+    for $p < q$; $q$-component dominates).
   \item \texttt{pasten\_nd\_km1\_gcd\_div\_one}: $\gcd(k/g,\, m/g) = 1$ for
     $g = \gcd(k,m)$; integer core of the $\varphi_r{=}0$ solution-family
     uniqueness in Theorem~\ref{thm:nd_km1} (Mathlib
@@ -1469,7 +1512,16 @@ verified numerically on 14 named examples (T69); and (p) a universality
 corollary (Corollary~\ref{cor:nd_smallc}): for one-prime-per-$a,b$-group triples
 with $r_1 = \min P_c > q > p$, the formula $\mathrm{nd} = \min(r_1, \max(pm/g, qk/g))$
 holds regardless of how many primes $c$ has or their valuations — only
-the smallest $c$-prime matters.
+the smallest $c$-prime matters; and (q) a valuation-regime independence result
+(Corollary~\ref{cor:nd_kmn_val}): when $\max(pm/g, qk/g) \le r$, the formula
+$\mathrm{nd}(a,b) = \max(pm/g, qk/g)$ holds for \emph{all} $n = v_r(c)$, not just
+$n=1$ — the witness $(-m/g, k/g, 0)$ satisfies the constraint for any $n$, so the
+$c$-exponent is entirely invisible in the valuation regime (verified numerically on
+52 cases with $n \ge 2$, T71); and (r) a characterisation of the pure-formula
+boundary (Remark~\ref{rem:mixed_witness}): when the group-$c$ prime is not the
+largest in the triple, the three-pure formula can fail and a fully mixed witness is
+required, exemplified by $(5,27,32)$ where $\mathrm{nd} = 6$ beats all pure-branch
+minima ($N_0 = N_1 = 15$, $N_2 = 25$).
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
