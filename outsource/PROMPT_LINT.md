@@ -52,8 +52,17 @@ grep: `it is well-known that there are finitely`, `finiteness follows`, `trivial
 ## A7 — Claim not self-contained
 
 CHECK: does the prompt say "see spec §X" or reference another file instead of repeating
-the definition inline? Every symbol and formula must appear in the prompt itself.
+the definition inline? Every symbol and formula **that appears** in the prompt must be
+defined in the same prompt.
+
+**Scoping rule:** Only check symbols that actually APPEAR in the prompt text. Do NOT
+require a prompt to define v_max, W(φ), F(a,b), or other Pasten lattice symbols unless
+those symbols appear in the prompt. A prompt that uses the E_n theorem without stating
+the full Pasten lattice is self-contained as long as nd(a,b) and E_n are defined inline.
+
 grep: `see spec`, `as defined in`, `from CLAUDE.md`, `as above`.
+For each symbol used (nd, ρ, v_max, W, F(a,b), R, ω*, m_g, med): verify its definition
+appears in the "All definitions" section of the same file.
 
 ## A8 — IUT object type mismatch
 
@@ -168,6 +177,68 @@ be verified by hand or by a quick script. Reference failure: OB-03 Step 4 wrote
 not log 72; the correct value is log 9 / log 6 ≈ 1.226.
 CHECK: for every "≈" or "=" followed by a floating-point value in any proof step, run
 `python3 -c "import math; print(math.log(9)/math.log(6))"` (or equivalent) to confirm.
+
+
+## A16 — Theorem preconditions explicitly verified (Pasten lattice)
+
+When a proof skeleton invokes any of the following theorems, the prompt MUST explicitly
+verify all stated preconditions — not just cite the theorem by name.
+
+**E_n theorem (nd = second-smallest{m_a,m_b,m_c} for squarefree triples):**
+- CHECK: are Pa, Pb, Pc explicitly confirmed non-empty, or is min(∅)=+∞ explicitly
+  invoked for the empty-group case?
+- FAIL if the E_n theorem is applied and the partition type's group emptiness is not
+  discussed.
+- grep: `E_n theorem`, `second.smallest`, `second_smallest` — then verify adjacent
+  text confirms which groups are empty/non-empty.
+
+**Step 3 cross-group bound (nd ≤ v_max·med):**
+- CHECK: is it explicit that the bound is nd ≤ v_max·med(m_a,m_b,m_c) (PROVED), NOT
+  nd ≤ v_max·R^{1/(ω*-1)} (REFUTED for squarefree, see OB-13B refutation 2026-08-16)?
+- FAIL if Step 3 is cited and the distinction between "med bound" and "R bound" is absent.
+- grep: `Step 3`, `cross.group`, `v_max.*R\^` — verify that the conclusion is
+  "≤ v_max·med" not "≤ v_max·R^{1/(ω*-1)}".
+
+## A17 — Coprimality-derived bounds: "smallest prime not in {set}" ≠ "smallest prime > max(set)"
+
+When bounding a free variable r₁ (or similar) by coprimality with a product a=p₁·...·pₖ:
+the correct lower bound is "smallest prime NOT IN {p₁,...,pₖ}", which may be LESS THAN
+min(p₁,...,pₖ) if some small prime is missing from the product.
+
+Examples of the error: "r₁ ≥ p₃, the smallest prime greater than p₂" — wrong when
+p₁=2,p₂=7 (smallest prime ∉{2,7} is 3, not 11).
+
+CHECK:
+1. grep: `smallest prime.*greater than`, `smallest prime.*>.*p_` — if found, check
+   whether the occurrence is:
+   (a) an **assertion** (claiming r₁ ≥ "smallest prime greater than p₂"), OR
+   (b) a **correction/negation** (saying NOT to use "smallest prime greater than p₂").
+   Case (b) is correct and should be **ignored** (it is already the fix).
+   Only flag case (a).
+2. For any case (a): verify that "smallest prime > X" and "smallest prime ∉{factors of a}"
+   give the same result for ALL valid (p₁,p₂) in scope (not just the leading example).
+3. For the cases where they differ (p₁=2, p₂≥5): confirm that the "small r₁" cases
+   produce q ≤ 0 (not a valid prime) or that r₁(r₂-r₁)>p₁p₂ is separately verified.
+4. Any claim of the form "r₁ ≥ C" where C comes from a coprimality argument must be
+   checked for ALL (p₁,p₂) in the stated scope, not just the example case.
+
+## A18 — Conditional steps must be labeled; non-circularity must match EVERY step
+
+The non-circularity declaration at the top of an outsource prompt (e.g., "abc, IUT,
+Szpiro, known abc triples not used") creates a PROMISE. Every step in the proof
+skeleton must be checked against this promise.
+
+CHECK:
+1. grep: `sieve`, `Dirichlet`, `Goldbach`, `density`, `Chen`, `Bombieri`, `Vinogradov`
+   — if any such term appears, verify that:
+   (a) the corresponding step is marked "conditional on [named hypothesis]", AND
+   (b) the non-circularity declaration is updated to note the conditional dependency.
+2. grep: `likely follows from`, `probably`, `should follow`, `one expects` — these
+   are implicit conditionals and must be made explicit or removed.
+3. For any claim of the form "sup = X is approached": verify that the family achieving
+   the supremum is proved to be infinite, OR that the sup-claim is labeled as conditional.
+4. FAIL if the theorem statement presents a SINGLE claim mixing unconditional upper bound
+   with a conditional supremum without explicit separation.
 
 ---
 

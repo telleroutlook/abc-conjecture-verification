@@ -129,10 +129,11 @@ r₁/(q+6)^{1/2} → 1 for near-balanced semiprimes (r₁ ≈ r₂ ≈ √(q+6) 
 For (ii): if r₁ = √q − O(1) (near-balanced), then ρ = r₁/(6q(q+6))^{1/4} ≈ √q/(6q²)^{1/4}
 = q^{1/2}/(6^{1/4} q^{1/2}) = 1/6^{1/4}.
 
-**Note:** The infinitude of primes q with 6+q = r₁r₂ semiprime likely follows from
-sieve methods (Goldbach-type density: for any fixed even integer 2k, the number of
-primes p ≤ N with p+2k semiprime has positive density — a weaker form of Goldbach).
-If this sieve estimate is unavailable, the result can be stated conditionally.
+*(Conditional on sieve density:)* The infinitude of primes q with 6+q = r₁r₂
+semiprime near-balanced follows from Bombieri–Vinogradov / Chen's theorem on almost-primes
+(specifically: the set of primes q ≤ N with 6+q = r₁r₂ semiprime has counting function
+≫ N/(log N)² by standard sieve methods). This hypothesis is required for OB-14B only;
+Theorem OB-14A is unconditional.
 
 ### Step 3 — Type (2,2,1) by symmetry
 

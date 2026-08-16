@@ -70,29 +70,37 @@ $$\mathrm{nd}(a,b) \;\leq\; v_{\max} \cdot R^{1/(\omega^*-1)}.$$
 ### Key structural observations (to guide the proof)
 
 **Observation 1 (v_max is non-trivial).** R < c implies c is *not* squarefree: if c
-were squarefree then c | R (since all primes of c are in R), so c ≤ R — contradicting
-R < c. Hence some prime p ∈ Pc has v_p(c) ≥ 2, so v_max ≥ 2.
+were squarefree then rad(c) = c divides R (since all primes of c are in R), so c ≤ R —
+contradicting R < c. Hence some prime p ∈ Pc has v_p(c) ≥ 2, so v_max ≥ 2.
 
-**Observation 2 (the proved bound).** By the cross-group construction (OB-13 Step 3),
-$$\mathrm{nd}(a,b) \;\leq\; v_{\max} \cdot \mathrm{med}(m_a, m_b, m_c),$$
-where med is the second-smallest of the three group minima m_a=min(Pa), m_b=min(Pb),
-m_c=min(Pc). OB-15 reduces to showing:
+**Observation 1' (c cannot be prime).** If c is prime then rad(c) = c, so
+R = rad(a)·rad(b)·c ≥ c, giving R ≥ c. Hence R < c implies c is **composite and
+non-squarefree**. *(This is proved, not conjectured.)*
+
+**Observation 2 (the proved cross-group bound).** By the cross-group construction
+(OB-13 Step 3), for any coprime triple:
+$$\mathrm{nd}(a,b) \;\leq\; v_{\max} \cdot \mathrm{med}(m_a, m_b, m_c).$$
+OB-15 would follow from:
 $$\mathrm{med}(m_a, m_b, m_c) \;\leq\; R^{1/(\omega^*-1)} \quad \text{when } R < c.
 \tag{KEY}$$
+(KEY) is **sufficient but not necessary**: when the within-group construction is available
+(two primes in the same group with unequal valuations), nd can be strictly less than
+v_max·med, so OB-15 can hold even when (KEY) fails. Concretely, (1,48,49) has
+med = 7 > R^{1/2} ≈ 6.48 so (KEY) fails, yet nd = 7 ≤ v_max·R^{1/2} = 4·6.48 ≈ 25.9
+because a cross-group construction gives nd = 7 directly.
 
-(When the within-group construction is available — two primes in the same group with
-unequal valuations — it can give nd strictly smaller than v_max·med, so (KEY) is
-sufficient but possibly not necessary.)
+**Observation 3 (why counterexamples to OB-13B have R > c).** The refuted OB-13B
+cases all have a single large prime in Pc or Pb with med = that large prime > R^{1/(ω*-1)}.
+Example: (1,6,7): med = 7, R^{1/2} = √42 ≈ 6.48. But R = 42 > 7 = c, so R < c fails.
+The R < c constraint appears to prevent this failure mode.
 
-**Observation 3 (why counterexamples have R > c).** The refuted cases all have a
-single large prime in Pc or Pb with med = that large prime > R^{1/(ω*-1)}.
-Example: (1,6,7): med = 7, R^{1/2} = √42 ≈ 6.48. The constraint R < c = 7 forces
-R < 7, but R = 42 > 7 here — so R < c fails, consistent with Observation 2.
-
-**Observation 4 (R < c restricts the median).** If R < c and m_c = min(Pc) ≤ med:
-$$m_c^{\omega^*-1} \;\leq\; R \quad\text{(to prove)}.$$
-This would give m_c ≤ R^{1/(ω*-1)}, and since med ≤ m_c is not immediate, a stronger
-argument is needed.
+**Observation 4 (ω* ≤ 4 for R < c — empirical).** Brute-force search over all c ≤ 10000
+finds no R < c triple with ω* ≥ 5. This is consistent with Observation 1' (c not prime)
+and the structure c = p₁^{e₁}·...·pₖ^{eₖ} with at least one eᵢ ≥ 2. This observation
+is **not proved** for large c: for c = p² with large prime p, a triple with ω* = 5 and
+R = p·q₁q₂q₃q₄ < p² (where q₁q₂q₃q₄ < p, four small primes) is not ruled out by
+the current argument. If ω* ≤ 4 were proved for R < c, (KEY) would reduce to a
+finite case analysis over ω* ∈ {2, 3, 4}.
 
 ---
 
@@ -103,37 +111,70 @@ argument is needed.
 The hardest case is type (0, k, 1): Pa=∅, Pb = k primes, Pc = {p} (single prime).
 Here med(∞, m_b, p) = p if p > m_b, or m_b if m_b > p.
 
-**Sub-case 1a (p = med > m_b):** Need p ≤ R^{1/(ω*-1)}.
-R < c = p^e (since c ∈ Pc = {p} and R = m_b·...·m_b'·p). R = rad(b)·p.
-From R < c = p^e: rad(b)·p < p^e, so rad(b) < p^{e-1}.
-Then R = rad(b)·p, and R^{1/(ω*-1)} = (rad(b)·p)^{1/(ω*-1)}.
-Need: p ≤ (rad(b)·p)^{1/(ω*-1)}, i.e., p^{ω*-1} ≤ rad(b)·p, i.e., p^{ω*-2} ≤ rad(b).
-Since ω* = 1 + |Pb| and rad(b) ≥ product of ω*-1 distinct primes each ≥ 2:
-rad(b) ≥ 2^{ω*-1}. Need p ≤ 2^{(ω*-1)/(ω*-2)}·... This is where the argument needs
-the constraint rad(b) < p^{e-1}.
+Since c has a double prime factor (Observation 1'), c = p^e with e ≥ 2 for the
+single-prime-c-group case.
+
+**Sub-case 1a (p = med > m_b):** Need nd ≤ v_max · R^{1/(ω*-1)}.
+R < c = p^e, so R = rad(b)·p < p^e, giving rad(b) < p^{e-1}.
+The cross-group construction gives nd ≤ v_max · p.
+We need v_max · p ≤ v_max · R^{1/(ω*-1)}, i.e., p ≤ R^{1/(ω*-1)} = (rad(b)·p)^{1/(ω*-1)}.
+Equivalently: p^{ω*-2} ≤ rad(b). Since rad(b) ≥ product of (ω*-1) distinct primes ≥ 2^{ω*-1},
+this requires p ≤ rad(b)^{1/(ω*-2)} (for ω* ≥ 3).
+
+**KEY gap:** Prove p ≤ R^{1/(ω*-1)} given rad(b) < p^{e-1} and ω* = 1 + |Pb| ≥ 2.
+Note: the condition rad(b) < p^{e-1} gives p^{ω*-2} ≤ rad(b) < p^{e-1}, so for ω* ≤ e
+this is consistent. The case ω* = 2 (single prime in b) gives R = q·p and KEY becomes
+p ≤ q·p, i.e., 1 ≤ q — trivially true.
 
 **What to close for Step 1:** Prove p ≤ R^{1/(ω*-1)} under the constraint
-rad(b)·p < p^e (i.e., rad(b) < p^{e-1}) and ω* = 1 + |Pb| ≥ 2.
+rad(b)·p < p^e and ω* ≥ 2. The key instance is ω*=3 (one prime q in Pb):
+R = q·p, R^{1/2} = √(qp), need p ≤ √(qp), i.e., p ≤ q — but R < c = p^e with e≥2
+gives q·p < p^e so q < p^{e-1}. This does NOT give p ≤ q in general.
+Example: (1,48,49): p=7, q=2,3, R=42 < 49=c. p=7 > √42≈6.48. KEY fails here!
+OB-15 still holds for (1,48,49) via nd=7 (a different construction, not v_max·p). So
+Step 1's path via KEY is BLOCKED for (1,48,49); an alternative non-KEY construction is needed.
 
 ### Step 2 — Multiple-prime c-group and general case
 
-When |Pc| ≥ 2: m_c = smallest prime in Pc < c^{1/2}, and the median is at most
-c^{1/2} < R^{1/2} (since R > c^{1/2}... this needs justification from R < c).
+When |Pc| ≥ 2: m_c = smallest prime in Pc. Since c is non-squarefree (Observation 1'),
+either (a) some p ∈ Pc has v_p(c) ≥ 2 (contributing v_max ≥ 2), or (b) another group
+carries the high valuation. The median satisfies med ≤ m_c ≤ c^{1/2} when Pc has ≥ 2
+primes, since the two primes of Pc multiply to ≤ c, so m_c ≤ c^{1/2} ≤ R^{1/2}
+(using R < c implies R < c but R > R^{1/2} only when R > 1... need careful bound).
 
-**What to close for Step 2:** Show that when Pc has ≥ 2 primes (or when Pa is
-non-empty), the median satisfies med ≤ R^{1/(ω*-1)} without the R < c constraint, or
-use R < c to obtain a stronger bound.
+**What to close for Step 2:** Show that when |Pc| ≥ 2 and R < c, we have
+m_c ≤ R^{1/(ω*-1)}, OR that an explicit construction gives nd ≤ v_max · R^{1/(ω*-1)}
+without going through KEY.
 
-### Step 3 — Within-group assistance for equal-valuation groups
+### Step 3 — Same-valuation same-group (Gap 2 from external review)
 
-When two primes p, q in the same group have *unequal* valuations v_p ≠ v_q, the
-within-group vector φ_p = v_q/g, φ_q = −v_p/g (g = gcd(v_p,v_q)) is non-degenerate
-(W = ±(v_q−v_p)/g ≠ 0) with norm max(p·v_q, q·v_p)/g. This can be much smaller than
-v_max·med and gives nd ≤ max(p·v_q, q·v_p)/g.
+When two primes p, q ∈ same group G have **unequal** valuations v_p ≠ v_q, the
+within-group vector φ_p = v_q/gcd, φ_q = −v_p/gcd is non-degenerate (W ≠ 0).
+This gives nd ≤ max(p·v_q, q·v_p)/gcd.
 
-**What to close for Step 3:** Identify which high-quality triples are NOT covered by
-within-group or Step 1 (i.e., same-valuation same-group primes and single-prime groups).
-Show these remaining cases satisfy OB-15 via a direct argument.
+When v_p = v_q (same valuation), the within-group vector would have W = 0 (degenerate).
+For squarefree triples in a group, all v_p = 1 so this always fails.
+For R < c: Observation 1' gives c non-squarefree, but a and b can still be squarefree.
+
+**Gap 2:** The case where:
+- Two or more primes in the same group ALL have equal valuations, AND
+- No within-group non-degenerate vector exists for that group.
+In this case only cross-group constructions are available.
+
+**What to close for Step 3:** Identify which R < c triples have this "equal-valuation
+blocking" for ALL groups simultaneously, and prove OB-15 holds for them via cross-group
+alone. Show the cross-group bound nd ≤ v_max · med satisfies nd ≤ v_max · R^{1/(ω*-1)}
+in these specific cases (likely requiring a direct argument about med when R < c).
+
+---
+
+## Gap analysis (from external review 2026-08-16)
+
+| Gap | Status | Blocking case | Path forward |
+|-----|--------|--------------|--------------|
+| Gap 1: KEY unproved | **OPEN** | (1,48,49): med=7 > R^{1/2}≈6.48, KEY fails | Non-KEY construction for single-prime-c triples; or prove ω*≤4 for R<c then case-split |
+| Gap 2: same-valuation case | **OPEN** | Squarefree a,b with c non-squarefree | Cross-group bound + direct R<c argument |
+| ω*≤4 for R<c | **EMPIRICAL ONLY** | No counterexample for c≤10000; not proved for large c | New sub-problem OB-15A |
 
 ---
 
