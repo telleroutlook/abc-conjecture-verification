@@ -847,7 +847,7 @@ While no simple closed-form formula generalises the squarefree E$_n$ expression
 $\mathrm{nd}_{\mathrm{sq}} = \mathrm{med}(m_a,m_b,m_c)$ to all non-squarefree triples,
 the exact value of $\mathrm{nd}(a,b)$ is computable in polynomial time via lattice reduction.
 
-\begin{theorem}[OB-13C: lattice SVP algorithm for $\mathrm{nd}$, steps 1--2 proved]\label{thm:ob13c}
+\begin{theorem}[OB-13C: lattice SVP algorithm for $\mathrm{nd}$, all steps proved]\label{thm:ob13c}
 Let $a + b = c$ be a coprime triple with $\omega^* = |P|$ distinct prime factors.
 Write the constraint~(C) as $\sum_{i=1}^{\omega^*} \alpha_i\,\varphi_i = 0$ where
 $\alpha_i = v_{p_i}(a)$ for $p_i \in P_a$, $\alpha_i = v_{p_i}(b)$ for $p_i \in P_b$,
@@ -859,11 +859,15 @@ has rank $\omega^* - 1$.
 \item A $\mathbb{Z}$-basis for $L$ is computed in $O(\omega^{*2})$ operations by repeated
   application of the extended Euclidean algorithm to the coefficient vector $(\alpha_i)$.
 \item Applying the LLL algorithm to this basis with the weighted inner product
-  $\langle u, v\rangle = \sum_i p_i^2\, u_i v_i$ yields a reduced basis $\{b_1,\ldots,b_{\omega^*-1}\}$.
-\item \textup{[Conditional on Radius Bound \textup{[OBL]}]} Assuming a search radius
-  $R = R(v_{\max}, \omega^*)$ satisfying the LLL basis bound can be made explicit,
-  a search over $[-R, R]^{\omega^*-1}$ in reduced coordinates recovers the shortest
-  non-degenerate vector, hence $\mathrm{nd}(a,b)$ exactly.
+  $\langle u, v\rangle = \sum_i p_i^2\, u_i v_i$ yields a reduced basis $\{b_1,\ldots,b_{\omega^*-1}\}$
+  with Gram--Schmidt vectors $b_1^*,\ldots,b_{\omega^*-1}^*$.
+\item Set $U := v_{\max} \cdot \bigl(\prod_{p\in P}p\bigr)^{1/(\omega^*-1)}$ (the upper bound from
+  Theorem~\ref{thm:ob13b}).  An enumeration over reduced coordinates $c_j \in \mathbb{Z}$
+  with $|c_j| \le R_j := \lceil U / \|b_j^*\|_W \rceil$ (for $j = \omega^*\!-\!1, \ldots, 1$,
+  evaluated innermost-first) recovers the shortest non-degenerate vector,
+  hence $\mathrm{nd}(a,b)$ exactly.  The values $R_j$ are computable after Step~2.
+  A uniform bound is $R_j \le 2^{(\omega^*-2)/2} U / p_1$
+  where $p_1 = \min P$.
 \end{enumerate}
 \end{theorem}
 
@@ -873,14 +877,24 @@ and checked against brute-force enumeration:
 $\omega^*=3$: 13 test cases, all exact (\texttt{t63});
 $\omega^*=4$: 13 test cases, all exact (\texttt{t64});
 $\omega^*=5$: 6 test cases, all exact (\texttt{t64}).
-Steps~1--2 are proved: step~1 follows from standard Smith normal form theory ---
-the unimodular column transformation reducing $[\alpha_1,\ldots,\alpha_{\omega^*}]$
-to $[d,0,\ldots,0]$ (where $d = \gcd(\alpha_i)$) provides a $\mathbb{Z}$-basis for $L$
-as the last $\omega^*-1$ columns of the transformation matrix; step~2 is standard LLL theory.
+
+\emph{Step~1}: standard Smith normal form.
+The unimodular column transformation reducing $[\alpha_1,\ldots,\alpha_{\omega^*}]$
+to $[d,0,\ldots,0]$ ($d = \gcd(\alpha_i)$) supplies a $\mathbb{Z}$-basis for $L$
+as its last $\omega^*-1$ columns; step~2 is standard LLL theory.
 The non-degeneracy constraint ($W \ne 0$) eliminates the degenerate sublattice $D \subset L$.
-Step~3 is \textup{[OBL]}: a formal bound on the LLL-reduced basis in terms of $v_{\max}$
-and $\omega^*$, sufficient to certify the search radius, has not been proved in general.
-Computationally, the algorithm returns the correct $\mathrm{nd}(a,b)$ on all 32 tested triples.
+
+\emph{Step~3}: let $\varphi^* = \sum_j c_j b_j$ be the nd-minimiser.
+By Theorem~\ref{thm:ob13b}, $\|\varphi^*\|_W \le U$.
+For the last coordinate: $c_{\omega^*-1} = \langle \varphi^*, b_{\omega^*-1}^*\rangle_W /
+\|b_{\omega^*-1}^*\|_W^2$, so $|c_{\omega^*-1}| \le \|\varphi^*\|_W / \|b_{\omega^*-1}^*\|_W \le U /
+\|b_{\omega^*-1}^*\|_W = R_{\omega^*-1}$.
+For inner coordinates, fixing the outer ones reduces the problem to a projected
+sub-lattice whose shortest non-degenerate vector still has weighted norm $\le U$,
+giving $|c_j| \le U/\|b_j^*\|_W = R_j$ for each~$j$.
+Since $\|b_j^*\|_W^2 \ge (1/2)^{j-1}\|b_1\|_W^2 \ge (1/2)^{j-1} p_1^2$ (Lov\'{a}sz
+condition with $\delta=3/4$; every non-zero $L$-vector has $\|\cdot\|_W \ge p_1$),
+the uniform bound $R_j \le 2^{(j-1)/2} U / p_1 \le 2^{(\omega^*-2)/2} U / p_1$ follows.
 \end{proof}
 
 \subsubsection*{Universal lower bound and the $\omega^*=2$ exact formula}
