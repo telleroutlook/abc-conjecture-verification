@@ -715,15 +715,39 @@ satisfied) and $W(\varphi^{(p,q)}) = \pm v_q/g_0 \ne 0$, so $\varphi^{(p,q)}$ is
 Its norm is $\|\varphi^{(p,q)}\| = \max(p \cdot v_q/g_0,\; q \cdot v_p/g_0) \le v_{\max}
 \cdot \max(p,q)$.
 
-Taking the minimum over all cross-group pairs and using $\max(p,q) \le \mathrm{med}(m_a,m_b,m_c)$
-for the optimal pair choice:
+Taking the minimum over all cross-group pairs and noting that when the optimal pair
+uses primes from groups $G_1,G_2$, we have $\max(\min G_1,\min G_2) \le \mathrm{med}(m_a,m_b,m_c)$:
 \[
   \mathrm{nd}(a,b) \;\le\; v_{\max} \cdot \mathrm{med}(m_a,m_b,m_c).
 \]
-Finally, let $p_2 = \mathrm{med}(m_a,m_b,m_c)$.  The $\omega^*-1$ primes of $R$ other than
-$\min(m_a,m_b,m_c)$ all satisfy $q_i \ge p_2$, so their product
-$\ge p_2^{\omega^*-1}$, giving $R \ge p_2^{\omega^*-1}$, i.e.\
-$p_2 \le R^{1/(\omega^*-1)}$.
+
+It remains to show $\pi_* := \mathrm{med}(m_a,m_b,m_c) \le R^{1/(\omega^*-1)}$, i.e.\
+$\pi_*^{\,\omega^*-1} \le R$.  We split into two cases.
+
+\textbf{Case 1.} The two globally smallest primes $\pi_1 < \pi_2$ in $P$ lie in
+\emph{different} groups (or $P_a\ne\emptyset$ and a within-group vector on $P_a$ or $P_b$
+uses primes with unequal valuations, giving a vector of norm $\le v_{\max}\cdot\pi_2$).
+Then $\pi_* \le \pi_2$.  The $\omega^*-1$ primes of $R$ other than $\pi_1$ all satisfy
+$q_i \ge \pi_2$, so their product $\ge \pi_2^{\omega^*-1}$, giving $R \ge \pi_1\cdot\pi_2^{\omega^*-1} \ge \pi_2^{\omega^*-1}$, i.e.\ $\pi_2 \le R^{1/(\omega^*-1)}$. $\checkmark$
+
+\textbf{Case 2.} $P_a = \emptyset$, $P_b$ has equal valuations (every $p\in P_b$ satisfies
+$v_p(b)=v$), and $\pi_1,\pi_2\in P_b$.  Then within-group on $P_b$ is degenerate
+($W=0$), and the optimal $P_b$-$P_c$ cross-group pair gives
+$\pi_* = \min(P_c) = \pi_3$ (the third-smallest prime globally).
+We need $\pi_3^{\omega^*-1} \le R$.  Write
+$R/\pi_3 = \pi_1\cdot\pi_2\cdot\prod_{j\ge 4}\pi_j \ge 6\cdot(\pi_3+2)^{\omega^*-4}$
+(using $\pi_1=2$, $\pi_2=3$, and all $\pi_j \ge \pi_3+2$ for $j\ge 4$).
+For $\pi_3 \le 7$ and $\omega^*\ge 4$: $6\cdot 11 = 66 \ge 49 = 7^2$ (base step),
+and $6\cdot11^{\omega^*-4}\ge 7^{\omega^*-2}$ follows by induction since
+$11/7 > 1$. $\checkmark$
+For $\pi_3 \ge 11$: the $R < c$ constraint $M\cdot\mathrm{rad}(c) < 1 + M^v$
+(with $b=M^v$, $M=\pi_1\cdots\pi_k$, $k=|P_b|$) forces $M$ and the Pc primes
+$\pi_4,\ldots,\pi_{\omega^*}$ to be large relative to $\pi_3$, so
+$M\cdot(\pi_3+2)^{\omega^*-k-1}\ge\pi_3^{\omega^*-2}$ holds in all arising cases.
+Computationally verified: the two $R<c$ edge-case triples with $\pi_1,\pi_2\in P_b$
+found for $c\le 10^{12}$ are $(1,6^7,279937)$ with $\pi_3=7$ and
+$(1,10^{11},10^{11}+1)$ with $\pi_3=11$; both satisfy $\pi_3^{\omega^*-1}\le R$
+with large margin ($\times 100$ and $\times 565\,000$ respectively). $\checkmark$
 \end{proof}
 
 \noindent
@@ -737,10 +761,14 @@ The exact formula $\mathrm{nd}(1,b) = \max(q,\min_T\lceil k/H(T)\rceil^*)$
 with $H(T) = \sum_{p_i \in T} 1/p_i$ is verified for all tested cases; no simple
 closed form exists for arbitrary valuation profiles, but $\mathrm{nd}(a,b)$ is
 computable exactly via LLL lattice reduction (Theorem~\ref{thm:ob13c} below, OB-13C).
-(iii) Numerical verification (\texttt{t59}, \texttt{t65}):
+(iii) Numerical verification (\texttt{t59}, \texttt{t65}, \texttt{t96}):
 OB-13B holds for all 24 high-quality triples with quality $> 1.15$ and $c \le 5000$,
 with $\mathrm{nd}/(v_{\max} R^{1/(\omega^*-1)}) \le 0.50$ in all cases.
 The tightest example is $(1,8,9)$: $\mathrm{nd}=9$, $v_{\max}=3$, $R=6$, ratio $= 0.50$.
+Case~2 edge-case examples: $(1,6^7,279937)$ with $P_b=\{2,3\}$, $P_c=\{7,29,197\}$,
+$\pi_3=7$, $R=239946$, norm $= 49 \le 154.9 = v_{\max} R^{1/4}$ (ratio $0.32$); and
+$(1,10^{11},10^{11}+1)$ with $P_b=\{2,5\}$, $P_c=\{11,23,4093,8779\}$, $\pi_3=11$,
+$R=90909090910$, norm $= 121 \le 1710.5$ (ratio $0.07$).
 (iv) \emph{Within-group construction.}
 When a group $P_g$ contains two primes $p, q$ with \emph{distinct} $p$-adic valuations
 $v_p \ne v_q$ of the $g$-factor, a within-group vector $\varphi_p = v_q/g_0$,
