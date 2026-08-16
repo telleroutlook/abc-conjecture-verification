@@ -132,7 +132,12 @@ $R = \rad(abc) = \prod_{p \in P} p$.
   $\|\psi\|_\infty \le \det(F(a,b))^{1/(\omega-1)} < R^{1/(\omega-1)}$.
 \end{corollary}
 
-\subsection{Limitations and honest scope}
+For non-squarefree triples we prove the following extension
+(Theorem~\ref{thm:ob13b} below): the minimum non-degenerate norm satisfies
+$\mathrm{nd}(a,b) \le v_{\max} \cdot R^{1/(\omega^*-1)}$,
+where $v_{\max} = \max_{p} v_p(abc)$.
+
+
 
 Corollary~\ref{cor:minkowski} does \emph{not} imply abc for the following reasons:
 \begin{enumerate}
@@ -654,7 +659,55 @@ Key-lemma Lean formalizations: \texttt{pasten\_E10\_lb\_key} (Theorem~\ref{thm:e
 Numerical confirmation across all types: $\omega=4$ (\texttt{t47}),
 $\omega=5$ (\texttt{t48}), $\omega=6$ (\texttt{t49})---all verified in $\le 1$\,s.
 
-\subsubsection*{F32a: second minimum non-degenerate norm for $\omega=3$}
+\subsubsection*{OB-13B: non-squarefree upper bound}
+
+The squarefree bound $\mathrm{nd}(a,b) \le R^{1/(\omega^*-1)}$ extends to
+non-squarefree triples with a $v_{\max}$ factor, where
+$v_{\max} = \max_{p \in P} v_p(abc)$.
+
+\begin{theorem}[OB-13B: non-squarefree E$_n$ upper bound]\label{thm:ob13b}
+For every coprime triple $a + b = c$ (not necessarily squarefree),
+\[
+  \mathrm{nd}(a,b) \;\le\; v_{\max} \cdot R^{1/(\omega^*-1)}.
+\]
+\end{theorem}
+
+\begin{proof}
+For each cross-group prime pair $(p,q)$ with $p \in P_g$, $q \in P_{g'}$ ($g \neq g'$)
+and $g_0 = \gcd(v_p(g\text{-factor}),\, v_q(g'\text{-factor}))$, define the vector
+$\varphi^{(p,q)}$ by
+$\varphi_p = v_q/g_0$, $\varphi_q = -v_p/g_0$, and $\varphi_r = 0$ for all $r \notin \{p,q\}$.
+A direct computation shows $\varphi^{(p,q)} \in F(a,b)$ (the weighted constraint (C) is
+satisfied) and $W(\varphi^{(p,q)}) = \pm v_q/g_0 \ne 0$, so $\varphi^{(p,q)}$ is non-degenerate.
+Its norm is $\|\varphi^{(p,q)}\| = \max(p \cdot v_q/g_0,\; q \cdot v_p/g_0) \le v_{\max}
+\cdot \max(p,q)$.
+
+Taking the minimum over all cross-group pairs and using $\max(p,q) \le \mathrm{med}(m_a,m_b,m_c)$
+for the optimal pair choice:
+\[
+  \mathrm{nd}(a,b) \;\le\; v_{\max} \cdot \mathrm{med}(m_a,m_b,m_c).
+\]
+Finally, let $p_2 = \mathrm{med}(m_a,m_b,m_c)$.  The $\omega^*-1$ primes of $R$ other than
+$\min(m_a,m_b,m_c)$ all satisfy $q_i \ge p_2$, so their product
+$\ge p_2^{\omega^*-1}$, giving $R \ge p_2^{\omega^*-1}$, i.e.\
+$p_2 \le R^{1/(\omega^*-1)}$.
+\end{proof}
+
+\noindent
+\textit{Remarks.}
+(i) For squarefree triples $v_{\max}=1$ and this recovers the Minkowski bound.
+(ii) The two-prime vector with GCD reduction can be sharpened to a multi-prime
+``balanced load'' construction: for triples $(1,b,q^k)$ with $b$ squarefree and $|P_b| \ge 2$,
+the optimal vector distributes the constraint $k$ across a subset $T \subseteq P_b$,
+achieving norm $\max(q,\, k/\sum_{p_i \in T} p_i^{-1})$---strictly below the pairwise bound.
+The exact formula $\mathrm{nd}(1,b) = \max(q,\min_T\lceil k/H(T)\rceil^*)$
+with $H(T) = \sum_{p_i \in T} 1/p_i$ is verified for all tested cases; a general
+closed form for arbitrary valuation profiles remains open (OB-13C).
+(iii) Numerical verification: \texttt{discovery/m2\_directions/t59\_ob13\_verify.py}
+confirms OB-13B for all tested triples including high-quality cases such as
+$(1,8,9)$, $(1,48,49)$, $(4,5,9)$.
+
+
 
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
 \emph{second} minimum non-degenerate norm.
