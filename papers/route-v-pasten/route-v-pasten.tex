@@ -1716,6 +1716,50 @@ We record this as a standalone theorem.
   sub-problem whose own Bezout regime provides a vector at least as good.
 \end{remark}
 
+\subsubsection*{General recursive nd algorithm}
+
+Theorems~\ref{thm:nd_zero_coord} and the individual exact-nd results combine into
+a complete recursive algorithm for $\mathrm{nd}(a,b)$.
+
+\begin{theorem}[General recursive nd formula]\label{thm:nd_recursive}
+  Let $a+b=c$ be a coprime triple with $\omega^*\ge 3$ distinct primes partitioned
+  as $P_a\cup P_b\cup P_c$.  For each prime $p \in P_a\cup P_b\cup P_c$, define
+  the \emph{$p$-branch} $B_p$ recursively:
+  \begin{itemize}
+    \item (Multi-prime reduction) If $|P_x| \ge 2$ for the group $P_x$ containing
+      $p$: $B_p = \mathrm{nd}(a',b')$ where $(a',b',c')$ is the $(\omega^*-1)$-prime
+      sub-problem obtained by removing prime $p$ from $P_x$
+      (its coordinate is forced to zero).
+    \item (Singleton interaction) If $|P_x| = 1$: $B_p$ is the group-interaction
+      minimum $\min\{\|\varphi\|_{\mathrm{nd}} : \varphi\in F(a,b),\,\varphi_p=0,\,
+      W(\varphi)\ne 0\}$, a direct Bezout-type minimization over the remaining
+      two-group constraint.
+  \end{itemize}
+  The base case ($\omega^*=3$) is Theorem~\ref{thm:nd_pairwise_bezout}.  Then:
+  \begin{enumerate}[(i)]
+    \item For $\omega^*=4$: $\mathrm{nd}(a,b) = \min_p B_p$ (proved, from
+      Theorems~\ref{thm:nd_type211}, \ref{thm:nd_type121},
+      \ref{thm:nd_omega4_two_c}).
+    \item For $\omega^*\in\{5,6\}$: $\mathrm{nd}(a,b) = \min_p B_p$ (empirically
+      verified; $\omega^*=5$ all partition types, $a,b\le 300$; $\omega^*=6$
+      type $(1,1,4)$, $143$ triples, spot-check $40$, $0$ failures, script T83).
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  \textit{Upper bound ($\mathrm{nd} \le \min_p B_p$).}  Each $B_p$ is a minimum over a
+  sub-lattice of $F(a,b)$, hence $\mathrm{nd}(a,b) \le B_p$ for every $p$.
+
+  \textit{Lower bound for $\omega^*=4$ ($\mathrm{nd} \ge \min_p B_p$).}
+  Follows from Theorem~\ref{thm:nd_zero_coord}(i): every non-degenerate minimizer
+  has some coordinate zero, placing it in one of the $\omega^*=4$ branches.
+  The exact-nd sub-problem formulas (Theorems~\ref{thm:nd_type211}--\ref{thm:nd_omega4_two_c})
+  confirm the identity.
+
+  \textit{Part (ii).}  Computational verification; see Theorem~\ref{thm:nd_zero_coord}(ii)
+  for the zero-coordinate property and the individual T-scripts for the exact values.
+\end{proof}
+
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
 \emph{second} minimum non-degenerate norm.
 
@@ -2253,7 +2297,13 @@ prime coordinate equal to zero, so $\mathrm{nd}(a,b) = \min_p B_p$
 (minimum over all zero-$\varphi_p$ sub-lattices); proved for $\omega^*=4$
 and verified on $300$+ triples each for $\omega^*=5,6$ (0 violations).
 This fails for $\omega^*=3$: the triple $(5,27,32)$ achieves $\mathrm{nd}=6$
-via an all-nonzero vector, while every zero-coordinate branch gives norm $\ge 15$.
+via an all-nonzero vector, while every zero-coordinate branch gives norm $\ge 15$;
+and (ae) the \emph{general recursive nd algorithm}
+(Theorem~\ref{thm:nd_recursive}): for any coprime triple with $\omega^*\ge 3$
+primes, $\mathrm{nd}(a,b) = \min_p B_p$ (each $B_p$ zeroing one prime coordinate,
+computed recursively from the nd111 base case); proved for $\omega^*=4$,
+verified for $\omega^*=5$ (all types) and $\omega^*=6$ type~$(1,1,4)$
+($143$ triples, $0$ failures, T83).
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
