@@ -24,6 +24,13 @@ Phase status as of 2026-08-16.
   = second smallest prime in P ≤ R^{1/(ω*-1)} (Key Lemma: p₂^{ω*-1} < R for any ω*
   distinct primes, proved: ∏_{j≠2} p_j ≥ 2(p₂+1)^{ω*-2} > p₂^{ω*-2}). Verified: 0
   violations in all 118 R<c triples with a>1 (c≤5000).
+- **OB-15 for a=1 equal-val Pb (2026-08-16):**
+  - v=1 (b=M squarefree): PROVED VACUOUS. R=M·rad(1+M)≥2M≥c. ✓
+  - Single-prime Pc, v≥2: PROVED VACUOUS (Mihailescu/Catalan: r^u-M^v=1 with M≥6
+    squarefree ≥2 factors has no solution; only 3²-2³=1 excluded). ✓
+  - Multi-prime Pc: EXISTS and OB-15 holds. Example: (1,26³,17577) with Pb={2,13}
+    equal-val v=3, Pc={3,7,31}. R=16926<17577. nd_ub=9 (Pb-Pc: pick 2∈Pb,3∈Pc).
+    Theorem D via Pb-Pc pairing proves norm≤v_max·π₂≤v_max·R^{1/(ω*-1)}. ✓
 
 ## Numerical evidence
 
@@ -33,12 +40,15 @@ Phase status as of 2026-08-16.
 
 ## Open obligations
 
-- **OB-15 for a=1 R<c triples with equal-val Pb (Gap 2):**
-  All known R<c triples with a=1 have unequal-val Pb (verified c≤5000). Theorem D
-  doesn't apply (Pa=∅). For unequal-val Pb: within-group works. Open only for equal-val
-  Pb a=1 case — computationally vacuous (0 such triples in c≤5000).
-- **OB-16 Gap 2:** Equal-valuation multi-prime groups. Construction proof for ω*=4 needed.
-- **OB-17:** Theorem D closes a>1 case. a=1 equal-val-Pb remains open.
+- **OB-15 residual (single edge case):** The case a=1, equal-val Pb, multi-prime Pc
+  with BOTH π₁,π₂ ∈ Pb (the two smallest primes of P both in the equal-val Pb group)
+  and min(Pc)=π₃. Key Lemma gives π₂≤R^{1/(ω*-1)} but Pb-Pc pairing uses π₃.
+  Need: π₃≤v_max·R^{1/(ω*-1)}/v_max (i.e., π₃≤R^{1/(ω*-1)}), OR a separate bound
+  using v_max. Computationally: 0 violations (c≤50000). Likely requires further analysis.
+- **OB-16 Gap 2:** Construction proof for ω*=4 equal-val Pa case — fully handled by
+  Theorem D (a=1: Pb-Pc; a>1: any pairing). Effectively closed.
+- **OB-17:** All structural cases covered (see CONFIRMED-GENERAL above). Edge case above
+  is the only remaining open item.
 
 ## Outsource files ready for external review
 
