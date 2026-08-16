@@ -1301,3 +1301,30 @@ theorem pasten_nd_k11_norm_equals_qk (p q k x : ℕ) (hpq : p < q) (hk : 1 ≤ k
 theorem pasten_nd_km1_gcd_div_one (k m : ℕ) (hk : 0 < k) (_ : 0 < m) :
     Nat.Coprime (k / Nat.gcd k m) (m / Nat.gcd k m) :=
   Nat.coprime_div_gcd_div_gcd (Nat.gcd_pos_of_pos_left m hk)
+
+/-! ### Valuation-regime independence of n (Corollary cor:nd_kmn_val)
+
+  For Pa={p^k}, Pb={q^m}, Pc={r^n} with p < q < r, g = gcd(k,m),
+  if max(p*m/g, q*k/g) ≤ r (valuation regime), then nd(a,b) = max(p*m/g, q*k/g)
+  for ANY n = v_r(c).
+
+  Key arithmetic: the witness (-m/g, k/g, 0) satisfies k*(-m/g) + m*(k/g) = 0,
+  and n*0 = 0, so the constraint is satisfied regardless of n.
+-/
+
+/-- [THM] nd_kmn_val_witness_constraint: k * (m / gcd(k,m)) = m * (k / gcd(k,m)).
+    This is the arithmetic core of cor:nd_kmn_val: the valuation-regime witness
+    (-m/g, k/g, 0) satisfies the constraint k*φ_p + m*φ_q = n*φ_r for any n,
+    since k*(m/g) = m*(k/g) (both equal k*m/g) and n*0 = 0. -/
+theorem pasten_nd_kmn_val_witness_constraint (k m : ℕ) (_ : 0 < k) (_ : 0 < m) :
+    k * (m / Nat.gcd k m) = m * (k / Nat.gcd k m) :=
+  calc k * (m / Nat.gcd k m)
+      = k * m / Nat.gcd k m := (Nat.mul_div_assoc k (Nat.gcd_dvd_right k m)).symm
+    _ = m * k / Nat.gcd k m := by rw [Nat.mul_comm k m]
+    _ = m * (k / Nat.gcd k m) := Nat.mul_div_assoc m (Nat.gcd_dvd_left k m)
+
+/-- [THM] nd_kmn_val_n_zero: n * 0 = 0 for any n.
+    Abstract core: the r-coordinate of the valuation-regime witness is 0,
+    so the constraint n*φ_r = n*0 = 0 holds for all n — the exponent n
+    is entirely invisible in the valuation regime. -/
+theorem pasten_nd_kmn_val_n_zero (n : ℕ) : n * 0 = 0 := Nat.mul_zero n

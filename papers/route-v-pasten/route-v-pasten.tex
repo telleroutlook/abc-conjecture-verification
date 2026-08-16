@@ -1505,6 +1505,15 @@ Additional lemmas added in the E10/E11/E$_n$/F31 extension:
     $g = \gcd(k,m)$; integer core of the $\varphi_r{=}0$ solution-family
     uniqueness in Theorem~\ref{thm:nd_km1} (Mathlib
     \texttt{Nat.Coprime.div\_gcd\_coprime}, zero \texttt{sorry}).
+  \item \texttt{pasten\_nd\_kmn\_val\_witness\_constraint}:
+    $k \cdot (m/g) = m \cdot (k/g)$ for $g = \gcd(k,m)$; confirms the
+    valuation-regime witness $(-m/g, k/g, 0)$ satisfies the constraint for
+    \emph{any} $n$ (Corollary~\ref{cor:nd_kmn_val}), using
+    \texttt{Nat.mul\_div\_assoc} twice.  Zero \texttt{sorry}.
+  \item \texttt{pasten\_nd\_kmn\_val\_n\_zero}: $n \cdot 0 = 0$ for all $n$;
+    captures the key $n$-independence: the $r$-coordinate of the
+    valuation-regime witness is zero, so the $c$-exponent $n$ does not appear
+    (Corollary~\ref{cor:nd_kmn_val}).  Zero \texttt{sorry}.
 \end{itemize}
 
 \section{Conclusion}
