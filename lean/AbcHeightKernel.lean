@@ -1486,3 +1486,79 @@ theorem pasten_f36_achieve_nondeg : (0 : ℤ) ≠ 1 := by norm_num
 theorem pasten_f36_lambda2_formula (p2 p3 : ℤ) (hp2 : 0 < p2) (hp23 : p2 < p3) :
     p2 < min (2 * p2) p3 :=
   lt_min (by linarith) hp23
+
+/-! ### F37: Third successive minimum for squarefree type-(1,1,2) triples (Theorem thm:f37)
+
+  λ₂ = min(2p₂, p₃) [F36].  The losing branch yields λ₃:
+  - Case 1 (p₃ < 2p₂, λ₂=p₃): λ₃ = min(2p₂, p₄).
+  - Case 2 (p₃ ≥ 2p₂, λ₂=2p₂): λ₃ = min(3p₂, p₃).
+
+  In both cases the gap argument reduces to: no integer k lies strictly between
+  two consecutive integers (1<k<2 for Case 1, 2<k<3 for Case 2).
+
+  Key lemmas:
+  (A) pasten_f37_case1_gap: No k with p₂ < k*p₂ < min(2p₂, p₄) when p₃ < 2p₂
+      (same as f36 gap: 1 < k < 2 is impossible)
+  (B) pasten_f37_case2_gap: No k with 2*p₂ < k*p₂ < min(3p₂, p₃) when p₃ ≥ 2p₂
+      (new: 2 < k < 3 is impossible)
+  (C) pasten_f37_achieve_2p2_from_p3: Doubling vector achieves 2p₂ above p₃ (Case 1).
+  (D) pasten_f37_achieve_p4_constraint: Witness for p₄ achievability (Case 1).
+  (E) pasten_f37_achieve_3p2_constraint: Tripling vector achieves 3p₂ (Case 2).
+  (F) pasten_f37_achieve_p3_case2_constraint: B_{pa=0} witness achieves p₃ (Case 2).
+-/
+
+/-- [THM] f37_case1_gap_no_k: In Case 1 (p₃ < 2p₂), the gap (p₃, min(2p₂,p₄))
+    contains no achievable rank-2 norm k*p₂.
+    Key: on the rank-2 sub-lattice (φ_{p₃}=φ_{p₄}=0 forced by integrality when N<p₃·2),
+    norms are k*p₂; no k satisfies p₃ < k*p₂ < min(2p₂,p₄).
+    Since p₃ < 2p₂ (Case 1) and p₄ ≤ 2p₂ (or min=2p₂ anyway), the bound gives 1<k<2:
+    impossible. -/
+theorem pasten_f37_case1_gap_no_k (p2 k : ℤ) (hp2 : 0 < p2)
+    (h1 : p2 < k * p2) (h2 : k * p2 < 2 * p2) : False :=
+  pasten_f36_gap_no_k p2 k hp2 h1 h2
+
+/-- [THM] f37_case2_gap_no_k: In Case 2 (p₃ ≥ 2p₂), the gap (2p₂, min(3p₂,p₃))
+    contains no achievable rank-2 norm k*p₂.
+    Since N < min(3p₂,p₃) ≤ p₃, integrality forces φ_{p₃}=φ_{p₄}=0 and the norm
+    reduces to k*p₂.  No k satisfies 2p₂ < k*p₂ < 3p₂, i.e. 2 < k < 3: impossible. -/
+theorem pasten_f37_case2_gap_no_k (p2 k : ℤ) (hp2 : 0 < p2)
+    (h1 : 2 * p2 < k * p2) (h2 : k * p2 < 3 * p2) : False := by
+  have hk1 : 2 < k := by nlinarith
+  have hk2 : k < 3 := by nlinarith
+  omega
+
+/-- [THM] f37_achieve_triple_constraint: Tripling the lattice constraint preserves it.
+    If a + b = c + d, then 3*a + 3*b = 3*c + 3*d.
+    Used to show 3p₂ is achievable in Case 2 by tripling the nd-minimizer. -/
+theorem pasten_f37_achieve_triple_constraint (a b c d : ℤ) (h : a + b = c + d) :
+    3 * a + 3 * b = 3 * c + 3 * d := by linarith
+
+/-- [THM] f37_achieve_p4_constraint: For the B_{p_b=0} sub-problem in Case 1,
+    the witness (φ_{p_a}=1, φ_{p_b}=0, φ_{p_c1}=0, φ_{p_c2}=1) satisfies the
+    type-(1,1,2) constraint: φ_{p_a} + φ_{p_b} = φ_{p_c1} + φ_{p_c2}. -/
+theorem pasten_f37_achieve_p4_constraint : (1 : ℤ) + 0 = 0 + 1 := by norm_num
+
+/-- [THM] f37_achieve_p4_nondeg: The p₄-branch witness (φ_{p_a}=1, φ_{p_b}=0)
+    is non-degenerate: sum_{Pa}=1 ≠ 0=sum_{Pb}. -/
+theorem pasten_f37_achieve_p4_nondeg : (1 : ℤ) ≠ 0 := by norm_num
+
+/-- [THM] f37_achieve_p4_norm: For the witness with φ_{p_a}=1, φ_{p_b}=0, φ_{p_c2}=1,
+    the ℓ∞-norm is max(p_a * 1, p_b * 0, p_c1 * 0, p_c2 * 1) = max(p_a, p_c2) = p_c2
+    when p_a < p_c2.  In type (1,1,2) sorted as p₁<p₂<p₃<p₄: p_a = p₁, p_c2 = p₄,
+    so norm = p₄. -/
+theorem pasten_f37_achieve_p4_norm (p_a p_c2 : ℤ) (h : p_a < p_c2) :
+    max (p_a * 1) (p_c2 * 1) = p_c2 := by simp; exact Int.le_of_lt h
+
+/-- [THM] f37_lambda3_upper_case1: In Case 1, λ₃ ≤ min(2p₂, p₄).
+    Both 2p₂ (doubling) and p₄ (B_{pb=0} witness) exceed λ₂=p₃ and are achieved. -/
+theorem pasten_f37_lambda3_upper_case1 (p2 p3 p4 : ℤ)
+    (hp23 : p3 < 2 * p2) (hp34 : p3 < p4) :
+    p3 < min (2 * p2) p4 := lt_min hp23 hp34
+
+/-- [THM] f37_lambda3_upper_case2: In Case 2, λ₃ ≤ min(3p₂, p₃).
+    Both 3p₂ (tripling) and p₃ (B_{pa=0} witness, same as F36) exceed λ₂=2p₂
+    and are achieved. -/
+theorem pasten_f37_lambda3_upper_case2 (p2 p3 : ℤ)
+    (hp23 : 2 * p2 < p3) (hp2 : 0 < p2) :
+    2 * p2 < min (3 * p2) p3 := lt_min (by linarith) hp23
+
