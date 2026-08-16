@@ -173,14 +173,20 @@ The numerical anchor (Section~6 below) suggests this may not be exact.
 ### Step 3 — Upper bound $\mathrm{nd}(a,b) \leq v_{\max} \cdot R^{1/(\omega^*-1)}$ **[PROVED]**
 
 **Proof.**  For each ordered pair of primes $(p, q)$ with $p \in P_g$ and $q \in P_{g'}$
-from two distinct groups $g \neq g'$, define $g = \gcd(v_p(g\text{-factor}),\, v_q(g'\text{-factor}))$
-and the vector $\varphi^{(p,q)}$ by
-$$
-\varphi_p = v_q(g'\text{-factor})/g, \quad \varphi_q = -v_p(g\text{-factor})/g,
-\quad \varphi_r = 0 \text{ for all } r \neq p, q.
-$$
-One verifies directly that $\varphi^{(p,q)} \in F(a,b)$ for each of the three group-pair
-types $(P_a, P_c)$, $(P_b, P_c)$, $(P_a, P_b)$, and that $W(\varphi^{(p,q)}) \neq 0$.
+from two distinct groups $g \neq g'$, let $g_0 = \gcd(v_p(g\text{-factor}),\, v_q(g'\text{-factor}))$
+and define:
+
+- **$(P_a, P_b)$ pairs** (both on the LHS of constraint C):
+  $\varphi_p = v_q(b)/g_0$, $\varphi_q = -v_p(a)/g_0$, others zero.
+  Then $v_p(a)\varphi_p + v_q(b)\varphi_q = 0$ ✓ and $W \ne 0$ ✓.
+
+- **$(P_a, P_c)$ pairs** (LHS vs RHS):
+  $\varphi_p = v_q(c)/g_0$, $\varphi_q = v_p(a)/g_0$, others zero (both positive).
+  Then $v_p(a)\varphi_p = v_q(c)\varphi_q$ ✓ and $W = -\varphi_p \ne 0$ ✓.
+
+- **$(P_b, P_c)$ pairs** (LHS vs RHS):
+  $\varphi_q = v_r(c)/g_0$, $\varphi_r = v_q(b)/g_0$, others zero (both positive).
+  Then $v_q(b)\varphi_q = v_r(c)\varphi_r$ ✓ and $W = \varphi_q \ne 0$ ✓.
 The norm is $\|\varphi^{(p,q)}\| = \max(p \cdot v_q/g,\; q \cdot v_p/g)$.
 
 Taking the minimum over all such pairs:
