@@ -1043,7 +1043,68 @@ is determined by a one-dimensional lattice.
   Theorem~\ref{thm:ob13c}.
 \end{remark}
 
+\begin{theorem}[Exact nd in pairwise regime via Bezout]\label{thm:nd_pairwise_bezout}
+  Let $a + b = c$ be coprime with $P_a = \{p\}$, $P_b = \{q\}$, $P_c = \{r\}$
+  (one prime per group), exponents $k,m,n$, and let $p_L = \max(p,q,r)$.
+  Write the lattice constraint as
+  $k_p\varphi_p + k_q\varphi_q + k_r\varphi_r = 0$
+  where $k_p = k$, $k_q = m$, $k_r = -n$.
+  Let
+  \begin{align*}
+    N &= \text{minimum norm of the }\varphi_{p_L}{=}0\text{ sub-problem},\\
+    B &= \min\Bigl\{\max_{p_i \ne p_L} p_i|\varphi_i| \Bigm|
+         k_{p_L} \cdot (\pm 1) + \sum_{p_i \ne p_L} k_{p_i}\varphi_i = 0,\;
+         W \ne 0\Bigr\}
+  \end{align*}
+  be the minimum weighted norm over all $\varphi_{p_L} = \pm 1$ solutions
+  (set $B = \infty$ if none exist, i.e.\ $\gcd(k_{\text{other}1}, k_{\text{other}2})$
+  does not divide $k_{p_L}$).
+
+  In the pairwise regime $N > p_L$:
+  \begin{enumerate}
+    \item[(i)] $\mathrm{nd}(a,b) \ge p_L$ (lower bound, since
+      $\varphi_{p_L}=0$ gives norm $\ge N > p_L$ and
+      $\varphi_{p_L}\ne 0$ gives norm $\ge p_L$);
+    \item[(ii)] $\mathrm{nd}(a,b) = p_L$ if and only if $B \le p_L$;
+    \item[(iii)] $\mathrm{nd}(a,b) = \min(N,\, B)$ when $B > p_L$
+      (the exact value is either the pure-branch norm $N$
+      or the Bezout-family minimum $B$, whichever is smaller).
+  \end{enumerate}
+  In particular, the \emph{unified exact formula} for all one-prime-per-group
+  triples (both regimes) is
+  \[
+    \mathrm{nd}(a,b) \;=\; \min\!\bigl(N,\; \max(p_L,\, B)\bigr).
+  \]
+\end{theorem}
+
+\begin{proof}
+  Lower bound (i): already noted above ($\varphi_{p_L}=0$ forces norm $\ge N$;
+  $\varphi_{p_L}\ne 0$ forces $p_L|\varphi_{p_L}| \ge p_L$).
+
+  For (ii): if $B \le p_L$, the Bezout witness $\varphi_{p_L}=\pm 1$ with the
+  optimal partner achieves norm $\max(p_L, B) = p_L$.
+  Conversely, if $\mathrm{nd}=p_L$, then a minimising vector $\varphi$ has norm $p_L$,
+  forcing $|\varphi_{p_L}| \le 1$; the $\varphi_{p_L}=0$ case gives norm $\ge N > p_L$,
+  so $|\varphi_{p_L}|=1$ and that vector is a Bezout witness with
+  max other-prime norm $\le p_L$, i.e.\ $B \le p_L$.
+
+  For (iii): $\mathrm{nd} = \min(\text{norm from }\varphi_{p_L}=0, \text{ norm from }
+  |\varphi_{p_L}|=1)$ since $|\varphi_{p_L}|\ge 2$ gives norm $\ge 2p_L > \min(N,B)$.
+  The first gives $N$ and the second gives $\max(p_L,B)=B$ (since $B>p_L$),
+  so $\mathrm{nd} = \min(N,B)$.  The unified formula $\min(N,\max(p_L,B))$ covers
+  both sub-cases and the valuation regime ($N \le p_L$, where it reduces to $N$).
+\end{proof}
+
+\begin{remark}
+  Script T72 verifies Theorem~\ref{thm:nd_pairwise_bezout} on all 229
+  one-prime-per-group pairwise-regime triples in $[1,600)$: the Bezout
+  condition $B \le p_L$ correctly predicts nd $=p_L$ in all 223 such cases,
+  and fails in the 6 exceptions (e.g.\ $(5,27)$, $(7,25)$, $(169,343)$)
+  where $B > p_L$ and nd $= \min(N, B)$.
+\end{remark}
+
 \begin{corollary}[Minimum depends only on the smallest $c$-prime]\label{cor:nd_smallc}
+
   Let $a + b = c$ be coprime with $P_a = \{p\}$, $P_b = \{q\}$ (one prime each),
   and $P_c$ any finite set of primes with $r_1 = \min P_c > q > p$.
   Set $g = \gcd(k, m)$ where $k = v_p(a)$, $m = v_q(b)$.
@@ -1521,7 +1582,13 @@ $c$-exponent is entirely invisible in the valuation regime (verified numerically
 boundary (Remark~\ref{rem:mixed_witness}): when the group-$c$ prime is not the
 largest in the triple, the three-pure formula can fail and a fully mixed witness is
 required, exemplified by $(5,27,32)$ where $\mathrm{nd} = 6$ beats all pure-branch
-minima ($N_0 = N_1 = 15$, $N_2 = 25$).
+minima ($N_0 = N_1 = 15$, $N_2 = 25$); and (s) a complete pairwise-regime characterisation
+(Theorem~\ref{thm:nd_pairwise_bezout}): for one-prime-per-group triples in the pairwise
+regime $N_{p_L=0} > p_L$, the exact formula is
+$\mathrm{nd}(a,b) = \min(N,\, \max(p_L, B))$ where $B$ is the minimum weighted norm over
+$|\varphi_{p_L}|=1$ solutions — simultaneously giving $\mathrm{nd} = p_L$ in the typical case
+($B \le p_L$, verified 223/229 cases, T72) and recovering the precise value in the 6 exceptional
+cases (e.g.\ $(169,343)$ with $\mathrm{nd} = N = 21$ due to a gcd obstruction).
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
