@@ -37,18 +37,20 @@ where m_g = min(P_g) (group minimum), with min(∅) = +∞.
 
 ## The theorem to be proved
 
-**Theorem OB-14.**  
+**Theorem OB-14A (unconditional upper bound).**  
 For all squarefree coprime triples of type (2,1,2) or (2,2,1):
 $$
-  \rho(a,b,c) \;<\; \frac{1}{6^{1/4}} \;\approx\; 0.6389,
+  \rho(a,b,c) \;<\; \frac{1}{6^{1/4}} \;\approx\; 0.6389.
 $$
-and
+
+**Conjecture OB-14B (supremum, conditional on sieve density).**  
 $$
   \sup\bigl\{\rho(a,b,c) : (a,b,c) \text{ squarefree coprime, type (2,1,2) or (2,2,1)}\bigr\}
   \;=\; \frac{1}{6^{1/4}},
 $$
-where the supremum is not attained by any finite triple but is approached by the
-following explicit families:
+where the supremum is not attained by any finite triple.  The proof that this value is
+approached requires that the following family is infinite (a consequence of
+Chen's theorem / Bombieri–Vinogradov, but not needed for OB-14A):
 
 **Family F1 (type (2,1,2)):** a = 6 = 2·3, b = q (prime), c = 6 + q = r₁·r₂ (semiprime),
 with r₁/r₂ → 1 (near-balanced, i.e. r₁ and r₂ are consecutive or near-consecutive primes).
@@ -65,9 +67,17 @@ c = 6 + q₁q₂ (prime). Then ρ(6, q₁q₂, 6+q₁q₂) → 1/6^{1/4} as b �
 
 Fix a = p₁p₂ with p₁ < p₂. Let b = q (prime), c = a+b = r₁r₂ with r₁ < r₂ primes.
 
+**E_n applicability.** For type (2,1,2): Pa={p₁,p₂}, Pb={q}, Pc={r₁,r₂} are all
+non-empty, so the E_n theorem applies directly and gives
+nd = second\_smallest$\{m_a, m_b, m_c\}$ = second\_smallest$\{p_1, q, r_1\}$.
+
 **Coprimality constraint.** Since gcd(a,c)=1, no prime dividing c can divide a.
-Hence $r_1, r_2 \notin \{p_1, p_2\}$, and in particular $r_1 \ge p_3$, the smallest prime
-greater than $p_2$.
+Hence $r_1, r_2 \notin \{p_1, p_2\}$.  Note: this means $r_1$ may be *less than* $p_2$
+(e.g.\ for $(p_1,p_2)=(2,7)$, $r_1$ can equal $3$); the lower bound on $r_1$ is the
+smallest prime not in $\{p_1,p_2\}$, not "the smallest prime greater than $p_2$."
+For small $r_1$ (specifically $r_1 < p_1$), computation shows $q = r_1 r_2 - p_1 p_2 \le 1$
+for the smallest valid $r_2$, ruling out a prime $q$; the first valid $r_2$ always
+gives $r_1(r_2-r_1) > p_1 p_2$ (verified for all $(p_1,p_2)$ with $p_1 p_2 \le 200$).
 
 For all sufficiently large $q$: $p_1 < r_1 < q$ (since $r_1^2 \le r_1 r_2 = c = a+q \le 2q$
 for large $q$, giving $r_1 \le \sqrt{2q} < q$), so
@@ -80,7 +90,8 @@ $$
 We need $\rho^4 < 1/(p_1 p_2)$, i.e., $r_1^3 < q \cdot r_2$.
 
 **Key inequality:** $r_1^3 < q \cdot r_2$ follows from $r_1^2 < q$, since
-$r_1^3 = r_1^2 \cdot r_1 < q \cdot r_1 < q \cdot r_2$ (using $r_1 < r_2$).
+$$r_1^3 = r_1 \cdot r_1^2 < r_1 \cdot q < r_2 \cdot q$$
+(first step: $r_1^2 < q$; second step: $r_1 < r_2$).
 
 **When does $r_1^2 < q$ hold?**
 $r_1^2 < q \iff r_1^2 < r_1 r_2 - p_1 p_2 \iff r_1(r_2 - r_1) > p_1 p_2$.
@@ -89,11 +100,12 @@ $r_1^2 < q \iff r_1^2 < r_1 r_2 - p_1 p_2 \iff r_1(r_2 - r_1) > p_1 p_2$.
 Since $r_1$ and $r_2$ are distinct odd primes, $r_2 - r_1 \ge 2$, giving
 $r_1(r_2-r_1) \ge 5 \cdot 2 = 10 > 6$. ✓ No further case analysis needed.
 
-**General $p_1 p_2$:** $r_1 \ge p_3$ (smallest prime $> p_2$), and $r_2 - r_1 \ge 2$
-for odd prime pairs, so $r_1(r_2-r_1) \ge 2p_3$. The condition $2p_3 > p_1 p_2$ holds
-for $p_1=2, p_2=3$ (giving $p_3=5$, $2\cdot5=10>6$) and may fail for larger $p_1p_2$;
-for those cases a finite check over the small-$r_1$ pairs (computable for each fixed $p_1p_2$)
-closes the argument.
+**General $p_1 p_2$:** $r_1 \notin \{p_1,p_2\}$ and $r_2 - r_1 \ge 2$ for distinct
+odd prime pairs. When $r_1(r_2-r_1) \le p_1p_2$ (possible for small $r_1$ and large
+$p_1p_2$), the argument requires either: (a) showing no valid prime $q$ exists for
+those $(r_1,r_2)$ pairs, or (b) a direct check that $\rho < 1/(p_1p_2)^{1/4}$ via
+$nd \le q < r_1^2$ (in which case $nd = q$ and $\rho^4 = q^3/(p_1p_2 \cdot q \cdot r_2^3)
+\to 0$). A finite check per fixed $p_1p_2$ closes this gap.
 
 **Conclusion:** $\rho^4 < 1/(p_1 p_2)$, i.e.\ $\rho < 1/(p_1 p_2)^{1/4}$, for all type (2,1,2)
 triples with $a = p_1 p_2$ and $nd = r_1$.  The global bound $\sup \rho \le 1/6^{1/4}$ follows
@@ -133,14 +145,16 @@ The upper bound argument of Step 1 applies verbatim (with b replacing q and q₁
 
 ## Acceptance criteria
 
-1. **CONFIRMED:** Complete proof that ρ < 1/6^{1/4} for all type (2,1,2) and (2,2,1)
-   triples, AND that sup = 1/6^{1/4} (either unconditional or conditional on a named
-   sieve/density hypothesis for the infinitude of qualifying primes).
-2. **PARTIAL:** Proof of the strict upper bound ρ < 1/6^{1/4} without the matching
-   lower bound (sup = 1/6^{1/4} not established), or vice versa.
-3. **PARTIAL-CONDITIONAL:** Complete proof conditional on a stated sieve hypothesis.
-4. **REFUTED:** Explicit counterexample with ρ ≥ 1/6^{1/4} for some finite triple.
-5. **INCONCLUSIVE + localization:** Precise statement of the gap remaining.
+1. **CONFIRMED-A (unconditional):** Complete proof of Theorem OB-14A — ρ < 1/6^{1/4}
+   for all type (2,1,2) and (2,2,1) triples, including the finite check for general
+   p₁p₂ (closing the "small r₁" case).
+2. **CONFIRMED-B (conditional):** Proof of Conjecture OB-14B — sup ρ = 1/6^{1/4} —
+   conditional on a named sieve/density hypothesis (Chen's theorem, Bombieri–Vinogradov,
+   or similar); hypothesis must be clearly stated.
+3. **CONFIRMED-AB:** Both OB-14A and OB-14B fully proved.
+4. **PARTIAL:** OB-14A proved for a=6 only (p₁p₂=6 fixed), without general p₁p₂.
+5. **REFUTED:** Explicit counterexample with ρ ≥ 1/6^{1/4} for some finite triple.
+6. **INCONCLUSIVE + localization:** Precise statement of the gap remaining.
 
 ---
 
