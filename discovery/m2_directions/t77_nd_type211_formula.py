@@ -6,17 +6,13 @@ Type (2,1,1): a = p^k1 * q^k2 (Pa has exactly 2 distinct primes p<q),
               c = s^n  (Pc = {s}).
 All four primes p,q,r,s distinct; gcd(a,b)=1.
 
-The formula has 10 branches:
-  1. W_ab        = max(p*k2/g, q*k1/g)  [within-group; valid iff k1/g != k2/g]
-  2. pw(k1,m,p,r)                         [phi_q=phi_s=0]
-  3. pw(k2,m,q,r)                         [phi_p=phi_s=0]
-  4. pw(k1,n,p,s)                         [phi_q=phi_r=0]
-  5. pw(k2,n,q,s)                         [phi_p=phi_r=0]
-  6. pw(m,n,r,s)                          [phi_p=phi_q=0]
-  7. N_r0        [phi_r=0; Pa x Pc interaction]
-  8. N_s0        [phi_s=0; Pa x Pb interaction]
-  9. nd3_q0      [phi_q=0; omega*=3 sub-problem (p^k1, r^m, s^n)]
- 10. nd3_p0      [phi_p=0; omega*=3 sub-problem (q^k2, r^m, s^n)]
+4-branch formula (Theorem thm:nd_type211):
+  nd(a,b) = min(N_{s=0}, N_{r=0}, nd3(p^k1,r^m,s^n), nd3(q^k2,r^m,s^n))
+
+  N_{s=0}: phi_s=0; Pa x Pb interaction (subsumes W_ab and pairwise pw(*,*,*,r/s))
+  N_{r=0}: phi_r=0; Pa x Pc interaction (subsumes pairwise pw(*,*,*,s))
+  nd3_q0:  phi_q=0; omega*=3 sub-problem (p^k1, r^m, s^n)
+  nd3_p0:  phi_p=0; omega*=3 sub-problem (q^k2, r^m, s^n)
 
 Result: formula agrees with brute-force nd on all triples in [4,LIMIT)x[1,LIMIT).
 """
@@ -129,24 +125,16 @@ def nd_omega3_min(k, m, n, p, r, s, search=14):
 
 def nd_formula_211(p, q, r, s, k1, k2, m, n):
     """
-    10-branch exact nd formula for type (2,1,1) triples.
+    4-branch exact nd formula for type (2,1,1) triples.
     Pa={p^k1,q^k2}, Pb={r^m}, Pc={s^n}, all primes distinct.
+    nd = min(N_{s=0}, N_{r=0}, nd3(p^k1,r^m,s^n), nd3(q^k2,r^m,s^n))
     """
-    g = math.gcd(k1, k2)
-    W_ab = max(p * (k2 // g), q * (k1 // g)) if (k2 // g) != (k1 // g) else float('inf')
-    branches = [
-        W_ab,                           # 1: within-group
-        pw(k1, m, p, r),                # 2: phi_q=phi_s=0
-        pw(k2, m, q, r),                # 3: phi_p=phi_s=0
-        pw(k1, n, p, s),                # 4: phi_q=phi_r=0
-        pw(k2, n, q, s),                # 5: phi_p=phi_r=0
-        pw(m, n, r, s),                 # 6: phi_p=phi_q=0
-        nr0_min(k1, k2, n, p, q, s),   # 7: phi_r=0 (Pa x Pc)
-        ns0_min(k1, k2, m, p, q, r),   # 8: phi_s=0 (Pa x Pb)
-        nd_omega3_min(k1, m, n, p, r, s),  # 9: phi_q=0
-        nd_omega3_min(k2, m, n, q, r, s),  # 10: phi_p=0
-    ]
-    return min(branches)
+    return min(
+        ns0_min(k1, k2, m, p, q, r),          # phi_s=0: Pa x Pb interaction
+        nr0_min(k1, k2, n, p, q, s),           # phi_r=0: Pa x Pc interaction
+        nd_omega3_min(k1, m, n, p, r, s),      # phi_q=0: omega*=3 sub-problem
+        nd_omega3_min(k2, m, n, q, r, s),      # phi_p=0: omega*=3 sub-problem
+    )
 
 # ---- Main verification ----
 print(f"T77: Exact nd formula for type (2,1,1) triples (LIMIT={LIMIT}, BOUND={BOUND})")
@@ -179,8 +167,7 @@ print(f"Type (2,1,1) triples found: {len(triples)}")
 print()
 
 ok = 0; fail = 0; branch_wins = defaultdict(int)
-branch_names = ['W_ab','pw(p,r)','pw(q,r)','pw(p,s)','pw(q,s)','pw(r,s)',
-                'N_r0','N_s0','nd3_q0','nd3_p0']
+branch_names = ['N_s0', 'N_r0', 'nd3_q0', 'nd3_p0']
 
 for (a, b, p, q, r, s, k1, k2, m, nv) in triples:
     nd = nd_brute(a, b)
@@ -190,12 +177,11 @@ for (a, b, p, q, r, s, k1, k2, m, nv) in triples:
     if f_nd == nd:
         ok += 1
         # Track which branches achieve minimum
-        g = math.gcd(k1, k2)
-        W_ab = max(p*(k2//g),q*(k1//g)) if (k2//g)!=(k1//g) else float('inf')
         bvals = [
-            W_ab, pw(k1,m,p,r), pw(k2,m,q,r), pw(k1,nv,p,s), pw(k2,nv,q,s), pw(m,nv,r,s),
-            nr0_min(k1,k2,nv,p,q,s), ns0_min(k1,k2,m,p,q,r),
-            nd_omega3_min(k1,m,nv,p,r,s), nd_omega3_min(k2,m,nv,q,r,s),
+            ns0_min(k1, k2, m, p, q, r),
+            nr0_min(k1, k2, nv, p, q, s),
+            nd_omega3_min(k1, m, nv, p, r, s),
+            nd_omega3_min(k2, m, nv, q, r, s),
         ]
         for i, v in enumerate(bvals):
             if v == nd: branch_wins[branch_names[i]] += 1
@@ -211,4 +197,4 @@ for nm in branch_names:
 
 if fail == 0:
     print()
-    print("PASS: nd_formula_211 is exact on all tested triples.")
+    print("PASS: 4-branch nd_formula_211 is exact on all tested triples.")
