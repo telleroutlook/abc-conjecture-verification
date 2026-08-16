@@ -1244,6 +1244,17 @@ Additional lemmas added in the E10/E11/E$_n$/F31 extension:
     if $f = 0$ on $P_b$ and $f = 0$ on $P_c$, then $\sum_{P_b} f = \sum_{P_a} f$
     (degenerate condition for all $\omega$; Lean, zero \texttt{sorry}).
     This is the first fully general-$\omega$ Lean formalization in this project.
+  \item Four OB-13B integer kernel lemmas (zero \texttt{sorry}):
+    cross-group norm bound; median$^{\omega-1} \le R$ for $\omega=3,4$;
+    within-group $W \ne 0$; all in \texttt{lean/AbcHeightKernel.lean}.
+  \item \texttt{pasten\_nd\_lb\_large\_prime\_zero}: $p_2 \le p$, $p x < p_2$
+    $\Rightarrow x = 0$; integer core of LB-1 (zero \texttt{sorry}).
+  \item \texttt{pasten\_nd\_lb\_single\_prime\_int}: $k > 0$, $kz = 0$
+    $\Rightarrow z = 0$; abstract form of Lemma~\ref{lem:single_prime}
+    (zero \texttt{sorry}).
+  \item \texttt{pasten\_nd\_lb\_omega2\_ge\_q}: $q \le q (v/g)$ for $g \mid v$;
+    integer core of $\mathrm{nd} \ge p_2$ in Theorem~\ref{thm:nd_omega2}
+    (zero \texttt{sorry}).
 \end{itemize}
 
 \section{Conclusion}
@@ -1284,7 +1295,19 @@ and for every twin-prime triple with $q \ge 5$ the full spectrum of achievable
 non-degenerate norms is exactly $\{kq:k\ge 1\} \cup \{kr:k\ge 1\}$
 (F32b, Theorem~\ref{thm:f32b}), both Lean-formalized; the Frobenius number of the
 spectrum is $q^2-2$ (Corollary~\ref{cor:f32c}); and second minimum
-$\min(r_2,q,2r_1)$ for type $(1,1,2)$ (F33, Theorem~\ref{thm:f33}), Lean-formalized.
+$\min(r_2,q,2r_1)$ for type $(1,1,2)$ (F33, Theorem~\ref{thm:f33}), Lean-formalized;
+and (k) the non-squarefree upper bound (OB-13B, Theorem~\ref{thm:ob13b}):
+$\mathrm{nd}(a,b) \le v_{\max} \cdot R^{1/(\omega^*-1)}$ for all coprime triples,
+proved via the cross-group vector construction, with a tighter median form
+(Corollary~\ref{cor:ob13b-sharp}), and the within-group construction showing that the
+squarefree E$_n$ lower bound fails for non-squarefree triples
+(counterexample $(72,11,83)$); (l) the universal lower bound (Theorem~\ref{thm:nd_lb}):
+$\mathrm{nd}(a,b) \ge p_2$ (second-smallest prime in $\mathrm{rad}(abc)$) for all coprime
+triples, squarefree or not, proved by a single-prime-constraint argument
+(Lemma~\ref{lem:single_prime}), tight at $(1,2,3)$; and (m) the exact formula for
+$\omega^*=2$ triples (Theorem~\ref{thm:nd_omega2}):
+$\mathrm{nd}(a,b) = \max(p\cdot w/g,\; q\cdot v/g)$ where $g = \gcd(v,w)$,
+verified on all seven $\omega^*=2$ examples up to $c \le 1000$, Lean-formalized.
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
