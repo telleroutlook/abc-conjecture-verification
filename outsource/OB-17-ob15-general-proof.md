@@ -132,10 +132,27 @@ Therefore: nd ≤ ‖φ‖ ≤ π₂·v_max ≤ v_max·R^{1/(ω*-1)}. QED Theore
 0 violations of nd_ub ≤ v_max·R^{1/(ω*-1)} using the best 3-pairing construction.
 
 **Remaining open sub-case (a=1).** For triples with a=1 (Pa=∅): the zero-out construction
-is unavailable. These use within-group on Pb (cases (1,48,49), (1,8191²-1,8191²), etc.),
-which requires unequal valuations in Pb. All known R<c triples with a=1 have unequal-val
-Pb (verified c≤5000). The equal-val-Pb, a=1 case is the remaining open Gap 2 sub-case
-(OB-16). Computationally: no R<c triple with a=1 and equal-val Pb found (c≤5000).
+is unavailable. These use within-group on Pb, which requires unequal valuations in Pb.
+All known R<c triples with a=1 have unequal-val Pb (verified c≤5000).
+
+For the equal-val-Pb sub-case (b=M^v, M squarefree ≥6, all Pb primes have valuation v):
+
+*v=1 (proved vacuous).* b=M (squarefree), c=1+M. R=M·rad(1+M)≥2M (since rad(1+M)≥2).
+But 2M≥1+M=c for M≥1. So R≥c. Not R<c. QED. ✓
+
+*v=2 (computationally vacuous; partial proof).* b=M², c=1+M². All prime factors of
+1+M² are coprime to M. Squared prime factors: if q²|1+M² then q≤sqrt(1+M²)<M+1, so q≤M.
+Since M is composite (≥2 prime factors), q≠M, so q≤M-1<M. Hence the dominant
+contribution to (1+M²)/rad(1+M²) from squared primes is <M. Squarefree 1+M² gives
+(1+M²)/rad=1<M trivially. Higher powers (q^e|1+M², e≥3) with contribution q^{e-1}≥M:
+requires q≥M^{1/(e-1)} and q^e≤M²+1, so q^e≥M^{e/(e-1)} and q^e≤M²+1.
+For e=3: q≥M^{1/2} and q^3≤M²+1; q≤(M²+1)^{1/3}<M^{2/3}+ε. So M^{1/2}≤q<M^{2/3}:
+requires M^{3/2}≤q^3≤M²+1, consistent, but no such M found (c≤5000, 0 violations). ✓
+
+*v≥3 (computationally vacuous; no elementary proof found).* Computational search: 0 R<c
+triples with a=1 and equal-val Pb for c≤5000. The Zsygmondy primitive prime divisor of
+M^v+1 (q≡1 mod 2v, q≥2v+1) contributes to rad, but bounding rad(1+M^v)≥M^{v-1}+1
+in general requires Diophantine methods beyond Zsygmondy. Left open.
 
 For ω*=4, the dominant case is: some group G (typically Pb) contains two primes p<q with
 v_p(g)≠v_q(g). By F2, nd ≤ v_max·q. So OB-17 reduces to:
@@ -212,9 +229,11 @@ zeroing one group and using the ω*=k result on the remainder.
 
 1. **CONFIRMED-4 (partially achieved, 2026-08-16):** Theorem D proves OB-17 for all
    ω*=4 R<c triples with a>1 (covers 115/118 of the verified triples; the 3 with a=1
-   use within-group). The equal-val-Pb a=1 sub-case remains open (0 such triples found).
+   use within-group). The equal-val-Pb a=1 sub-case: v=1 proved vacuous; v≥2
+   computationally vacuous (0 such triples found, c≤5000).
 2. **CONFIRMED-GENERAL (partially achieved, 2026-08-16):** Theorem D proves OB-17 for
-   all R<c triples with a>1 and all ω*≥3. The a=1 case needs a separate argument.
+   all R<c triples with a>1 and all ω*≥3. The a=1 equal-val-Pb v≥2 case needs a proof
+   that no such R<c triple exists.
 3. **CONDITIONAL-4:** Proof of KEY-4 assuming a named auxiliary hypothesis (prime gap,
    Bertrand-type, or congruence condition).
 4. **PARTIAL:** Proof for all ω*=4 triples with p₁p₂≥10 (covers all but p₁=2,p₂=3).
