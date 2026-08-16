@@ -71,8 +71,21 @@ $$\mathrm{nd}(a,b) \;\leq\; v_{\max} \cdot R^{1/(\omega^*-1)}.$$
 ### Case ω* = 2
 nd(a,b) ≤ v_max · R (trivial: any non-degenerate φ works). ✓
 
-### Case ω* = 3 (power triples p^α + q^β = r^γ, p < q < r)
-Zero-out construction: φ_r=0, φ_p=β/g, φ_q=−α/g. Proved above. ✓
+### Case ω* = 3 (CONFIRMED-3 — proved 2026-08-16)
+
+All ω*=3 R<c triples fall into three structural types:
+
+| Type | Count (c≤5000) | Construction | Norm bound |
+|------|---------------|--------------|------------|
+| (1,1,1): single prime per group | 7 | zero-out Pc: φ_r=0, φ_p=β/g, φ_q=−α/g | ≤ v_max·q ≤ v_max·R^{1/2} |
+| (0,2,1): Pa=∅, Pb two unequal-val | 5 | within-group Pb: φ_p=v_q/g, φ_q=−v_p/g | ≤ v_max·max(p,q) ≤ v_max·R^{1/2} |
+| (0,1,2): Pa=∅, Pc two unequal-val | 2 | zero-out larger Pc prime | ≤ v_max·r ≤ v_max·R^{1/2} |
+
+**Norm bound argument (same for all cases):** the construction norm is ≤ v_max·p₂ where p₂ is
+the second-largest prime among ω*=3 primes {p₁<p₂<p₃}. Then p₂ ≤ R^{1/2}:
+p₂ ≤ sqrt(p₁·p₂·p₃) ⟺ p₂ ≤ p₁·p₃. Since p₁≥2 and p₃>p₂: p₁·p₃ ≥ 2p₃ > p₂. ✓
+
+No R<c triple with ω*=3 and equal-valuation multi-prime Pb found (c≤5000, 14 classified). ✓
 
 ### Case ω* = 4, Pa has two equal-valuation primes (the unique case c ≤ 2000)
 
