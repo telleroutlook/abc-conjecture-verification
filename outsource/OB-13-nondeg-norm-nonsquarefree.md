@@ -323,3 +323,23 @@ This is a structural lattice-geometry result; it does **not** by itself imply ab
 A lower bound on $\mathrm{nd}(a,b)$ would be far harder and is **not** requested here.
 The problem is bounded in scope and should be resolvable without deep analytic number
 theory.
+
+**Within-group construction and the failure of the squarefree lower bound.**
+When a group $P_g$ contains two primes $p, q$ with *distinct* valuations $v_p \neq v_q$,
+the within-group vector $\varphi_p = v_q/g_0$, $\varphi_q = -v_p/g_0$
+(all other coordinates zero, $g_0 = \gcd(v_p, v_q)$) satisfies constraint (C)
+and has $W = \pm(v_q - v_p)/g_0 \neq 0$.
+
+**Consequence:** for non-squarefree triples, $\mathrm{nd}(a,b)$ can be *strictly below*
+the squarefree E$_n$ formula value $\mathrm{med}(m_a, m_b, m_c)$.
+
+**Counterexample to the squarefree lower bound:** $(a,b,c) = (72, 11, 83)$.
+- $a = 2^3 \cdot 3^2$, $P_a = \{2,3\}$, $v_2(a)=3$, $v_3(a)=2$.
+- $P_b = \{11\}$, $P_c = \{83\}$; $\mathrm{med}(m_a, m_b, m_c) = \mathrm{med}(2, 11, 83) = 11$.
+- Within-group vector: $\varphi_2 = 2$, $\varphi_3 = -3$, $\varphi_{11} = \varphi_{83} = 0$.
+  - Constraint: $3 \cdot 2 + 2 \cdot (-3) = 0$ ✓.
+  - $W = 0 - 2 - (-3) = 1 \neq 0$ ✓.
+  - Norm $= \max(2 \cdot 2,\, 3 \cdot 3) = 9$.
+- Therefore $\mathrm{nd}(72, 11) \leq 9 < 11 = \mathrm{med}(m_a, m_b, m_c)$.
+- The lower bound $\mathrm{nd} \geq \mathrm{med}$ valid for squarefree triples fails here.
+  (The trivial lower bound $\mathrm{nd} \geq$ second-smallest prime in $P = 3$ still holds.)

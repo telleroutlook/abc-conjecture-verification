@@ -734,6 +734,20 @@ closed form for arbitrary valuation profiles remains open (OB-13C).
 OB-13B holds for all 24 high-quality triples with quality $> 1.15$ and $c \le 5000$,
 with $\mathrm{nd}/(v_{\max} R^{1/(\omega^*-1)}) \le 0.50$ in all cases.
 The tightest example is $(1,8,9)$: $\mathrm{nd}=9$, $v_{\max}=3$, $R=6$, ratio $= 0.50$.
+(iv) \emph{Within-group construction.}
+When a group $P_g$ contains two primes $p, q$ with \emph{distinct} $p$-adic valuations
+$v_p \ne v_q$ of the $g$-factor, a within-group vector $\varphi_p = v_q/g_0$,
+$\varphi_q = -v_p/g_0$ (all other coordinates zero, $g_0 = \gcd(v_p, v_q)$) satisfies
+the constraint~(C) (both sides of (C) vanish for this vector) and has
+$W(\varphi) = \pm(v_q - v_p)/g_0 \ne 0$.
+This construction can give $\mathrm{nd}(a,b) < \mathrm{med}(m_a,m_b,m_c)$,
+i.e.\ below the squarefree E$_n$ formula.
+Example: $(a,b,c) = (72, 11, 83)$ with $a = 2^3 \cdot 3^2$, $P_a = \{2,3\}$,
+$P_b = \{11\}$, $P_c = \{83\}$. The within-group vector $\varphi_2 = 2$, $\varphi_3 = -3$
+satisfies $3 \cdot 2 + 2\cdot(-3) = 0$ and $W = 1 \ne 0$, giving
+$\mathrm{nd}(72,11) \le 9 < 11 = \mathrm{med}(m_a,m_b,m_c)$.
+Thus the squarefree E$_n$ lower bound $\mathrm{nd} \ge \mathrm{med}$ does \emph{not} extend
+to non-squarefree triples when groups have $\ge 2$ primes with distinct valuations.
 
 \begin{corollary}[OB-13B sharp]\label{cor:ob13b-sharp}
 Under the same hypotheses,
