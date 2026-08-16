@@ -1916,13 +1916,14 @@ We record this as a standalone theorem.
     \item For \emph{non-squarefree} $\omega^* = 4$: $\mathrm{nd}(a,b) = \min_{p} B_p$
       (proved from Theorems~\ref{thm:nd_type211}, \ref{thm:nd_type121},
       \ref{thm:nd_omega4_two_c}).
-    \item For \emph{non-squarefree} $\omega^* \in \{5, 6\}$:
-      $\mathrm{nd}(a,b) = \min_{p} B_p$
-      (empirically verified: $\omega^*=5$ both partition types $(2,2,1)$ and
-      $(3,1,1)$, $2446$ non-squarefree triples $a,b\le 150$,
-      brute-force bound $\|\varphi\|_\infty\le 3$, $0$ violations, T86;
-      $\omega^*=6$ all three unordered partition classes $\{4,1,1\}$,
-      $\{3,2,1\}$, $\{2,2,2\}$, $3193$ triples, $0$ violations, T85).
+    \item For \emph{non-squarefree} $\omega^* = 5$:
+      $\mathrm{nd}(a,b) = \min_{p} B_p$.
+      Of the $2446$ non-squarefree triples $a,b\le 150$:
+      $2019$ (82.5\%) are proved analytically via a squarefree cross-group
+      pair in $\{p_1,\ldots,p_4\}$; the remaining $427$ (17.5\%) are verified
+      computationally with $B_{p_5}\le p_5$ (T86bis, BB\,=\,8; $0$ violations,
+      $0$ skips).  For \emph{non-squarefree} $\omega^*=6$: verified on all
+      $3193$ triples ($0$ violations, T85).
     \item For \emph{non-squarefree} $\omega^* = 3$: the identity \emph{fails}.
       The triple $(5,27,32)$ has $\mathrm{nd}=6$ (achieved by $\varphi=(-1,2,1)$,
       all coordinates non-zero), while $\min_p B_p = 15$.
@@ -1939,12 +1940,28 @@ We record this as a standalone theorem.
   $\varphi_p=0$).  Types $(1,2,1)$ and $(1,1,2)$ follow analogously
   from Theorems~\ref{thm:nd_type121} and~\ref{thm:nd_omega4_two_c}.
 
-  \textit{Part (iii).}  Brute-force enumeration over $\|\varphi\|_\infty \le 3$
-  (T86, $\omega^*=5$; T85, $\omega^*=6$)
-  confirms $\min_p B_p = \mathrm{nd}(a,b)$ on all sampled triples; no all-nonzero
-  minimizer beats the zero-coordinate minimum.
+  \textit{Part (iii).}  Label the primes $p_1<\cdots<p_5$.
+  \emph{$p_5$-forcing:} any all-nonzero $\varphi\in F(a,b)$ with $W(\varphi)\ne 0$
+  satisfies $p_5|\varphi_{p_5}|\le\|\varphi\|$; if $\|\varphi\|<B_{p_5}$ then
+  $p_5|\varphi_{p_5}|<p_5$, forcing $\varphi_{p_5}=0$ — contradiction.
+  Hence nd$(a,b)\ge B_{p_5}$, and equality nd$(a,b)=\min_p B_p$ holds as soon as
+  $B_{p_5}\le p_5$ (since any all-nonzero candidate then has norm $\ge p_5>B_{p_5}$).
 
-  \textit{Part (iii).}  For $(a,b,c)=(5,27,32)$: $P_a=\{5\}$, $P_b=\{3\}$,
+  \textit{Sub-case B1} (2019 triples, 82.5\%): there exist $p_i,p_j\in\{p_1,\ldots,p_4\}$
+  with $v_{p_i}(abc)=v_{p_j}(abc)=1$ lying in \emph{different} groups.  The cross-group
+  Bézout vector ($\varphi_{p_i}$ and $\varphi_{p_j}$ the unique non-zero coordinates,
+  determined by the constraint, all others~$0$) has $\varphi_{p_5}=0$, $W\ne 0$, and
+  norm $\max(p_i,p_j)\le p_4<p_5$.  Hence $B_{p_5}\le p_4<p_5$.
+
+  \textit{Sub-case B2} (427 triples, 17.5\%): no squarefree cross-group pair exists in
+  $\{p_1,\ldots,p_4\}$.  Brute-force search over $\|\varphi\|_\infty\le 8$ on the
+  four-prime sub-lattice verifies $B_{p_5}\le p_5$ for all $427$ such triples
+  (T86bis; $0$ violations, $0$ skips; worst margin $B_{p_5}/p_5\le 0.77$).
+
+  For $\omega^*=6$: brute-force enumeration (T85, $\|\varphi\|_\infty\le 3$)
+  confirms $\min_p B_p=\mathrm{nd}(a,b)$ on all $3193$ triples.
+
+  \textit{Part (iv).}  For $(a,b,c)=(5,27,32)$: $P_a=\{5\}$, $P_b=\{3\}$,
   $P_c=\{2\}$, exponents $1,3,5$.  The vector $\varphi=(-1,2,1)$ satisfies
   the lattice constraint ($1\cdot(-1)+3\cdot2=5\cdot1$), $W=2-(-1)=3\ne 0$,
   and $\|\varphi\|=\max(5,6,2)=6$.  The three zero-coordinate branches give
