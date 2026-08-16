@@ -1103,6 +1103,39 @@ is determined by a one-dimensional lattice.
   where $B > p_L$ and nd $= \min(N, B)$.
 \end{remark}
 
+\begin{remark}[T73: high-quality triples]\label{rem:t73_highqual}
+  Script T73 scans one-prime-per-group triples $p_a^k + p_b^m \le 5\times 10^5$
+  for quality $>1$ and finds exactly 10, listed by decreasing quality:
+  \begin{center}
+  {\small
+  \begin{tabular}{lccccl}
+  \hline
+  Triple & quality & nd & $p_L$ & nd\,vs\,$p_L$ & branch \\
+  \hline
+  $(3,125)$   & 1.427 & 9   & 5   & $>$ & pairwise, $B=N_0=9$ \\
+  $(7,32761)$ & 1.327 & 105 & 181 & $<$ & val($\varphi_{p_L}=0$), $N_2=105$ \\
+  $(13,243)$  & 1.273 & 13  & 13  & $=$ & pairwise, $B=9\le 13$ \\
+  $(169,343)$ & 1.199 & 21  & 13  & $>$ & pairwise, $B=\infty$, $N=21$ \\
+  $(32,49)$   & 1.176 & 7   & 7   & $=$ & pairwise, $B=6\le 7$ \\
+  $(751,130321)$ & 1.149 & 323 & 751 & $<$ & val($\varphi_{p_L}=0$), $N_1=323$ \\
+  $(139,2048)$ & 1.143 & 33 & 139 & $<$ & val($\varphi_{p_L}=0$), $N_1=33$ \\
+  $(128,4913)$ & 1.095 & 71  & 71  & $=$ & pairwise, $B=71=p_L$ \\
+  $(4,121)$   & 1.027 & 10  & 11  & $<$ & val($\varphi_{p_L}=0$), $N_2=10$ \\
+  $(5,27)$    & 1.019 & 6   & 5   & $>$ & pairwise, $B=6>p_L$ \\
+  \hline
+  \end{tabular}
+  }
+  \end{center}
+  All 10 are correctly classified by Theorem~\ref{thm:nd_pairwise_bezout} and
+  Corollary~\ref{cor:nd_kmn_val}.
+  Four triples satisfy nd $< p_L$: the winning branch is the
+  \emph{val($\varphi_{p_L}=0$)} case, which zeroes the \emph{largest}
+  prime-group coordinate (rather than the $c$-group as in the standard
+  valuation-regime).
+  Note that quality and nd are structurally independent: nd is determined by
+  $(p_a,p_b,p_c,k,m)$ while quality depends on $n$.
+\end{remark}
+
 \begin{corollary}[Minimum depends only on the smallest $c$-prime]\label{cor:nd_smallc}
 
   Let $a + b = c$ be coprime with $P_a = \{p\}$, $P_b = \{q\}$ (one prime each),
@@ -1597,7 +1630,13 @@ regime $N_{p_L=0} > p_L$, the exact formula is
 $\mathrm{nd}(a,b) = \min(N,\, \max(p_L, B))$ where $B$ is the minimum weighted norm over
 $|\varphi_{p_L}|=1$ solutions — simultaneously giving $\mathrm{nd} = p_L$ in the typical case
 ($B \le p_L$, verified 223/229 cases, T72) and recovering the precise value in the 6 exceptional
-cases (e.g.\ $(169,343)$ with $\mathrm{nd} = N = 21$ due to a gcd obstruction).
+cases (e.g.\ $(169,343)$ with $\mathrm{nd} = N = 21$ due to a gcd obstruction);
+and (t) a systematic scan (Remark~\ref{rem:t73_highqual}, T73) of all quality-$>1$
+one-prime-per-group triples with $a+b \le 5\times 10^5$, yielding exactly 10 such
+triples — all correctly classified by the exact formula, with four exhibiting
+nd $< p_L$ via the val($\varphi_{p_L}=0$) regime, and confirming that nd and
+quality are structurally independent (nd depends on $(p_a,p_b,p_c,k,m)$ while
+quality depends on $n$).
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
