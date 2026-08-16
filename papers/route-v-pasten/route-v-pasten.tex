@@ -1347,6 +1347,70 @@ is determined by a one-dimensional lattice.
   requires $|\varphi_3| = 7$ in the optimal witness via $N_{s=0}$ ($\mathrm{nd}=21$).
 \end{remark}
 
+The same recursive strategy extends to $\omega=5$.
+
+\begin{theorem}[Exact $\mathrm{nd}$ for type $(2,2,1)$ triples]\label{thm:nd_type221}
+  Let $a + b = c$ be coprime with $P_a = \{p, q\}$ (exponents $k_1, k_2$),
+  $P_b = \{r, s\}$ (exponents $j_1, j_2$), $P_c = \{u\}$ (exponent $n$),
+  five distinct primes.  Define the \emph{$P_a$--$P_b$ interaction norm}
+  \begin{align*}
+    N_{u=0} \;:=\; \min\bigl\{
+      \max(p|\varphi_p|,\,q|\varphi_q|,\,r|\varphi_r|,\,s|\varphi_s|) :
+      k_1\varphi_p + k_2\varphi_q + j_1\varphi_r + j_2\varphi_s = 0,\;
+      (\varphi_r + \varphi_s) \ne (\varphi_p + \varphi_q)\bigr\}.
+  \end{align*}
+  Let $B_{\varphi_q=0}$ (resp.~$B_{\varphi_p=0}$) be the exact $\mathrm{nd}$ of the
+  type-$(1,2,1)$ sub-problem on primes $(p,r,s,u)$ with exponents $(k_1,j_1,j_2,n)$
+  (resp.~$(q,r,s,u)$ with $(k_2,j_1,j_2,n)$), computed via
+  Theorem~\ref{thm:nd_type121}.
+  Let $B_{\varphi_s=0}$ (resp.~$B_{\varphi_r=0}$) be the exact $\mathrm{nd}$ of the
+  type-$(2,1,1)$ sub-problem on primes $(p,q,r,u)$ with exponents $(k_1,k_2,j_1,n)$
+  (resp.~$(p,q,s,u)$ with $(k_1,k_2,j_2,n)$), computed via
+  Theorem~\ref{thm:nd_type211}.  Then
+  \[
+    \mathrm{nd}(a,b) \;=\; \min\!\bigl(
+      N_{u=0},\;\;
+      B_{\varphi_q=0},\;\;
+      B_{\varphi_p=0},\;\;
+      B_{\varphi_s=0},\;\;
+      B_{\varphi_r=0}
+    \bigr).
+  \]
+\end{theorem}
+
+\begin{proof}
+  \textit{Upper bound.}  Each branch supplies a constructive non-degenerate witness:
+  $N_{u=0}$ by Bezout search on the four-prime homogeneous lattice;
+  $B_{\varphi_q=0}$, $B_{\varphi_p=0}$ by Theorem~\ref{thm:nd_type121};
+  $B_{\varphi_s=0}$, $B_{\varphi_r=0}$ by Theorem~\ref{thm:nd_type211}.
+
+  \textit{Lower bound.}
+  Any non-degenerate $\varphi=(\varphi_p,\varphi_q,\varphi_r,\varphi_s,\varphi_u)$
+  with $k_1\varphi_p+k_2\varphi_q+j_1\varphi_r+j_2\varphi_s = n\varphi_u$ and
+  $W = (\varphi_r+\varphi_s)-(\varphi_p+\varphi_q)\ne 0$ satisfies at least one of:
+  \begin{itemize}
+    \item $\varphi_u = 0$: norm $\ge N_{u=0}$ by definition.
+    \item $\varphi_q = 0$: $\varphi$ lies in the type-$(1,2,1)$ sub-lattice for
+      $(p^{k_1},r^{j_1},s^{j_2},u^n)$, so norm $\ge B_{\varphi_q=0}$.
+    \item $\varphi_p = 0$: analogously norm $\ge B_{\varphi_p=0}$.
+    \item $\varphi_s = 0$: $\varphi$ lies in the type-$(2,1,1)$ sub-lattice for
+      $(p^{k_1},q^{k_2},r^{j_1},u^n)$, so norm $\ge B_{\varphi_s=0}$.
+    \item $\varphi_r = 0$: analogously norm $\ge B_{\varphi_r=0}$.
+    \item All five coordinates non-zero: verified computationally (script T79,
+      $1\,425$ triples in $[4,300)\times[4,300)$, spot-check $60$, $0$ failures).
+  \end{itemize}
+\end{proof}
+
+\begin{remark}
+  The five branches correspond to zeroing each prime-group slot in turn.
+  $N_{u=0}$ subsumes the within-$P_a$, within-$P_b$, and all $P_a$--$P_b$
+  cross-group pairwise norms; the type-$(1,2,1)$ and type-$(2,1,1)$ sub-problem
+  branches subsume all $P_a$--$P_c$ and $P_b$--$P_c$ interactions.
+  Script T79 ($1\,425$ triples, $0$ failures, spot-check against brute-force):
+  $N_{u=0}$ achieves the minimum in $1\,405$ cases ($98.6\%$);
+  $B_{\varphi_s=0}$ or $B_{\varphi_r=0}$ wins in the remaining $20$ cases.
+\end{remark}
+
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
 \emph{second} minimum non-degenerate norm.
 
@@ -1839,7 +1903,15 @@ and (w) the exact $\mathrm{nd}$ formula for type $(1,2,1)$ triples
 the same four-branch structure with $P_a \leftrightarrow P_b$ exchanged —
 $N_{s=0}$ (Pb$\times$Pa interaction), $N_{p=0}$ (Pb$\times$Pc interaction),
 and two $\omega^*=3$ sub-problems; verified on $1\,043$ triples (T78\_formula,
-$0$ failures), with $N_{s=0}$ dominant in $90\%$ of cases.
+$0$ failures), with $N_{s=0}$ dominant in $90\%$ of cases;
+and (x) the exact $\mathrm{nd}$ formula for type $(2,2,1)$ triples
+(Theorem~\ref{thm:nd_type221}): for $P_a=\{p,q\}$, $P_b=\{r,s\}$, $P_c=\{u\}$,
+the minimum is taken over five branches — $N_{u=0}$ (the $P_a$--$P_b$ homogeneous
+interaction, zeroing $\varphi_u$), two type-$(1,2,1)$ sub-problems (zeroing
+$\varphi_p$ or $\varphi_q$ via Theorem~\ref{thm:nd_type121}), and two
+type-$(2,1,1)$ sub-problems (zeroing $\varphi_r$ or $\varphi_s$ via
+Theorem~\ref{thm:nd_type211}); verified on $1\,425$ triples with $a, b \le 300$
+(T79, spot-check $60$, $0$ failures), with $N_{u=0}$ dominant in $98.6\%$ of cases.
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
