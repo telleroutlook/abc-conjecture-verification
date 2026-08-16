@@ -452,9 +452,10 @@ the sum $\operatorname{quality} + \rho^{\omega-1}$ is provably bounded away from
 \begin{remark}[Unbounded types]
   The bound fails for unbounded-$\rho$ types (e.g.\ type $(2,1,1)$: $\rho^3 \approx q/6
   \to \infty$).  For bounded types the gap to $1$ is large away from type $(1,1,1)$:
-  $\omega=4$ bounded types maximum $\approx 0.523$;
-  $\omega=5$ bounded types $\approx 0.569$;
-  $\omega=6$ bounded types $\approx 0.889$ (all verified numerically, T51).
+  $\omega=4$ bounded types $\max(q+\rho^{\omega-1}) \approx 0.523$;
+  $\omega=5$ bounded types $\max(q+\rho^{\omega-1}) \approx 0.569$ (verified numerically, T51).
+  All $\omega \ge 6$ types are unbounded ($\rho^{\omega-1} \to \infty$); the bound
+  $q + \rho^{\omega-1} \le 1$ fails for all $\omega \ge 6$ types.
 \end{remark}
 
 \subsection{Non-degeneracy: complete classification for $\omega \le 5$}
@@ -699,10 +700,14 @@ non-squarefree triples with a $v_{\max}$ factor, where
 $v_{\max} = \max_{p \in P} v_p(abc)$.
 
 \begin{theorem}[OB-13B: non-squarefree E$_n$ upper bound]\label{thm:ob13b}
-For every coprime triple $a + b = c$ (not necessarily squarefree),
+For every coprime triple $a + b = c$ (not necessarily squarefree) with $c \le 10^{12}$,
 \[
   \mathrm{nd}(a,b) \;\le\; v_{\max} \cdot R^{1/(\omega^*-1)}.
 \]
+For $c > 10^{12}$ the bound also holds in all cases except possibly $a = 1$,
+$b = M^v$ with $M \in \{6, 10\}$, $v$ even, $v \not\equiv 6 \pmod{12}$, or $M \ge 14$
+and $\pi_1, \pi_2 \in P_b$; for those sub-cases the proof is conditional on
+non-existence of $R < c$ triples \textup{(see proof below)}.
 \end{theorem}
 
 \begin{proof}
@@ -770,7 +775,12 @@ grows as $\times(q/13)\ge\times(97/13)>1$ per additional prime. $\checkmark$
 
 For all other even-$v$ sub-cases ($M=6$, $v$ even, $v\not\equiv 6\pmod{12}$; $M=10$,
 $v$ even; $M\ge14$): exhaustive search (\texttt{t96}) over $c\le10^{12}$ finds no $R<c$
-triple with $\pi_1,\pi_2\in P_b$ and $|P_c|\ge2$; these sub-cases contribute no examples.
+triple with $\pi_1,\pi_2\in P_b$ and $|P_c|\ge2$.
+(A complete unconditional proof of non-existence in these sub-cases — showing that
+$1+M^v$ is squarefree enough to force $R\ge c$ — requires a Wieferich-type
+prime-power analysis and is an open auxiliary obligation.
+The theorem therefore holds unconditionally for $c\le10^{12}$ in these sub-cases
+and is conditional on non-existence of such triples for larger $c$.)
 
 Verification summary: the complete list of $R<c$ edge-case triples with $\pi_1,\pi_2\in P_b$
 and $c\le 10^{12}$ is $(1,6^7,279937)$ ($\pi_3=7$, proved above) and
@@ -955,21 +965,22 @@ is determined by a one-dimensional lattice.
   gives $v = w = g = 1$.
 \end{proof}
 
-\begin{corollary}[Simplified $\omega^*=2$ formula]\label{cor:nd_omega2_simp}
+\begin{corollary}[Explicit $\omega^*=2$ formula]\label{cor:nd_omega2_simp}
   Under the hypotheses of Theorem~\ref{thm:nd_omega2}, with $v = v_{p_1}$ and $w = v_{p_2}$:
   \[
-    \mathrm{nd}(a,b) \;=\; \frac{p_2 \cdot \max(v_{p_1},\, v_{p_2})}{\gcd(v_{p_1},\, v_{p_2})}.
+    \mathrm{nd}(a,b) \;=\; \frac{\max(p_1\cdot v_{p_2},\; p_2\cdot v_{p_1})}{\gcd(v_{p_1},\, v_{p_2})}.
   \]
   In particular, $p_2 \le \mathrm{nd}(a,b) \le p_2 \cdot v_{\max}$ with $v_{\max} = \max(v_{p_1}, v_{p_2})$.
 \end{corollary}
 
 \begin{proof}
-  Since $p_1 < p_2$ and $\gcd(v_{p_1}, v_{p_2}) \mid v_{p_i}$, we have
-  $p_1 \cdot \max(v,w)/g \le p_2 \cdot \max(v,w)/g$, so the maximum in
-  Theorem~\ref{thm:nd_omega2} equals $p_2 \cdot \max(v,w)/g$:
-  for $\max(v,w) = w$, the bound $p_1 \le p_2$ gives $p_1 w/g \le p_2 w/g$;
-  for $\max(v,w) = v$, we have $p_1 w \le p_1 v \le p_2 v$ (as $w \le v$ and $p_1 \le p_2$).
-  The inequality $\mathrm{nd} \le p_2 v_{\max}$ follows since $g \ge 1$.
+  Substituting $p = p_1$, $q = p_2$, $v = v_{p_1}$, $w = v_{p_2}$, $g = \gcd(v_{p_1},v_{p_2})$
+  in Theorem~\ref{thm:nd_omega2} gives $\mathrm{nd}(a,b) = \max(p_1 w, p_2 v)/g
+  = \max(p_1 v_{p_2}, p_2 v_{p_1})/\gcd(v_{p_1},v_{p_2})$ directly.
+  The lower bound $\mathrm{nd} \ge p_2$ follows from $p_2 v/g \ge p_2 \ge p_2$ (as $v \ge g$).
+  The upper bound $\mathrm{nd} \le p_2 v_{\max}$ follows from
+  $\max(p_1 w, p_2 v)/g \le \max(p_2 w, p_2 v)/g = p_2 \cdot \max(v,w)/g \le p_2 v_{\max}$
+  (since $p_1 \le p_2$ and $g \ge 1$).
 \end{proof}
 
 \begin{corollary}[Complete norm spectrum for $\omega^*=2$]\label{cor:nd_omega2_spectrum}
