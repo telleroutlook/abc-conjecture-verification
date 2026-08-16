@@ -1677,8 +1677,9 @@ We record this as a standalone theorem.
       \ref{thm:nd_omega4_two_c}).
     \item For $\omega^* \in \{5, 6\}$: $\mathrm{nd}(a,b) = \min_{p} B_p$
       (empirically verified: $\omega^*=5$ on all partition types with $a,b\le 300$,
-      $300$ triples each; $\omega^*=6$ on $200$ triples with $a,b\le 120$;
-      $0$ violations in all cases).
+      $300$ triples each; $\omega^*=6$ on all three unordered partition classes
+      $\{4,1,1\}$, $\{3,2,1\}$, $\{2,2,2\}$, covering $3193$ triples with
+      $a,b\le 200$, $0$ violations, script T85).
     \item For $\omega^* = 3$: the identity \emph{fails}.  The triple
       $(5,27,32)$ has $\mathrm{nd}=6$ (achieved by $\varphi=(-1,2,1)$,
       all coordinates non-zero), while $\min_p B_p = 15$.
@@ -1741,8 +1742,10 @@ a complete recursive algorithm for $\mathrm{nd}(a,b)$.
       Theorems~\ref{thm:nd_type211}, \ref{thm:nd_type121},
       \ref{thm:nd_omega4_two_c}).
     \item For $\omega^*\in\{5,6\}$: $\mathrm{nd}(a,b) = \min_p B_p$ (empirically
-      verified; $\omega^*=5$ all partition types, $a,b\le 300$; $\omega^*=6$
-      type $(1,1,4)$, $143$ triples, spot-check $40$, $0$ failures, script T83).
+      verified; $\omega^*=5$ all six partition types, $a,b\le 300$;
+      $\omega^*=6$ all three unordered partition classes $\{4,1,1\}$,
+      $\{3,2,1\}$, $\{2,2,2\}$, covering $3193$ triples with $a,b\le 200$,
+      $0$ failures, scripts T83--T85).
   \end{enumerate}
 \end{theorem}
 
@@ -2295,15 +2298,17 @@ and (ad) the \emph{zero-coordinate minimizer property}
 non-degenerate norm is always achieved by a vector with at least one
 prime coordinate equal to zero, so $\mathrm{nd}(a,b) = \min_p B_p$
 (minimum over all zero-$\varphi_p$ sub-lattices); proved for $\omega^*=4$
-and verified on $300$+ triples each for $\omega^*=5,6$ (0 violations).
+and verified across all partition classes for $\omega^*=5,6$: $3193$
+triples at $\omega^*=6$ covering all three unordered partition classes
+$\{4,1,1\}$, $\{3,2,1\}$, $\{2,2,2\}$, $0$ violations (T85).
 This fails for $\omega^*=3$: the triple $(5,27,32)$ achieves $\mathrm{nd}=6$
 via an all-nonzero vector, while every zero-coordinate branch gives norm $\ge 15$;
 and (ae) the \emph{general recursive nd algorithm}
 (Theorem~\ref{thm:nd_recursive}): for any coprime triple with $\omega^*\ge 3$
 primes, $\mathrm{nd}(a,b) = \min_p B_p$ (each $B_p$ zeroing one prime coordinate,
 computed recursively from the nd111 base case); proved for $\omega^*=4$,
-verified for $\omega^*=5$ (all types) and $\omega^*=6$ type~$(1,1,4)$
-($143$ triples, $0$ failures, T83).
+verified for $\omega^*=5$ (all six partition types) and $\omega^*=6$ (all
+three partition classes, $3193$ triples, $0$ failures, T83--T85).
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
