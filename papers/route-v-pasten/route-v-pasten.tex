@@ -2157,12 +2157,17 @@ For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also 
   Write $\lambda := \lambda_3(a,b)$.  We prove matching lower and upper bounds in each case.
 
   \textit{Upper bounds.}
-  In both cases the bound $3p_2$ is achieved by tripling the nd-minimiser $\varphi^*$
+  In both cases $3p_2$ is achieved by tripling the nd-minimiser $\varphi^*$
   (non-degeneracy scales linearly).
-  The bound $p_4$ (Case~1) and $p_3$ (Case~2) are achieved by the zero-coordinate
-  sub-problem with $\varphi_{p_1}=0$: by the E$_n$ theorem its minimum
-  non-degenerate norm is the second element of $\{p_2,p_3,p_4\}$, which equals
-  $p_3$ in Case~2 and (when $p_4 < 2p_2$) $p_4$ in Case~1.
+  In Case~2, $p_3$ is achieved by the sub-problem with $\varphi_{p_1}=0$:
+  the E$_n$ theorem applied to $\{p_2,p_3,p_4\}$ gives nd $= p_3$.
+  In Case~1, $2p_2$ is achieved by doubling $\varphi^*$.
+  The bound $p_4$ is achieved by an explicit non-degenerate vector with
+  $|\varphi_{p_4}|=1$: by the UD constraint $\varphi_{p_a}+\varphi_{p_b}=
+  \varphi_{p_{c,1}}+\varphi_{p_{c,2}}$ (with $|P_a|=|P_b|=1$, $|P_c|=2$),
+  setting the coordinate in the same UD-pair as $p_4$ to $+1$ and all other
+  coordinates to $0$ satisfies UD and gives $\varphi_{p_a}\ne\varphi_{p_b}$;
+  the norm equals $p_4$.
   Hence $\lambda \le \min$ of the stated formula.
 
   \textit{Lower bounds.}
@@ -2172,14 +2177,17 @@ For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also 
   Since $p_4 \cdot |\varphi_{p_4}| \le N < p_4$, we get $\varphi_{p_4} = 0$.
   Since $p_3 \cdot |\varphi_{p_3}| \le N < 2p_2$ and $|\varphi_{p_3}| \ge 2$
   would give $p_3 \cdot |\varphi_{p_3}| \ge 2p_3 > 2p_2 > N$, we get
-  $|\varphi_{p_3}| \le 1$.  If $|\varphi_{p_3}|=1$: norm $\ge p_3$ but any
-  other coordinate with $p_2|\varphi_{p_2}| > p_3$ requires $|\varphi_{p_2}|\ge 2$,
-  giving $p_2|\varphi_{p_2}|\ge 2p_2 > N$ --- contradiction.  So either
-  $\varphi_{p_3}=0$ or $|\varphi_{p_3}|=1$ with $p_2|\varphi_{p_2}| \le p_3$,
-  in both cases the norm is dominated by $p_1|\varphi_{p_1}|$ or $p_2|\varphi_{p_2}|$
-  on the rank-2 sub-lattice $\{p_1, p_2\}$.
-  Achievable non-degenerate norms on this branch are $\{k p_2 : k \in \mathbb{Z}_{>0}\}$;
-  no integer $k$ satisfies $p_3 < k p_2 < 2p_2$ (since $p_3 < 2p_2$).
+  $|\varphi_{p_3}| \le 1$.  If $|\varphi_{p_3}|=1$: any coordinate with
+  $p_2|\varphi_{p_2}| > p_3$ requires $|\varphi_{p_2}|\ge 2$,
+  giving $p_2|\varphi_{p_2}|\ge 2p_2 > N$ --- contradiction.
+  So $|\varphi_{p_2}|\le 1$ in either sub-case ($\varphi_{p_3}=0$ or $|\varphi_{p_3}|=1$).
+  The UD constraint with $\varphi_{p_4}=0$, $|\varphi_{p_3}|\le 1$, $|\varphi_{p_2}|\le 1$
+  forces $|\varphi_{p_1}|\le 2$ (each group contributes at most $1$ in absolute value
+  to the UD sum), so $p_1|\varphi_{p_1}|\le 2p_1 < p_3 < N$
+  (three distinct primes satisfy $2p_1 < p_3$); thus $p_1$ does not determine the norm.
+  The norm equals $p_2|\varphi_{p_2}|$.  For $N \in (p_3, 2p_2)$ this requires
+  $p_3/p_2 < |\varphi_{p_2}| < 2$; since $p_3 > p_2$ gives $p_3/p_2 > 1$, no
+  integer value of $|\varphi_{p_2}|$ exists.
   Contradiction; so $N$ does not exist and $\lambda \ge \min(2p_2, p_4)$.
 
   \textit{Case~2} ($p_3 \ge 2p_2$, $\lambda_2 = 2p_2$).
