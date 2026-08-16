@@ -2139,6 +2139,68 @@ For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also 
   $12$ at $\omega^*=6$ (all zero failures).
 \end{remark}
 
+\begin{theorem}[F37: Third successive minimum for squarefree type $(1,1,2)$ triples]\label{thm:f37}
+  Let $a + b = c$ be a squarefree coprime triple of type $(1,1,2)$
+  (i.e.\ $|P_a|=|P_b|=1$, $|P_c|=2$) with $\omega^*=4$ distinct prime divisors
+  $p_1 < p_2 < p_3 < p_4$.  Then $\lambda_1 = p_2$ (E$_n$ theorem), $\lambda_2 = \min(2p_2,p_3)$
+  (Theorem~\ref{thm:f36}), and
+  \[
+    \lambda_3(a,b) \;=\;
+    \begin{cases}
+      \min(2p_2,\; p_4) & \text{if } p_3 < 2p_2 \quad \text{(Case~1: $\lambda_2 = p_3$)}, \\[4pt]
+      \min(3p_2,\; p_3) & \text{if } p_3 \ge 2p_2 \quad \text{(Case~2: $\lambda_2 = 2p_2$)}.
+    \end{cases}
+  \]
+\end{theorem}
+
+\begin{proof}
+  Write $\lambda := \lambda_3(a,b)$.  We prove matching lower and upper bounds in each case.
+
+  \textit{Upper bounds.}
+  In both cases the bound $3p_2$ is achieved by tripling the nd-minimiser $\varphi^*$
+  (non-degeneracy scales linearly).
+  The bound $p_4$ (Case~1) and $p_3$ (Case~2) are achieved by the zero-coordinate
+  sub-problem with $\varphi_{p_1}=0$: by the E$_n$ theorem its minimum
+  non-degenerate norm is the second element of $\{p_2,p_3,p_4\}$, which equals
+  $p_3$ in Case~2 and (when $p_4 < 2p_2$) $p_4$ in Case~1.
+  Hence $\lambda \le \min$ of the stated formula.
+
+  \textit{Lower bounds.}
+  \textit{Case~1} ($p_3 < 2p_2$, $\lambda_2 = p_3$).
+  We show no non-degenerate norm lies in $(p_3,\, \min(2p_2, p_4))$.
+  Let $N$ be such a norm with $p_3 < N < \min(2p_2, p_4)$.
+  Since $p_4 \cdot |\varphi_{p_4}| \le N < p_4$, we get $\varphi_{p_4} = 0$.
+  Since $p_3 \cdot |\varphi_{p_3}| \le N < 2p_2$ and $|\varphi_{p_3}| \ge 2$
+  would give $p_3 \cdot |\varphi_{p_3}| \ge 2p_3 > 2p_2 > N$, we get
+  $|\varphi_{p_3}| \le 1$.  If $|\varphi_{p_3}|=1$: norm $\ge p_3$ but any
+  other coordinate with $p_2|\varphi_{p_2}| > p_3$ requires $|\varphi_{p_2}|\ge 2$,
+  giving $p_2|\varphi_{p_2}|\ge 2p_2 > N$ --- contradiction.  So either
+  $\varphi_{p_3}=0$ or $|\varphi_{p_3}|=1$ with $p_2|\varphi_{p_2}| \le p_3$,
+  in both cases the norm is dominated by $p_1|\varphi_{p_1}|$ or $p_2|\varphi_{p_2}|$
+  on the rank-2 sub-lattice $\{p_1, p_2\}$.
+  Achievable non-degenerate norms on this branch are $\{k p_2 : k \in \mathbb{Z}_{>0}\}$;
+  no integer $k$ satisfies $p_3 < k p_2 < 2p_2$ (since $p_3 < 2p_2$).
+  Contradiction; so $N$ does not exist and $\lambda \ge \min(2p_2, p_4)$.
+
+  \textit{Case~2} ($p_3 \ge 2p_2$, $\lambda_2 = 2p_2$).
+  We show no norm lies in $(2p_2,\, \min(3p_2, p_3))$.
+  Let $N$ be such a norm with $2p_2 < N < \min(3p_2, p_3)$.
+  Since $N < p_3 \le p_i$ for all $i \ge 3$, we have $\varphi_{p_3}=\varphi_{p_4}=0$.
+  The norm reduces to the rank-2 sub-lattice $\{p_1,p_2\}$ with achievable
+  non-degenerate norms $\{k p_2\}$; no integer $k$ satisfies $2p_2 < k p_2 < 3p_2$.
+  Contradiction; so $\lambda \ge \min(3p_2, p_3)$.
+\end{proof}
+
+\begin{remark}
+  T94b verifies Theorem~\ref{thm:f37} on all $360$ squarefree type-$(1,1,2)$ coprime
+  triples with $c \le 500$ (zero failures): $125$ in Case~1 (including $71$ where
+  $p_4 < 2p_2$ so the $p_4$-branch determines $\lambda_3$) and $235$ in Case~2.
+  The two cases are exhaustive and mutually exclusive; Case~1 reduces to
+  $\lambda_3 = \min(2p_2, p_4)$ and Case~2 to $\lambda_3 = \min(3p_2, p_3)$,
+  showing that $\lambda_3$ is always determined by the ``losing'' branch of the
+  $\lambda_2$ competition together with the next available prime.
+\end{remark}
+
 \subsubsection*{F11: $\omega \ge 6$ --- all types unbounded}
 
 \begin{theorem}[F11]\label{thm:f11}
@@ -2576,7 +2638,15 @@ proved by an integrality gap argument reducing any near-minimizer to the
 two-prime sub-lattice; unifies Theorem~\ref{thm:f32a} ($\omega^*=3$, where
 $p_3 < 2p_2$ always) and Theorem~\ref{thm:f33} (type $(1,1,2)$, where the
 $q$-branch is dominated); verified on 778 squarefree $\omega^*=4$ triples,
-42 at $\omega^*=5$, 12 at $\omega^*=6$ (zero failures, T90b).
+42 at $\omega^*=5$, 12 at $\omega^*=6$ (zero failures, T90b);
+and (ak) the third successive minimum formula for squarefree type-$(1,1,2)$
+triples (Theorem~\ref{thm:f37}):
+$\lambda_3(a,b) = \min(2p_2, p_4)$ if $p_3 < 2p_2$, and
+$\lambda_3(a,b) = \min(3p_2, p_3)$ if $p_3 \ge 2p_2$, where $p_4$ is the
+fourth-smallest prime of $\mathrm{rad}(abc)$;
+proved by extending the integrality gap argument to the next branch --- the
+``losing'' branch of the $\lambda_2$ competition always yields $\lambda_3$;
+verified on $360$ squarefree type-$(1,1,2)$ triples with $c \le 500$ (zero failures, T94b).
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
