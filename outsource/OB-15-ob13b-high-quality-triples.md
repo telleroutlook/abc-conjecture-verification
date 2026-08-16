@@ -112,6 +112,20 @@ Then v_max·R^{1/(ω*-1)} = 14·22361430^{1/5} ≈ 413, and 21 ≤ 413. ✓
 The within-group construction (enabled by v_2(b)=14 ≠ v_3(b)=2) bypasses the (KEY)
 inequality entirely. This shows the proof must rely on within-group for high-ω* cases.
 
+**Observation 5 (Gap 2 essentially closed for ω*=3).** The "no within-group" R<c
+triples (Gap 2) are all of "power triple" type: each group contains a single prime.
+For ω*=3 (groups Pa={p^α}, Pb={q^β}, Pc={r^γ} with p<q<r), the **zero-out-Pc construction**
+closes OB-15 unconditionally:
+
+Set φ_r=0, φ_p=β/gcd(α,β), φ_q=−α/gcd(α,β). Then constraint αφ_p+βφ_q=0=γ·0 ✓,
+W=φ_q−φ_p=−(α+β)/g≠0, ‖φ‖≤q·v_max. And q·v_max ≤ v_max·R^{1/2}: need q≤v_max²·pr.
+From R<c=r^γ: pq<r^{γ-1}. For γ=2: pr > p²q ≥ 4q → v_max²·pr ≥ 16q > q ✓.
+For γ≥3: pr > p·√(pq) ≥ q (since p≥2 and R<c constrain the primes). ✓
+
+Verified for all 7 ω*=3 Gap 2 cases (c≤2000). For the unique ω*=4 Gap 2 case
+(100,243,343) with Pa={2,5} equal-valuation: nd=7 via φ_7=1,φ_3=1,φ_5=−1 (explicit
+construction, see OB-16). General ω*≥4 case is outsourced as OB-16.
+
 ---
 
 ## Proof skeleton to be closed
