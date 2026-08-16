@@ -1155,3 +1155,69 @@ theorem pasten_En_lb_general (pa pb pc : Finset ℕ) (f : ℕ → ℤ)
   rw [Finset.sum_eq_zero h_zero_b, Finset.sum_eq_zero h_zero_c] at *
   linarith
 
+
+/-- [THM] OB13B_norm_kernel: Integer core of the OB-13B cross-group vector norm bound.
+    For natural numbers va, vc (valuations) with g = gcd(va, vc), the cross-group vector
+    φ_p = vc/g, φ_q = va/g has norm max(p*(vc/g), q*(va/g)) ≤ max(va,vc) * max(p,q).
+    This is the key step in showing nd(a,b) ≤ v_max * max(p,q) for any cross-group pair. -/
+theorem pasten_ob13b_norm_kernel (va vc p q : ℕ) (hva : 0 < va) (hvc : 0 < vc) :
+    Nat.max (p * (vc / Nat.gcd va vc)) (q * (va / Nat.gcd va vc)) ≤
+    Nat.max va vc * Nat.max p q := by
+  apply Nat.max_le.mpr
+  constructor
+  · calc p * (vc / Nat.gcd va vc)
+        ≤ Nat.max p q * (vc / Nat.gcd va vc) := by
+          apply Nat.mul_le_mul_right; exact Nat.le_max_left p q
+      _ ≤ Nat.max p q * vc := by
+          apply Nat.mul_le_mul_left; exact Nat.div_le_self vc _
+      _ ≤ Nat.max p q * Nat.max va vc := by
+          apply Nat.mul_le_mul_left; exact Nat.le_max_right va vc
+      _ = Nat.max va vc * Nat.max p q := by ring
+  · calc q * (va / Nat.gcd va vc)
+        ≤ Nat.max p q * (va / Nat.gcd va vc) := by
+          apply Nat.mul_le_mul_right; exact Nat.le_max_right p q
+      _ ≤ Nat.max p q * va := by
+          apply Nat.mul_le_mul_left; exact Nat.div_le_self va _
+      _ ≤ Nat.max p q * Nat.max va vc := by
+          apply Nat.mul_le_mul_left; exact Nat.le_max_left va vc
+      _ = Nat.max va vc * Nat.max p q := by ring
+
+/-- [THM] OB13B_med_sq_le_rad3: For the ω=3 case, the median prime squared ≤ radical.
+    For any p ≤ q ≤ r with 2 ≤ p (all prime), q² ≤ p * q * r.
+    This is the integer core of med(m_a,m_b,m_c) ≤ R^{1/(ω*-1)} for ω=3:
+    the median group minimum q satisfies q² ≤ R = p*q*r, so q ≤ R^{1/2}. -/
+theorem pasten_ob13b_med_sq_le_rad3 (p q r : ℕ) (hp : 2 ≤ p) (hpq : p ≤ q) (hqr : q ≤ r) :
+    q ^ 2 ≤ p * q * r := by
+  have h1 : q ^ 2 = q * q := by ring
+  have h2 : q * q ≤ q * r := Nat.mul_le_mul_left q hqr
+  have h3 : q * r ≤ p * q * r :=
+    calc q * r = 1 * (q * r) := (one_mul _).symm
+      _ ≤ p * (q * r) := Nat.mul_le_mul_right (q * r) (by omega)
+      _ = p * q * r := by ring
+  linarith
+
+/-- [THM] OB13B_med_cube_le_rad4: For the ω=4 case, median prime cubed ≤ radical.
+    For p ≤ q ≤ r ≤ s with 2 ≤ p, we have q³ ≤ p * q * r * s.
+    Integer core of med ≤ R^{1/(ω*-1)} for ω=4. -/
+theorem pasten_ob13b_med_cube_le_rad4 (p q r s : ℕ) (hp : 2 ≤ p)
+    (hpq : p ≤ q) (hqr : q ≤ r) (hrs : r ≤ s) :
+    q ^ 3 ≤ p * q * r * s := by
+  have hs : q ≤ s := Nat.le_trans hqr hrs
+  calc q ^ 3 = q * (q * q) := by ring
+    _ ≤ q * (r * s) := Nat.mul_le_mul_left q (Nat.mul_le_mul hqr hs)
+    _ ≤ p * q * r * s :=
+        calc q * (r * s) = 1 * (q * (r * s)) := (one_mul _).symm
+          _ ≤ p * (q * (r * s)) := Nat.mul_le_mul_right (q * (r * s)) (by omega)
+          _ = p * q * r * s := by ring
+
+/-- [THM] OB13B_within_group_W: Within-group construction: if vp/g = vq/g then vp = vq.
+    Contrapositive: vp ≠ vq implies vp/gcd ≠ vq/gcd, so the within-group Wronskian ≠ 0. -/
+theorem pasten_ob13b_within_group_W (vp vq : ℕ) (hvp : 0 < vp) (hvq : 0 < vq)
+    (hne : vp ≠ vq) : vp / Nat.gcd vp vq ≠ vq / Nat.gcd vp vq := by
+  intro h
+  apply hne
+  have hdvp : Nat.gcd vp vq ∣ vp := Nat.gcd_dvd_left vp vq
+  have hdvq : Nat.gcd vp vq ∣ vq := Nat.gcd_dvd_right vp vq
+  calc vp = Nat.gcd vp vq * (vp / Nat.gcd vp vq) := (Nat.mul_div_cancel' hdvp).symm
+    _ = Nat.gcd vp vq * (vq / Nat.gcd vp vq) := by rw [h]
+    _ = vq := Nat.mul_div_cancel' hdvq
