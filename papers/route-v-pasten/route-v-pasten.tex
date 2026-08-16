@@ -895,6 +895,23 @@ is determined by a one-dimensional lattice.
   gives $v = w = g = 1$.
 \end{proof}
 
+\begin{corollary}[Simplified $\omega^*=2$ formula]\label{cor:nd_omega2_simp}
+  Under the hypotheses of Theorem~\ref{thm:nd_omega2}, with $v = v_{p_1}$ and $w = v_{p_2}$:
+  \[
+    \mathrm{nd}(a,b) \;=\; \frac{p_2 \cdot \max(v_{p_1},\, v_{p_2})}{\gcd(v_{p_1},\, v_{p_2})}.
+  \]
+  In particular, $p_2 \le \mathrm{nd}(a,b) \le p_2 \cdot v_{\max}$ with $v_{\max} = \max(v_{p_1}, v_{p_2})$.
+\end{corollary}
+
+\begin{proof}
+  Since $p_1 < p_2$ and $\gcd(v_{p_1}, v_{p_2}) \mid v_{p_i}$, we have
+  $p_1 \cdot \max(v,w)/g \le p_2 \cdot \max(v,w)/g$, so the maximum in
+  Theorem~\ref{thm:nd_omega2} equals $p_2 \cdot \max(v,w)/g$:
+  for $\max(v,w) = w$, the bound $p_1 \le p_2$ gives $p_1 w/g \le p_2 w/g$;
+  for $\max(v,w) = v$, we have $p_1 w \le p_1 v \le p_2 v$ (as $w \le v$ and $p_1 \le p_2$).
+  The inequality $\mathrm{nd} \le p_2 v_{\max}$ follows since $g \ge 1$.
+\end{proof}
+
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
 \emph{second} minimum non-degenerate norm.
 
