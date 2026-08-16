@@ -154,9 +154,14 @@ The key constraint is R < c which limits how large q and r can be relative to R.
 
 1. **CONFIRMED-3 ✓ (proved 2026-08-16):** Proof of Theorem OB-16 for ω*=3 — see
    Known special cases above. All three structural types verified and proved.
-2. **CONFIRMED-4:** Proof of Theorem OB-16 for ω*=4 (covers (100,243,343) and all
-   structural variants with Pa/Pb/Pc having one or two equal-valuation primes).
-3. **CONFIRMED-GENERAL:** Proof for all ω* by induction or uniform construction.
+2. **CONFIRMED-4 ✓ (closed by Theorem D, 2026-08-16):** For ω*=4 equal-val Pa/Pb
+   cases: Theorem D (OB-17 Strategy D) covers all sub-cases. For a=1 with equal-val Pb:
+   Pb-Pc construction gives norm ≤ v_max·π₃ ≤ v_max·R^{1/(ω*-1)} (Extended Key Lemma
+   for π₃ proved in OB-17). For a>1: best-of-3-pairings construction covers all groups.
+   All 53 ω*=4 R<c triples (c≤5000) verified, 0 violations.
+3. **CONFIRMED-GENERAL ✓ (closed by Theorem D + OB-17, 2026-08-16):** Proof for all
+   ω* by Theorem D: pick the pairing (G₁,G₂) minimizing max(min(G₁),min(G₂)) ≤ π₂
+   (or π₃ in edge case, handled by Extended Key Lemma). Zero-out all other primes.
 4. **PARTIAL:** Proof for a restricted class (e.g., only equal-val Pa sub-case).
 5. **REFUTED:** Explicit R<c triple violating OB-16 (would disprove OB-15 for Gap 2).
 6. **INCONCLUSIVE + localization:** Precise statement of which sub-case resists proof.
