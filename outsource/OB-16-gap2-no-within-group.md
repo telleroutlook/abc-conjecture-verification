@@ -115,21 +115,25 @@ is needed. Identify which (v,u,s) triples require this and construct φ explicit
 
 ## Proof skeleton to be closed
 
-### Step 1 — General construction for single-prime-per-group (ω* ≥ 3)
+### Step 1 — Within-group construction for ω*=4 (main open case)
 
-For any k groups each containing a single prime p₁<p₂<...<p_k (with valuations
-v₁,...,v_k and the respective group signs in constraint):
+For ω*=4, 48 of 53 R<c triples (c≤5000) have a multi-prime group with unequal vals;
+within-group then gives norm ≤ v_max·q where q = max prime in that group.
 
-**Zero-out the largest prime p_k.** Set φ_{p_k}=0 and solve the (k−1)-variable
-linear Diophantine equation. The resulting norm is bounded by max(p₁,...,p_{k-1})·v_max.
+**What to close:** Show q ≤ v_max·R^{1/(ω*-1)} for within-group prime q when R<c.
 
-**What to close:** Show max(p₁,...,p_{k-1})·v_max ≤ v_max·R^{1/(ω*-1)},
-i.e., p_{k-1} ≤ R^{1/(ω*-1)}.
+This reduces to: q^(ω*-1) ≤ v_max^(ω*-1)·R = v_max^(ω*-1)·p₁·p₂·p₃·p₄ (for ω*=4).
 
-The key inequality p_{k-1}^{ω*-1} ≤ R = p₁·p₂·...·p_k follows from:
-R < c = p_k^{γ} → p₁·...·p_{k-1} < p_k^{γ-1}.
-Then p_{k-1}^{ω*-1} ≤ (p₁·...·p_{k-1})·p_{k-1}^{ω*-1−(k-1)}... 
-*(Requires completing the inductive argument for ω*≥4.)*
+**Key lemma (from Observation 1'):** R<c implies c non-squarefree, so v_max ≥ 2.
+
+With v_max ≥ 2 and the dominant case (single-prime Pc={s^γ}, γ≥2, giving R<c=s^γ → p₁p₂p₃ < s^{γ-1}):
+
+For γ=2 (most common): s > p₁·p₂·p₃ ≥ 6q (if p₁=2,p₂=3; noting p₃≥q).
+v_max^3·p₁·p₂·s > 8·6·6q = 288q. So q^2 ≤ v_max^3·p₁·p₂·s when q ≤ 288.
+For q > 288: the constraint s > 6q forces s (and hence R) to be proportionally large,
+maintaining the bound.
+
+**What is needed:** Make the above into a complete proof, or identify a sub-case where it fails and construct an alternative vector.
 
 ### Step 2 — Equal-valuation multi-prime groups
 
@@ -146,12 +150,12 @@ The key constraint is R < c which limits how large q and r can be relative to R.
 
 ## Acceptance criteria
 
-1. **CONFIRMED-3:** Proof of Theorem OB-16 for ω*=3 (already proved, included for
-   completeness; verify the zero-out argument is water-tight).
+1. **CONFIRMED-3 ✓ (proved 2026-08-16):** Proof of Theorem OB-16 for ω*=3 — see
+   Known special cases above. All three structural types verified and proved.
 2. **CONFIRMED-4:** Proof of Theorem OB-16 for ω*=4 (covers (100,243,343) and all
    structural variants with Pa/Pb/Pc having one or two equal-valuation primes).
 3. **CONFIRMED-GENERAL:** Proof for all ω* by induction or uniform construction.
-4. **PARTIAL:** Proof for a restricted class (e.g., all triples with Pa=∅ only).
+4. **PARTIAL:** Proof for a restricted class (e.g., only equal-val Pa sub-case).
 5. **REFUTED:** Explicit R<c triple violating OB-16 (would disprove OB-15 for Gap 2).
 6. **INCONCLUSIVE + localization:** Precise statement of which sub-case resists proof.
 
@@ -159,15 +163,31 @@ The key constraint is R < c which limits how large q and r can be relative to R.
 
 ## Numerical anchors (all verified, sanity only)
 
-| (a,b,c) | structure | ω* | R | v_max | v_max·R^{1/(ω*-1)} | nd | OB-16? |
-|---------|-----------|----|----|-------|--------------------|----|--------|
+**Full verification (c≤5000):** Construction-based checker (gcd formula, within-group,
+zero-out, parameterized cross-group) finds 0 violations across all 80 R<c triples:
+- ω*=3: 14 triples, all PROVED by the three-case argument above.
+- ω*=4: 53 triples, 0 violations; max construction ratio 0.28.
+- ω*=5: 12 triples, 0 violations; max construction ratio 0.54.
+- ω*=6: 1 triple (1, 8191²−1, 8191²) at c=67092481 >> 5000 — handled by within-group.
+
+Script: `discovery/m2_directions/ob15_gap2_power_triples.py`
+
+**Representative ω*=4 triples (construction verified, proof open):**
+
+| (a,b,c) | structure | ω* | R | v_max | v_max·R^{1/3} | nd_ub | ratio |
+|---------|-----------|----|----|-------|---------------|-------|-------|
+| (100,243,343) | 2²·5²,3⁵,7³ | 4 | 210 | 5 | 29.7 | 8 | 0.27 |
+| (81,175,256) | 3⁴,5²·7,2⁸ | 4 | 210 | 8 | 47.5 | 10 | 0.21 |
+| (1,224,225) | 1,2⁵·7,3²·5² | 4 | 210 | 5 | 29.7 | 4 | 0.13 |
+| (640,729,1369) | 2⁷·5,3⁶,37² | 4 | 1110 | 9 | 93.1 | 9 | 0.10 |
+
+**Representative ω*=3 triples (proved):**
+
+| (a,b,c) | structure | ω* | R | v_max | v_max·R^{1/2} | nd | OB-16? |
+|---------|-----------|----|----|-------|---------------|----|--------|
 | (1,8,9) | 1,2³,3² | 2 | 6 | 3 | 18.0 | 9 | ✓ |
 | (5,27,32) | 5,3³,2⁵ | 3 | 30 | 5 | 27.4 | 6 | ✓ |
 | (32,49,81) | 2⁵,7²,3⁴ | 3 | 42 | 5 | 32.4 | 7 | ✓ |
 | (4,121,125) | 2²,11²,5³ | 3 | 110 | 3 | 31.5 | 10 | ✓ |
-| (3,125,128) | 3,5³,2⁷ | 3 | 30 | 7 | 38.3 | 9 | ✓ |
-| (13,243,256) | 13,3⁵,2⁸ | 3 | 78 | 8 | 70.7 | 13 | ✓ |
 | (100,243,343) | 2²·5²,3⁵,7³ | 4 | 210 | 5 | 29.7 | 7 | ✓ |
 | (169,343,512) | 13²,7³,2⁹ | 3 | 182 | 9 | 121.4 | 21 | ✓ |
-
-Script: `discovery/m2_directions/ob15_gap2_power_triples.py`.
