@@ -136,6 +136,10 @@ For non-squarefree triples we prove the following extension
 (Theorem~\ref{thm:ob13b} below): the minimum non-degenerate norm satisfies
 $\mathrm{nd}(a,b) \le v_{\max} \cdot R^{1/(\omega^*-1)}$,
 where $v_{\max} = \max_{p} v_p(abc)$.
+We also establish a universal lower bound
+(Theorem~\ref{thm:nd_lb}): $\mathrm{nd}(a,b) \ge p_2$, the second-smallest prime
+in $\mathrm{rad}(abc)$, for every coprime triple regardless of squarefreeness;
+and an exact formula for $\omega^* = 2$ (Theorem~\ref{thm:nd_omega2}).
 
 
 
@@ -794,7 +798,7 @@ has rank $\omega^* - 1$.
 \end{theorem}
 
 \begin{proof}[Verification]
-The algorithm is implemented in \texttt{discovery/m2\_directions/t64\_omega4\_lattice\_svp.py}
+The algorithm is implemented in \texttt{t64\_omega4\_lattice\_svp.py}
 and checked against brute-force enumeration:
 $\omega^*=3$: 13 test cases, all exact (\texttt{t63});
 $\omega^*=4$: 13 test cases, all exact (\texttt{t64});
@@ -807,6 +811,88 @@ Steps~2--3 are standard LLL theory; the non-degeneracy constraint ($W \ne 0$)
 eliminates the degenerate sublattice $D \subset L$ from the search.
 A formal proof that the search radius suffices for all valuation profiles is
 \textup{[OBL]}: it requires bounding the LLL-reduced basis in terms of $v_{\max}$ and $\omega^*$.
+\end{proof}
+
+\subsubsection*{Universal lower bound and the $\omega^*=2$ exact formula}
+
+The cross-group upper bound (Theorem~\ref{thm:ob13b}) is complemented by a
+universal lower bound that holds for all coprime triples, squarefree or not.
+
+\begin{lemma}[Single-prime constraint]\label{lem:single_prime}
+  Let $p \in P$ be any prime in $\mathrm{rad}(abc)$.
+  If $\varphi \in F(a,b)$ satisfies $\varphi_q = 0$ for all $q \in P \setminus \{p\}$,
+  then $\varphi_p = 0$.
+\end{lemma}
+
+\begin{proof}
+  Each prime lies in exactly one of $P_a$, $P_b$, $P_c$.
+  With $\varphi_q = 0$ for all $q \ne p$, constraint~(C) reduces to
+  $v_p(\cdot)\,\varphi_p = 0$, where $v_p(\cdot) \ge 1$ since $p \in P$.
+  Hence $\varphi_p = 0$.
+\end{proof}
+
+\begin{theorem}[Universal lower bound for $\mathrm{nd}$]\label{thm:nd_lb}
+  For every coprime triple $a + b = c$, let $p_1 < p_2$ be the two smallest
+  primes in $P = \mathrm{rad}(abc)$.  Then
+  \[
+    \mathrm{nd}(a,b) \;\ge\; p_2.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Let $\varphi \in F(a,b)$ with $W(\varphi) \ne 0$.  Suppose $\|\varphi\| < p_2$.
+  For any $p \ge p_2$ in $P$, $p\,|\varphi_p| \le \|\varphi\| < p_2 \le p$ forces
+  $|\varphi_p| < 1$, so $\varphi_p = 0$.
+  The only prime in $P$ with $p < p_2$ is $p_1$, so $\varphi_q = 0$ for all $q \ne p_1$.
+  By Lemma~\ref{lem:single_prime}, $\varphi_{p_1} = 0$ as well, giving $\varphi = 0$,
+  which contradicts $W(\varphi) \ne 0$.
+\end{proof}
+
+\begin{remark}
+  The bound is tight: for $(a,b,c) = (1,2,3)$ with $P = \{2,3\}$, the vector
+  $\varphi_2 = \varphi_3 = 1$ satisfies the constraint ($1 \cdot 1 = 1 \cdot 1$)
+  and has $W = \varphi_2 = 1 \ne 0$, giving $\mathrm{nd}(1,2) = 3 = p_2$.
+
+  For squarefree triples the E$_n$ theorem gives
+  $\mathrm{nd}(a,b) = \mathrm{med}(m_a,m_b,m_c) \ge p_2$ (each group minimum is a
+  prime in $P$), so Theorem~\ref{thm:nd_lb} is subsumed by E$_n$ in that case.
+  For non-squarefree triples it is the tightest universal lower bound:
+  the within-group construction of Remark~(iv) shows that
+  $\mathrm{nd}(a,b)$ can fall strictly below $\mathrm{med}(m_a,m_b,m_c)$
+  (counterexample $(72,11,83)$: $\mathrm{nd} = 9 > p_2 = 3$),
+  so Theorem~\ref{thm:nd_lb} is the right replacement for E$_n$'s lower bound.
+
+  Verified on 10 named non-squarefree examples including the within-group
+  counterexample $(72,11,83)$ (\texttt{t67}); the analytical proof above covers all triples.
+\end{remark}
+
+For triples with $\omega^* = 2$ the lower bound is sharp and the exact value
+is determined by a one-dimensional lattice.
+
+\begin{theorem}[Exact $\mathrm{nd}$ for $\omega^* = 2$]\label{thm:nd_omega2}
+  Let $a + b = c$ be a coprime triple with $\omega^* = 2$,
+  so $P = \{p, q\}$ with $p < q$.  Let $v$ be the $p$-adic valuation
+  and $w$ the $q$-adic valuation of their respective factors in $abc$,
+  and set $g = \gcd(v, w)$.  Then
+  \[
+    \mathrm{nd}(a,b) \;=\; \max\!\Bigl(p\cdot\tfrac{w}{g},\; q\cdot\tfrac{v}{g}\Bigr) \;\ge\; q = p_2.
+  \]
+  Equality $\mathrm{nd} = q$ holds if and only if $v = w = 1$.
+\end{theorem}
+
+\begin{proof}
+  The constraint~(C) is a single equation $v\,\varphi_p = w\,\varphi_q$ (with
+  appropriate sign depending on the group memberships of $p$ and $q$).
+  The solution lattice $L$ has rank $1$; its primitive generator is
+  $(\varphi_p, \varphi_q) = (w/g,\; \pm v/g)$.  All solutions are
+  $k \cdot (w/g, \pm v/g)$ for $k \in \mathbb{Z}$.  Since $W(\varphi) \ne 0$ iff
+  the $P_b$-component is non-zero, this requires $k \ne 0$.
+  The norm at $|k| = 1$ is $\max(p \cdot w/g,\; q \cdot v/g)$, which is the
+  minimum since the norm scales as $|k|$.  The inequality $\ge q$ follows from
+  $q \cdot v/g \ge q$ (as $v/g \ge 1$) and $p \cdot w/g \ge p \ge 2$.
+  Equality $\mathrm{nd} = q$ requires $p \cdot w/g \le q$ and $q \cdot v/g = q$,
+  i.e.\ $v = g$; combined with $w/g = 1$ from the bound $p \cdot w/g \le q$ this
+  gives $v = w = g = 1$.
 \end{proof}
 
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the

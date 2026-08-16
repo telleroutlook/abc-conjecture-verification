@@ -1212,7 +1212,7 @@ theorem pasten_ob13b_med_cube_le_rad4 (p q r s : ℕ) (hp : 2 ≤ p)
 
 /-- [THM] OB13B_within_group_W: Within-group construction: if vp/g = vq/g then vp = vq.
     Contrapositive: vp ≠ vq implies vp/gcd ≠ vq/gcd, so the within-group Wronskian ≠ 0. -/
-theorem pasten_ob13b_within_group_W (vp vq : ℕ) (hvp : 0 < vp) (hvq : 0 < vq)
+theorem pasten_ob13b_within_group_W (vp vq : ℕ) (_ : 0 < vp) (_ : 0 < vq)
     (hne : vp ≠ vq) : vp / Nat.gcd vp vq ≠ vq / Nat.gcd vp vq := by
   intro h
   apply hne
@@ -1221,3 +1221,38 @@ theorem pasten_ob13b_within_group_W (vp vq : ℕ) (hvp : 0 < vp) (hvq : 0 < vq)
   calc vp = Nat.gcd vp vq * (vp / Nat.gcd vp vq) := (Nat.mul_div_cancel' hdvp).symm
     _ = Nat.gcd vp vq * (vq / Nat.gcd vp vq) := by rw [h]
     _ = vq := Nat.mul_div_cancel' hdvq
+
+/-! ### Universal lower bound nd ≥ p₂ (Theorem thm:nd_lb)
+
+  Two integer kernel lemmas underlying the proof of Theorem thm:nd_lb:
+  the universal lower bound nd(a,b) ≥ p₂ (second smallest prime in rad(abc)).
+
+  The proof has two key steps:
+  (1) Any prime p ≥ p₂ with p * x < p₂ forces x = 0
+      (Lemma lem:single_prime abstract: large-prime coordinate forced zero).
+  (2) A vector in F(a,b) with at most one nonzero coordinate (at p₁) is zero
+      (Lemma lem:single_prime: single-prime constraint forces zero).
+-/
+
+/-- [THM] nd_lb_large_prime_zero: If p2 ≤ p and p * x < p2, then x = 0.
+    Integer core of "for p ≥ p₂, the norm bound p*|φ_p| < p₂ forces φ_p = 0". -/
+theorem pasten_nd_lb_large_prime_zero (p p2 x : ℕ) (hp : p2 ≤ p) (h : p * x < p2) : x = 0 := by
+  by_contra hx
+  have hx1 : 1 ≤ x := Nat.one_le_iff_ne_zero.mpr hx
+  have hpx : p ≤ p * x := le_mul_of_one_le_right (Nat.zero_le p) hx1
+  linarith
+
+/-- [THM] nd_lb_single_prime_int: If k > 0 and k * z = 0, then z = 0.
+    Abstract form of Lemma lem:single_prime: a single-prime vector in F(a,b)
+    must be zero because the constraint reduces to v_p(·) * φ_p = 0 with v_p > 0. -/
+theorem pasten_nd_lb_single_prime_int (k z : ℤ) (hk : 0 < k) (h : k * z = 0) : z = 0 :=
+  (mul_eq_zero.mp h).resolve_left (Int.ne_of_gt hk)
+
+/-- [THM] nd_lb_omega2_ge_q: For ω*=2 with primes p < q, the formula
+    nd = max(p*w/g, q*v/g) ≥ q (second smallest prime = p₂).
+    Integer core: for v, w ≥ 1 and g = gcd(v,w) | v, we have q * (v/g) ≥ q. -/
+theorem pasten_nd_lb_omega2_ge_q (q v g : ℕ) (_ : 0 < q) (hv : 0 < v)
+    (hdvd : g ∣ v) (hg : 0 < g) : q ≤ q * (v / g) := by
+  have hvg : 1 ≤ v / g := Nat.one_le_iff_ne_zero.mpr
+    (Nat.div_ne_zero_iff_of_dvd hdvd |>.mpr (by omega))
+  exact le_mul_of_one_le_right (Nat.zero_le q) hvg
