@@ -2080,6 +2080,65 @@ For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also 
   as \texttt{pasten\_F33\_gap} in the Lean kernel (zero \texttt{sorry}).
 \end{proof}
 
+\begin{theorem}[F36: Universal second minimum for squarefree triples]\label{thm:f36}
+  Let $a + b = c$ be a squarefree coprime triple with $\omega^* \ge 3$ distinct
+  prime divisors $p_1 < p_2 < p_3 \le \cdots \le p_{\omega^*}$.
+  Then $\mathrm{nd}(a,b) = p_2$ (Theorem~\ref{thm:en}) and
+  \[
+    \lambda_2(a,b) \;=\; \min(2p_2,\; p_3).
+  \]
+  In particular: for $\omega^*=3$ one always has $p_3 = p_1+p_2 < 2p_2$, giving
+  $\lambda_2 = p_3$ (recovering Theorem~\ref{thm:f32a}); for $\omega^*\ge 4$,
+  either $2p_2 \le p_3$ (gap formula $\lambda_2 = 2p_2$) or $p_3 < 2p_2$
+  (third-prime formula $\lambda_2 = p_3$).
+\end{theorem}
+
+\begin{proof}
+  \textit{Lower bound.}
+  Suppose $\varphi$ is a non-degenerate vector with $p_2 < \|\varphi\| < \min(2p_2, p_3)$.
+  Since $p \cdot |\varphi_p| \le \|\varphi\| < p_3 \le p$ for every prime $p \ge p_3$,
+  we have $|\varphi_p| < 1$, hence $\varphi_p = 0$ for all $p \ge p_3$.
+  The constraint $\sum_i \alpha_i \varphi_i = 0$ then reduces to the two-variable
+  equation $\alpha_{p_1}\varphi_{p_1} + \alpha_{p_2}\varphi_{p_2} = 0$
+  with $\alpha_{p_i} \in \{+1,-1\}$ (squarefree).
+  The primitive solution is $\varphi_{p_1} = \pm 1$, $\varphi_{p_2} = \mp\alpha_{p_1}\alpha_{p_2}$,
+  achieving norm $\max(p_1, p_2) = p_2$ (non-degeneracy holds since $p_1$ and $p_2$
+  lie in different prime groups when $\mathrm{nd} = p_2$).
+  Every solution is an integer multiple of this primitive vector; hence every
+  achievable norm on this branch is $k p_2$ for $k \in \mathbb{Z}_{>0}$.
+  No integer $k$ satisfies $p_2 < k p_2 < 2p_2$, so no norm lies strictly
+  in $(p_2, 2p_2)$.  Together with $\|\varphi\| < p_3$, there is no norm in
+  $(p_2, \min(2p_2,p_3))$.
+
+  \textit{Upper bound.}
+  \textit{Achieving $2p_2$:} the nd-minimiser $\varphi^*$ (with $\|\varphi^*\| = p_2$ and
+  $W(\varphi^*) \ne 0$) satisfies $W(2\varphi^*) = 2W(\varphi^*) \ne 0$ and
+  $\|2\varphi^*\| = 2p_2$, so $2p_2$ is an achievable non-degenerate norm. \\
+  \textit{Achieving $p_3$:} by the zero-coordinate property
+  (Theorem~\ref{thm:nd_zero_coord}), the nd-minimising sub-problem for the branch
+  $\varphi_{p_1} = 0$ is a squarefree $(\omega^*-1)$-prime sub-triple whose
+  primes are $\{p_2,\ldots,p_{\omega^*}\}$.  By Theorem~\ref{thm:en} applied to
+  this sub-triple, its minimum non-degenerate norm equals $p_3$
+  (the second-smallest element of $\{p_2,\ldots,p_{\omega^*}\}$), achieved by
+  a vector $\varphi'$ with $\varphi'_{p_1}=0$, $\|\varphi'\|=p_3$, $W(\varphi')\ne 0$.
+  Hence $p_3$ is achievable.
+
+  Since both $2p_2$ and $p_3$ exceed $\mathrm{nd}(a,b) = p_2$, we get
+  $\lambda_2 \le \min(2p_2,p_3)$, completing the proof.
+\end{proof}
+
+\begin{remark}
+  Theorem~\ref{thm:f36} unifies F32a (Theorem~\ref{thm:f32a}), and
+  Theorem~\ref{thm:f33} follows as a corollary: for type $(1,1,2)$ with
+  $p < r_1 < r_2$ and $q = r_1 r_2 - p \gg r_2$, the sorted primes are
+  $p_1=p, p_2=r_1, p_3=r_2, p_4=q$ and Theorem~\ref{thm:f36} gives
+  $\lambda_2 = \min(2r_1, r_2)$; the ``$q$'' branch in Theorem~\ref{thm:f33}
+  is always dominated by $r_2 \le q$.
+  T90b verifies Theorem~\ref{thm:f36} on $778$ squarefree $\omega^*=4$ triples
+  with $a,b \le 400$ (zero failures), plus $42$ triples at $\omega^*=5$ and
+  $12$ at $\omega^*=6$ (all zero failures).
+\end{remark}
+
 \subsubsection*{F11: $\omega \ge 6$ --- all types unbounded}
 
 \begin{theorem}[F11]\label{thm:f11}
@@ -2509,7 +2568,15 @@ and (af) the \emph{squarefree minimizer support theorem}
 of any $\omega^*\ge 3$, every nd-minimizer satisfies $\varphi_p=0$ for all
 $p > m_2$ (second group minimum), so at least $\omega^*-2$ coordinates are
 forced to zero by integrality; in particular the zero-coordinate property
-holds unconditionally for all squarefree triples.
+holds unconditionally for all squarefree triples;
+and (aj) the universal second-minimum formula for all squarefree triples with
+$\omega^* \ge 3$ (Theorem~\ref{thm:f36}): $\lambda_2(a,b) = \min(2p_2, p_3)$
+where $p_1 < p_2 < p_3$ are the three smallest primes of $\mathrm{rad}(abc)$,
+proved by an integrality gap argument reducing any near-minimizer to the
+two-prime sub-lattice; unifies Theorem~\ref{thm:f32a} ($\omega^*=3$, where
+$p_3 < 2p_2$ always) and Theorem~\ref{thm:f33} (type $(1,1,2)$, where the
+$q$-branch is dominated); verified on 778 squarefree $\omega^*=4$ triples,
+42 at $\omega^*=5$, 12 at $\omega^*=6$ (zero failures, T90b).
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
