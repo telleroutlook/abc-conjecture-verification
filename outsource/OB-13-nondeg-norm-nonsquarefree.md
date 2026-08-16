@@ -241,12 +241,22 @@ $W_\psi / \mathrm{nd} \in [0.4, 2.0]$; not always an integer.
 $\mathrm{nd} \mid W_\psi$ holds in only 9/26 cases; $v_{\max} \mid W_\psi$ in 10/26.
 No universal divisibility rule exists for non-squarefree triples.
 
-**Scope limit for Step 4:**
-The SVP parametrisation handles $\omega=3$ triples with one prime per group.
-Multi-prime groups ($\omega \geq 4$, or $|P_a| \geq 2$) require a higher-dimensional
-lattice; the LP multi-prime approach (Step 3 / T60) gives an upper bound
-but not the exact formula. The general $\mathrm{nd}$ formula is an open integer
-min-max program with no simple closed form.
+**Scope limit for Step 4 (UPDATED — T64):**
+The SVP parametrisation generalises to arbitrary $\omega$.  The constraint
+$\sum_i \alpha_i \varphi_i = 0$ defines an $(\omega^*-1)$-dimensional sublattice of
+$\mathbb{Z}^{\omega^*}$.  Its $\mathbb{Z}$-basis is found by the Smith normal form of
+$[\alpha]$, then LLL-reduced.  A search over $[-25,25]^{\omega^*-1}$ in reduced
+coordinates recovers the exact $\mathrm{nd}$.
+
+**T64 verification** (`discovery/m2_directions/t64_omega4_lattice_svp.py`):
+- $\omega=4$: 13 triples (squarefree and non-squarefree), \textbf{ALL MATCH}.
+- $\omega=5$: 6 triples (squarefree and non-squarefree), \textbf{ALL MATCH}.
+
+**OB-13C status (2026-08-16): RESOLVED algorithmically.**
+$\mathrm{nd}(a,b)$ is computed exactly in polynomial time (in $\omega^*$ and the
+valuation magnitudes) via LLL reduction + SVP on the $(\omega^*-1)$-dimensional
+constraint lattice.  There is no simple closed-form expression in general, but the
+algorithm is concrete and verified.
 
 ---
 
