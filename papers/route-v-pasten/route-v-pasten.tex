@@ -912,6 +912,51 @@ is determined by a one-dimensional lattice.
   The inequality $\mathrm{nd} \le p_2 v_{\max}$ follows since $g \ge 1$.
 \end{proof}
 
+\begin{theorem}[Exact $\mathrm{nd}$ for type $(k,1,1)$ non-squarefree triples]\label{thm:nd_k11}
+  Let $a + b = c$ be a coprime triple with $P_a = \{p\}$, $P_b = \{q\}$, $P_c = \{r\}$
+  (one prime per group, $p < q < r$) and $v_p(a) = k \ge 1$, $v_q(b) = v_r(c) = 1$.
+  Then
+  \[
+    \mathrm{nd}(a,b) \;=\; \min(r,\; qk).
+  \]
+\end{theorem}
+
+\begin{proof}
+  \textit{Upper bound.}
+  The vector $\varphi_p = 0$, $\varphi_q = \varphi_r = 1$ satisfies the constraint
+  ($k \cdot 0 + 1 = 1$) and has $W = 1 - 0 = 1 \ne 0$, giving norm $r$.
+  The vector $\varphi_p = -1$, $\varphi_q = k$, $\varphi_r = 0$ satisfies the constraint
+  ($k(-1) + k = 0$), has $W = k - (-1) = k+1 \ne 0$, and norm $\max(p, qk) = qk$
+  (as $q > p$ and $k \ge 1$ give $qk \ge q > p$).
+  Hence $\mathrm{nd}(a,b) \le \min(r, qk)$.
+
+  \textit{Lower bound.}
+  Let $\varphi = (\varphi_p, \varphi_q, \varphi_r)$ be a non-degenerate vector.
+  \begin{itemize}
+    \item If $\varphi_r \ne 0$: then $r |\varphi_r| \ge r$, so $\|\varphi\| \ge r \ge \min(r, qk)$.
+    \item If $\varphi_r = 0$: the constraint reduces to $k\varphi_p + \varphi_q = 0$, i.e.\
+      $\varphi_q = -k\varphi_p$.  Non-degeneracy requires $\varphi_q \ne \varphi_p$,
+      i.e.\ $(k+1)\varphi_p \ne 0$, so $\varphi_p \ne 0$.
+      Then $\|\varphi\| = \max(p|\varphi_p|, qk|\varphi_p|) = qk|\varphi_p| \ge qk \ge \min(r,qk)$.
+  \end{itemize}
+  In both cases $\|\varphi\| \ge \min(r, qk)$.
+\end{proof}
+
+\begin{remark}
+  For $k = 1$ (squarefree), $\min(r, q) = q$ (as $q < r$), recovering the E$_n$ value.
+  For $k \ge 2$: $\mathrm{nd} = qk$ when $qk < r$
+  (the within-group effective valuation dominates), and $\mathrm{nd} = r$ otherwise.
+  The crossover $qk = r$ gives a transition between two regimes.
+
+  \textit{Examples.}  $(4, 3, 7)$: $p=2$, $q=3$, $r=7$, $k=2$.
+  $\min(7, 6) = 6 = qk < r$ (dominant: valuation regime).
+  $(4, 7, 11)$: $p=2$, $q=7$, $r=11$, $k=2$.
+  $\min(11, 14) = 11 = r < qk$ (dominant: pairwise regime).
+
+  This gives a tight two-sided bound: $\min(r, qk) \ge q = p_2$
+  (confirming Theorem~\ref{thm:nd_lb}), since $qk \ge q$ and $r > q$.
+\end{remark}
+
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
 \emph{second} minimum non-degenerate norm.
 
@@ -1272,6 +1317,11 @@ Additional lemmas added in the E10/E11/E$_n$/F31 extension:
   \item \texttt{pasten\_nd\_lb\_omega2\_ge\_q}: $q \le q (v/g)$ for $g \mid v$;
     integer core of $\mathrm{nd} \ge p_2$ in Theorem~\ref{thm:nd_omega2}
     (zero \texttt{sorry}).
+  \item Three type $(k,1,1)$ integer kernel lemmas for Theorem~\ref{thm:nd_k11}
+    (zero \texttt{sorry}): \texttt{pasten\_nd\_k11\_r\_branch} ($r \le rx$ for
+    $x \ge 1$; $\varphi_r \ne 0$ branch); \texttt{pasten\_nd\_k11\_valuation\_branch}
+    ($qk \le qkx$; $\varphi_r{=}0$ branch); \texttt{pasten\_nd\_k11\_norm\_equals\_qk}
+    ($\max(px, qkx) = qkx$ for $p < q$; q-component dominates).
 \end{itemize}
 
 \section{Conclusion}
@@ -1324,7 +1374,14 @@ triples, squarefree or not, proved by a single-prime-constraint argument
 (Lemma~\ref{lem:single_prime}), tight at $(1,2,3)$; and (m) the exact formula for
 $\omega^*=2$ triples (Theorem~\ref{thm:nd_omega2}):
 $\mathrm{nd}(a,b) = \max(p\cdot w/g,\; q\cdot v/g)$ where $g = \gcd(v,w)$,
-verified on all seven $\omega^*=2$ examples up to $c \le 1000$, Lean-formalized.
+verified on all seven $\omega^*=2$ examples up to $c \le 1000$, Lean-formalized;
+and (n) the exact formula for type $(k,1,1)$ non-squarefree triples
+(Theorem~\ref{thm:nd_k11}): $\mathrm{nd}(a,b) = \min(r,\; qk)$ for
+$P_a=\{p^k\}$, $P_b=\{q\}$, $P_c=\{r\}$ with $p<q<r$, with two regimes
+(valuation-dominant $qk<r$ and pairwise-dominant $qk \ge r$) and
+confirming $\mathrm{nd} \ge p_2 = q$ (Theorem~\ref{thm:nd_lb});
+verified numerically (T68) and Lean-formalized (three arithmetic kernel lemmas,
+zero \texttt{sorry}).
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime

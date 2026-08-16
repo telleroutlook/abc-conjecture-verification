@@ -1256,3 +1256,33 @@ theorem pasten_nd_lb_omega2_ge_q (q v g : ℕ) (_ : 0 < q) (hv : 0 < v)
   have hvg : 1 ≤ v / g := Nat.one_le_iff_ne_zero.mpr
     (Nat.div_ne_zero_iff_of_dvd hdvd |>.mpr (by omega))
   exact le_mul_of_one_le_right (Nat.zero_le q) hvg
+
+/-! ### Type (k,1,1) exact nd formula (Theorem thm:nd_k11)
+
+  For Pa={p^k}, Pb={q}, Pc={r} with p < q < r: nd(a,b) = min(r, q*k).
+
+  Key integer arithmetic lemmas for the lower bound proof:
+  (1) r-branch: r * |φ_r| ≥ r * 1 = r when |φ_r| ≥ 1.
+  (2) φ_r=0 branch: norm = q * k * |φ_p| ≥ q*k when |φ_p| ≥ 1, since p < q*k.
+  (3) Upper bound witness for min(r, q*k).
+-/
+
+/-- [THM] nd_k11_r_branch: If r ≥ 1 and x ≥ 1, then r * x ≥ r.
+    Abstract core: φ_r ≠ 0 forces norm ≥ r * 1 = r. -/
+theorem pasten_nd_k11_r_branch (r x : ℕ) (_ : 1 ≤ r) (hx : 1 ≤ x) : r ≤ r * x :=
+  le_mul_of_one_le_right (Nat.zero_le r) hx
+
+/-- [THM] nd_k11_valuation_branch: If p < q and k ≥ 1 and x ≥ 1, then q*k ≤ q*k*x.
+    Abstract core: φ_r=0 branch gives norm = q*k*|φ_p| ≥ q*k. -/
+theorem pasten_nd_k11_valuation_branch (q k x : ℕ) (_ : 0 < q) (_ : 1 ≤ k) (_ : 1 ≤ x) :
+    q * k ≤ q * k * x := by
+  exact le_mul_of_one_le_right (Nat.zero_le (q * k)) ‹1 ≤ x›
+
+/-- [THM] nd_k11_norm_equals_qk: For p < q, k ≥ 1, x ≥ 1:
+    max(p * x, q * k * x) = q * k * x.
+    Abstract core: in the φ_r=0 branch with φ_q = k*φ_p, the q-component dominates. -/
+theorem pasten_nd_k11_norm_equals_qk (p q k x : ℕ) (hpq : p < q) (hk : 1 ≤ k) (_ : 1 ≤ x) :
+    max (p * x) (q * k * x) = q * k * x := by
+  apply Nat.max_eq_right
+  have hpqk : p < q * k := Nat.lt_of_lt_of_le hpq (le_mul_of_one_le_right (Nat.zero_le q) hk)
+  exact Nat.mul_le_mul_right x (Nat.le_of_lt hpqk)
