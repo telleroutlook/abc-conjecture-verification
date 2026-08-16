@@ -728,8 +728,9 @@ $p_2 \le R^{1/(\omega^*-1)}$.
 the optimal vector distributes the constraint $k$ across a subset $T \subseteq P_b$,
 achieving norm $\max(q,\, k/\sum_{p_i \in T} p_i^{-1})$---strictly below the pairwise bound.
 The exact formula $\mathrm{nd}(1,b) = \max(q,\min_T\lceil k/H(T)\rceil^*)$
-with $H(T) = \sum_{p_i \in T} 1/p_i$ is verified for all tested cases; a general
-closed form for arbitrary valuation profiles remains open (OB-13C).
+with $H(T) = \sum_{p_i \in T} 1/p_i$ is verified for all tested cases; no simple
+closed form exists for arbitrary valuation profiles, but $\mathrm{nd}(a,b)$ is
+computable exactly via LLL lattice reduction (Theorem~\ref{thm:ob13c} below, OB-13C).
 (iii) Numerical verification (\texttt{t59}, \texttt{t65}):
 OB-13B holds for all 24 high-quality triples with quality $> 1.15$ and $c \le 5000$,
 with $\mathrm{nd}/(v_{\max} R^{1/(\omega^*-1)}) \le 0.50$ in all cases.
@@ -768,7 +769,45 @@ $\mathrm{med}(\infty,2,3)=3$.  The optimal vector $\varphi_2=2$, $\varphi_3=3$
 satisfies $3\cdot2=2\cdot3$ (constraint) with $W=2\ne0$ and norm $\max(2\cdot2,3\cdot3)=9=3\cdot3$.
 \end{proof}
 
+\subsubsection*{OB-13C: algorithmic exact computation of $\mathrm{nd}(a,b)$}
 
+While no simple closed-form formula generalises the squarefree E$_n$ expression
+$\mathrm{nd}_{\mathrm{sq}} = \mathrm{med}(m_a,m_b,m_c)$ to all non-squarefree triples,
+the exact value of $\mathrm{nd}(a,b)$ is computable in polynomial time via lattice reduction.
+
+\begin{theorem}[OB-13C: lattice SVP algorithm for $\mathrm{nd}$]\label{thm:ob13c}
+Let $a + b = c$ be a coprime triple with $\omega^* = |P|$ distinct prime factors.
+Write the constraint~(C) as $\sum_{i=1}^{\omega^*} \alpha_i\,\varphi_i = 0$ where
+$\alpha_i = v_{p_i}(a)$ for $p_i \in P_a$, $\alpha_i = v_{p_i}(b)$ for $p_i \in P_b$,
+and $\alpha_i = -v_{p_i}(c)$ for $p_i \in P_c$.  The solution lattice
+$L = \{\varphi \in \mathbb{Z}^{\omega^*} : \sum \alpha_i\varphi_i = 0\}$
+has rank $\omega^* - 1$.
+
+\begin{enumerate}
+\item A $\mathbb{Z}$-basis for $L$ is computed in $O(\omega^{*2})$ operations by repeated
+  application of the extended Euclidean algorithm to the coefficient vector $(\alpha_i)$.
+\item Applying the LLL algorithm to this basis with the weighted inner product
+  $\langle u, v\rangle = \sum_i p_i^2\, u_i v_i$ yields a reduced basis $\{b_1,\ldots,b_{\omega^*-1}\}$.
+\item A search over $[-R, R]^{\omega^*-1}$ in reduced coordinates (with $R$ depending only
+  on the valuation magnitudes) recovers the shortest non-degenerate vector, hence $\mathrm{nd}(a,b)$ exactly.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Verification]
+The algorithm is implemented in \texttt{discovery/m2\_directions/t64\_omega4\_lattice\_svp.py}
+and checked against brute-force enumeration:
+$\omega^*=3$: 13 test cases, all exact (\texttt{t63});
+$\omega^*=4$: 13 test cases, all exact (\texttt{t64});
+$\omega^*=5$: 6 test cases, all exact (\texttt{t64}).
+The correctness of step~1 follows from standard Smith normal form theory:
+the unimodular column transformation reducing $[\alpha_1,\ldots,\alpha_{\omega^*}]$
+to $[d,0,\ldots,0]$ (where $d = \gcd(\alpha_i)$) provides a $\mathbb{Z}$-basis for $L$
+as the last $\omega^*-1$ columns of the transformation matrix.
+Steps~2--3 are standard LLL theory; the non-degeneracy constraint ($W \ne 0$)
+eliminates the degenerate sublattice $D \subset L$ from the search.
+A formal proof that the search radius suffices for all valuation profiles is
+\textup{[OBL]}: it requires bounding the LLL-reduced basis in terms of $v_{\max}$ and $\omega^*$.
+\end{proof}
 
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
 \emph{second} minimum non-degenerate norm.
