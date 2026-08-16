@@ -730,9 +730,29 @@ achieving norm $\max(q,\, k/\sum_{p_i \in T} p_i^{-1})$---strictly below the pai
 The exact formula $\mathrm{nd}(1,b) = \max(q,\min_T\lceil k/H(T)\rceil^*)$
 with $H(T) = \sum_{p_i \in T} 1/p_i$ is verified for all tested cases; a general
 closed form for arbitrary valuation profiles remains open (OB-13C).
-(iii) Numerical verification: \texttt{discovery/m2\_directions/t59\_ob13\_verify.py}
-confirms OB-13B for all tested triples including high-quality cases such as
-$(1,8,9)$, $(1,48,49)$, $(4,5,9)$.
+(iii) Numerical verification (\texttt{t59}, \texttt{t65}):
+OB-13B holds for all 24 high-quality triples with quality $> 1.15$ and $c \le 5000$,
+with $\mathrm{nd}/(v_{\max} R^{1/(\omega^*-1)}) \le 0.50$ in all cases.
+The tightest example is $(1,8,9)$: $\mathrm{nd}=9$, $v_{\max}=3$, $R=6$, ratio $= 0.50$.
+
+\begin{corollary}[OB-13B sharp]\label{cor:ob13b-sharp}
+Under the same hypotheses,
+\[
+  \mathrm{nd}(a,b) \;\le\; v_{\max} \cdot \mathrm{med}(m_a, m_b, m_c),
+\]
+where $\mathrm{med}$ denotes the second smallest of $\{m_a, m_b, m_c\}$ (with $m_g = \infty$
+for empty groups).  This bound is tight: equality holds at $(a,b,c)=(1,8,9)$,
+where $v_{\max}=3$, $\mathrm{med}=3$, and $\mathrm{nd}=9$.
+\end{corollary}
+
+\begin{proof}
+The proof of Theorem~\ref{thm:ob13b} establishes
+$\mathrm{nd}(a,b) \le v_{\max}\cdot\mathrm{med}(m_a,m_b,m_c)$ as an intermediate step
+(the Minkowski step that follows gives only a weaker bound).
+For $(1,8,9)$: $P_a=\emptyset$, $P_b=\{2\}$, $P_c=\{3\}$; $v_{\max}=3$ (from $v_2(8)=3$),
+$\mathrm{med}(\infty,2,3)=3$.  The optimal vector $\varphi_2=2$, $\varphi_3=3$
+satisfies $3\cdot2=2\cdot3$ (constraint) with $W=2\ne0$ and norm $\max(2\cdot2,3\cdot3)=9=3\cdot3$.
+\end{proof}
 
 
 
