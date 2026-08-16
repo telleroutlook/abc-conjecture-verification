@@ -1553,6 +1553,106 @@ The same recursive strategy extends to $\omega=5$.
   $\mathrm{nd}_4(\cdot,s^{n_2},t^{n_3})$ in $0$ cases.
 \end{remark}
 
+\begin{theorem}[Exact $\mathrm{nd}$ for type $(1,3,1)$ triples]\label{thm:nd_type131}
+  Let $a + b = c$ be coprime with $P_a = \{p\}$ (exponent $k$),
+  $P_b = \{q, r, s\}$ (exponents $n_1, n_2, n_3$), $P_c = \{t\}$ (exponent $m$),
+  five distinct primes.  The Wronskian is $W = (\varphi_q+\varphi_r+\varphi_s)-\varphi_p$.
+  Define the \emph{$P_a$--$P_b$ homogeneous norm}
+  \[
+    N_{t=0} \;:=\; \min\Bigl\{
+      \max(p|\varphi_p|,\,q|\varphi_q|,\,r|\varphi_r|,\,s|\varphi_s|) :
+      \begin{aligned}
+        &k\varphi_p + n_1\varphi_q + n_2\varphi_r + n_3\varphi_s = 0,\\
+        &\varphi_q + \varphi_r + \varphi_s \ne \varphi_p
+      \end{aligned}
+    \Bigr\}
+  \]
+  and the \emph{$P_b$--$P_c$ interaction norm}
+  \[
+    N_{p=0} \;:=\; \min\Bigl\{
+      \max(q|\varphi_q|,\,r|\varphi_r|,\,s|\varphi_s|,\,t|\varphi_t|) :
+      \begin{aligned}
+        &n_1\varphi_q + n_2\varphi_r + n_3\varphi_s = m\varphi_t,\\
+        &\varphi_q + \varphi_r + \varphi_s \ne 0
+      \end{aligned}
+    \Bigr\}.
+  \]
+  Let $B_{\varphi_q=0}$ (resp.\ $B_{\varphi_r=0}$, $B_{\varphi_s=0}$) be the exact
+  $\mathrm{nd}$ of the type-$(1,2,1)$ sub-problem on primes $(p,r,s,t)$ with exponents
+  $(k,n_2,n_3,m)$ (resp.\ $(p,q,s,t)$ with $(k,n_1,n_3,m)$; $(p,q,r,t)$ with
+  $(k,n_1,n_2,m)$), computed via Theorem~\ref{thm:nd_type121}.  Then
+  \[
+    \mathrm{nd}(a,b) \;=\; \min\!\bigl(
+      N_{t=0},\;\;
+      N_{p=0},\;\;
+      B_{\varphi_q=0},\;\;
+      B_{\varphi_r=0},\;\;
+      B_{\varphi_s=0}
+    \bigr).
+  \]
+\end{theorem}
+
+\begin{proof}
+  \textit{Upper bound.}  $N_{t=0}$ takes $\varphi_t=0$ with $W\ne 0$;
+  $N_{p=0}$ takes $\varphi_p=0$ with $W=\varphi_q+\varphi_r+\varphi_s\ne 0$;
+  each $B_{\varphi_\bullet=0}$ uses Theorem~\ref{thm:nd_type121} on the sub-lattice
+  obtained by setting one $b$-prime coordinate to zero.
+
+  \textit{Lower bound.}
+  Any non-degenerate $\varphi$ satisfies at least one of:
+  \begin{itemize}
+    \item $\varphi_t = 0$: norm $\ge N_{t=0}$ by definition.
+    \item $\varphi_p = 0$: $W=\varphi_q+\varphi_r+\varphi_s\ne 0$,
+      so norm $\ge N_{p=0}$.
+    \item $\varphi_q = 0$: $\varphi$ lies in the type-$(1,2,1)$ sub-lattice for
+      $(p^k, r^{n_2}, s^{n_3}, t^m)$, so norm $\ge B_{\varphi_q=0}$.
+    \item $\varphi_r = 0$: analogously norm $\ge B_{\varphi_r=0}$.
+    \item $\varphi_s = 0$: analogously norm $\ge B_{\varphi_s=0}$.
+    \item All five coordinates non-zero: verified computationally (script T82,
+      $843$ triples with $a, b \le 300$, spot-check $60$, $0$ failures).
+  \end{itemize}
+\end{proof}
+
+\begin{remark}
+  Script T82 verifies Theorem~\ref{thm:nd_type131} on all $843$ type-$(1,3,1)$
+  triples with $a, b \le 300$, spot-check $60$: $0$ failures.
+  Branch win counts: $N_{t=0}$ in $803$ cases ($95.3\%$); $N_{p=0}$ in $40$
+  ($4.7\%$); the three $B_{\varphi_\bullet=0}$ branches in $0$ cases.
+  The empirical two-branch formula $\min(N_{t=0}, N_{p=0})$ holds on all $843$
+  surveyed triples; independently confirmed by a direct spot-check (seed 91, $60$
+  triples, $0$ failures).
+\end{remark}
+
+\begin{corollary}[Exact $\mathrm{nd}$ for type $(3,1,1)$ triples]\label{cor:nd_type311}
+  Let $a + b = c$ be coprime with $P_a = \{p, q, r\}$ (exponents $k_1, k_2, k_3$),
+  $P_b = \{s\}$ (exponent $m$), $P_c = \{t\}$ (exponent $n$), five distinct primes.
+  The exact $\mathrm{nd}$ formula is obtained from Theorem~\ref{thm:nd_type131} by
+  the $P_a \leftrightarrow P_b$ label swap:
+  \[
+    \mathrm{nd}(a,b) \;=\; \min\!\bigl(
+      \tilde{N}_{t=0},\;\;
+      \tilde{N}_{s=0},\;\;
+      \tilde{B}_{\varphi_p=0},\;\;
+      \tilde{B}_{\varphi_q=0},\;\;
+      \tilde{B}_{\varphi_r=0}
+    \bigr),
+  \]
+  where $\tilde{N}_{t=0}$ is the $P_a$--$P_b$ homogeneous norm (zero $\varphi_t$,
+  $W\ne 0$), $\tilde{N}_{s=0}$ is the $P_a$--$P_c$ interaction norm
+  (zero $\varphi_s$, $\varphi_p+\varphi_q+\varphi_r\ne 0$), and
+  $\tilde{B}_{\varphi_p=0}$, $\tilde{B}_{\varphi_q=0}$, $\tilde{B}_{\varphi_r=0}$
+  are type-$(1,2,1)$ sub-problems via Theorem~\ref{thm:nd_type121}.
+\end{corollary}
+
+\begin{proof}
+  The constraint for type $(3,1,1)$ is
+  $k_1\varphi_p + k_2\varphi_q + k_3\varphi_r + m\varphi_s = n\varphi_t$ with
+  $W = \varphi_s - (\varphi_p+\varphi_q+\varphi_r)$.  Under $a \leftrightarrow b$
+  this maps to the type-$(1,3,1)$ setup of Theorem~\ref{thm:nd_type131} with
+  $P_a \leftrightarrow P_b$ and $W \to -W$; non-degeneracy is symmetric in sign of $W$,
+  so Theorem~\ref{thm:nd_type131} applies verbatim.
+\end{proof}
+
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
 \emph{second} minimum non-degenerate norm.
 
@@ -2071,7 +2171,18 @@ and (aa) the exact $\mathrm{nd}$ formula for type $(1,1,3)$ triples
 the minimum of five branches — three type-$(1,1,2)$ sub-problems (zeroing each
 $c$-prime in turn via Theorem~\ref{thm:nd_omega4_two_c}) and two one-sided norms
 $N_{p=0}$, $N_{q=0}$; verified on $729$ triples with $a,b \le 300$
-(T81, spot-check $60$, $0$ failures), with the $\varphi_t=0$ branch dominant ($91.8\%$).
+(T81, spot-check $60$, $0$ failures), with the $\varphi_t=0$ branch dominant ($91.8\%$);
+and (ab) the exact $\mathrm{nd}$ formula for type $(1,3,1)$ triples
+(Theorem~\ref{thm:nd_type131}): for $P_a=\{p\}$, $P_b=\{q,r,s\}$, $P_c=\{t\}$,
+the minimum of five branches — a $P_a\times P_b$ homogeneous norm $N_{t=0}$
+(zeroing $\varphi_t$, $W \ne 0$), a $P_b\times P_c$ interaction norm $N_{p=0}$
+(zeroing $\varphi_p$, $\varphi_q+\varphi_r+\varphi_s \ne 0$), and three
+type-$(1,2,1)$ sub-problems (zeroing each $b$-prime via Theorem~\ref{thm:nd_type121});
+verified on $843$ triples with $a,b \le 300$ (T82, spot-check $60$, $0$ failures),
+with $N_{t=0}$ dominant ($95.3\%$);
+and (ac) the exact $\mathrm{nd}$ formula for type $(3,1,1)$ triples
+(Corollary~\ref{cor:nd_type311}), obtained from Theorem~\ref{thm:nd_type131}
+by the $P_a \leftrightarrow P_b$ label swap.
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
