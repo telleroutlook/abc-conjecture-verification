@@ -1003,6 +1003,35 @@ is determined by a one-dimensional lattice.
   When $k = m = 1$ (squarefree), $\mathrm{nd} = q$, recovering E$_n$.
 \end{remark}
 
+\begin{corollary}[Minimum depends only on the smallest $c$-prime]\label{cor:nd_smallc}
+  Let $a + b = c$ be coprime with $P_a = \{p\}$, $P_b = \{q\}$ (one prime each),
+  and $P_c$ any finite set of primes with $r_1 = \min P_c > q > p$.
+  Set $g = \gcd(k, m)$ where $k = v_p(a)$, $m = v_q(b)$.
+  Then
+  \[
+    \mathrm{nd}(a,b) \;=\; \min\!\left(r_1,\; \max\!\left(\frac{pm}{g},\;\frac{qk}{g}\right)\right).
+  \]
+  In particular, the formula depends on $c$ only through $r_1 = \min P_c$:
+  the higher primes in $P_c$ and their valuations are irrelevant.
+\end{corollary}
+
+\begin{proof}
+  Let $N_0 = \max(pm/g, qk/g)$.
+  \textit{Lower bound.}
+  If all $P_c$-coordinates of $\varphi$ are zero, the constraint reduces to the
+  $\omega^*=2$ problem on $\{p,q\}$, giving norm $\ge N_0$
+  (identical to the $\varphi_r=0$ case in Theorem~\ref{thm:nd_km1}).
+  If at least one coordinate $\varphi_r$ with $r \in P_c$ is nonzero, then
+  $r|\varphi_r| \ge r \ge r_1$.
+  Hence $\mathrm{nd}(a,b) \ge \min(r_1, N_0)$.
+
+  \textit{Upper bound.}
+  The $P_c$-zero witness (from Theorem~\ref{thm:nd_km1}) achieves norm $N_0$.
+  The pairwise-regime bound $\mathrm{nd} \le r_1$ follows from
+  Theorem~\ref{thm:nd_km1} applied to the sub-triple $(a, b, r_1^{v_{r_1}(c)})$
+  (which has $P_c = \{r_1\}$, the same lower bound, and the same $N_0$).
+\end{proof}
+
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
 \emph{second} minimum non-degenerate norm.
 
@@ -1436,7 +1465,11 @@ non-squarefree triples (Theorem~\ref{thm:nd_km1}):
 $\mathrm{nd}(a,b) = \min(r,\, \max(pm/g,\, qk/g))$ where $g = \gcd(k,m)$,
 subsumes Theorems~\ref{thm:nd_k11} ($m=1$) and the squarefree E$_n$ value ($k=m=1$),
 with equal-valuation regime ($k=m$) always realising $\mathrm{nd} = p_2$;
-verified numerically on 14 named examples (T69).
+verified numerically on 14 named examples (T69); and (p) a universality
+corollary (Corollary~\ref{cor:nd_smallc}): for one-prime-per-$a,b$-group triples
+with $r_1 = \min P_c > q > p$, the formula $\mathrm{nd} = \min(r_1, \max(pm/g, qk/g))$
+holds regardless of how many primes $c$ has or their valuations — only
+the smallest $c$-prime matters.
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
