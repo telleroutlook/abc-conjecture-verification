@@ -735,11 +735,14 @@ $v_p(b)=v$), and $\pi_1,\pi_2\in P_b$.  Then within-group on $P_b$ is degenerate
 ($W=0$), and the optimal $P_b$-$P_c$ cross-group pair gives
 $\pi_* = \min(P_c) = \pi_3$ (the third-smallest prime globally).
 We need $\pi_3^{\omega^*-1} \le R$.  Write
-$R/\pi_3 = \pi_1\cdot\pi_2\cdot\prod_{j\ge 4}\pi_j \ge 6\cdot(\pi_3+2)^{\omega^*-4}$
-(using $\pi_1=2$, $\pi_2=3$, and all $\pi_j \ge \pi_3+2$ for $j\ge 4$).
-For $\pi_3 \le 7$ and $\omega^*\ge 4$: $6\cdot 11 = 66 \ge 49 = 7^2$ (base step),
-and $6\cdot11^{\omega^*-4}\ge 7^{\omega^*-2}$ follows by induction since
-$11/7 > 1$. $\checkmark$
+$R/\pi_3 = \pi_1\cdot\pi_2\cdot\prod_{j\ge 4}\pi_j \ge 6\cdot(\pi_3+2)^{\omega^*-3}$
+(using $\pi_1=2$, $\pi_2=3$, all $\pi_j \ge \pi_3+2$ for $j\ge 4$; there are $\omega^*-3$
+such primes).
+For $\pi_3 \le 7$ and $\omega^*\ge 4$: we need $\pi_3^{\omega^*-2} \le 6\cdot(\pi_3+2)^{\omega^*-3}$.
+For $\pi_3=7$, $\omega^*=4$: $7^2=49 \le 6\cdot 9=54$. $\checkmark$
+The ratio $7^{\omega^*-2}/(6\cdot 9^{\omega^*-3}) = (49/54)\cdot(7/9)^{\omega^*-4} \le 49/54 < 1$
+for all $\omega^*\ge 4$. $\checkmark$
+(For $\pi_3=5$: $5^2=25 \le 6\cdot7=42$, ratio $(25/42)\cdot(5/7)^{\omega^*-4} < 1$. $\checkmark$)
 For $\pi_3 \ge 11$: the $R < c$ constraint $M\cdot\mathrm{rad}(c) < 1 + M^v$
 (with $b=M^v$, $M=\pi_1\cdots\pi_k$, $k=|P_b|$) forces $M$ and the Pc primes
 $\pi_4,\ldots,\pi_{\omega^*}$ to be large relative to $\pi_3$, so
