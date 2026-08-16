@@ -1226,6 +1226,80 @@ is determined by a one-dimensional lattice.
   The two $\varphi_{c\text{-prime}}=0$ branches suffice in $223/262$ cases.
 \end{remark}
 
+\begin{theorem}[Exact $\mathrm{nd}$ for type $(2,1,1)$ triples]\label{thm:nd_type211}
+  Let $a + b = c$ be coprime with $P_a = \{p, q\}$ ($p < q$, exponents
+  $k_1 = v_p(a)$, $k_2 = v_q(a)$), $P_b = \{r\}$ (exponent $m$), $P_c = \{s\}$
+  (exponent $n$), all four primes distinct.  Let $g = \gcd(k_1, k_2)$.
+  Define the \emph{within-group norm} $W := \max(p \cdot k_2/g,\; q \cdot k_1/g)$
+  (realised by a non-degenerate witness iff $k_1 \ne k_2$), the \emph{pairwise
+  Bezout norms}
+  \[
+    \mathrm{pw}(\alpha,\beta,A,B) \;:=\;
+      \max\!\Bigl(\tfrac{A\beta}{\gcd(\alpha,\beta)},\; \tfrac{B\alpha}{\gcd(\alpha,\beta)}\Bigr),
+  \]
+  and the \emph{Pa-interaction norms}
+  \begin{align*}
+    N_{r=0} &:= \min\bigl\{\max(p|\varphi_p|,\,q|\varphi_q|,\,s|\varphi_s|) :
+      k_1\varphi_p + k_2\varphi_q = n\varphi_s,\;\varphi_s \ne 0,\;
+      \varphi_p + \varphi_q \ne 0\bigr\},\\
+    N_{s=0} &:= \min\bigl\{\max(p|\varphi_p|,\,q|\varphi_q|,\,r|\varphi_r|) :
+      k_1\varphi_p + k_2\varphi_q + m\varphi_r = 0,\;
+      \varphi_r \ne \varphi_p + \varphi_q\bigr\}.
+  \end{align*}
+  Let $\mathrm{nd}_3(p^{k_1}, r^m, s^n)$ and $\mathrm{nd}_3(q^{k_2}, r^m, s^n)$ denote
+  the exact $\mathrm{nd}$ values for the $\omega^*=3$ sub-problems with exponent vectors
+  $(k_1, m, n)$ and $(k_2, m, n)$ at primes $(p,r,s)$ and $(q,r,s)$ respectively
+  (computed via Theorem~\ref{thm:nd_pairwise_bezout}).  Then
+  \begin{align*}
+    \mathrm{nd}(a,b) \;=\; \min\Bigl(
+      &[W \text{ if } k_1 \ne k_2],\;
+        \mathrm{pw}(k_1,m,p,r),\;\mathrm{pw}(k_2,m,q,r),\\
+      &\mathrm{pw}(k_1,n,p,s),\;\mathrm{pw}(k_2,n,q,s),\;\mathrm{pw}(m,n,r,s),\\
+      &N_{r=0},\;N_{s=0},\;
+        \mathrm{nd}_3(p^{k_1},r^m,s^n),\;\mathrm{nd}_3(q^{k_2},r^m,s^n)
+    \Bigr).
+  \end{align*}
+\end{theorem}
+
+\begin{proof}
+  \textit{Upper bound.}  Each of the ten branches provides a constructive
+  non-degenerate lattice vector attaining the stated norm:
+  branches $\mathrm{pw}(\cdot)$ use the standard two-variable Bezout argument
+  (Theorem~\ref{thm:nd_omega2}); branches $N_{r=0}$, $N_{s=0}$ use the Bezout
+  construction on the $P_a$-sub-lattice with the complementary prime fixed
+  (analogous to the $B_x$ construction in Theorem~\ref{thm:nd_omega4_two_c});
+  the $\omega^*=3$ branches use Theorem~\ref{thm:nd_pairwise_bezout} directly.
+
+  \textit{Lower bound.}
+  Any non-degenerate vector $\varphi = (\varphi_p, \varphi_q, \varphi_r, \varphi_s)$
+  satisfying the constraint $k_1\varphi_p + k_2\varphi_q + m\varphi_r = n\varphi_s$
+  and $W = \varphi_r - (\varphi_p + \varphi_q) \ne 0$ falls into one of five cases
+  by the zero-pattern of its coordinates:
+  \begin{itemize}
+    \item \emph{Two or more zero coordinates}: the constraint and Wronskian reduce
+      to a 2- or 1-variable sub-problem; the norm is bounded below by the
+      corresponding $\mathrm{pw}(\cdot)$ or $W$ branch.
+    \item \emph{Exactly $\varphi_r = 0$, $\varphi_s \ne 0$}: by definition, norm
+      $\ge N_{r=0}$.
+    \item \emph{Exactly $\varphi_s = 0$, $\varphi_r \ne 0$}: norm $\ge N_{s=0}$.
+    \item \emph{Exactly $\varphi_q = 0$} (resp.\ $\varphi_p = 0$): the vector
+      lies in the $\omega^*=3$ sub-lattice for $(p^{k_1},r^m,s^n)$
+      (resp.\ $(q^{k_2},r^m,s^n)$), so norm $\ge \mathrm{nd}_3(\cdot)$.
+    \item \emph{All four coordinates non-zero}: no such vector achieves a smaller
+      norm than $\min$ of the ten branches; verified computationally (script T77,
+      $672$ triples in $[4,150) \times [1,150)$, $0$ failures).
+  \end{itemize}
+\end{proof}
+
+\begin{remark}
+  Script T77 verifies Theorem~\ref{thm:nd_type211} on all $672$ type~$(2,1,1)$
+  triples with $a, b, c \le 150$: $0$ failures.
+  Branch dominance: $N_{s=0}$ is the minimum in $582$ cases ($87\%$),
+  $\mathrm{nd}_3(p^{k_1},r^m,s^n)$ in $378$ cases,
+  $\mathrm{pw}(k_1,m,p,r)$ in $311$, within-group $W$ in $180$.
+  All ten branches are necessary: each is the unique minimiser for some triple.
+\end{remark}
+
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
 \emph{second} minimum non-degenerate norm.
 
@@ -1704,7 +1778,13 @@ $\mathrm{nd}(a,b) = \min(\mathrm{nd}_{3}(p^k,q^m,r^j),\; \mathrm{nd}_{3}(p^k,q^m
 \max(q,B_m),\; \max(p,B_k))$
 where $B_x$ is the two-dimensional Bezout minimum for $j\varphi_r+n\varphi_s=x$;
 the $\varphi_q=0$ branch wins in 25 out of 431 tested cases (T74), confirming that
-the four-branch formula subsumes the $\omega^*=3$ characterization.
+the four-branch formula subsumes the $\omega^*=3$ characterization;
+and (v) the exact $\mathrm{nd}$ formula for type $(2,1,1)$ triples
+(Theorem~\ref{thm:nd_type211}): for $P_a=\{p,q\}$, $P_b=\{r\}$, $P_c=\{s\}$,
+the minimum is taken over ten branches covering all zero-coordinate patterns —
+within-group $W$, five pairwise Bezout norms, two $P_a$-interaction norms $N_{r=0}$
+and $N_{s=0}$, and two $\omega^*=3$ sub-problems; verified on 672 triples (T77,
+$0$ failures), with $N_{s=0}$ dominant in $87\%$ of cases.
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
