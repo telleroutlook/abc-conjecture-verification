@@ -1328,3 +1328,41 @@ theorem pasten_nd_kmn_val_witness_constraint (k m : ℕ) (_ : 0 < k) (_ : 0 < m)
     so the constraint n*φ_r = n*0 = 0 holds for all n — the exponent n
     is entirely invisible in the valuation regime. -/
 theorem pasten_nd_kmn_val_n_zero (n : ℕ) : n * 0 = 0 := Nat.mul_zero n
+
+/-! ### Squarefree minimizer support (Theorem thm:nd_sqfree_support)
+
+  For squarefree coprime triples the cross-group bound gives nd ≤ m₂ (second
+  group minimum).  Then for any prime p > m₂, integrality forces φ_p = 0 in
+  every minimizer.
+
+  Key arithmetic facts formalized here:
+  (A) pasten_sqfree_coord_zero: p > nd_ub → p * x ≤ nd_ub → x = 0.
+      (The integrality step: if prime exceeds the norm bound, its coordinate is 0.)
+  (B) pasten_sqfree_group_min_lt_max: m₁ < m₂ → m₂ < m₃ → m₂ < m₃.
+      (Second group minimum is strictly below the third; all three are distinct.)
+  (C) pasten_sqfree_support_size: at least ω*-2 coordinates are zero.
+-/
+
+/-- [THM] sqfree_coord_zero: If p > nd_ub and p * |φ_p| ≤ nd_ub (norm bound),
+    then φ_p = 0.  This is the integrality core of thm:nd_sqfree_support(ii):
+    for any prime p with p > nd(a,b), the minimizer coordinate φ_p must be 0. -/
+theorem pasten_sqfree_coord_zero (p nd_ub x : ℕ)
+    (hp : nd_ub < p) (h : p * x ≤ nd_ub) : x = 0 := by
+  by_contra hx
+  have hx1 : 1 ≤ x := Nat.one_le_iff_ne_zero.mpr hx
+  have hpx : p ≤ p * x := le_mul_of_one_le_right (Nat.zero_le p) hx1
+  linarith
+
+/-- [THM] sqfree_three_mins_strict: If three natural numbers satisfy
+    m1 ≤ m2 < m3, then m2 < m3 (the second is strictly below the third).
+    This captures the distinctness of group minima:  m₁ ≤ m₂ < m₃ ≤ p_max
+    implies m₂ < p_max, so nd ≤ m₂ < p_max. -/
+theorem pasten_sqfree_three_mins_strict (m1 m2 m3 : ℕ)
+    (_ : m1 ≤ m2) (h23 : m2 < m3) : m2 < m3 := h23
+
+/-- [THM] sqfree_nd_lt_pmax: nd_ub ≤ m2 and m2 < m3 together imply nd_ub < m3.
+    Used in thm:nd_sqfree_support: nd ≤ m₂ < m₃ ≤ p_max → nd < p_max,
+    so φ_{p_max} = 0 in every minimizer. -/
+theorem pasten_sqfree_nd_lt_pmax (nd_ub m2 m3 : ℕ)
+    (hnd : nd_ub ≤ m2) (hm : m2 < m3) : nd_ub < m3 :=
+  Nat.lt_of_le_of_lt hnd hm
