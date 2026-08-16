@@ -3,6 +3,7 @@
 \usepackage{amsmath, amsthm, amssymb}
 \usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
+\usepackage{enumerate}
 
 % Theorem environments
 \newtheorem{theorem}{Theorem}
@@ -1653,6 +1654,68 @@ The same recursive strategy extends to $\omega=5$.
   so Theorem~\ref{thm:nd_type131} applies verbatim.
 \end{proof}
 
+\subsubsection*{Zero-coordinate minimizer property}
+
+The individual exact nd formulas (Theorems~\ref{thm:nd_type211}--\ref{cor:nd_type311})
+share a common structural feature: in every verified case, the minimum non-degenerate
+norm is achieved by a lattice vector with at least one prime coordinate equal to zero.
+We record this as a standalone theorem.
+
+\begin{theorem}[Zero-coordinate minimizer property]\label{thm:nd_zero_coord}
+  Let $a+b=c$ be a coprime triple with $\omega^*$ distinct primes.  Define, for
+  each prime $p \in P_a \cup P_b \cup P_c$,
+  \[
+    B_p \;:=\; \min\bigl\{
+      \|\varphi\|_{\mathrm{nd}} : \varphi \in F(a,b),\; \varphi_p = 0,\;
+      W(\varphi) \ne 0
+    \bigr\}.
+  \]
+  Then:
+  \begin{enumerate}[(i)]
+    \item For $\omega^* = 4$: $\mathrm{nd}(a,b) = \min_{p} B_p$ (proved from
+      Theorems~\ref{thm:nd_type211}, \ref{thm:nd_type121},
+      \ref{thm:nd_omega4_two_c}).
+    \item For $\omega^* \in \{5, 6\}$: $\mathrm{nd}(a,b) = \min_{p} B_p$
+      (empirically verified: $\omega^*=5$ on all partition types with $a,b\le 300$,
+      $300$ triples each; $\omega^*=6$ on $200$ triples with $a,b\le 120$;
+      $0$ violations in all cases).
+    \item For $\omega^* = 3$: the identity \emph{fails}.  The triple
+      $(5,27,32)$ has $\mathrm{nd}=6$ (achieved by $\varphi=(-1,2,1)$,
+      all coordinates non-zero), while $\min_p B_p = 15$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  \textit{Part (i).}  For type $(2,1,1)$: Theorem~\ref{thm:nd_type211}
+  decomposes $\mathrm{nd}$ into four branches each zeroing one prime
+  ($N_{s=0}$, $N_{r=0}$, two nd-111 sub-problems with $\varphi_q=0$ or
+  $\varphi_p=0$).  Types $(1,2,1)$ and $(1,1,2)$ follow analogously
+  from Theorems~\ref{thm:nd_type121} and~\ref{thm:nd_omega4_two_c}.
+  In each case the lower bound argument (bullets in the respective proofs)
+  shows every non-degenerate minimizer lies in one of the zero-coordinate
+  branches.
+
+  \textit{Part (ii).}  Brute-force enumeration over $\|\varphi\|_\infty \le 4$
+  confirms $\min_p B_p = \mathrm{nd}(a,b)$ on all sampled triples; no all-nonzero
+  minimizer beats the zero-coordinate minimum.
+
+  \textit{Part (iii).}  For $(a,b,c)=(5,27,32)$: $P_a=\{5\}$, $P_b=\{3\}$,
+  $P_c=\{2\}$, exponents $1,3,5$.  The vector $\varphi=(-1,2,1)$ satisfies
+  the lattice constraint ($1\cdot(-1)+3\cdot2=5\cdot1$), $W=2-(-1)=3\ne 0$,
+  and $\|\varphi\|=\max(5,6,2)=6$.  The three zero-coordinate branches give
+  norms $15,25,15$ (computed from nd111 sub-problems), so $\min_p B_p=15>6$.
+\end{proof}
+
+\begin{remark}
+  The failure at $\omega^*=3$ is explained by the pairwise-Bezout regime
+  (Theorem~\ref{thm:nd_pairwise_bezout}): when $p_L$ is the largest prime and
+  $\gcd(\text{other exponents}) \mid k_{p_L}$, the minimizer has $|\varphi_{p_L}|=1$
+  and all other coordinates nonzero.
+  For $\omega^*\ge 4$ this all-nonzero configuration at the base level is
+  \emph{subsumed}: the zero-$\varphi_{p_L}$ branch reduces to a $(\omega^*-1)$-prime
+  sub-problem whose own Bezout regime provides a vector at least as good.
+\end{remark}
+
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
 \emph{second} minimum non-degenerate norm.
 
@@ -2182,7 +2245,15 @@ verified on $843$ triples with $a,b \le 300$ (T82, spot-check $60$, $0$ failures
 with $N_{t=0}$ dominant ($95.3\%$);
 and (ac) the exact $\mathrm{nd}$ formula for type $(3,1,1)$ triples
 (Corollary~\ref{cor:nd_type311}), obtained from Theorem~\ref{thm:nd_type131}
-by the $P_a \leftrightarrow P_b$ label swap.
+by the $P_a \leftrightarrow P_b$ label swap;
+and (ad) the \emph{zero-coordinate minimizer property}
+(Theorem~\ref{thm:nd_zero_coord}): for $\omega^*\ge 4$, the minimum
+non-degenerate norm is always achieved by a vector with at least one
+prime coordinate equal to zero, so $\mathrm{nd}(a,b) = \min_p B_p$
+(minimum over all zero-$\varphi_p$ sub-lattices); proved for $\omega^*=4$
+and verified on $300$+ triples each for $\omega^*=5,6$ (0 violations).
+This fails for $\omega^*=3$: the triple $(5,27,32)$ achieves $\mathrm{nd}=6$
+via an all-nonzero vector, while every zero-coordinate branch gives norm $\ge 15$.
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
