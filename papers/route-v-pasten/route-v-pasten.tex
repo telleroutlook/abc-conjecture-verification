@@ -743,14 +743,39 @@ For $\pi_3=7$, $\omega^*=4$: $7^2=49 \le 6\cdot 9=54$. $\checkmark$
 The ratio $7^{\omega^*-2}/(6\cdot 9^{\omega^*-3}) = (49/54)\cdot(7/9)^{\omega^*-4} \le 49/54 < 1$
 for all $\omega^*\ge 4$. $\checkmark$
 (For $\pi_3=5$: $5^2=25 \le 6\cdot7=42$, ratio $(25/42)\cdot(5/7)^{\omega^*-4} < 1$. $\checkmark$)
-For $\pi_3 \ge 11$: the $R < c$ constraint $M\cdot\mathrm{rad}(c) < 1 + M^v$
-(with $b=M^v$, $M=\pi_1\cdots\pi_k$, $k=|P_b|$) forces $M$ and the Pc primes
-$\pi_4,\ldots,\pi_{\omega^*}$ to be large relative to $\pi_3$, so
-$M\cdot(\pi_3+2)^{\omega^*-k-1}\ge\pi_3^{\omega^*-2}$ holds in all arising cases.
-Computationally verified: the two $R<c$ edge-case triples with $\pi_1,\pi_2\in P_b$
-found for $c\le 10^{12}$ are $(1,6^7,279937)$ with $\pi_3=7$ and
-$(1,10^{11},10^{11}+1)$ with $\pi_3=11$; both satisfy $\pi_3^{\omega^*-1}\le R$
-with large margin ($\times 100$ and $\times 565\,000$ respectively). $\checkmark$
+For $\pi_3 \ge 11$: we analyse the two families of arising triples.
+
+\emph{Case 2a: $M=10$, $v$ odd} ($P_b=\{2,5\}$, $k=2$).
+Since $10\equiv -1\pmod{11}$, we have $11\mid 1+10^v$ for all odd $v$, so $\pi_3=11$.
+Then $R/\pi_3 = 10\cdot\prod_{j\ge4}\pi_j \ge 10\cdot13^{\omega^*-3}$.
+For $\omega^*=4$: $10\cdot13=130\ge 121=11^2$. $\checkmark$
+The ratio $10\cdot13^{\omega^*-3}/11^{\omega^*-2}=(130/121)\cdot(13/11)^{\omega^*-4}>1$
+for all $\omega^*\ge 4$. $\checkmark$
+
+\emph{Case 2b: $M=6$, $v\equiv 6\pmod{12}$} ($P_b=\{2,3\}$, $k=2$).
+Since $5\nmid c$ (as $6\equiv 1\pmod{5}$), $7\nmid c$ ($v$ even, $6\equiv -1\pmod7$),
+and $11\nmid c$ ($\mathrm{ord}(6\bmod11)=10$, $6^v\equiv{-1}\pmod{11}$ requires $v\equiv5\pmod{10}$,
+which is odd), we have $\pi_3\ge 13$.
+For $\pi_3=13$ (requiring $v\equiv 6\pmod{12}$): the cyclotomic factor
+$\Phi_{12}(6)=6^4-6^2+1=1261=13\times 97$ shows $\mathrm{ord}(6\bmod13)=\mathrm{ord}(6\bmod97)=12$
+and $6^6\equiv-1$ modulo both 13 and 97.
+Moreover $\mathrm{ord}(6\bmod37)=4$ with $6^2\equiv-1\pmod{37}$, and $v\equiv6\pmod{12}$
+implies $v\equiv2\pmod{4}$, so $37\mid c$ too.
+Hence $P_c\supseteq\{13,37,97\}$, $|P_c|\ge 3$, $\omega^*\ge 5$,
+$R\ge 6\cdot13\cdot37\cdot97=279\,942$.
+For $\omega^*=5$: $\pi_3^{\omega^*-1}=13^4=28\,561\le 279\,942=R$. $\checkmark$
+For $\omega^*>5$: each extra $P_c$ prime satisfies $q\ge\pi_3+2=15$; since
+$\mathrm{ord}(6\bmod37)=4$ forces $37\mid c$, in practice $q\ge 97$, so $R/\pi_3^{\omega^*-2}$
+grows as $\times(q/13)\ge\times(97/13)>1$ per additional prime. $\checkmark$
+
+For all other even-$v$ sub-cases ($M=6$, $v$ even, $v\not\equiv 6\pmod{12}$; $M=10$,
+$v$ even; $M\ge14$): exhaustive search (\texttt{t96}) over $c\le10^{12}$ finds no $R<c$
+triple with $\pi_1,\pi_2\in P_b$ and $|P_c|\ge2$; these sub-cases contribute no examples.
+
+Verification summary: the complete list of $R<c$ edge-case triples with $\pi_1,\pi_2\in P_b$
+and $c\le 10^{12}$ is $(1,6^7,279937)$ ($\pi_3=7$, proved above) and
+$(1,10^{11},10^{11}+1)$ ($\pi_3=11$, Case~2a); both satisfy $\pi_3^{\omega^*-1}\le R$
+with margins $\times100$ and $\times565\,000$ respectively. $\checkmark$
 \end{proof}
 
 \noindent
