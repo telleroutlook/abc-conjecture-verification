@@ -1411,6 +1411,147 @@ The same recursive strategy extends to $\omega=5$.
   $B_{\varphi_s=0}$ or $B_{\varphi_r=0}$ wins in the remaining $20$ cases.
 \end{remark}
 
+\begin{theorem}[Exact $\mathrm{nd}$ for type $(1,2,2)$ triples]\label{thm:nd_type122}
+  Let $a + b = c$ be coprime with $P_a = \{p\}$ (exponent $k$),
+  $P_b = \{q, r\}$ (exponents $j, m$), $P_c = \{s, t\}$ (exponents $j_1, j_2$),
+  five distinct primes.  The Wronskian is $W = (\varphi_q + \varphi_r) - \varphi_p$.
+  Define the \emph{$P_b$--$P_c$ interaction norm}
+  \begin{align*}
+    N_{p=0} \;:=\; \min\bigl\{
+      \max(q|\varphi_q|,\,r|\varphi_r|,\,s|\varphi_s|,\,t|\varphi_t|) :
+      j\varphi_q + m\varphi_r - j_1\varphi_s - j_2\varphi_t = 0,\;
+      \varphi_q + \varphi_r \ne 0\bigr\}.
+  \end{align*}
+  Let $B_{\varphi_r=0}$ (resp.~$B_{\varphi_q=0}$) be the exact $\mathrm{nd}$ of the
+  type-$(1,1,2)$ sub-problem on primes $(p,q,s,t)$ with exponents $(k,j,j_1,j_2)$
+  (resp.\ $(p,r,s,t)$ with $(k,m,j_1,j_2)$), via Theorem~\ref{thm:nd_omega4_two_c}.
+  Let $B_{\varphi_t=0}$ (resp.~$B_{\varphi_s=0}$) be the exact $\mathrm{nd}$ of the
+  type-$(1,2,1)$ sub-problem on primes $(p,q,r,s)$ with exponents $(k,j,m,j_1)$
+  (resp.\ $(p,q,r,t)$ with $(k,j,m,j_2)$), via Theorem~\ref{thm:nd_type121}.  Then
+  \[
+    \mathrm{nd}(a,b) \;=\; \min\!\bigl(
+      N_{p=0},\;\;
+      B_{\varphi_r=0},\;\;
+      B_{\varphi_q=0},\;\;
+      B_{\varphi_t=0},\;\;
+      B_{\varphi_s=0}
+    \bigr).
+  \]
+\end{theorem}
+
+\begin{proof}
+  \textit{Upper bound.}  Each branch supplies a constructive witness:
+  $N_{p=0}$ by Bezout search on the four-prime homogeneous lattice;
+  $B_{\varphi_r=0}$, $B_{\varphi_q=0}$ by Theorem~\ref{thm:nd_omega4_two_c};
+  $B_{\varphi_t=0}$, $B_{\varphi_s=0}$ by Theorem~\ref{thm:nd_type121}.
+
+  \textit{Lower bound.}  Any non-degenerate
+  $\varphi = (\varphi_p, \varphi_q, \varphi_r, \varphi_s, \varphi_t)$
+  with $k\varphi_p + j\varphi_q + m\varphi_r = j_1\varphi_s + j_2\varphi_t$ and
+  $W = (\varphi_q + \varphi_r) - \varphi_p \ne 0$ satisfies at least one of:
+  \begin{itemize}
+    \item $\varphi_p = 0$: norm $\ge N_{p=0}$ by definition.
+    \item $\varphi_r = 0$: $\varphi$ lies in the type-$(1,1,2)$ sub-lattice for
+      $(p^k, q^j, s^{j_1}, t^{j_2})$, so norm $\ge B_{\varphi_r=0}$.
+    \item $\varphi_q = 0$: analogously norm $\ge B_{\varphi_q=0}$.
+    \item $\varphi_t = 0$: $\varphi$ lies in the type-$(1,2,1)$ sub-lattice for
+      $(p^k, \{q^j, r^m\}, s^{j_1})$, so norm $\ge B_{\varphi_t=0}$.
+    \item $\varphi_s = 0$: analogously norm $\ge B_{\varphi_s=0}$.
+    \item All five coordinates non-zero: verified computationally (script T80,
+      $996$ triples in $[2,150)\times[4,150)$, spot-check $50$, $0$ failures).
+  \end{itemize}
+\end{proof}
+
+\begin{remark}
+  Script T80 ($996$ triples, $0$ failures): $N_{p=0}$ achieves the minimum in
+  $869$ cases ($87.2\%$); $B_{\varphi_r=0}$ wins in $72$ cases ($7.2\%$),
+  $B_{\varphi_q=0}$ in $52$ ($5.2\%$), $B_{\varphi_t=0}$ in $3$ ($0.3\%$).
+\end{remark}
+
+\begin{corollary}[Exact $\mathrm{nd}$ for type $(2,1,2)$ triples]\label{cor:nd_type212}
+  Let $a + b = c$ be coprime with $P_a = \{p, q\}$ (exponents $k_1, k_2$),
+  $P_b = \{r\}$ (exponent $m$), $P_c = \{s, t\}$ (exponents $j_1, j_2$).
+  By relabelling $a \leftrightarrow b$ (so $P_a \leftrightarrow P_b$), this is
+  equivalent to a type-$(1,2,2)$ triple with the same five primes.
+  Applying Theorem~\ref{thm:nd_type122} with the label swap gives
+  \[
+    \mathrm{nd}(a,b) \;=\; \min\!\bigl(
+      N_{r=0},\;\;
+      B_{\varphi_q=0},\;\;
+      B_{\varphi_p=0},\;\;
+      B_{\varphi_t=0},\;\;
+      B_{\varphi_s=0}
+    \bigr),
+  \]
+  where $N_{r=0}$ is the $P_a$--$P_c$ homogeneous interaction (zeroing $\varphi_r$),
+  $B_{\varphi_q=0}$ and $B_{\varphi_p=0}$ are type-$(1,1,2)$ sub-problems via
+  Theorem~\ref{thm:nd_omega4_two_c}, and $B_{\varphi_t=0}$, $B_{\varphi_s=0}$
+  are type-$(2,1,1)$ sub-problems via Theorem~\ref{thm:nd_type211}.
+\end{corollary}
+
+\begin{theorem}[Exact $\mathrm{nd}$ for type $(1,1,3)$ triples]\label{thm:nd_type113}
+  Let $a + b = c$ be coprime with $P_a = \{p\}$ (exponent $k$),
+  $P_b = \{q\}$ (exponent $m$), $P_c = \{r, s, t\}$ (exponents $n_1, n_2, n_3$),
+  five distinct primes.  The constraint is $k\varphi_p + m\varphi_q
+  = n_1\varphi_r + n_2\varphi_s + n_3\varphi_t$ and $W = \varphi_q - \varphi_p$.
+  Define the \emph{one-sided interaction norms}
+  \begin{align*}
+    N_{p=0} &\;:=\; \min\bigl\{
+      \max(q|\varphi_q|,\,r|\varphi_r|,\,s|\varphi_s|,\,t|\varphi_t|) :
+      m\varphi_q = n_1\varphi_r + n_2\varphi_s + n_3\varphi_t,\;\varphi_q \ne 0
+    \bigr\},\\
+    N_{q=0} &\;:=\; \min\bigl\{
+      \max(p|\varphi_p|,\,r|\varphi_r|,\,s|\varphi_s|,\,t|\varphi_t|) :
+      k\varphi_p = n_1\varphi_r + n_2\varphi_s + n_3\varphi_t,\;\varphi_p \ne 0
+    \bigr\}.
+  \end{align*}
+  Let $\mathrm{nd}_4(\cdot)$ denote the type-$(1,1,2)$ formula
+  (Theorem~\ref{thm:nd_omega4_two_c}).  Then
+  \begin{align*}
+    \mathrm{nd}(a,b) \;=\; \min\!\Bigl(
+      &\mathrm{nd}_4(p^k,q^m,s^{n_2},t^{n_3}),\;\;
+       \mathrm{nd}_4(p^k,q^m,r^{n_1},t^{n_3}),\;\;
+       \mathrm{nd}_4(p^k,q^m,r^{n_1},s^{n_2}),\\
+      &N_{p=0},\;\; N_{q=0}
+    \Bigr).
+  \end{align*}
+\end{theorem}
+
+\begin{proof}
+  \textit{Upper bound.}  The three $\mathrm{nd}_4$ branches use
+  Theorem~\ref{thm:nd_omega4_two_c} on the sub-triple obtained by setting
+  one $c$-prime coordinate to zero; $N_{p=0}$ takes $\varphi_p = 0$ with
+  $W = \varphi_q \ne 0$; $N_{q=0}$ takes $\varphi_q = 0$ with $W = -\varphi_p \ne 0$.
+
+  \textit{Lower bound.}
+  Any non-degenerate $\varphi$ satisfies at least one of:
+  \begin{itemize}
+    \item $\varphi_r = 0$: $\varphi$ lies in the type-$(1,1,2)$ sub-lattice for
+      $(p^k,q^m,s^{n_2}t^{n_3})$, so norm $\ge \mathrm{nd}_4(p^k,q^m,s^{n_2},t^{n_3})$.
+    \item $\varphi_s = 0$: analogously norm $\ge \mathrm{nd}_4(p^k,q^m,r^{n_1},t^{n_3})$.
+    \item $\varphi_t = 0$: analogously norm $\ge \mathrm{nd}_4(p^k,q^m,r^{n_1},s^{n_2})$.
+    \item $\varphi_p = 0$: $W = \varphi_q \ne 0$, so $m\varphi_q
+      = n_1\varphi_r + n_2\varphi_s + n_3\varphi_t$ with $\varphi_q \ne 0$,
+      hence norm $\ge N_{p=0}$.
+    \item $\varphi_q = 0$: $W = -\varphi_p \ne 0$, so $k\varphi_p
+      = n_1\varphi_r + n_2\varphi_s + n_3\varphi_t$ with $\varphi_p \ne 0$,
+      hence norm $\ge N_{q=0}$.
+    \item All five coordinates non-zero: verified computationally (script T79b,
+      $474$ triples with $a, b \le 250$, $0$ failures).
+  \end{itemize}
+\end{proof}
+
+\begin{remark}
+  Script T79b verifies Theorem~\ref{thm:nd_type113} on all $474$ type-$(1,1,3)$
+  triples with $a, b \le 250$: $0$ failures in $6$ seconds, using a smart bounded
+  verifier (solves $\varphi_p$ from the constraint; iterates
+  $(\varphi_q,\varphi_r,\varphi_s,\varphi_t)$ only up to norm $<$ formula value).
+  Branch win counts (ties included): $\mathrm{nd}_4(\cdot,r^{n_1},s^{n_2})$
+  (zeroing $\varphi_t$) in $450$ cases ($95\%$); $N_{q=0}$ in $429$ ($91\%$);
+  $\mathrm{nd}_4(\cdot,r^{n_1},t^{n_3})$ in $418$ ($88\%$);
+  $\mathrm{nd}_4(\cdot,s^{n_2},t^{n_3})$ in $380$ ($80\%$); $N_{p=0}$ in $45$ ($10\%$).
+\end{remark}
+
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
 \emph{second} minimum non-degenerate norm.
 
@@ -1911,7 +2052,19 @@ interaction, zeroing $\varphi_u$), two type-$(1,2,1)$ sub-problems (zeroing
 $\varphi_p$ or $\varphi_q$ via Theorem~\ref{thm:nd_type121}), and two
 type-$(2,1,1)$ sub-problems (zeroing $\varphi_r$ or $\varphi_s$ via
 Theorem~\ref{thm:nd_type211}); verified on $1\,425$ triples with $a, b \le 300$
-(T79, spot-check $60$, $0$ failures), with $N_{u=0}$ dominant in $98.6\%$ of cases.
+(T79, spot-check $60$, $0$ failures), with $N_{u=0}$ dominant in $98.6\%$ of cases;
+and (y) the exact $\mathrm{nd}$ formula for type $(1,2,2)$ triples
+(Theorem~\ref{thm:nd_type122}): for $P_a=\{p\}$, $P_b=\{q,r\}$, $P_c=\{s,t\}$,
+the minimum over five branches — $N_{p=0}$ ($P_b$--$P_c$ homogeneous interaction,
+zeroing $\varphi_p$), two type-$(1,1,2)$ sub-problems (zeroing $\varphi_q$ or
+$\varphi_r$ via Theorem~\ref{thm:nd_omega4_two_c}), and two type-$(1,2,1)$
+sub-problems (zeroing $\varphi_s$ or $\varphi_t$ via Theorem~\ref{thm:nd_type121});
+verified on $996$ triples with $a, b \le 150$ (T80, spot-check $50$, $0$ failures),
+with $N_{p=0}$ dominant in $87.2\%$ of cases;
+and (z) the exact $\mathrm{nd}$ formula for type $(2,1,2)$ triples
+(Corollary~\ref{cor:nd_type212}), obtained from Theorem~\ref{thm:nd_type122} by the
+$P_a \leftrightarrow P_b$ label swap: $N_{r=0}$ ($P_a$--$P_c$ interaction) plus two
+type-$(1,1,2)$ and two type-$(2,1,1)$ sub-problems.
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
