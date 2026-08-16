@@ -957,6 +957,45 @@ is determined by a one-dimensional lattice.
   (confirming Theorem~\ref{thm:nd_lb}), since $qk \ge q$ and $r > q$.
 \end{remark}
 
+\begin{theorem}[Exact $\mathrm{nd}$ for type $(k,m,1)$ non-squarefree triples]\label{thm:nd_km1}
+  Let $a + b = c$ be a coprime triple with $P_a = \{p\}$, $P_b = \{q\}$, $P_c = \{r\}$
+  and $v_p(a) = k \ge 1$, $v_q(b) = m \ge 1$, $v_r(c) = 1$, $p < q < r$.
+  Let $g = \gcd(k, m)$.  Then
+  \[
+    \mathrm{nd}(a,b) \;=\; \min\!\left(r,\;\max\!\left(\frac{pm}{g},\frac{qk}{g}\right)\right).
+  \]
+\end{theorem}
+
+\begin{proof}
+  \textit{Upper bound.}
+  The vector $\varphi_p = -m/g$, $\varphi_q = k/g$, $\varphi_r = 0$ satisfies
+  the constraint ($k \cdot (-m/g) + m \cdot (k/g) = 0$),
+  has $W = k/g + m/g = (k+m)/g \ne 0$,
+  and norm $\max(pm/g,\, qk/g)$.
+  Hence $\mathrm{nd}(a,b) \le \max(pm/g, qk/g) \le \min(r, \max(pm/g, qk/g))$.
+
+  \textit{Lower bound — $\varphi_r = 0$ case.}
+  The constraint reduces to $k\varphi_p + m\varphi_q = 0$.
+  Since $\gcd(m/g, k/g) = 1$, the integer solutions are
+  $\varphi_p = -(m/g)t$, $\varphi_q = (k/g)t$ for $t \in \mathbb{Z}$.
+  Non-degeneracy $W = (k/g + m/g)t \ne 0$ forces $t \ne 0$, giving
+  norm $\max(pm/g,\, qk/g) \cdot |t| \ge \max(pm/g,\, qk/g)$.
+
+  \textit{Lower bound — $\varphi_r \ne 0$ case.}
+  Then $r|\varphi_r| \ge r$, so $\|\varphi\| \ge r$.
+
+  Combining both cases, $\mathrm{nd}(a,b) \ge \min(r,\, \max(pm/g, qk/g))$.
+\end{proof}
+
+\begin{remark}
+  Theorem~\ref{thm:nd_k11} is the special case $m = 1$ (so $g = 1$,
+  $\max(p, qk) = qk$ since $qk > p$ for $k \ge 1$, $q > p$).
+  When $k = m$ (equal valuations), $g = k$ and
+  $\max(p, q) = q$, giving $\mathrm{nd} = q = p_2$:
+  equal valuations always realise the lower bound.
+  When $k = m = 1$ (squarefree), $\mathrm{nd} = q$, recovering E$_n$.
+\end{remark}
+
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
 \emph{second} minimum non-degenerate norm.
 
@@ -1322,6 +1361,10 @@ Additional lemmas added in the E10/E11/E$_n$/F31 extension:
     $x \ge 1$; $\varphi_r \ne 0$ branch); \texttt{pasten\_nd\_k11\_valuation\_branch}
     ($qk \le qkx$; $\varphi_r{=}0$ branch); \texttt{pasten\_nd\_k11\_norm\_equals\_qk}
     ($\max(px, qkx) = qkx$ for $p < q$; q-component dominates).
+  \item \texttt{pasten\_nd\_km1\_gcd\_div\_one}: $\gcd(k/g,\, m/g) = 1$ for
+    $g = \gcd(k,m)$; integer core of the $\varphi_r{=}0$ solution-family
+    uniqueness in Theorem~\ref{thm:nd_km1} (Mathlib
+    \texttt{Nat.Coprime.div\_gcd\_coprime}, zero \texttt{sorry}).
 \end{itemize}
 
 \section{Conclusion}
@@ -1381,7 +1424,12 @@ $P_a=\{p^k\}$, $P_b=\{q\}$, $P_c=\{r\}$ with $p<q<r$, with two regimes
 (valuation-dominant $qk<r$ and pairwise-dominant $qk \ge r$) and
 confirming $\mathrm{nd} \ge p_2 = q$ (Theorem~\ref{thm:nd_lb});
 verified numerically (T68) and Lean-formalized (three arithmetic kernel lemmas,
-zero \texttt{sorry}).
+zero \texttt{sorry}); and (o) the exact formula for general type $(k,m,1)$
+non-squarefree triples (Theorem~\ref{thm:nd_km1}):
+$\mathrm{nd}(a,b) = \min(r,\, \max(pm/g,\, qk/g))$ where $g = \gcd(k,m)$,
+subsumes Theorems~\ref{thm:nd_k11} ($m=1$) and the squarefree E$_n$ value ($k=m=1$),
+with equal-valuation regime ($k=m$) always realising $\mathrm{nd} = p_2$;
+verified numerically on 14 named examples (T69).
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime

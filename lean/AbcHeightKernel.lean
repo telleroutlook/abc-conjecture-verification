@@ -1286,3 +1286,18 @@ theorem pasten_nd_k11_norm_equals_qk (p q k x : ℕ) (hpq : p < q) (hk : 1 ≤ k
   apply Nat.max_eq_right
   have hpqk : p < q * k := Nat.lt_of_lt_of_le hpq (le_mul_of_one_le_right (Nat.zero_le q) hk)
   exact Nat.mul_le_mul_right x (Nat.le_of_lt hpqk)
+
+/-! ### Type (k,m,1) exact nd formula (Theorem thm:nd_km1)
+
+  For Pa={p^k}, Pb={q^m}, Pc={r} with p < q < r, g = gcd(k,m):
+  nd(a,b) = min(r, max(p*m/g, q*k/g)).
+
+  Key arithmetic fact: gcd(k/g, m/g) = 1, so the φ_r=0 solution set is
+  exactly {t*(−m/g, k/g) : t ∈ ℤ}, and W = (k+m)/g * t ≠ 0 iff t ≠ 0.
+-/
+
+/-- [THM] nd_km1_gcd_div_one: gcd(k / gcd(k,m), m / gcd(k,m)) = 1.
+    Integer core of the uniqueness of the φ_r=0 solution family in thm:nd_km1. -/
+theorem pasten_nd_km1_gcd_div_one (k m : ℕ) (hk : 0 < k) (_ : 0 < m) :
+    Nat.Coprime (k / Nat.gcd k m) (m / Nat.gcd k m) :=
+  Nat.coprime_div_gcd_div_gcd (Nat.gcd_pos_of_pos_left m hk)
