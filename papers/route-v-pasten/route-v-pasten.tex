@@ -2039,8 +2039,8 @@ a complete recursive algorithm for $\mathrm{nd}(a,b)$.
     \item For $\omega^*\in\{5,6\}$: $\mathrm{nd}(a,b) = \min_p B_p$ (empirically
       verified; $\omega^*=5$ all six partition types, $a,b\le 300$;
       $\omega^*=6$ all three unordered partition classes $\{4,1,1\}$,
-      $\{3,2,1\}$, $\{2,2,2\}$, covering $3193$ triples with $a,b\le 200$,
-      $0$ failures, scripts T83--T85).
+      $\{3,2,1\}$, $\{2,2,2\}$: non-squarefree $1959$ triples $a,b\le 200$,
+      $0$ violations, T85bis; squarefree proved in item~(i)).
   \end{enumerate}
 \end{theorem}
 
@@ -2741,9 +2741,10 @@ and (ad) the \emph{zero-coordinate minimizer property}
 non-degenerate norm is always achieved by a vector with at least one
 prime coordinate equal to zero, so $\mathrm{nd}(a,b) = \min_p B_p$
 (minimum over all zero-$\varphi_p$ sub-lattices); proved for $\omega^*=4$
-and verified across all partition classes for $\omega^*=5,6$: $3193$
-triples at $\omega^*=6$ covering all three unordered partition classes
-$\{4,1,1\}$, $\{3,2,1\}$, $\{2,2,2\}$, $0$ violations (T85).
+and verified across all partition classes for $\omega^*=5,6$:
+non-squarefree $\omega^*=6$: $1959$ triples $a,b\le 200$, all three
+partition classes $\{4,1,1\}$, $\{3,2,1\}$, $\{2,2,2\}$, $0$ violations
+(T85bis); squarefree $\omega^*=6$: proved by Theorem~\ref{thm:nd_zero_coord}(i).
 This fails for non-squarefree $\omega^*=3$: the triple $(5,27,32)$ achieves
 $\mathrm{nd}=6$ via an all-nonzero vector, while every zero-coordinate branch
 gives norm $\ge 15$;
@@ -2752,7 +2753,8 @@ and (ae) the \emph{general recursive nd algorithm}
 primes, $\mathrm{nd}(a,b) = \min_p B_p$ (each $B_p$ zeroing one prime coordinate,
 computed recursively from the nd111 base case); proved for $\omega^*=4$,
 verified for $\omega^*=5$ (all six partition types) and $\omega^*=6$ (all
-three partition classes, $3193$ triples, $0$ failures, T83--T85);
+three partition classes, non-squarefree $1959$ triples $a,b\le 200$,
+$0$ violations, T85bis; squarefree proved in Theorem~\ref{thm:nd_zero_coord}(i));
 and (af) the \emph{squarefree minimizer support theorem}
 (Theorem~\ref{thm:nd_sqfree_support}): for every squarefree coprime triple
 of any $\omega^*\ge 3$, every nd-minimizer satisfies $\varphi_p=0$ for all

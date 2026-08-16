@@ -34,11 +34,20 @@ Phase status as of 2026-08-17.
 
 ## Paper: route-v-pasten.tex (2026-08-17, post-T86bis)
 
-T86bis: thm:nd_zero_coord Part (iii) strengthened — ω*=5 now has p₅-forcing analytic proof
-for 2019/2446 (82.5%) and computational verification for 427/2446 (17.5%); 0 violations,
-0 skips. Old T86 (BB=3, 40 sampled) replaced. Duplicate "Part (iii)" label fixed → "Part (iv)".
+## Paper: route-v-pasten.tex (2026-08-17, 4 commits today)
 
-Four S1-S5 PAPER_LINT findings found and fixed (all committed):
+**Commits today (f4b79d2, 71b77d5, a658de0, c0e02ec):**
+1. **T86bis + thm:nd_zero_coord Part (iii) omega*=5:** p_5-forcing: B1 analytic (2019/2446,
+   82.5%), B2 computational (427/2446, 17.5%), 0 violations. Duplicate "Part (iii)" label
+   fixed → "Part (iv)".
+2. **thm:ob13c Step 3 closed:** Explicit computable search radius R_j = ceil(U/||b_j*||_W)
+   via GS coefficient bound and Lovász condition. Center-shifting enumeration described correctly.
+3. **T85bis + thm:nd_zero_coord Part (iii) omega*=6:** p_6-forcing: B1 analytic (1920/1959,
+   98.0%), B2 computational (39/1959, 2.0%), 0 violations. Corrected count 3193→1959
+   (T85 had sampled only ~150 and counted all ω*=6 including squarefree). T85 citation
+   replaced by T85bis.
+
+
 1. **Unbounded types remark:** Removed erroneous "ω=6 bounded types ≈ 0.889" (no
    bounded ω=6 types exist). Corrected T51 statistic label to max(q+ρ^{ω-1}).
 2. **thm:ob13b statement:** Theorem now states c≤10^12 unconditional; c>10^12 conditional
