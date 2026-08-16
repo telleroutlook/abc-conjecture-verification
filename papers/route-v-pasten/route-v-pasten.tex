@@ -440,6 +440,7 @@ the sum $\operatorname{quality} + \rho^{\omega-1}$ is provably bounded away from
 \end{proof}
 
 \begin{remark}[Tightness for type $(1,1,1)$]
+  The supremum is approached only by type $(1,1,1)$ triples.
   For the twin-prime family $(2,q,q+2)$: $\operatorname{quality} \to 1/2$ and
   $\rho^2 = q/(2(q+2)) \to 1/2$ as $q \to \infty$, so the bound is tight.
   The algebraic core --- $(q+2)^q < (2q)^{q+4}$ for all $q \ge 1$ (proved for $q=1$
@@ -1298,49 +1299,52 @@ is determined by a one-dimensional lattice.
 \begin{theorem}[Exact $\mathrm{nd}$ for type $(1,2,1)$ triples]\label{thm:nd_type121}
   Let $a + b = c$ be coprime with $P_a = \{p\}$ (exponent $k$),
   $P_b = \{q, r\}$ ($q < r$, exponents $j = v_q(b)$, $m = v_r(b)$),
-  $P_c = \{s\}$ (exponent $n$), all four primes distinct.
-  Let $g = \gcd(j, m)$.  Then
-  \begin{align*}
-    \mathrm{nd}(a,b) \;=\; \min\Bigl(
-      &[W_b \;\text{if}\; j \ne m],\;
-        \mathrm{pw}(k,j,p,q),\;\mathrm{pw}(k,m,p,r),\\
-      &\mathrm{pw}(k,n,p,s),\;\mathrm{pw}(j,n,q,s),\;\mathrm{pw}(m,n,r,s),\\
-      &N_{p=0},\;N_{s=0},\;
-        \mathrm{nd}_3(p^k,q^j,s^n),\;\mathrm{nd}_3(p^k,r^m,s^n)
-    \Bigr),
-  \end{align*}
-  where $W_b := \max(q \cdot m/g,\; r \cdot j/g)$ is the within-group $P_b$ norm,
-  \begin{align*}
-    N_{p=0} &:= \min\bigl\{\max(q|\varphi_q|,\,r|\varphi_r|,\,s|\varphi_s|)
-      : j\varphi_q + m\varphi_r = n\varphi_s,\;
-      \varphi_q + \varphi_r \ne 0\bigr\},\\
-    N_{s=0} &:= \min\bigl\{\max(p|\varphi_p|,\,q|\varphi_q|,\,r|\varphi_r|)
-      : k\varphi_p + j\varphi_q + m\varphi_r = 0,\;
-      (\varphi_q+\varphi_r) \ne \varphi_p\bigr\},
-  \end{align*}
-  and $\mathrm{nd}_3(p^k,q^j,s^n)$, $\mathrm{nd}_3(p^k,r^m,s^n)$ are the $\omega^*=3$
-  sub-problems (Theorem~\ref{thm:nd_pairwise_bezout}).
+  $P_c = \{s\}$ (exponent $n$), all four primes distinct.  Define the
+  \emph{$P_a$–$P_b$ interaction norm}
+  \[
+    N_{s=0} \;:=\; \min\bigl\{\max(p|\varphi_p|,\,q|\varphi_q|,\,r|\varphi_r|) :
+      k\varphi_p + j\varphi_q + m\varphi_r = 0,\;
+      (\varphi_q+\varphi_r) \ne \varphi_p\bigr\}
+  \]
+  (zeroing the $P_c$-coordinate; subsumes the within-group $P_b$ norm and the two
+  $P_a$--$P_b$ pairwise norms), and the \emph{$P_b$–$P_c$ interaction norm}
+  \[
+    N_{p=0} \;:=\; \min\bigl\{\max(q|\varphi_q|,\,r|\varphi_r|,\,s|\varphi_s|) :
+      j\varphi_q + m\varphi_r = n\varphi_s,\;
+      \varphi_q + \varphi_r \ne 0\bigr\}
+  \]
+  (zeroing $P_a$; subsumes the two $P_b$--$P_c$ pairwise norms).
+  Let $\mathrm{nd}_3(p^k,q^j,s^n)$ and $\mathrm{nd}_3(p^k,r^m,s^n)$ denote the
+  $\omega^*=3$ sub-problems (Theorem~\ref{thm:nd_pairwise_bezout}; each subsumes the
+  $P_a$--$P_c$ pairwise norm and the corresponding $P_b$--$P_c$ norm).  Then
+  \[
+    \mathrm{nd}(a,b) \;=\; \min\!\Bigl(
+      N_{s=0},\;\; N_{p=0},\;\;
+      \mathrm{nd}_3(p^k,q^j,s^n),\;\;
+      \mathrm{nd}_3(p^k,r^m,s^n)
+    \Bigr).
+  \]
 \end{theorem}
 
 \begin{proof}
-  The Wronskian is $W = (\varphi_q + \varphi_r) - \varphi_p$.
-  The constraint is $k\varphi_p + j\varphi_q + m\varphi_r = n\varphi_s$.
-  This has the same structure as Theorem~\ref{thm:nd_type211} with $P_a$
-  and $P_b$ exchanged: the single-prime group is now $P_a = \{p\}$ and the
-  two-prime group is $P_b = \{q,r\}$.  Relabelling throughout the proof of
-  Theorem~\ref{thm:nd_type211} (replace $\varphi_r \to \varphi_p$,
-  $\varphi_p \leftrightarrow \varphi_q \leftrightarrow \varphi_r$) gives the
-  same ten-branch case analysis verbatim.
+  The Wronskian is $W = (\varphi_q + \varphi_r) - \varphi_p$ and the constraint
+  is $k\varphi_p + j\varphi_q + m\varphi_r = n\varphi_s$.  This has the same
+  algebraic structure as Theorem~\ref{thm:nd_type211} with $P_a$ and $P_b$
+  exchanged: relabelling $p \leftrightarrow r$, $k_1 \leftrightarrow m$,
+  $k_2 \leftrightarrow j$, and identifying the single-prime group as $P_a = \{p\}$
+  maps the four-branch formula of Theorem~\ref{thm:nd_type211} verbatim to the
+  formula above.  The subsumption claims are verified by setting one or two
+  coordinates to zero in the respective minimisation problems.
 \end{proof}
 
 \begin{remark}
-  Script T78 verifies Theorem~\ref{thm:nd_type121} on all $1\,043$ type~$(1,2,1)$
+  Script T78\_formula verifies Theorem~\ref{thm:nd_type121} on all $1\,043$ type~$(1,2,1)$
   triples with $a, b \le 200$: $0$ failures.
-  Branch dominance mirrors type~$(2,1,1)$: cross-group $\mathrm{pw}$ in $61\%$,
-  within-group $W_b$ in $30\%$, $N_{s=0}$ in $6\%$, $N_{p=0}$ in $2\%$.
-  One spot-check case ($(128, 69)$: $a = 2^7$, $b = 3 \cdot 23$, $c = 197$)
-  requires $|\varphi_3| = 7$ for the optimal witness ($\mathrm{nd} = 21$ via the
-  $N_{s=0}$ branch), confirming that a brute-force bound of $6$ is insufficient.
+  Branch win counts (ties included): $N_{s=0}$ in $935$ cases ($90\%$),
+  $\mathrm{nd}_3(p^k,q^j,s^n)$ in $567$, $N_{p=0}$ in $395$,
+  $\mathrm{nd}_3(p^k,r^m,s^n)$ in $265$.
+  One spot-check case ($a = 2^7$, $b = 3 \cdot 23$, $c = 197$)
+  requires $|\varphi_3| = 7$ in the optimal witness via $N_{s=0}$ ($\mathrm{nd}=21$).
 \end{remark}
 
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
