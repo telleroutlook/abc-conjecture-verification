@@ -35,7 +35,7 @@ group minima. Proved analytically: every cross-group 2-entry φ-vector is non-de
 
 ---
 
-## Status update (2026-08-15): ALL CLAIMS CONFIRMED
+## Status update (2026-08-16): Claims A and B CONFIRMED; Claim C REVISED
 
 **Claim A — Type (0,2,2):** CONFIRMED (F14). Unique max at (1,14,15); ρ = 3·210^{−1/3}.
 
@@ -45,10 +45,24 @@ group minima. Proved analytically: every cross-group 2-entry φ-vector is non-de
   - c-odd subfamily (a=2, b odd prime, c=2+b=r₁r₂): nd = r₁ always (proved: r₁ < b).
     ρ³ ≤ √(2+b)/(2b) → 0. Finite max = 0.4106 at (2,13,15). All < 2^{-1/3}.
 
-**Claim C — Types (1,2,2), (2,1,2), (2,2,1):** CONFIRMED (F15/T27).
-  Each type has a growing subfamily with nd=3 fixed while R→∞, so ρ→0.
-  Finite maxima: (1,2,2) ρ=0.4999 at (13,22,35); (2,1,2) ρ=0.6076 at (6,1511,1517);
-  (2,2,1) ρ=0.6064 at (6,1517,1523). Scripts: t27, t29.
+**Claim C — REVISED (2026-08-16):**
+  - Type (1,2,2): ρ → 0 ✓. nd is bounded (equal to a fixed small prime) while
+    R → ∞, so ρ → 0. Finite max ≈ 0.4327 at (2,33,35).
+  - Type (2,1,2): **ρ does NOT go to 0.** The family a=6, b=q (prime), c=6+q (near-
+    balanced semiprime) gives nd = min(Pc) ≈ √q and R ≈ 6q², so
+    ρ ≈ √q / (6q²)^{1/4} = 1/6^{1/4} ≈ 0.6389.
+    sup ρ = 1/6^{1/4} (approached, never achieved). Verified: ρ reaches 0.6357 at
+    (6, 36857, 36863) = (6, 36857, 191·193).
+  - Type (2,2,1): **ρ does NOT go to 0.** The family a=6, b=q₁q₂ (balanced
+    semiprime), c=6+q₁q₂ (prime) gives nd = min(Pb) ≈ √b and R ≈ 6b·c ≈ 6b²,
+    so ρ → 1/6^{1/4} ≈ 0.6389.
+    sup ρ = 1/6^{1/4} (approached, never achieved). Verified: ρ reaches 0.6357 at
+    (6, 39203, 39209) = (6, 197·199, 39209).
+  **General formula:** for type (2,⋆,⋆) or (⋆,2,⋆) with the 2-prime group having
+  product p₁p₂ fixed while b → ∞ via balanced semiprime structure:
+    ρ → 1/(p₁p₂)^{1/4}.
+  Smallest possible p₁p₂ = 2·3 = 6, giving the universal bound sup ρ ≤ 1/6^{1/4} for
+  types (2,1,2) and (2,2,1).
 
 ---
 
@@ -70,9 +84,13 @@ achieved uniquely at (a, b, c) = (1, 14, 15).
   sup ρ ≤ 0.773 (numerical; exact supremum unknown; may be irrational).
   Characterize: does ρ → 0 as the triple grows, and what is the exact supremum?
 
-**Claim C — Types (1,2,2), (2,1,2), (2,2,1), ω=5:**
-  All three have ρ → 0 as triple grows (numerically verified). Prove analytically.
-  Numerical sups: 0.500, 0.607, 0.582 respectively. Are these achieved exactly?
+**Claim C — Types (1,2,2), (2,1,2), (2,2,1), ω=5 (REVISED 2026-08-16):**
+  - Type (1,2,2): ρ → 0. Prove analytically. Numerical max ≈ 0.433 at (2,33,35).
+  - Type (2,1,2): sup ρ = 1/6^{1/4} ≈ 0.6389 (limit, not achieved). The original claim
+    "ρ→0" is **wrong**. Prove: sup ρ = 1/(min(a))^{1/4} where min(a) = p₁p₂ is the
+    2-prime group product, minimized at p₁p₂=6. Numerical evidence: ρ reaches 0.6357.
+  - Type (2,2,1): sup ρ = 1/6^{1/4} ≈ 0.6389 (limit, not achieved). Same analysis.
+    Numerical evidence: ρ reaches 0.6357.
 
 ---
 
