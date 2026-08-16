@@ -1366,3 +1366,45 @@ theorem pasten_sqfree_three_mins_strict (m1 m2 m3 : ℕ)
 theorem pasten_sqfree_nd_lt_pmax (nd_ub m2 m3 : ℕ)
     (hnd : nd_ub ≤ m2) (hm : m2 < m3) : nd_ub < m3 :=
   Nat.lt_of_le_of_lt hnd hm
+
+/-! ### F34: Second successive minimum for type (k,1,1) (Theorem thm:f34)
+  Three achievability vectors and core gap arithmetic.
+  (A) Vector (0,2,2): constraint k*0+2=2, norm = max(0,2q,2r) = 2r.
+  (B) Vector (1,-k,0): constraint k*1+(-k)=0, norm = max(p,qk,0) = qk.
+  (C) Vector (1,1-k,1): constraint k*1+(1-k)=1, norm = q(k-1) when q(k-1)>r.
+  (D) Gap: on phi_r=1 line, q*|1-k*t| < q*(k-1) forces t=0 (mod k arithmetic).
+-/
+
+/-- [THM] f34_vec_2r_constraint: k*0 + 2 = 2.
+    Integer constraint check for the 2r-achievability vector (0,2,2). -/
+theorem pasten_f34_vec_2r_constraint (k : ℤ) : k * 0 + 2 = 2 := by ring
+
+/-- [THM] f34_vec_2r_norm: For q < r, max(2*q, 2*r) = 2*r.
+    The (0,2,2) vector achieves norm 2*r in the pairwise regime. -/
+theorem pasten_f34_vec_2r_norm (q r : ℕ) (h : q < r) : max (2 * q) (2 * r) = 2 * r := by
+  exact Nat.max_eq_right (Nat.mul_le_mul_left 2 (Nat.le_of_lt h))
+
+/-- [THM] f34_vec_qk1_constraint: k*1 + (1-k) = 1.
+    Integer constraint check for the q(k-1)-achievability vector (1,1-k,1). -/
+theorem pasten_f34_vec_qk1_constraint (k : ℤ) : k * 1 + (1 - k) = 1 := by ring
+
+/-- [THM] f34_vec_qk1_norm: If p < q*(k-1) and r < q*(k-1), then
+    max(p, max(q*(k-1), r)) = q*(k-1).
+    The (1,1-k,1) vector achieves norm q*(k-1) when q*(k-1) exceeds both p and r. -/
+theorem pasten_f34_vec_qk1_norm (p qk1 r : ℕ) (hp : p < qk1) (hr : r < qk1) :
+    max p (max qk1 r) = qk1 := by omega
+
+/-- [THM] f34_gap_line_t0: For integer k ≥ 2 and t ∈ ℤ, the only t with
+    -(k-1) < 1 - k*t < k-1 is t = 0.  Core arithmetic of the pairwise-regime
+    gap for thm:f34: on the phi_r=1 branch, norm < q*(k-1) forces t = 0. -/
+theorem pasten_f34_gap_line_t0 (k t : ℤ) (hk : 2 ≤ k)
+    (h1 : -(k - 1) < 1 - k * t) (h2 : 1 - k * t < k - 1) : t = 0 := by
+  have hkt_upper : k * t < k := by linarith
+  have hkt_lower : 2 - k < k * t := by linarith
+  have ht_nonpos : t ≤ 0 := by
+    by_contra hc; push_neg at hc
+    nlinarith [mul_nonneg (show (0:ℤ) ≤ k by linarith) (show (0:ℤ) ≤ t - 1 by linarith)]
+  have ht_nonneg : 0 ≤ t := by
+    by_contra hc; push_neg at hc
+    nlinarith [mul_nonneg (show (0:ℤ) ≤ k by linarith) (show (0:ℤ) ≤ -1 - t by linarith)]
+  linarith
