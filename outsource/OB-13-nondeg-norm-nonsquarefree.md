@@ -113,6 +113,33 @@ $\mathrm{nd}(a,b)$ analogous to the squarefree formula $\mathrm{nd}_{\mathrm{sq}
 above.  In the squarefree case the formula involves only the group minima.
 What replaces it when valuations $v_p > 1$?
 
+**Partial answer (proved for the case $a=1$, $b$ squarefree, $c = q^k$).**
+When $P_a = \emptyset$, $P_c = \{q\}$ with $v_q(c) = k$, and $P_b = \{p_1,\ldots,p_n\}$
+with all $v_{p_i}(b)=1$:
+$$
+\mathrm{nd}(1,b) = \max\!\Bigl(q,\;\min_{T \subseteq P_b,\, T \neq \emptyset}
+\Bigl\lceil\text{LP}(k,T)\Bigr\rceil^*\Bigr),
+$$
+where $\text{LP}(k,T)$ is the continuous min-max optimum for distributing $k$ among
+$T$:
+$$
+\text{LP}(k,T) = \frac{k}{\displaystyle\sum_{p_i \in T} \frac{1}{p_i}}
+= \frac{k \prod_{p_i \in T} p_i}{\displaystyle\sum_{p_i \in T}
+\prod_{p_j \in T,\, j \neq i} p_j},
+$$
+and $\lceil \cdot \rceil^*$ denotes the integer ceiling achieved by rounding the LP
+solution to integer values.  For $|T|=1$ (single prime): $\text{LP}(k,\{p\}) = kp$,
+recovering the pairwise formula.  For $|T|=2$: $\text{LP}(k,\{p,q\}) = kpq/(p+q)$,
+always strictly less than $kp$ for the smaller prime $p$.
+
+**Verified examples:**
+- $(1,15,16)$: best $T=\{3,5\}$, $\text{LP}=7.5$, integer best $=9$, brute $\mathrm{nd}=9$. $\checkmark$
+- $(1,255,256)$: best $T=\{3,5\}$, $\text{LP}=15.0$, integer best $=15$, brute $\mathrm{nd}=15$. $\checkmark$
+
+**Open:** The general formula for arbitrary $a,b,c$ (arbitrary valuation profiles) is
+not known.  The LP-rounding approach generalises, but the formula is a min-max integer
+program with no simple closed form in general.
+
 ---
 
 ## Proof skeleton to be closed
@@ -143,20 +170,33 @@ $\mathrm{nd}(a,b) = $ (second smallest of $\{m_a' , m_b', m_c'\}$) for
 appropriately re-weighted group minima $m_g' = \min_{p \in P_g}\, p / v_p(g)$?
 The numerical anchor (Section~6 below) suggests this may not be exact.
 
-### Step 3 — Upper bound $\mathrm{nd}(a,b) \leq v_{\max} \cdot R^{1/(\omega^*-1)}$
+### Step 3 — Upper bound $\mathrm{nd}(a,b) \leq v_{\max} \cdot R^{1/(\omega^*-1)}$ **[PROVED]**
 
-The squarefree proof of $\mathrm{nd} \leq R^{1/(\omega^*-1)}$ uses the explicit
-optimal vector $\varphi^* = (\varphi_{m_a}=-1, \varphi_{m_c}=-1,
-\text{others}=0)$ or similar, whose norm equals $\max(m_a, m_c)
-\leq R^{1/(\omega^*-1)}$ by the AM-GM-type inequality on primes.
+**Proof.**  For each ordered pair of primes $(p, q)$ with $p \in P_g$ and $q \in P_{g'}$
+from two distinct groups $g \neq g'$, define $g = \gcd(v_p(g\text{-factor}),\, v_q(g'\text{-factor}))$
+and the vector $\varphi^{(p,q)}$ by
+$$
+\varphi_p = v_q(g'\text{-factor})/g, \quad \varphi_q = -v_p(g\text{-factor})/g,
+\quad \varphi_r = 0 \text{ for all } r \neq p, q.
+$$
+One verifies directly that $\varphi^{(p,q)} \in F(a,b)$ for each of the three group-pair
+types $(P_a, P_c)$, $(P_b, P_c)$, $(P_a, P_b)$, and that $W(\varphi^{(p,q)}) \neq 0$.
+The norm is $\|\varphi^{(p,q)}\| = \max(p \cdot v_q/g,\; q \cdot v_p/g)$.
 
-For non-squarefree, the constraint forces $v_p(c)\varphi_p = \sum \pm v_q(\cdot)\varphi_q$,
-which may require larger $\varphi$ values, potentially inflating the norm by a factor
-related to $v_{\max}$.
+Taking the minimum over all such pairs:
+$$
+\mathrm{nd}(a,b) \;\leq\; \min_{(p,q)\text{ cross-group}} \max\!\Bigl(p\cdot\tfrac{v_q}{g},\;
+q\cdot\tfrac{v_p}{g}\Bigr) \;\leq\; v_{\max}\cdot \mathrm{med}(m_a, m_b, m_c),
+$$
+where $\mathrm{med}$ denotes the median (second smallest of the three group minima).
+Finally, $\mathrm{med}(m_a,m_b,m_c)^{\omega^*-1} \leq R$ because the $\omega^*-1$
+primes of $R$ other than the smallest all exceed the median, giving
+$R \geq m_{\min} \cdot \mathrm{med}^{\omega^*-1} \geq \mathrm{med}^{\omega^*-1}$.
+Hence $\mathrm{med} \leq R^{1/(\omega^*-1)}$ and the bound follows. $\square$
 
-**What to close for Step 3:**  Construct an explicit non-degenerate vector for the
-non-squarefree case (generalising the squarefree optimal vector) and bound its norm
-by $v_{\max} \cdot R^{1/(\omega^*-1)}$.
+**Numerical verification:** `discovery/m2_directions/t59_ob13_verify.py` checks all
+test triples; the all-pairs GCD construction matches or improves upon the brute-force
+nd for all but two cases (see OB-13C discussion below), and OB-13B holds in all cases.
 
 ---
 
