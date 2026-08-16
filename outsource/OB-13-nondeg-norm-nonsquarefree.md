@@ -198,6 +198,56 @@ Hence $\mathrm{med} \leq R^{1/(\omega^*-1)}$ and the bound follows. $\square$
 test triples; the all-pairs GCD construction matches or improves upon the brute-force
 nd for all but two cases (see OB-13C discussion below), and OB-13B holds in all cases.
 
+### Step 4 — Exact formula for $\omega=3$: 2D lattice SVP **[DISCOVERY TIER]**
+
+**Setting ($\omega=3$ triples with one prime per group).**
+For $P_a = \{p_1\}$, $P_b = \{p_2\}$, $P_c = \{p_3\}$ with valuations $v_a, v_b, v_c$,
+the constraint~(C) is $v_a \varphi_1 + v_b \varphi_2 = v_c \varphi_3$.
+Fix $(\varphi_1, \varphi_2) \in \mathbb{Z}^2$; then $\varphi_3$ is an integer iff
+$$
+  (\varphi_1, \varphi_2) \;\in\; \mathcal{L}
+    \;=\; \bigl\{(x,y)\in\mathbb{Z}^2 : v_c \mid v_a x + v_b y\bigr\}.
+$$
+$\mathcal{L}$ is a sublattice of $\mathbb{Z}^2$ of index $v_c / \gcd(v_a, v_b, v_c)$.
+An explicit basis is found by extended GCD: let $g = \gcd(v_b, v_c)$; then
+$\mathbf{e}_1 = (1,\, t)$ where $t \equiv -v_a \cdot (v_b/g)^{-1} \pmod{v_c/g}$,
+and $\mathbf{e}_2 = (0,\, v_c/g)$.
+
+Computing $\mathrm{nd}(a,b)$ reduces to the \textbf{Shortest Vector Problem} on
+$\mathcal{L}$ with norm $\|(x,y)\| = \max(p_1 |x|,\, p_2 |y|,\, p_3 |(v_a x + v_b y)/v_c|)$,
+subject to $W(x,y) = y - x \neq 0$.
+
+**Algorithm** (`discovery/m2_directions/t63_omega3_lattice_svp.py`):
+Apply the Gauss--Lagrange 2D reduction to $\mathcal{L}$ (using the Euclidean proxy
+$\|(p_1 x,\, p_2 y,\, p_3(v_a x + v_b y)/v_c)\|_2$), then search $[-25,25]^2$
+in the reduced-basis coordinates.
+
+**Verified:** for all 13 tested $\omega=3$ triples (squarefree and non-squarefree,
+valuations up to 5), the SVP approach recovers the exact brute-force $\mathrm{nd}$.
+
+**Key example** (new OB-13C gap case, T62):
+$a = 27 = 3^3$, $b = 5$, $c = 32 = 2^5$.
+Basis of $\mathcal{L} = \{(x,y): 5 \mid 3x + y\}$:
+$\mathbf{e}_1 = (1,2)$, $\mathbf{e}_2 = (0,5)$.
+Reduced basis: $(-2,1)$ and $(1,2)$.
+Optimal vector: $n_1=-1$, $n_2=0$ gives $(\varphi_3, \varphi_5, \varphi_2) = (2,-1,1)$,
+norm $= \max(3{\cdot}2,\, 5{\cdot}1,\, 2{\cdot}1) = 6$, $W = -3 \neq 0$.
+Constraint: $3 \cdot 2 + 1 \cdot (-1) = 5 = 5 \cdot 1$. $\checkmark$
+The all-pairs GCD construction (best pair $(3,2)$) gives norm $15$; the 2D SVP
+reduces this to $6$ by using all three primes simultaneously.
+
+**W_\psi divisibility result** (T62, 26 non-squarefree triples):
+$W_\psi / \mathrm{nd} \in [0.4, 2.0]$; not always an integer.
+$\mathrm{nd} \mid W_\psi$ holds in only 9/26 cases; $v_{\max} \mid W_\psi$ in 10/26.
+No universal divisibility rule exists for non-squarefree triples.
+
+**Scope limit for Step 4:**
+The SVP parametrisation handles $\omega=3$ triples with one prime per group.
+Multi-prime groups ($\omega \geq 4$, or $|P_a| \geq 2$) require a higher-dimensional
+lattice; the LP multi-prime approach (Step 3 / T60) gives an upper bound
+but not the exact formula. The general $\mathrm{nd}$ formula is an open integer
+min-max program with no simple closed form.
+
 ---
 
 ## Acceptance criteria
