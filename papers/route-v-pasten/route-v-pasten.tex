@@ -1103,6 +1103,55 @@ is determined by a one-dimensional lattice.
   $\varphi_r \ne 0$, norm $\ge r \ge N_0$.  Neither case involves $n$.
 \end{proof}
 
+\begin{theorem}[F35: Second successive minimum for type $(k,m,1)$ in the valuation regime]\label{thm:f35}
+  Let $a + b = c$ be a coprime triple with $P_a = \{p\}$, $P_b = \{q\}$, $P_c = \{r\}$,
+  $v_p(a) = k \ge 2$, $v_q(b) = m \ge 2$, $v_r(c) = 1$, $p < q < r$.
+  Set $g = \gcd(k,m)$ and $N_0 = \max(pm/g,\, qk/g)$.
+  In the valuation regime ($N_0 < r$), the second successive minimum satisfies
+  \[
+    \lambda_2(a,b) \;=\; \min(r,\; 2N_0),
+  \]
+  with the convention that $r$ is achievable only when $g = 1$ (coprime exponents);
+  when $g \ge 2$, the $|\varphi_r|=1$ branch has no integer solutions and
+  $\lambda_2 = 2N_0$ (which equals $\min(r, 2N_0)$ in all practical cases since
+  $2N_0 \le r$ holds whenever $g \ge 2$ for prime triples with $k,m \ge 2$).
+\end{theorem}
+
+\begin{proof}
+  \textit{Upper bound.}
+  The vector $\varphi_p = -2m/g$, $\varphi_q = 2k/g$, $\varphi_r = 0$ lies in the
+  lattice ($k(-2m/g) + m(2k/g) = 0$), has $W = 2k/g + 2m/g = 2(k+m)/g \ne 0$,
+  and achieves norm $2N_0 > N_0 = \mathrm{nd}(a,b)$.
+  When $g = 1$ and $r \le 2N_0$: the minimal Bezout solution $(k_0, m_0)$ of
+  $kk_0 + mm_0 = 1$ satisfies $|k_0| \le m/2$ and $|m_0| \le k/2$, so
+  $p|k_0| \le N_0/2 < r$ and $q|m_0| \le N_0/2 < r$; thus the vector
+  $(\varphi_p, \varphi_q, \varphi_r) = (k_0, m_0, 1)$ has norm
+  $\max(p|k_0|, q|m_0|, r) = r$.  Hence $\lambda_2 \le \min(r, 2N_0)$.
+
+  \textit{Lower bound.}
+  Split every non-minimizing vector by its $\varphi_r$ value:
+  \begin{itemize}
+    \item $\varphi_r = 0$: the constraint reduces to $k\varphi_p + m\varphi_q = 0$,
+      whose integer solutions are $(\varphi_p, \varphi_q) = -(m/g)t,\,(k/g)t)$
+      for $t \in \mathbb{Z}$.  Since $\gcd(m/g, k/g) = 1$, the generator is
+      primitive, and norm $= |t|N_0 \ge 2N_0$ for $|t| \ge 2$.
+    \item $|\varphi_r| \ge 1$: norm $\ge r \cdot |\varphi_r| \ge r \ge \min(r, 2N_0)$
+      (using $N_0 < r$).
+  \end{itemize}
+  Every non-minimizing vector therefore has norm $\ge \min(r, 2N_0)$,
+  giving $\lambda_2 \ge \min(r, 2N_0)$.
+\end{proof}
+
+\begin{remark}
+  Theorem~\ref{thm:f35} is the direct generalization of the valuation-regime case of
+  Theorem~\ref{thm:f34} (which has $m=1$, $g=1$, $N_0 = qk$).
+  The pairwise regime ($N_0 \ge r$) is vacuous for $k, m \ge 2$: one would need
+  $\max(pm/g, qk/g) \ge p^k + q^m$, which requires $q \cdot \max(k,m)/g \ge q^m$,
+  i.e.\ $\max(k,m)/g \ge q^{m-1}$; impossible for $m \ge 2$ and $q \ge 3$.
+  T88b verifies Theorem~\ref{thm:f35} on 40 triples
+  ($p \le 7$, $k, m \in \{2,\ldots,9\}$, $a, b \le 2000$, zero failures).
+\end{remark}
+
 \begin{remark}[Mixed witnesses in the pairwise regime]
 \label{rem:mixed_witness}
   Theorems~\ref{thm:nd_km1} and~\ref{cor:nd_kmn_val} require $p_c = r$ to be
@@ -2341,7 +2390,15 @@ in the pairwise regime $\lambda_2 = \min\{N \in \{2r, qk, q(k-1)\} : N > r\}$
 (three explicit achievability vectors, gap proved by a parametric line argument);
 verified on 55 triples, zero failures (T87);
 verified numerically (T68) and Lean-formalized (three arithmetic kernel lemmas,
-zero \texttt{sorry}); and (o) the exact formula for general type $(k,m,1)$
+zero \texttt{sorry});
+and (ai) the second successive minimum for type $(k,m,1)$ triples in the
+valuation regime (Theorem~\ref{thm:f35}):
+$\lambda_2 = \min(r, 2N_0)$ where $N_0 = \max(pm/g,\, qk/g)$, $g = \gcd(k,m)$,
+proved by the same three-way split as Theorem~\ref{thm:f34}
+(the $\varphi_r=0$ branch generates norms $\{tN_0 : t \ge 1\}$ by primitivity of its
+generator, any $|\varphi_r| \ge 1$ vector gives norm $\ge r \ge \min(r,2N_0)$);
+verified on 40 triples ($p \le 7$, $k,m \in \{2,\ldots,9\}$, zero failures, T88b);
+and (o) the exact formula for general type $(k,m,1)$
 non-squarefree triples (Theorem~\ref{thm:nd_km1}):
 $\mathrm{nd}(a,b) = \min(r,\, \max(pm/g,\, qk/g))$ where $g = \gcd(k,m)$,
 subsumes Theorems~\ref{thm:nd_k11} ($m=1$) and the squarefree E$_n$ value ($k=m=1$),
