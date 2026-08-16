@@ -977,6 +977,66 @@ is determined by a one-dimensional lattice.
   (confirming Theorem~\ref{thm:nd_lb}), since $qk \ge q$ and $r > q$.
 \end{remark}
 
+\begin{theorem}[F34: Second successive minimum for type $(k,1,1)$]\label{thm:f34}
+  Under the hypotheses of Theorem~\ref{thm:nd_k11}, the second successive minimum is:
+  \begin{enumerate}[(i)]
+    \item \textit{Valuation regime} ($qk < r$, $\mathrm{nd} = qk$):
+      \[
+        \lambda_2 = \min(r,\; 2qk).
+      \]
+    \item \textit{Pairwise regime} ($qk \ge r$, $\mathrm{nd} = r$):
+      \[
+        \lambda_2 = \min\bigl\{ N \in \{2r,\; qk,\; q(k-1)\} : N > r \bigr\}.
+      \]
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  \textit{Achievability.}  We exhibit a non-degenerate vector for each candidate:
+  \begin{itemize}
+    \item $2r$: $\varphi = (0, 2, 2)$ (i.e.\ $\varphi_p=0, \varphi_q=\varphi_r=2$).
+      Constraint: $k\cdot 0 + 2 = 2$\checkmark.  $W = 2 - 0 = 2 \ne 0$.
+      Norm $= \max(0, 2q, 2r) = 2r$.
+    \item $qk$: $\varphi = (1, -k, 0)$.
+      Constraint: $k - k = 0$\checkmark.  $W = -k-1 \ne 0$.
+      Norm $= \max(p, qk, 0) = qk$.
+    \item $q(k-1)$ (when $q(k-1) > r$): $\varphi = (1, 1-k, 1)$.
+      Constraint: $k + (1-k) = 1$\checkmark.  $W = (1-k)-1 = -k \ne 0$.
+      Norm $= \max(p, q(k-1), r) = q(k-1)$ (since $q(k-1) > r > p$).
+  \end{itemize}
+
+  \textit{Gap (no norm between $\mathrm{nd}$ and $\lambda_2$).}
+  Let $M = \lambda_2$ and suppose $\varphi \ne 0$ is non-degenerate with
+  $\mathrm{nd} < \|\varphi\| < M$.
+
+  \textit{(i) Valuation regime} ($\mathrm{nd}=qk$, $M=\min(r,2qk)$):
+  $r|\varphi_r| \le \|\varphi\| < M \le r$ forces $\varphi_r = 0$.
+  Then $k\varphi_p + \varphi_q = 0$, so $\|\varphi\| = qk|\varphi_p| \ge qk = \mathrm{nd}$.
+  Equality gives $|\varphi_p|=1$; the next value is $2qk \ge M$.
+
+  \textit{(ii) Pairwise regime} ($\mathrm{nd}=r$): write $\varphi_p = t$, $\varphi_q = j - kt$
+  for integer $t$, where $\varphi_r = j$ (any integer).
+  \begin{itemize}
+    \item $|j| = 0$: $\|\varphi\| = qk|t| \ge qk \ge M$.
+    \item $|j| \ge 2$: $\|\varphi\| \ge 2r \ge M$.
+    \item $|j| = 1$ (say $j=1$): $\|\varphi\| = \max(p|t|, q|1-kt|, r)$.
+      For $\|\varphi\| < M$, we need $q|1-kt| < M$.
+      Since $M \le q(k-1)$ (or $M=\min(2r,qk)$ when $q(k-1)\le r$), one checks that
+      $|1-kt| \le k-2$ (or $|1-kt| \le k-1$ resp.)\ forces $kt \in [3-k, k-1]$,
+      leaving only $t = 0$ (giving $\|\varphi\|=r=\mathrm{nd}$) as an integer solution.
+  \end{itemize}
+  In every case $\|\varphi\| \ge M$, so no norm lies strictly in $(\mathrm{nd}, M)$.
+\end{proof}
+
+\begin{remark}
+  The formula specialises cleanly: for $k=1$ (type $(1,1,1)$, always valuation),
+  $\lambda_2 = \min(r, 2q) = r$ since $r = q+2 < 2q$ for twin primes $q \ge 3$
+  (recovering Theorem~\ref{thm:f32a}).
+  For $k=2$ pairwise ($r \le 2q$): since $q(k-1)=q \le r$, one has
+  $\lambda_2 = \min(2r, 2q)$.  T87 verifies Theorem~\ref{thm:f34} on 55 triples
+  (four base primes $p\in\{2,3,5,7\}$, $k \le 9$, adaptive bound), zero failures.
+\end{remark}
+
 \begin{theorem}[Exact $\mathrm{nd}$ for type $(k,m,1)$ non-squarefree triples]\label{thm:nd_km1}
   Let $a + b = c$ be a coprime triple with $P_a = \{p\}$, $P_b = \{q\}$, $P_c = \{r\}$
   and $v_p(a) = k \ge 1$, $v_q(b) = m \ge 1$, $v_r(c) = 1$, $p < q < r$.
@@ -2274,6 +2334,12 @@ and (n) the exact formula for type $(k,1,1)$ non-squarefree triples
 $P_a=\{p^k\}$, $P_b=\{q\}$, $P_c=\{r\}$ with $p<q<r$, with two regimes
 (valuation-dominant $qk<r$ and pairwise-dominant $qk \ge r$) and
 confirming $\mathrm{nd} \ge p_2 = q$ (Theorem~\ref{thm:nd_lb});
+and (ah) the second successive minimum for type $(k,1,1)$ triples
+(Theorem~\ref{thm:f34}):
+in the valuation regime $\lambda_2 = \min(r, 2qk)$;
+in the pairwise regime $\lambda_2 = \min\{N \in \{2r, qk, q(k-1)\} : N > r\}$
+(three explicit achievability vectors, gap proved by a parametric line argument);
+verified on 55 triples, zero failures (T87);
 verified numerically (T68) and Lean-formalized (three arithmetic kernel lemmas,
 zero \texttt{sorry}); and (o) the exact formula for general type $(k,m,1)$
 non-squarefree triples (Theorem~\ref{thm:nd_km1}):
