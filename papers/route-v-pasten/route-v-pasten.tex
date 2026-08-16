@@ -281,7 +281,7 @@ $\ge 2^{\omega-1}$.  Together these give a nonzero $\psi \in L$ with
 Table~\ref{tab:data} gives comprehensive statistics from script
 \texttt{t30\_rho\_distribution.py} applied to all 44\,474
 squarefree coprime triples with $\omega \ge 3$ and $c \le 1000$.
-Table~\ref{tab:bounded} breaks out the seven universally-bounded partition types.
+Table~\ref{tab:bounded} breaks out the nine universally-bounded partition types.
 
 \begin{table}[h]
 \centering
@@ -812,7 +812,7 @@ While no simple closed-form formula generalises the squarefree E$_n$ expression
 $\mathrm{nd}_{\mathrm{sq}} = \mathrm{med}(m_a,m_b,m_c)$ to all non-squarefree triples,
 the exact value of $\mathrm{nd}(a,b)$ is computable in polynomial time via lattice reduction.
 
-\begin{theorem}[OB-13C: lattice SVP algorithm for $\mathrm{nd}$]\label{thm:ob13c}
+\begin{theorem}[OB-13C: lattice SVP algorithm for $\mathrm{nd}$, steps 1--2 proved]\label{thm:ob13c}
 Let $a + b = c$ be a coprime triple with $\omega^* = |P|$ distinct prime factors.
 Write the constraint~(C) as $\sum_{i=1}^{\omega^*} \alpha_i\,\varphi_i = 0$ where
 $\alpha_i = v_{p_i}(a)$ for $p_i \in P_a$, $\alpha_i = v_{p_i}(b)$ for $p_i \in P_b$,
@@ -825,25 +825,27 @@ has rank $\omega^* - 1$.
   application of the extended Euclidean algorithm to the coefficient vector $(\alpha_i)$.
 \item Applying the LLL algorithm to this basis with the weighted inner product
   $\langle u, v\rangle = \sum_i p_i^2\, u_i v_i$ yields a reduced basis $\{b_1,\ldots,b_{\omega^*-1}\}$.
-\item A search over $[-R, R]^{\omega^*-1}$ in reduced coordinates (with $R$ depending only
-  on the valuation magnitudes) recovers the shortest non-degenerate vector, hence $\mathrm{nd}(a,b)$ exactly.
+\item \textup{[Conditional on Radius Bound \textup{[OBL]}]} Assuming a search radius
+  $R = R(v_{\max}, \omega^*)$ satisfying the LLL basis bound can be made explicit,
+  a search over $[-R, R]^{\omega^*-1}$ in reduced coordinates recovers the shortest
+  non-degenerate vector, hence $\mathrm{nd}(a,b)$ exactly.
 \end{enumerate}
 \end{theorem}
 
-\begin{proof}[Verification]
+\begin{proof}
 The algorithm is implemented in \texttt{t64\_omega4\_lattice\_svp.py}
 and checked against brute-force enumeration:
 $\omega^*=3$: 13 test cases, all exact (\texttt{t63});
 $\omega^*=4$: 13 test cases, all exact (\texttt{t64});
 $\omega^*=5$: 6 test cases, all exact (\texttt{t64}).
-The correctness of step~1 follows from standard Smith normal form theory:
+Steps~1--2 are proved: step~1 follows from standard Smith normal form theory ---
 the unimodular column transformation reducing $[\alpha_1,\ldots,\alpha_{\omega^*}]$
 to $[d,0,\ldots,0]$ (where $d = \gcd(\alpha_i)$) provides a $\mathbb{Z}$-basis for $L$
-as the last $\omega^*-1$ columns of the transformation matrix.
-Steps~2--3 are standard LLL theory; the non-degeneracy constraint ($W \ne 0$)
-eliminates the degenerate sublattice $D \subset L$ from the search.
-A formal proof that the search radius suffices for all valuation profiles is
-\textup{[OBL]}: it requires bounding the LLL-reduced basis in terms of $v_{\max}$ and $\omega^*$.
+as the last $\omega^*-1$ columns of the transformation matrix; step~2 is standard LLL theory.
+The non-degeneracy constraint ($W \ne 0$) eliminates the degenerate sublattice $D \subset L$.
+Step~3 is \textup{[OBL]}: a formal bound on the LLL-reduced basis in terms of $v_{\max}$
+and $\omega^*$, sufficient to certify the search radius, has not been proved in general.
+Computationally, the algorithm returns the correct $\mathrm{nd}(a,b)$ on all 32 tested triples.
 \end{proof}
 
 \subsubsection*{Universal lower bound and the $\omega^*=2$ exact formula}
