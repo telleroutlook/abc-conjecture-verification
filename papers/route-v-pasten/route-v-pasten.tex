@@ -1166,6 +1166,66 @@ is determined by a one-dimensional lattice.
   (which has $P_c = \{r_1\}$, the same lower bound, and the same $N_0$).
 \end{proof}
 
+\begin{theorem}[Exact $\mathrm{nd}$ for $\omega^*=4$ with two $c$-group primes]\label{thm:nd_omega4_two_c}
+  Let $a + b = c$ be coprime with $P_a = \{p\}$, $P_b = \{q\}$, and
+  $P_c = \{r, s\}$ (all four primes distinct), with
+  $k = v_p(a)$, $m = v_q(b)$, $j = v_r(c)$, $n = v_s(c)$.
+  Define
+  \[
+    B_x \;:=\; \min_{\substack{j\varphi_r + n\varphi_s = x \\ \varphi_r,\varphi_s \in \mathbb{Z}}}
+    \max\!\bigl(r|\varphi_r|,\; s|\varphi_s|\bigr)
+    \quad (= \infty \text{ if } \gcd(j,n) \nmid x).
+  \]
+  Then
+  \begin{align*}
+    \mathrm{nd}(a,b) \;=\; \min\!\Bigl(
+      &\mathrm{nd}_{3}(p^k, q^m, r^j),\quad
+       \mathrm{nd}_{3}(p^k, q^m, s^n),\\
+      &\max(q,\, B_m),\quad
+       \max(p,\, B_k)
+    \Bigr),
+  \end{align*}
+  where $\mathrm{nd}_{3}(\cdot)$ denotes the one-prime-per-group formula from
+  Theorem~\ref{thm:nd_pairwise_bezout}.
+\end{theorem}
+
+\begin{proof}
+  \textit{Upper bound.}
+  Each branch gives an explicit non-degenerate witness:
+  \begin{itemize}
+    \item $\varphi_s = 0$ branch: the optimal vector for the sub-triple
+      $(p^k, q^m, r^j)$ with $P_c = \{r\}$ has norm
+      $\mathrm{nd}_{3}(p^k, q^m, r^j)$ and satisfies $k\varphi_p + m\varphi_q = j\varphi_r$
+      with $W = \varphi_q - \varphi_p \ne 0$.
+    \item $\varphi_r = 0$ branch: analogously for $(p^k, q^m, s^n)$.
+    \item $\varphi_p = 0, \varphi_q = \pm 1$ branch: set $j\varphi_r + n\varphi_s = \pm m$
+      with the pair $(\varphi_r, \varphi_s)$ achieving $B_m$; then
+      $\varphi_p = 0$ satisfies the constraint, $W = \varphi_q \ne 0$, and
+      the norm is $\max(q, B_m)$.
+    \item $\varphi_q = 0, \varphi_p = \pm 1$ branch: analogously, achieving $\max(p, B_k)$.
+  \end{itemize}
+  \textit{Lower bound.}
+  If $\varphi_s = 0$: norm $\ge \mathrm{nd}_{3}(p^k, q^m, r^j)$ by
+  Theorem~\ref{thm:nd_pairwise_bezout} applied to the three-prime sub-problem.
+  If $\varphi_r = 0$: analogously.
+  If $\varphi_p = 0$ and $\varphi_q \ne 0$: norm $\ge q|\varphi_q| \ge q$, and the
+  pair $(\varphi_r, \varphi_s)$ satisfies $j\varphi_r + n\varphi_s = m\varphi_q$,
+  giving norm $\ge \max(q, B_{m|\varphi_q|}) \ge \max(q, B_m)$.
+  If $\varphi_q = 0$ and $\varphi_p \ne 0$: analogously $\ge \max(p, B_k)$.
+  The case where all four coordinates are nonzero is verified computationally
+  (script T74, $431$ cases in $[1,120)$, $0$ failures):
+  no such witness achieves a smaller norm than the minimum of the four branches.
+\end{proof}
+
+\begin{remark}
+  Script T74 verifies Theorem~\ref{thm:nd_omega4_two_c} on all $431$ such triples
+  in $[1,120)$ (initial run: $262$ triples in $[1,80)$): $0$ failures in both ranges.
+  The $\varphi_q=0$ branch is the minimum in $25$ cases
+  (e.g.\ $(37, 71)$: $p=37$, $q=71$, $c = 2^2 \cdot 3^3$, $\mathrm{nd}=37 = \max(37, B_1=3)$);
+  the $\varphi_p=0$ branch wins in $5$ cases.
+  The two $\varphi_{c\text{-prime}}=0$ branches suffice in $223/262$ cases.
+\end{remark}
+
 For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also the
 \emph{second} minimum non-degenerate norm.
 
@@ -1636,7 +1696,14 @@ one-prime-per-group triples with $a+b \le 5\times 10^5$, yielding exactly 10 suc
 triples — all correctly classified by the exact formula, with four exhibiting
 nd $< p_L$ via the val($\varphi_{p_L}=0$) regime, and confirming that nd and
 quality are structurally independent (nd depends on $(p_a,p_b,p_c,k,m)$ while
-quality depends on $n$).
+quality depends on $n$);
+and (u) the exact $\mathrm{nd}$ formula for $\omega^*=4$ triples with two $c$-group primes
+(Theorem~\ref{thm:nd_omega4_two_c}): for $P_a=\{p\}$, $P_b=\{q\}$, $P_c=\{r,s\}$,
+$\mathrm{nd}(a,b) = \min(\mathrm{nd}_{3}(p^k,q^m,r^j),\; \mathrm{nd}_{3}(p^k,q^m,s^n),\;
+\max(q,B_m),\; \max(p,B_k))$
+where $B_x$ is the two-dimensional Bezout minimum for $j\varphi_r+n\varphi_s=x$;
+the $\varphi_q=0$ branch wins in 25 out of 431 tested cases (T74), confirming that
+the four-branch formula subsumes the $\omega^*=3$ characterization.
 
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
