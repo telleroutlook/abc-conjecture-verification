@@ -124,7 +124,9 @@ within-group then gives norm ≤ v_max·q where q = max prime in that group.
 
 This reduces to: q^(ω*-1) ≤ v_max^(ω*-1)·R = v_max^(ω*-1)·p₁·p₂·p₃·p₄ (for ω*=4).
 
-**Key lemma (from Observation 1'):** R<c implies c non-squarefree, so v_max ≥ 2.
+**Key lemma (from Observation 1'').** R<c implies v_max ≥ 3 (proved 2026-08-16 — see
+OB-15 Obs 1''). This strengthens the previous v_max ≥ 2 and raises the KEY-4 constant
+from 8(p₁p₂)²q to 27(p₁p₂)²q, covering q≤972 for the p₁p₂=6 dominant case.
 
 With v_max ≥ 2 and the dominant case (single-prime Pc={s^γ}, γ≥2, giving R<c=s^γ → p₁p₂p₃ < s^{γ-1}):
 

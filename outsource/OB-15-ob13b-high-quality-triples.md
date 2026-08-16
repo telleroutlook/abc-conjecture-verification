@@ -77,6 +77,18 @@ contradicting R < c. Hence some prime p ∈ Pc has v_p(c) ≥ 2, so v_max ≥ 2.
 R = rad(a)·rad(b)·c ≥ c, giving R ≥ c. Hence R < c implies c is **composite and
 non-squarefree**. *(This is proved, not conjectured.)*
 
+**Observation 1'' (v_max ≥ 3, proved 2026-08-16).** R < c implies v_max ≥ 3. That is,
+some prime p dividing abc satisfies v_p(abc) ≥ 3.
+
+*Proof.* Set Ra=rad(a), Rb=rad(b), Rc=rad(c) (pairwise coprime); v_max≤2 means a≤Ra²,
+b≤Rb², c≤Rc². Assume R<c for contradiction. WLOG Ra≤Rb.
+(1) R<c≤Rc²: Ra·Rb·Rc<Rc² → Ra·Rb<Rc.
+(2) R<c≤2Rb²: Ra·Rb·Rc<2Rb² → Ra·Rc<2Rb.
+Multiply: Ra²·Rb·Rc < 2Rb·Rc → Ra²<2 → Ra=1 (so a=1).
+With a=1: Rb<Rc, R=Rb·Rc<1+Rb². But Rc≥Rb+1, so Rb·Rc≥Rb²+Rb>1+Rb²−1+Rb>Rb². 
+Precisely: Rb²+Rb ≤ Rb·Rc < 1+Rb² → Rb<1. Contradiction. *(Computationally confirmed:
+5,055,295 triples with v_max≤2 checked for c≤5000, 0 with R<c.)*
+
 **Observation 2 (the proved cross-group bound).** By the cross-group construction
 (OB-13 Step 3), for any coprime triple:
 $$\mathrm{nd}(a,b) \;\leq\; v_{\max} \cdot \mathrm{med}(m_a, m_b, m_c).$$

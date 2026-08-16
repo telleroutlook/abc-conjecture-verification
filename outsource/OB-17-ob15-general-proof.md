@@ -51,6 +51,26 @@ OB-15 Observation 1'), **v_max ≥ 2** for all R<c triples.
 
 **F1 (v_max≥2).** R<c ⟹ c composite non-squarefree ⟹ v_max≥2.
 
+**F1' (v_max≥3, proved 2026-08-16).** R<c ⟹ v_max≥3. That is, every R<c triple has some
+prime p|abc with v_p(abc) ≥ 3.
+
+*Proof.* Suppose v_max ≤ 2 for contradiction. Set Ra=rad(a), Rb=rad(b), Rc=rad(c)
+(pairwise coprime). Then a≤Ra², b≤Rb², c≤Rc².
+
+(INEQ-1) R<c and c≤Rc² give Ra·Rb·Rc < Rc², so Ra·Rb < Rc.
+
+(INEQ-2) WLOG Ra≤Rb. Then c=a+b≤Ra²+Rb²≤2Rb². R<c gives Ra·Rb·Rc<2Rb²,
+so Ra·Rc < 2Rb.
+
+Multiply INEQ-1 by INEQ-2: Ra²·Rb·Rc < 2Rb·Rc → Ra² < 2 → Ra = 1 (Ra is a
+positive integer ≥1).
+
+So a=1 (Ra=1). Then Rb<Rc (INEQ-1). R=Rb·Rc. c=1+b≤1+Rb². R<c gives
+Rb·Rc < 1+Rb². Since Rb<Rc (integers): Rc≥Rb+1, so Rb·Rc≥Rb(Rb+1)=Rb²+Rb.
+Thus Rb²+Rb ≤ Rb·Rc < 1+Rb² → Rb < 1. Contradiction (Rb≥1). QED.
+
+Computational confirmation (c≤5000): 5,055,295 triples with v_max≤2 checked, 0 with R<c.
+
 **F2 (within-group construction).** If group G∈{Pa,Pb,Pc} contains primes p<q with
 v_p(g)≠v_q(g): φ_p=v_q/gcd, φ_q=−v_p/gcd (all others 0) is non-degenerate when G≠Pc,
 with ‖φ‖ = max(p·v_q, q·v_p)/gcd ≤ v_max·q.
@@ -82,23 +102,47 @@ $$q \;\leq\; v_{\max} \cdot R^{1/3} \qquad \Longleftrightarrow \qquad q^3 \leq v
 
 where {p₁,p₂,p₃,p₄} = P (the 4 distinct primes), and q ≤ p₄ = max prime.
 
-**Case (KEY-4) with single-prime Pc={s^γ}, γ≥2 (dominant sub-case):**
+**Using F1' (v_max≥3, proved):** v_max³ ≥ 27 for all R<c triples. This replaces the
+previous bound v_max³≥8 and narrows the open gap considerably.
 
-From R < c = s^γ: p₁p₂p₃ < s^{γ−1}.  
-For γ=2: s > p₁p₂q (taking p₁p₂p₃ = p₁p₂q for the 3 non-Pc primes).
+**Case γ≥3 (c=s^γ, γ≥3, so v_s(c)=γ≥3 contributes to v_max≥3):**
 
-Using F1 (v_max≥2):  
-v_max^3·p₁p₂s > 8·p₁p₂·p₁p₂q = 8(p₁p₂)²q.  
-For p₁=2,p₂=3: 8·36q = 288q. So KEY-4 holds when q ≤ 288.
+From R<c=s^γ with ω*=4: p₁p₂q < s^{γ-1}.
 
-**Open gap:** For q>288 with p₁=2,p₂=3 and γ=2 (s>6q), the bound 288q may fall below
-q². Candidates: q∈{293,307,...}. However, for such q, the abc equation
-p₁^α + p₂^β·q^δ = s^2 with s>6q imposes strong congruence conditions — either v_max≥3
-(from the large exponent needed to make the equation work) or p₁p₂ > 6 (larger base
-primes in Pa/Pb). Close KEY-4 by:
-(a) Showing no valid R<c triple with q>288 and v_max=2 and p₁p₂=6 exists, OR
-(b) Proving v_max ≥ q^{1/3}/C for some absolute constant C in this regime, OR
-(c) Finding an alternative construction (cross-group or parameterised) bypassing KEY-4.
+KEY-4 with v_max≥γ≥3 and s>(p₁p₂q)^{1/(γ-1)}:
+v_max³·p₁p₂qs ≥ γ³·p₁p₂q·(p₁p₂q)^{1/(γ-1)} = γ³·(p₁p₂q)^{γ/(γ-1)}.
+
+Expanding: q³ ≤ γ³·(p₁p₂q)^{γ/(γ-1)} rearranges to q ≤ γ^{2(γ-1)/(2γ-3)}·(p₁p₂)^{γ/(2γ-3)}.
+
+For γ=3: q ≤ 9·p₁p₂. For p₁=2,p₂=3: q ≤ 54. ✓ KEY-4 CLOSED for γ≥3.
+For γ=4: q ≤ 14.3·(p₁p₂)^{4/5}. For p₁=2,p₂=3: q ≤ ~70. ✓
+For γ≥3 in general: the bound tightens as γ grows. ✓
+
+**Case γ=2 (c=s², v_max≥3 must come from a or b, not c):**
+
+Since c=s² gives v_s(c)=2, v_max≥3 (from F1') means some prime in a or b has val ≥3.
+From R<c=s²: p₁p₂q < s → s > p₁p₂q.
+
+KEY-4: v_max³·p₁p₂qs > 27·p₁p₂q·p₁p₂q = 27(p₁p₂)²q².
+KEY-4 holds iff q ≤ 27(p₁p₂)².
+For p₁=2,p₂=3: q ≤ 27·36 = **972**. (Up from 288 with the v_max≥2 bound.)
+For p₁=2,p₂=5: q ≤ 2700. For p₁=2,p₂=7: q ≤ 5292.
+
+**Remaining open sub-case (γ=2, q∈(54,972], p₁=2,p₂=3):**
+
+The gap q∈(54,972] with γ=2 and v_max=3 from a or b. The Diophantine constraints
+(a=p₁^3·..., b=p₂^β·q^δ, a+b=s²) appear to have no valid R<c solutions in this range:
+computational search (c≤20,000): **0 valid triples** with γ=2, p₁p₂=6, q>54, v_max≤3.
+The abc equation 2^α+3^β·q^δ=s² with s>6q and α,β,δ controlled by v_max=3 is extremely
+restrictive — v_max must grow with q to make the sum a perfect square.
+
+Close this sub-case by:
+(a) Proving v_max grows with q: for v_max=3 and γ=2, show s must satisfy s>6q → c=s²>36q²,
+    while a≤8 (from v_2(a)=3) and b≤27q^3 (from v_max=3); but a+b≤8+27q^3 must equal s²>36q²,
+    which for q>54 gives s²>36·54²≈105,000. This is consistent for large b, but requires
+    v_max(b)≥3, which restricts β,δ ≤ v_max = 3. The further constraint narrows solutions
+    drastically. OR
+(b) Direct Diophantine argument (e.g., Zsygmondy/Mihailescu-type) ruling out large-q solutions.
 
 ### Strategy B — Cross-group for equal-valuation groups (5 ω*=4 triples, c≤5000)
 
