@@ -986,6 +986,53 @@ failure mode observed while integrating the CORE-2 diagnostic manifest.
   — CORE-0/1/5 PASS; CORE-2/3/4 rejected;
   `3 passed, 3 failed, 0 skipped out of 6 checked`.
 
+#### Frey conductor interface precision (2026-08-18)
+
+**Source search:** the official Springer/Brown pages for Silverman's *Advanced
+Topics in the Arithmetic of Elliptic Curves* identify the book and chapter but
+do not provide an authorized local statement of Theorem IV.10.4.  The premise
+therefore remains `source_verified: false`; it cannot support CORE-2
+acceptance.
+
+**Defect found in the earlier Lean premise:** the old declaration merely said
+that there exist \(f_2\), \(R\), and a real number \(N_E\) with
+\[
+  N_E=2^{f_2-1}R,\qquad f_2\le 8.
+\]
+That existential statement did not tie \(N_E\) to the actual arithmetic
+conductor of the fixed Frey curve, so it was too weak as a formal source
+interface.
+
+**Replacement:**
+
+1. `freyConductor a b` is now an opaque, fixed source constant for the Frey
+   conductor.
+2. `frey_conductor_formula` now states nontrivially that, for this fixed
+   conductor, there is \(f_2\) with
+   \[
+     1\le f_2\le 8,\qquad
+     \operatorname{freyConductor}(a,b)
+     =
+     2^{f_2-1}\operatorname{rad}(abc).
+   \]
+3. Added the zero-`sorry` theorem `rad_pos`.
+4. Added the derived theorem `frey_conductor_log_bound`:
+   \[
+     \log \operatorname{freyConductor}(a,b)
+     \le
+     \log \operatorname{rad}(abc)+7\log 2.
+   \]
+5. `#print axioms` shows that this theorem depends exactly on the two named
+   admitted premises `freyConductor` and `frey_conductor_formula` plus the
+   standard Lean axioms.  The generic algebra theorem
+   `conductor_log_bound` still depends only on the standard axioms.
+
+**Checker evidence:** `PYTHONPATH=. python3 -m pytest
+tests/test_lean_ob04.py tests/test_core2_partial_evidence.py
+tests/test_checker_pin.py -q` — `11 passed in 6.73s`.  The CORE-2 partial
+manifest was refreshed with the current Lean/test hashes.
+- `PYTHONPATH=. python3 -m pytest tests/ -q` — `121 passed in 20.59s`.
+
 #### CORE-2 partial evidence and Silverman source refresh (2026-08-17)
 
 **Primary source added:** `baseline/silverman-2009-arithmetic-elliptic-curves.pdf`

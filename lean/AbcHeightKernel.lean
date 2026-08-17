@@ -110,16 +110,26 @@ ADMITTED (Silverman ATEC (1994), Theorem IV.10.4, p. 98):
   The 2-adic conductor exponent f₂ ≤ 8 for Frey curves over ℚ.
 
 ADMITTED (Silverman AEC 2nd ed. (2009), Lemma VIII.11.3(b), pp. 257--258):
-  N_E = 2^{f₂-1} · R  where R = rad(abc).
+  odd primes p | abc contribute conductor exponent one.  Combining the two
+  source results gives N_E = 2^{f₂-1} · R for the fixed arithmetic conductor.
 
 The algebraic bound log N_E ≤ log R + 7·log 2 is PROVED. -/
 
+/-- The arithmetic conductor of the Frey curve, supplied as an opaque source
+constant.  Its formula and upper bound are admitted separately below. -/
+axiom freyConductor (a b : ℕ) : ℝ
+
 /-- ADMITTED: Silverman ATEC (1994) IV.10.4 + AEC VIII.11.3(b).
-    N_E = 2^{f₂-1} · R with f₂ ≤ 8. -/
-axiom frey_conductor_formula (a b : ℕ) (ha : 0 < a) (hb : 0 < b) (hcop : a.Coprime b) :
-    ∃ f2 : ℕ, f2 ≤ 8 ∧
-    ∃ R : ℝ, R = rad (a * b * (a + b)) ∧ 0 < R ∧
-    ∃ N_E : ℝ, N_E = 2 ^ (f2 - 1) * R
+    For the fixed Frey conductor, N_E = 2^{f₂-1}·R with f₂ ≤ 8. -/
+axiom frey_conductor_formula (a b : ℕ) (_ha : 0 < a) (_hb : 0 < b)
+    (_hcop : a.Coprime b) :
+    ∃ f2 : ℕ, 1 ≤ f2 ∧ f2 ≤ 8 ∧
+      freyConductor a b = 2 ^ (f2 - 1) * (rad (a * b * (a + b)) : ℝ)
+
+/-- The natural radical is positive (including the convention rad 0 = 1). -/
+theorem rad_pos (n : ℕ) : 0 < rad n := by
+  unfold rad
+  exact Finset.prod_pos fun p hp => Nat.pos_of_mem_primeFactors hp
 
 /-- Given N_E = 2^{f₂-1}·R with f₂ ≤ 8 and R > 0: log N_E ≤ log R + 7·log 2. -/
 theorem conductor_log_bound (f2 : ℕ) (hf2 : f2 ≤ 8) (R : ℝ) (hR : 0 < R)
@@ -130,6 +140,14 @@ theorem conductor_log_bound (f2 : ℕ) (hf2 : f2 ≤ 8) (R : ℝ) (hR : 0 < R)
   have hf2sub : f2 - 1 ≤ 7 := by omega
   have hcast : ((f2 - 1 : ℕ) : ℝ) ≤ 7 := by exact_mod_cast hf2sub
   linarith [mul_le_mul_of_nonneg_right hcast hlog2pos.le]
+
+/-- Source-backed conductor bound for the fixed Frey conductor. -/
+theorem frey_conductor_log_bound (a b : ℕ) (ha : 0 < a) (hb : 0 < b)
+    (hcop : a.Coprime b) :
+    Real.log (freyConductor a b) ≤
+      Real.log (rad (a * b * (a + b)) : ℝ) + 7 * Real.log 2 := by
+  obtain ⟨f2, _, hf2, hformula⟩ := frey_conductor_formula a b ha hb hcop
+  exact conductor_log_bound f2 hf2 _ (by exact_mod_cast rad_pos _) _ hformula
 
 /-! ## OB-04-D: Quality above 1 — witness (1, 8, 9) -/
 
@@ -145,10 +163,13 @@ theorem quality_above_one : Real.log 9 / Real.log 6 > 1 := by
 #print axioms rad_prime_pow
 #print axioms rad_mul_coprime
 #print axioms intRad_mul_coprime
+#print axioms rad_pos
 #print axioms silverman_frey_disc_cases
 #print axioms frey_disc_height_bound
+#print axioms freyConductor
 #print axioms frey_conductor_formula
 #print axioms conductor_log_bound
+#print axioms frey_conductor_log_bound
 #print axioms quality_above_one
 
 /-! ## Sanity checks -/

@@ -15,6 +15,13 @@ proofs for P1--P3 with zero `sorry`; OB-04-B and the conductor algebra are also
 formalized, while `silverman_frey_disc_cases` and `frey_conductor_formula`
 remain explicitly named admitted premises. This does not close CORE-2.
 
+**Interface correction (2026-08-18):** the conductor premise now fixes an
+opaque arithmetic conductor constant `freyConductor a b` and constrains that
+specific object by `frey_conductor_formula`.  The earlier existential
+`∃ N_E` shape was too weak because it did not identify \(N_E\) with the Frey
+conductor.  The derived theorem is `frey_conductor_log_bound`; the source
+premises remain outside the machine proof.
+
 ---
 
 ## All definitions (self-contained — everything is here)

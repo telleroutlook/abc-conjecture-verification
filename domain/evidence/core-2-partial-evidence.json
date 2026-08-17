@@ -13,7 +13,8 @@
         "intRad_ofNat",
         "rad_prime_pow",
         "rad_mul_coprime",
-        "intRad_mul_coprime"
+        "intRad_mul_coprime",
+        "rad_pos"
       ]
     },
     "OB-04-B": {
@@ -30,9 +31,11 @@
     "OB-04-C": {
       "status": "PARTIAL-FORMALIZATION",
       "theorems": [
-        "conductor_log_bound"
+        "conductor_log_bound",
+        "frey_conductor_log_bound"
       ],
       "admitted_premises": [
+        "freyConductor",
         "frey_conductor_formula"
       ]
     },
@@ -50,7 +53,7 @@
       "source_verified": true
     },
     {
-      "name": "frey_conductor_formula",
+      "name": "freyConductor + frey_conductor_formula",
       "source": "Silverman, Advanced Topics in the Arithmetic of Elliptic Curves, Theorem IV.10.4 and AEC Lemma VIII.11.3(b)",
       "source_verified": false,
       "blocking_reason": "Primary ATEC source copy is not yet available; premise remains explicit and cannot support CORE-2 acceptance."
@@ -68,12 +71,12 @@
     {
       "role": "lean-kernel",
       "path": "lean/AbcHeightKernel.lean",
-      "sha256": "sha256:273beae8828db4a2e7b14a3419fe4a8711157b1a198b71b7f288ef9ac43745b2"
+      "sha256": "sha256:4a02efc1efc6f26b1b90e820c08351706ad7b35fd81029d448d77a4af6f0691a"
     },
     {
       "role": "lean-axiom-audit-test",
       "path": "tests/test_lean_ob04.py",
-      "sha256": "sha256:6a76bca77d501f7e332e12b4e984416c6cfe6d9465e120b33dd4441941335afd"
+      "sha256": "sha256:940d76afdbb7a45f46f5c4676f3188259dfd1df07a201e4bf969e84d2218aa10"
     },
     {
       "role": "baseline-record",
@@ -88,7 +91,7 @@
     {
       "role": "outsource-problem",
       "path": "outsource/OB-04-lean4-formalization-height-framework.md",
-      "sha256": "sha256:0622ebfe6e944dc9e8a5cef774ee5aafa0c11d61a58aa11a2c8362764b4b523a"
+      "sha256": "sha256:64cade4ad47f8eee92888a81f99c3605ec88f9a4245d706217ffca11de92565f"
     },
     {
       "role": "core2-nonacceptance-test",

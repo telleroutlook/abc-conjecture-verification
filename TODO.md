@@ -44,6 +44,8 @@ exclusive responsibility of the offline checkers and the proof assistant.
 - [ ] Obtain an authorized primary copy of Silverman ATEC 1994 Theorem IV.10.4.
       Until then `frey_conductor_formula` remains an explicitly admitted premise
       and cannot support CORE-2 acceptance.
+- [x] Replace the vacuous existential conductor axiom by an opaque fixed Frey
+      conductor plus a nontrivial formula premise; derive the log bound in Lean.
 - [x] Anchor Mochizuki IUTT-III Corollary 3.12 to the May 2020 RIMS source
       PDF without closing or weakening the OPEN CORE-3 gate.
 - [x] Verify the newly added Pasten and Vaaler source anchors with local PDF
