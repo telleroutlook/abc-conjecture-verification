@@ -79,6 +79,12 @@ directions; closing them requires checker replay, not manual status edits.
       formal imports, or keep OB-04 at PARTIAL-FORMALIZATION status.
 - [x] Register a checker-validated, non-accepting CORE-2 partial-evidence
       manifest with content hashes for the OB-04 artifacts.
+- [x] Add adversarial replay tests proving that CORE-2 partial evidence cannot
+      tamper its way into acceptance, alter artifact digests, or promote an
+      OB-04 component status.
+- [x] Add checker-pin regression tests covering both domain and `.proofctl`
+      contract/graph mirrors, preventing a future checker edit from silently
+      desynchronizing proofctl.
 - [ ] CORE-3 / CL-10: prove the universal key inequality without forbidden
       inputs and supply an explicit `K_epsilon`.
 - [ ] CORE-3 IUT sub-obligation: provide a machine-replayed proof of

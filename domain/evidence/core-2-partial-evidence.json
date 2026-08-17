@@ -93,7 +93,7 @@
     {
       "role": "core2-nonacceptance-test",
       "path": "tests/test_core2_partial_evidence.py",
-      "sha256": "sha256:b4d3fe7b051c5c9689b2ccfc467a8b5a8f1839a746c697acbd0f75fe89f9ebf3"
+      "sha256": "sha256:d5d53f08bbe6e19cad528f2dbcb9e9a954db658f3841070ea16a36f75f91959b"
     }
   ]
 }

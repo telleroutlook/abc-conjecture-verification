@@ -102,7 +102,7 @@ Realized as a **proofctl domain adapter** (`~/github/proofctl`, Go), not a fork.
 | **P6 — conclusion** | deterministic CORE-5 firing | integration test §7.2 holds |
 
 **Current phase: ALL PHASES COMPLETE (2026-08-15).** System is in its final honest
-state. 116/116 tests pass (2026-08-17). All PLACEHOLDERs frozen. Discovery guard
+state. 121/121 tests pass (2026-08-18). All PLACEHOLDERs frozen. Discovery guard
 layer live.
 
 ### Phase completion status
@@ -144,9 +144,10 @@ layer live.
   - `checker/compute_contract_hashes.py` + all 6 `domain/contracts/*.json` frozen (0 PLACEHOLDERs)
   - `discovery/candidates/guard.py` — non-circularity wall for exploration candidates
   - Integration test (spec §7.2): CORE-1+2+3+4 ⟹ CORE-5 mechanically verified
-- **Tests**: 116/116 pass (adversarial + structural + P2 + P3 + P4 + P5 + P6 +
+- **Tests**: 121/121 pass (adversarial + structural + P2 + P3 + P4 + P5 + P6 +
   integration §7.2 + contract freeze + discovery guard + Route V replay +
-  OB-04 Lean axiom audit + CORE-2 partial-evidence/source replay)
+  OB-04 Lean axiom audit + CORE-2 partial-evidence/source replay + checker-pin
+  mirrors)
 
 ---
 
@@ -947,8 +948,42 @@ absolute-value invariance P1 and the integer-version P3 were missing.
   `frey_conductor_formula`; no `sorryAx` occurs.
 - `python3 checker/replay_kernel.py`
   — `all_pass: true`, `missing: 0`.
+
+#### CORE-2 evidence and checker-pin hardening (2026-08-18)
+
+**Adversarial manifest tests added:** `tests/test_core2_partial_evidence.py`
+now clones the diagnostic evidence tree and verifies that validation rejects:
+
+1. a producer-supplied acceptance attempt (`accepted: true`,
+   `proofctl_gate: accepted`, `ledger_status: THM`);
+2. any artifact digest mismatch;
+3. promotion of OB-04-B from `PARTIAL-FORMALIZATION` to `MACHINE_PROVED`.
+
+The manifest hash for the non-acceptance test was refreshed accordingly.  A
+valid manifest still cannot flip CORE-2 to pass.
+
+**Checker-pin regression added:** `tests/test_checker_pin.py` hashes
+`checker/check_certificate.py` and checks the exact same digest in:
+
+- all six `domain/contracts/*.json`;
+- all six `.proofctl/contracts/*.json`;
+- `graph.json`;
+- `.proofctl/graph.json`.
+
+This directly guards against the checker-edit/proofctl-mirror desynchronization
+failure mode observed while integrating the CORE-2 diagnostic manifest.
+
+**Checker evidence:**
+
+- `PYTHONPATH=. python3 -m pytest tests/test_core2_partial_evidence.py
+  tests/test_checker_pin.py -q` — `9 passed in 2.21s`.
+- `PYTHONPATH=. python3 -m pytest tests/ -q`
+  — `121 passed in 57.20s`.
+- `python3 checker/replay_kernel.py`
+  — `all_pass: true`, `missing: 0`.
+- All six domain contracts pass `proofctl contract lint`.
 - `~/github/proofctl/proofctl check --all`
-  — unchanged honest result: CORE-0/1/5 PASS, CORE-2/3/4 rejected,
+  — CORE-0/1/5 PASS; CORE-2/3/4 rejected;
   `3 passed, 3 failed, 0 skipped out of 6 checked`.
 
 #### CORE-2 partial evidence and Silverman source refresh (2026-08-17)
