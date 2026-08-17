@@ -897,8 +897,8 @@ Scholze--Stix concern recorded as the blocking reason.
 #### OB-04 Lean formalization audit (2026-08-17)
 
 **Defect found:** the OB-04-A status claimed P1--P3, but the Lean artifact
-previously contained only P2 (`rad_prime_pow`) and P3
-(`rad_mul_coprime`); the integer absolute-value invariance P1 was missing.
+previously contained only the natural-number P2/P3 specializations; the integer
+absolute-value invariance P1 and the integer-version P3 were missing.
 
 **Delivered:**
 
@@ -909,19 +909,29 @@ previously contained only P2 (`rad_prime_pow`) and P3
      \operatorname{rad}_{\mathbb Z}(|z|).
    \]
 2. Added `intRad_ofNat`, confirming agreement with the natural-number radical.
-3. Added explicit `#print axioms` audit commands for the OB-04 boundary:
+3. Generalized natural radical multiplicativity to require only coprimality
+   (no unnecessary positivity hypotheses), then added
+   `intRad_mul_coprime` for integer inputs:
+   \[
+     \gcd(|m|,|n|)=1
+     \implies
+     \operatorname{rad}_{\mathbb Z}(mn)
+     =
+     \operatorname{rad}_{\mathbb Z}(m)\operatorname{rad}_{\mathbb Z}(n).
+   \]
+4. Added explicit `#print axioms` audit commands for the OB-04 boundary:
    - `intRad_abs`, `rad_prime_pow`, `rad_mul_coprime`, `conductor_log_bound`,
-     and `quality_above_one` use only the standard Lean axioms
+     `intRad_mul_coprime`, and `quality_above_one` use only the standard Lean axioms
      `propext`, `Classical.choice`, and `Quot.sound`;
    - `frey_disc_height_bound` additionally uses the explicitly named admitted
      premise `silverman_frey_disc_cases`;
    - `silverman_frey_disc_cases` and `frey_conductor_formula` remain named
      premises rather than being silently treated as proved theorems.
-4. Added `tests/test_lean_ob04.py`, which replays
+5. Added `tests/test_lean_ob04.py`, which replays
    `lake env lean AbcHeightKernel.lean` and checks the emitted axiom
    dependencies.  The test fails if `sorryAx` appears or if an unexpected
    custom axiom boundary is introduced.
-5. Updated the OB-04 artifact status to PARTIAL-FORMALIZATION: OB-04-A is
+6. Updated the OB-04 artifact status to PARTIAL-FORMALIZATION: OB-04-A is
    complete at the machine-proof level, but CORE-2 remains `[OBL]` because the
    larger `P_height` construction is not accepted by proofctl.
 
@@ -930,7 +940,7 @@ previously contained only P2 (`rad_prime_pow`) and P3
 - `PYTHONPATH=. python3 -m pytest tests/test_lean_ob04.py -q`
   — `2 passed in 5.04s`.
 - `PYTHONPATH=. python3 -m pytest tests/ -q`
-  — `112 passed in 18.99s`.
+  — `112 passed in 18.84s` after the integer P3 generalization.
 - `cd lean && ~/.elan/bin/lake build`
   — exit `0`, `Build completed successfully (2005 jobs)`.  The output records
   the intended axiom boundary, including `silverman_frey_disc_cases` and

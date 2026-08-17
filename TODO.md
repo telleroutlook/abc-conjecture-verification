@@ -66,6 +66,8 @@ directions; closing them requires checker replay, not manual status edits.
 - [ ] CORE-2 / CL-09: construct and replay `P_height`.
 - [x] OB-04-A: close the missing Lean P1 artifact for integer absolute-value
       invariance of the radical (P2 and P3 are already formalized).
+- [x] OB-04-A: also state P3 over the integers, using coprime absolute values,
+      rather than only the natural-number specialization.
 - [x] OB-04-B/C: keep the named Silverman imports explicit in a machine-audited
       axiom manifest; do not describe them as fully formalized theorems.
 - [ ] OB-04: replace the two admitted Silverman axioms by source-verified

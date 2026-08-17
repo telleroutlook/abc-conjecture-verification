@@ -45,10 +45,17 @@ theorem rad_prime_pow (p k : ℕ) (hp : p.Prime) (hk : k ≠ 0) :
   simp [rad, Nat.primeFactors_prime_pow hk hp]
 
 /-- P3: rad is multiplicative on coprime inputs. -/
-theorem rad_mul_coprime (m n : ℕ) (_ : 0 < m) (_ : 0 < n) (hcop : m.Coprime n) :
+theorem rad_mul_coprime (m n : ℕ) (hcop : m.Coprime n) :
     rad (m * n) = rad m * rad n := by
   unfold rad
   rw [hcop.primeFactors_mul, Finset.prod_union hcop.disjoint_primeFactors]
+
+/-- P3 over the integers: coprime absolute values have multiplicative radical. -/
+theorem intRad_mul_coprime (m n : ℤ)
+    (hcop : m.natAbs.Coprime n.natAbs) :
+    intRad (m * n) = intRad m * intRad n := by
+  simp only [intRad, Int.natAbs_mul]
+  exact rad_mul_coprime _ _ hcop
 
 /-! ## OB-04-B: Discriminant height bound [★]
 
@@ -137,6 +144,7 @@ theorem quality_above_one : Real.log 9 / Real.log 6 > 1 := by
 #print axioms intRad_abs
 #print axioms rad_prime_pow
 #print axioms rad_mul_coprime
+#print axioms intRad_mul_coprime
 #print axioms silverman_frey_disc_cases
 #print axioms frey_disc_height_bound
 #print axioms frey_conductor_formula
@@ -149,7 +157,7 @@ theorem quality_above_one : Real.log 9 / Real.log 6 > 1 := by
 example : rad 72 = 6 := by
   have hcop : Nat.Coprime (2 ^ 3) (3 ^ 2) := by decide
   rw [show (72 : ℕ) = 2 ^ 3 * 3 ^ 2 from by norm_num,
-      rad_mul_coprime _ _ (by norm_num) (by norm_num) hcop,
+      rad_mul_coprime _ _ hcop,
       rad_prime_pow 2 3 (by decide) (by decide),
       rad_prime_pow 3 2 (by decide) (by decide)]
 

@@ -18,6 +18,7 @@ def test_ob04_source_declares_expected_theorems_and_admitted_premises() -> None:
         "theorem intRad_abs",
         "theorem rad_prime_pow",
         "theorem rad_mul_coprime",
+        "theorem intRad_mul_coprime",
         "theorem frey_disc_height_bound",
         "theorem conductor_log_bound",
         "theorem quality_above_one",
@@ -51,6 +52,7 @@ def test_ob04_axiom_audit_replays() -> None:
         "intRad_abs",
         "rad_prime_pow",
         "rad_mul_coprime",
+        "intRad_mul_coprime",
         "conductor_log_bound",
         "quality_above_one",
     ):
