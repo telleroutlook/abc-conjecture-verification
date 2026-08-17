@@ -16,7 +16,7 @@ exclusive responsibility of the offline checkers and the proof assistant.
 - [x] Rebuild `papers/route-v-pasten/route-v-pasten.pdf` after the final TeX edit.
 - [x] Refresh `PAPER_LINT_REPORT.md` so it describes the current TeX, not an
       earlier revision.
-- [ ] Triage the three untracked discovery scripts:
+- [x] Triage the three untracked discovery scripts:
   - [x] `t79_nd_type113_explore.py`: removed; it was superseded by the tracked
     `t79b_nd_type113_verify.py` and was an unresumable >30 s one-off.
   - [x] `t82_nd_type311_verify.py`: retain as mirror-case evidence and reference
@@ -24,10 +24,10 @@ exclusive responsibility of the offline checkers and the proof assistant.
   - [x] `t95_all_successive_minima.py`: record the finite refutation explicitly;
     never promote the merged-multiples spectrum to a theorem.
 - [x] Update the outsource status board for OB-01 through OB-17.
-- [ ] Decide which untracked baseline PDFs and reference records belong in the
+- [x] Decide which untracked baseline PDFs and reference records belong in the
       next commit.
 - [x] Record the current branch state (`main` ahead of `origin/main`).
-- [ ] Split pending changes into reviewable commits.
+- [x] Split pending changes into reviewable commits.
 
 ## Priority 1 — baseline source verification
 
