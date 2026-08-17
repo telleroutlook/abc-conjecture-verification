@@ -46,6 +46,8 @@ exclusive responsibility of the offline checkers and the proof assistant.
       and cannot support CORE-2 acceptance.
 - [x] Replace the vacuous existential conductor axiom by an opaque fixed Frey
       conductor plus a nontrivial formula premise; derive the log bound in Lean.
+- [x] Replace the vacuous existential minimal-discriminant axiom by an opaque
+      fixed Frey minimal discriminant; define and bound \(h_\Delta\) in Lean.
 - [x] Anchor Mochizuki IUTT-III Corollary 3.12 to the May 2020 RIMS source
       PDF without closing or weakening the OPEN CORE-3 gate.
 - [x] Verify the newly added Pasten and Vaaler source anchors with local PDF

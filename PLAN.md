@@ -1031,6 +1031,51 @@ interface.
 tests/test_lean_ob04.py tests/test_core2_partial_evidence.py
 tests/test_checker_pin.py -q` — `11 passed in 6.73s`.  The CORE-2 partial
 manifest was refreshed with the current Lean/test hashes.
+
+#### Fixed minimal-discriminant and \(h_\Delta\) interface (2026-08-18)
+
+**Defect corrected:** the earlier OB-04-B premise used an existential
+`\Delta`.  As with the conductor interface, that did not formally identify the
+witness with the fixed global minimal discriminant of the Frey curve.
+
+The Lean interface now has:
+
+1. an opaque fixed source constant
+   \[
+     \Delta_{\min}(a,b)=\texttt{freyMinimalDiscriminant}\ a\ b;
+   \]
+2. a nontrivial Silverman premise restricting this fixed object to
+   \[
+     16(abc)^2
+     \quad\text{or}\quad
+     2^{-8}(abc)^2;
+   \]
+3. the explicit discriminant height
+   \[
+     h_\Delta(a,b)
+     =
+     \frac{1}{12}\log \Delta_{\min}(a,b),
+   \]
+   defined as `freyDiscriminantHeight`;
+4. the two-sided machine-derived bound
+   \[
+     \frac{1}{6}\log(abc)-\frac{2}{3}\log 2
+     \le
+     h_\Delta(a,b)
+     \le
+     \frac{1}{6}\log(abc)+\frac{1}{3}\log 2,
+   \]
+   given by `frey_discriminant_height_bound`.
+
+`#print axioms` records that the scaled bound depends exactly on the named
+admitted premises `freyMinimalDiscriminant` and
+`silverman_frey_disc_cases`, plus the standard Lean axioms.  No `sorryAx`
+occurs.  This is \(h_\Delta\), not the Arakelov-theoretic Faltings height, and
+it does not close CORE-2.
+
+**Checker evidence:** `PYTHONPATH=. python3 -m pytest tests/test_lean_ob04.py
+-q` — `2 passed in 4.95s`; the full suite passes `121/121` (latest replay:
+`121 passed in 20.11s`).
 - `PYTHONPATH=. python3 -m pytest tests/ -q` — `121 passed in 20.59s`.
 
 #### CORE-2 partial evidence and Silverman source refresh (2026-08-17)

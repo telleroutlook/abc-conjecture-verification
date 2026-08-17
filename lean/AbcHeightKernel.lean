@@ -64,11 +64,18 @@ ADMITTED (Silverman AEC 2nd ed. (2009), Lemma VIII.11.3(a), pp. 257--258):
 
 The algebraic bounds [★] follow and are PROVED below. -/
 
+/-- The global minimal discriminant of the Frey curve, supplied as an opaque
+source constant.  Its two possible values are admitted below. -/
+axiom freyMinimalDiscriminant (a b : ℕ) : ℝ
+
 /-- ADMITTED: Silverman AEC 2nd ed. (2009), Lemma VIII.11.3(a), pp. 257--258.
-    |Δ_min| is either 16(abc)² or 2^{-8}(abc)² for the Frey curve. -/
-axiom silverman_frey_disc_cases (a b : ℕ) (ha : 0 < a) (hb : 0 < b) (hcop : a.Coprime b) :
-    ∃ Δ : ℝ, (Δ = 16 * ((a : ℝ) * b * (a + b)) ^ 2 ∨
-              Δ = ((a : ℝ) * b * (a + b)) ^ 2 / 256) ∧ 0 < Δ
+    For the fixed Frey minimal discriminant, the only two possible values are
+    16(abc)² and 2^{-8}(abc)². -/
+axiom silverman_frey_disc_cases (a b : ℕ) (_ha : 0 < a) (_hb : 0 < b)
+    (_hcop : a.Coprime b) :
+    0 < freyMinimalDiscriminant a b ∧
+      (freyMinimalDiscriminant a b = 16 * ((a : ℝ) * b * (a + b)) ^ 2 ∨
+       freyMinimalDiscriminant a b = ((a : ℝ) * b * (a + b)) ^ 2 / 256)
 
 /-- Weierstrass discriminant 16(abc)² satisfies the upper bound of [★] with equality. -/
 theorem weierstrass_disc_upper (abc : ℝ) (habc : 0 < abc) :
@@ -85,24 +92,40 @@ theorem minimal_disc_lower (abc : ℝ) (habc : 0 < abc) :
       Real.log_pow, show (256 : ℝ) = 2 ^ 8 by norm_num, Real.log_pow]
   push_cast; ring
 
-/-- [★] holds for the actual minimal discriminant (combines the axiom with the algebra). -/
+/-- The discriminant height is one-twelfth of the log of the fixed minimal
+discriminant.  It is deliberately not called the Faltings height. -/
+noncomputable def freyDiscriminantHeight (a b : ℕ) : ℝ :=
+  Real.log (freyMinimalDiscriminant a b) / 12
+
+/-- [★] holds for the fixed minimal discriminant. -/
 theorem frey_disc_height_bound (a b : ℕ) (ha : 0 < a) (hb : 0 < b) (hcop : a.Coprime b) :
-    ∃ Δ : ℝ, 0 < Δ ∧
-      2 * Real.log ((a : ℝ) * b * (a + b)) - 8 * Real.log 2 ≤ Real.log Δ ∧
-      Real.log Δ ≤ 2 * Real.log ((a : ℝ) * b * (a + b)) + 4 * Real.log 2 := by
+    2 * Real.log ((a : ℝ) * b * (a + b)) - 8 * Real.log 2 ≤
+      Real.log (freyMinimalDiscriminant a b) ∧
+      Real.log (freyMinimalDiscriminant a b) ≤
+      2 * Real.log ((a : ℝ) * b * (a + b)) + 4 * Real.log 2 := by
   have ha' : (0 : ℝ) < a := Nat.cast_pos.mpr ha
   have hb' : (0 : ℝ) < b := Nat.cast_pos.mpr hb
   have hab' : (0 : ℝ) < (a : ℝ) + b := by linarith
   have habc : (0 : ℝ) < (a : ℝ) * b * (a + b) := mul_pos (mul_pos ha' hb') hab'
   have hlog2 : 0 ≤ Real.log 2 := (Real.log_pos (by norm_num)).le
-  obtain ⟨disc, hdisccases, hdiscpos⟩ := silverman_frey_disc_cases a b ha hb hcop
-  rcases hdisccases with rfl | rfl
-  · exact ⟨_, hdiscpos,
-      by linarith [weierstrass_disc_upper _ habc],
-      (weierstrass_disc_upper _ habc).le⟩
-  · exact ⟨_, hdiscpos,
-      (minimal_disc_lower _ habc).ge,
-      by linarith [minimal_disc_lower _ habc]⟩
+  obtain ⟨_, hdisccases⟩ := silverman_frey_disc_cases a b ha hb hcop
+  rcases hdisccases with hcase | hcase
+  · rw [hcase, weierstrass_disc_upper _ habc]
+    exact ⟨by linarith, le_refl _⟩
+  · rw [hcase, minimal_disc_lower _ habc]
+    exact ⟨le_refl _, by linarith⟩
+
+/-- Scaled discriminant-height bounds.  This is \(h_\Delta\), not the
+Arakelov-theoretic Faltings height. -/
+theorem frey_discriminant_height_bound (a b : ℕ) (ha : 0 < a) (hb : 0 < b)
+    (hcop : a.Coprime b) :
+    Real.log ((a : ℝ) * b * (a + b)) / 6 - 2 * Real.log 2 / 3 ≤
+      freyDiscriminantHeight a b ∧
+      freyDiscriminantHeight a b ≤
+      Real.log ((a : ℝ) * b * (a + b)) / 6 + Real.log 2 / 3 := by
+  obtain ⟨hlower, hupper⟩ := frey_disc_height_bound a b ha hb hcop
+  unfold freyDiscriminantHeight
+  constructor <;> nlinarith
 
 /-! ## OB-04-C: Conductor bound
 
@@ -164,8 +187,11 @@ theorem quality_above_one : Real.log 9 / Real.log 6 > 1 := by
 #print axioms rad_mul_coprime
 #print axioms intRad_mul_coprime
 #print axioms rad_pos
+#print axioms freyMinimalDiscriminant
 #print axioms silverman_frey_disc_cases
 #print axioms frey_disc_height_bound
+#print axioms freyDiscriminantHeight
+#print axioms frey_discriminant_height_bound
 #print axioms freyConductor
 #print axioms frey_conductor_formula
 #print axioms conductor_log_bound

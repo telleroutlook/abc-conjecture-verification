@@ -22,6 +22,12 @@ specific object by `frey_conductor_formula`.  The earlier existential
 conductor.  The derived theorem is `frey_conductor_log_bound`; the source
 premises remain outside the machine proof.
 
+The same correction is applied to OB-04-B: `freyMinimalDiscriminant a b` is a
+fixed opaque source object, `silverman_frey_disc_cases` constrains that object
+to the two Silverman cases, and `freyDiscriminantHeight` is explicitly the
+discriminant height — not the Faltings height.  The scaled two-sided bound is
+`frey_discriminant_height_bound`.
+
 ---
 
 ## All definitions (self-contained — everything is here)

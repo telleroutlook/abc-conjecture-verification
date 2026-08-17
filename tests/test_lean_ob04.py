@@ -20,13 +20,16 @@ def test_ob04_source_declares_expected_theorems_and_admitted_premises() -> None:
         "theorem rad_mul_coprime",
         "theorem intRad_mul_coprime",
         "theorem rad_pos",
+        "def freyDiscriminantHeight",
         "theorem frey_disc_height_bound",
+        "theorem frey_discriminant_height_bound",
         "theorem conductor_log_bound",
         "theorem frey_conductor_log_bound",
         "theorem quality_above_one",
     ):
         assert declaration in source
     assert "axiom silverman_frey_disc_cases" in source
+    assert "axiom freyMinimalDiscriminant" in source
     assert "axiom freyConductor" in source
     assert "axiom frey_conductor_formula" in source
     assert "Silverman AEC 2nd ed. (2009), Lemma VIII.11.3(a)" in source
@@ -63,7 +66,12 @@ def test_ob04_axiom_audit_replays() -> None:
         assert axioms(name) == standard, name
 
     assert axioms("frey_disc_height_bound") == standard | {
-        "silverman_frey_disc_cases"
+        "freyMinimalDiscriminant",
+        "silverman_frey_disc_cases",
+    }
+    assert axioms("frey_discriminant_height_bound") == standard | {
+        "freyMinimalDiscriminant",
+        "silverman_frey_disc_cases",
     }
     assert axioms("frey_conductor_log_bound") == standard | {
         "freyConductor",
