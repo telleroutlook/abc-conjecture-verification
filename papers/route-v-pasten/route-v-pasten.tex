@@ -1561,6 +1561,7 @@ candidate formulas rather than theorems.
   The two $\varphi_{c\text{-prime}}=0$ branches suffice in $223/262$ cases.
 \end{remark}
 
+{\raggedright
 \begin{candidate}[Exact $\mathrm{nd}_{\mathrm{val}}$ for type $(2,1,1)$ triples]\label{thm:nd_type211}
   Let $a + b = c$ be coprime with $P_a = \{p, q\}$ ($p < q$, exponents
   $k_1 = v_p(a)$, $k_2 = v_q(a)$), $P_b = \{r\}$ (exponent $m$), $P_c = \{s\}$
@@ -1592,6 +1593,7 @@ candidate formulas rather than theorems.
     \Bigr).
   \]
 \end{candidate}
+}
 
 \begin{proof}[Evidence]
   \textit{Upper bound.}  Each branch provides a constructive non-degenerate
@@ -2144,6 +2146,7 @@ suggest the following recursion for $\mathrm{nd}(a,b)$; its non-squarefree
 branches concern $\mathrm{nd}_{\mathrm{val}}$ and are finite-verification claims
 outside the squarefree case.
 
+{\raggedright
 \begin{candidate}[General recursive nd formula]\label{thm:nd_recursive}
   Let $a+b=c$ be a coprime triple with $\omega^*\ge 3$ distinct primes partitioned
   as $P_a\cup P_b\cup P_c$.  For each prime $p \in P_a\cup P_b\cup P_c$, define
@@ -2175,6 +2178,7 @@ outside the squarefree case.
       Theorem~\ref{thm:nd_sqfree_support}).
   \end{enumerate}
 \end{candidate}
+}
 
 \begin{proof}[Evidence]
   \textit{Upper bound ($\mathrm{nd} \le \min_p B_p$).}  Each $B_p$ is a minimum over a
@@ -2600,6 +2604,7 @@ small primes --- equivalently, when $\max(n_a, n_b, n_c) \le 2$.
 
 
 \section{Formal verification status}
+\begingroup\raggedright
 
 The proofs of Theorem~\ref{thm:det} and Theorem~\ref{thm:gcd} have been
 formalized in Lean~4 (Mathlib), as part of the abc conjecture verification
@@ -2747,6 +2752,7 @@ Additional lemmas added in the E10/E11/E$_n$/F31 extension:
     (Corollary~\ref{cor:nd_kmn_val}).  Zero \texttt{sorry}.
 \end{itemize}
 
+\endgroup
 \section{Conclusion}
 
 We have proved that for squarefree coprime triples $(a,b,c)$ with $a+b=c$ and
@@ -2996,7 +3002,7 @@ for all $\varepsilon>0$ (Pasten's SDC), and the gap between our bound and SDC is
 the full depth of the problem.  We have made no use of any abc-equivalent
 hypothesis, known abc triples, or the Szpiro conjecture.
 
-{\sloppy
+{\sloppy\raggedright
 \begin{thebibliography}{9}
 
 \bibitem{Pasten2021}

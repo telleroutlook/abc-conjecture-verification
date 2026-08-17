@@ -818,14 +818,16 @@ the mathematical status boundaries.
 
 - Paper P1/P2/P3: `0/0/0` findings (P2 audited all 56 labels).
 - Paper P4: three `pdflatex` passes exited `0,0,0`; final undefined/citation/error
-  findings `0`; overfull `0`; underfull `10` (draft-stage).
+  findings `0`; overfull `0`; underfull `0`.
 - `python3 discovery/m2_directions/t82_nd_type311_verify.py`: exit `0`,
   `843 OK, 0 FAIL`.
 - `python3 discovery/m2_directions/t95_all_successive_minima.py`: exit `0`;
   expected refutation mismatches replayed exactly at $(2,13,15)$ and $(3,7,10)$.
 
-**Still open in this work stream:** decide the baseline PDF commit split and
-repair the ten underfull boxes before external paper submission.
+**Follow-up completed:** the baseline PDF set was committed separately, and the
+ten draft-stage underfull boxes were repaired by using ragged-right typography
+for long Candidate Formula statements, the formal-verification section, and the
+bibliography.
 
 #### Baseline source refresh (2026-08-17)
 
@@ -880,7 +882,8 @@ sketch.
 Commands and derived results after the TODO/lint/baseline updates:
 
 - `PYTHONPATH=. python3 -m pytest tests/ -q`
-  — `106 passed in 0.43s`.
+  — `110 passed in 13.80s` after adding regression replays for Route V scripts
+  T30, T82-type311, T95, and T96.
 - `python3 checker/replay_kernel.py`
   — `all_pass: true`; 4 replayed claims; `missing: 0`.
 - `~/github/proofctl/proofctl check --all`
@@ -894,7 +897,7 @@ Commands and derived results after the TODO/lint/baseline updates:
   warnings.
 - Paper audit: P1 `0`; P2 `0/56`; P3 `0/2`; P4 three passes exited
   `0,0,0`, final reference/citation/error findings `0`, overfull `0`,
-  underfull `10`.
+  underfull `0`.
 - `python3 discovery/m2_directions/t82_nd_type311_verify.py`
   — `843 OK, 0 FAIL`.
 - `python3 discovery/m2_directions/t95_all_successive_minima.py`

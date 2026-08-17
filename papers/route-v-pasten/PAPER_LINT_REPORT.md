@@ -15,8 +15,10 @@ This report records the checks run after the repairs described in `PLAN.md`.
 - **P3 uncited bibliography entries:** 0 findings among 2 entries.
 - **P4 LaTeX compilation:** three `pdflatex -interaction=nonstopmode
   route-v-pasten.tex` passes exited `0, 0, 0`.  The final pass had 0 undefined
-  reference/citation/error warnings, 0 overfull boxes, and 10 underfull boxes
-  (allowed at draft stage by P4).
+  reference/citation/error warnings, 0 overfull boxes, and 0 underfull boxes.
+  Long Candidate Formula statements, the formal-verification section, and the
+  bibliography use ragged-right typography for unbreakable identifiers and
+  source paths.
 - **P5 short title:** the optional short-title field is absent, so the full
   scoped title is used; no semantic mismatch.
 
@@ -172,5 +174,3 @@ This report records the checks run after the repairs described in `PLAN.md`.
    infinite prime-pattern families and remain conditional.
 3. OB-13B is conditional outside the checked \(c\le10^{12}\) edge-case search
    for the explicitly listed exceptional subfamilies.
-4. The ten underfull boxes remain draft-stage typography and do not affect the
-   P4 structural check.

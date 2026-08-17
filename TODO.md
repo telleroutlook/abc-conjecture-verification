@@ -50,10 +50,12 @@ exclusive responsibility of the offline checkers and the proof assistant.
       theorem-tier results.
 - [x] Preserve the conditional status of prime-pattern sharpness and
       unboundedness claims.
-- [ ] Close or explicitly retain the OB-13B exceptional-subfamily condition
+- [x] Explicitly retain the OB-13B exceptional-subfamily condition
       beyond `c <= 10^12`.
-- [ ] Repair the ten draft-stage underfull boxes before external submission.
-- [ ] Add regression/replay wrappers for discovery scripts whose output is cited
+      The remaining Wieferich-type prime-power analysis is a mathematical
+      auxiliary obligation, not a lint defect.
+- [x] Repair the ten draft-stage underfull boxes before external submission.
+- [x] Add regression/replay wrappers for discovery scripts whose output is cited
       as finite evidence.
 
 ## Priority 3 — mathematical frontier (checker-gated, not TODO prose)
