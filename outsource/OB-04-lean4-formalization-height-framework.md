@@ -10,6 +10,11 @@ proof artifacts, not new mathematics.
 closed in `OB-03-p-height-framework.md` (status: PARTIAL-FORMALIZATION, 2026-08-15).
 This problem asks only for Lean 4 / Mathlib4 formalizations.
 
+**Review status (2026-08-17):** PARTIAL-FORMALIZATION. OB-04-A now has machine
+proofs for P1--P3 with zero `sorry`; OB-04-B and the conductor algebra are also
+formalized, while `silverman_frey_disc_cases` and `frey_conductor_formula`
+remain explicitly named admitted premises. This does not close CORE-2.
+
 ---
 
 ## All definitions (self-contained — everything is here)

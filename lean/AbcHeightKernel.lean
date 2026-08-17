@@ -1,4 +1,5 @@
 import Mathlib.Data.Nat.PrimeFin
+import Mathlib.Algebra.Order.Group.Unbundled.Int
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
@@ -8,9 +9,11 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 Lean 4.32.2 + Mathlib commit 905b95818eb3 (tag v4.32.2).
 
 ## Status
-- OB-04-A (rad, P1–P3): PROVED (zero sorry)
-- OB-04-B (discriminant bound [★], algebraic part): PROVED (Silverman VIII.11.3(a) as axiom)
-- OB-04-C (conductor bound): PROVED (Silverman ATEC IV.10.4 / VIII.11.3(b) as axioms)
+- OB-04-A (rad, P1–P3): PROVED (zero sorry; P1 is `intRad_abs`)
+- OB-04-B (discriminant bound [★], algebraic part): PROVED
+  (`silverman_frey_disc_cases` is a named admitted premise)
+- OB-04-C (conductor bound): algebra PROVED; the Frey conductor formula is a named
+  admitted premise (`frey_conductor_formula`)
 - OB-04-D (quality > 1 for (1,8,9)): PROVED (zero sorry)
 
 Every `axiom` is labeled with exact Silverman source, theorem number, and page.
@@ -25,6 +28,16 @@ open Real Nat Finset
 
 /-- The radical of n: product of its distinct prime factors. -/
 noncomputable def rad (n : ℕ) : ℕ := n.primeFactors.prod id
+
+/-- The radical of an integer, defined through its absolute value. -/
+noncomputable def intRad (z : ℤ) : ℕ := rad z.natAbs
+
+/-- P1: the integer radical is invariant under absolute value. -/
+theorem intRad_abs (z : ℤ) : intRad z = intRad |z| := by
+  simp [intRad, Int.natAbs_abs]
+
+/-- The integer radical agrees with the natural radical on nonnegative inputs. -/
+theorem intRad_ofNat (n : ℕ) : intRad n = rad n := rfl
 
 /-- P2: The only prime factor of p^k (k ≥ 1) is p itself, so rad(p^k) = p. -/
 theorem rad_prime_pow (p k : ℕ) (hp : p.Prime) (hk : k ≠ 0) :
@@ -118,6 +131,17 @@ theorem quality_above_one : Real.log 9 / Real.log 6 > 1 := by
   have hlog6pos : 0 < Real.log 6 := Real.log_pos (by norm_num)
   rw [gt_iff_lt, one_lt_div hlog6pos]
   exact Real.log_lt_log (by norm_num) (by norm_num)
+
+-- Machine-audit the boundary between proved OB-04 algebra and admitted
+-- Silverman premises.  A direct `lake env lean` replay must show these lines.
+#print axioms intRad_abs
+#print axioms rad_prime_pow
+#print axioms rad_mul_coprime
+#print axioms silverman_frey_disc_cases
+#print axioms frey_disc_height_bound
+#print axioms frey_conductor_formula
+#print axioms conductor_log_bound
+#print axioms quality_above_one
 
 /-! ## Sanity checks -/
 
@@ -1561,4 +1585,3 @@ theorem pasten_f37_lambda3_upper_case1 (p2 p3 p4 : ℤ)
 theorem pasten_f37_lambda3_upper_case2 (p2 p3 : ℤ)
     (hp23 : 2 * p2 < p3) (hp2 : 0 < p2) :
     2 * p2 < min (3 * p2) p3 := lt_min (by linarith) hp23
-

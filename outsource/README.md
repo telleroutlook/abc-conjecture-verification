@@ -30,7 +30,7 @@ obligation; only the applicable checker/proof assistant can do that.
 | OB-02 | [OB-02-iut-corollary-312-isomorphism.md](OB-02-iut-corollary-312-isomorphism.md) | Explicit isomorphism for the IUT Θ-link | READY; no independent review yet; CORE-3 IUT gate remains OPEN |
 | OB-02v2 | [OB-02v2-iut-corollary-312-pilot-compatibility.md](OB-02v2-iut-corollary-312-pilot-compatibility.md) | Pilot-object log-volume compatibility | External review: INCONCLUSIVE + LOCALIZATION |
 | OB-03 | [OB-03-p-height-framework.md](OB-03-p-height-framework.md) | rad/height/discriminant/conductor framework | Ordinary mathematics corrected and reviewed; formalization PARTIAL. CORE-2 remains `[OBL]` |
-| OB-04 | [OB-04-lean4-formalization-height-framework.md](OB-04-lean4-formalization-height-framework.md) | Lean formalization of OB-03 | OPEN; no accepted full formalization yet |
+| OB-04 | [OB-04-lean4-formalization-height-framework.md](OB-04-lean4-formalization-height-framework.md) | Lean formalization of OB-03 | PARTIAL-FORMALIZATION; OB-04-A complete, Silverman premises explicitly admitted |
 | OB-05 | [OB-05-iut-object-definitions-verification.md](OB-05-iut-object-definitions-verification.md) | Verbatim audit of IUT object definitions | External review: PARTIAL (D1--D5, D7 corrected; D6 localized) |
 | OB-06 | [OB-06-iut-bj-morphism-construction.md](OB-06-iut-bj-morphism-construction.md) | IUT `B_j` comparison morphism | External review: INCONCLUSIVE + LOCALIZATION; IUT gate remains OPEN |
 | OB-07 | [OB-07-baker-methods-quality-bound.md](OB-07-baker-methods-quality-bound.md) | Baker/S-unit route to a fixed-power bound | External review: INCONCLUSIVE + LOCALIZATION; `R^{1/3}` barrier recorded |

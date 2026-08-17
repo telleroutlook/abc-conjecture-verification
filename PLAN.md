@@ -102,7 +102,8 @@ Realized as a **proofctl domain adapter** (`~/github/proofctl`, Go), not a fork.
 | **P6 — conclusion** | deterministic CORE-5 firing | integration test §7.2 holds |
 
 **Current phase: ALL PHASES COMPLETE (2026-08-15).** System is in its final honest
-state. 106/106 tests pass. All PLACEHOLDERs frozen. Discovery guard layer live.
+state. 112/112 tests pass (2026-08-17). All PLACEHOLDERs frozen. Discovery guard
+layer live.
 
 ### Phase completion status
 
@@ -143,7 +144,9 @@ state. 106/106 tests pass. All PLACEHOLDERs frozen. Discovery guard layer live.
   - `checker/compute_contract_hashes.py` + all 6 `domain/contracts/*.json` frozen (0 PLACEHOLDERs)
   - `discovery/candidates/guard.py` — non-circularity wall for exploration candidates
   - Integration test (spec §7.2): CORE-1+2+3+4 ⟹ CORE-5 mechanically verified
-- **Tests**: 106/106 pass (adversarial + structural + P2 + P3 + P4 + P5 + P6 + integration §7.2 + contract freeze + discovery guard)
+- **Tests**: 112/112 pass (adversarial + structural + P2 + P3 + P4 + P5 + P6 +
+  integration §7.2 + contract freeze + discovery guard + Route V replay +
+  OB-04 Lean axiom audit)
 
 ---
 
@@ -890,6 +893,53 @@ The source quote changes no gate status: the indeterminacies and
 cross-theater identifications are not independently formalized, so
 `core3.iut-corollary-312-independently-verified` remains OPEN with the
 Scholze--Stix concern recorded as the blocking reason.
+
+#### OB-04 Lean formalization audit (2026-08-17)
+
+**Defect found:** the OB-04-A status claimed P1--P3, but the Lean artifact
+previously contained only P2 (`rad_prime_pow`) and P3
+(`rad_mul_coprime`); the integer absolute-value invariance P1 was missing.
+
+**Delivered:**
+
+1. Added `intRad` and the zero-`sorry` theorem `intRad_abs`, formalizing P1:
+   \[
+     \operatorname{rad}_{\mathbb Z}(z)
+     =
+     \operatorname{rad}_{\mathbb Z}(|z|).
+   \]
+2. Added `intRad_ofNat`, confirming agreement with the natural-number radical.
+3. Added explicit `#print axioms` audit commands for the OB-04 boundary:
+   - `intRad_abs`, `rad_prime_pow`, `rad_mul_coprime`, `conductor_log_bound`,
+     and `quality_above_one` use only the standard Lean axioms
+     `propext`, `Classical.choice`, and `Quot.sound`;
+   - `frey_disc_height_bound` additionally uses the explicitly named admitted
+     premise `silverman_frey_disc_cases`;
+   - `silverman_frey_disc_cases` and `frey_conductor_formula` remain named
+     premises rather than being silently treated as proved theorems.
+4. Added `tests/test_lean_ob04.py`, which replays
+   `lake env lean AbcHeightKernel.lean` and checks the emitted axiom
+   dependencies.  The test fails if `sorryAx` appears or if an unexpected
+   custom axiom boundary is introduced.
+5. Updated the OB-04 artifact status to PARTIAL-FORMALIZATION: OB-04-A is
+   complete at the machine-proof level, but CORE-2 remains `[OBL]` because the
+   larger `P_height` construction is not accepted by proofctl.
+
+**Checker evidence:**
+
+- `PYTHONPATH=. python3 -m pytest tests/test_lean_ob04.py -q`
+  — `2 passed in 5.04s`.
+- `PYTHONPATH=. python3 -m pytest tests/ -q`
+  — `112 passed in 18.99s`.
+- `cd lean && ~/.elan/bin/lake build`
+  — exit `0`, `Build completed successfully (2005 jobs)`.  The output records
+  the intended axiom boundary, including `silverman_frey_disc_cases` and
+  `frey_conductor_formula`; no `sorryAx` occurs.
+- `python3 checker/replay_kernel.py`
+  — `all_pass: true`, `missing: 0`.
+- `~/github/proofctl/proofctl check --all`
+  — unchanged honest result: CORE-0/1/5 PASS, CORE-2/3/4 rejected,
+  `3 passed, 3 failed, 0 skipped out of 6 checked`.
 
 #### Session verification snapshot (2026-08-17)
 

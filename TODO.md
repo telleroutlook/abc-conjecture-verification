@@ -64,6 +64,12 @@ These items remain open obligations.  They are listed here only as work
 directions; closing them requires checker replay, not manual status edits.
 
 - [ ] CORE-2 / CL-09: construct and replay `P_height`.
+- [x] OB-04-A: close the missing Lean P1 artifact for integer absolute-value
+      invariance of the radical (P2 and P3 are already formalized).
+- [x] OB-04-B/C: keep the named Silverman imports explicit in a machine-audited
+      axiom manifest; do not describe them as fully formalized theorems.
+- [ ] OB-04: replace the two admitted Silverman axioms by source-verified
+      formal imports, or keep OB-04 at PARTIAL-FORMALIZATION status.
 - [ ] CORE-3 / CL-10: prove the universal key inequality without forbidden
       inputs and supply an explicit `K_epsilon`.
 - [ ] CORE-3 IUT sub-obligation: provide a machine-replayed proof of
