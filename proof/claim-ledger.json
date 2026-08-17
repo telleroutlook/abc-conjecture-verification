@@ -11,7 +11,7 @@
     },
     {
       "id": "CL-02",
-      "statement": "the abc conjecture is equivalent to Szpiro's conjecture for elliptic curves",
+      "statement": "the abc conjecture is equivalent to the modified Szpiro conjecture: for every epsilon > 0 there is C(epsilon) > 0 such that max(|c4(E)|^3, |c6(E)|^2) <= C(epsilon) * N_E^(6+epsilon) for every semi-stable elliptic curve E over Q (Oesterle Conjecture 4-prime)",
       "status": "BASE",
       "module": "M4",
       "note": "Admitted as foundational base result; not proved here"

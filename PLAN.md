@@ -46,7 +46,7 @@ M0 ─► M4 known results ─► M5
 | M1 | rad function, Faltings heights, arithmetic geometry | — | scaffold |
 | M2 | key inequality c ≤ K_ε · rad(abc)^(1+ε) | CL-09, CL-10 | **`[OBL]`** |
 | M3 | finiteness of exceptions | CL-11 | **`[OBL]`** |
-| M4 | known results (Faltings, Szpiro equiv., Mason–Stothers) | CL-02, CL-05, CL-06 | proved (base) |
+| M4 | known results (Faltings, modified Szpiro equiv., Mason–Stothers) | CL-02, CL-05, CL-06 | proved (base) |
 | M5 | comparison and bound verification | — | scaffold |
 | M6 | abc conclusion (apply Theorem 2) | CL-03 | proved (implication) |
 
@@ -856,6 +856,24 @@ No ledger status has been changed by this source audit.
 **Source availability:** the original Stothers 1981 publisher PDF returned
 HTTP 403.  Oesterlé's published theorem statement and proof are recorded as an
 exact secondary source for CL-06; obtaining the original remains a TODO.
+
+**CL-02 correction applied (2026-08-17):** the ledger, specification, README,
+M4 description, baseline record, and Route-A obstruction record now state the
+source-backed equivalence with Oesterlé's modified Szpiro Conjecture 4′:
+
+\[
+  \max(|c_4(E)|^3, |c_6(E)|^2)
+  \le C(\varepsilon)N_E^{6+\varepsilon}
+  \quad(E/\mathbb Q\text{ semi-stable}).
+\]
+
+The previous unqualified “abc ↔ Szpiro” wording was removed.  The foundation
+hash was recomputed and refrozen as
+`sha256:cbd075a3da810661e4311f31bd0dabe9f9682e3ad65d05c595bf4d2d5d9f8c2a`;
+the CORE-1 assumption-manifest evidence digest was updated to the same value.
+The Route-A obstruction now treats the displayed conductor sketch as a route
+localization rather than claiming an unsourced exact equivalence for that
+sketch.
 
 #### Session verification snapshot (2026-08-17)
 

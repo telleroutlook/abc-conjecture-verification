@@ -142,10 +142,10 @@ On printed page 169, Conjecture 3 states the abc conjecture:
 > $a+b+c=0$.
 
 Immediately afterward Oesterlé says that he will prove abc equivalent to
-Conjectures 4 and $4'$, which bound the minimal-model invariants
-$c_4^2$ and $c_6^2$ in terms of the conductor $N_E$ (Conjecture $4'$ restricts
-to semi-stable elliptic curves).  The equivalence proof continues on printed
-page 170.
+Conjectures 4 and $4'$, which bound
+$\max(|c_4(E)|^3,|c_6(E)|^2)$ by $C(\varepsilon)N_E^{6+\varepsilon}$ for a
+minimal model of $E$ (Conjecture $4'$ restricts to semi-stable elliptic curves
+over $\mathbb Q$).  The equivalence proof continues on printed page 170.
 
 **Precision finding:** this source directly supports equivalence between abc
 and the modified Szpiro/Conjecture 4′ formulation.  Oesterlé's discriminant

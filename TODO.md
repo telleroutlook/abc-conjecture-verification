@@ -31,7 +31,7 @@ exclusive responsibility of the offline checkers and the proof assistant.
 
 ## Priority 1 — baseline source verification
 
-- [ ] Correct the CL-02 statement/ledger wording to distinguish the source-backed
+- [x] Correct the CL-02 statement/ledger wording to distinguish the source-backed
       modified Szpiro/Conjecture 4′ form from the discriminant-only strong
       Szpiro form, or supply the missing exact bridge between those forms.
 - [x] Obtain and source-verify Faltings 1983 Satz 7 (CL-05).

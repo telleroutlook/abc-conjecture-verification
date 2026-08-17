@@ -108,7 +108,7 @@ discovery/candidates/          Untrusted exploration (never imported by proof/)
 | CL | Statement | Status |
 |---|---|---|
 | CL-01 | rad(n) well-defined and multiplicative | [DEF] |
-| CL-02 | abc ↔ Szpiro's conjecture | [BASE] |
+| CL-02 | abc ↔ modified Szpiro / Oesterlé Conjecture 4′ | [BASE] |
 | CL-03 | Certificate implies abc | [THM] |
 | CL-04 | Certificate existence ↔ abc (honesty) | [THM] |
 | CL-05 | Faltings theorem | [BASE] |
@@ -178,7 +178,9 @@ The abc conjecture (Masser–Oesterlé, 1985): for every ε > 0, there exist onl
 many coprime triples (a, b, c) with a + b = c such that c > rad(abc)^(1+ε), where
 rad(n) is the product of distinct prime factors of n.
 
-The conjecture is equivalent to Szpiro's conjecture for elliptic curves. It implies
+The conjecture is equivalent to the modified Szpiro conjecture for elliptic curves
+(Oesterlé's Conjecture 4′, bounding the minimal-model invariants c₄ and c₆ by the
+conductor). It implies
 Fermat's Last Theorem (for large exponents), Catalan's conjecture, Roth's theorem on
 rational approximation, and many other results in Diophantine geometry.
 

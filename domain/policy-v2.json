@@ -3,8 +3,8 @@
   "domain": "abc-conjecture-verification",
   "target": "thm-abc-certificate-implies-abc-conjecture",
   "note": "proofctl domain policy for the abc Conjecture Verification Kernel. Models domains/weil/policy-v2.json. Status is derived by proofctl; producer PASS flags are ignored. CL-12 (abc proved) and CL-13 (IUT verified) are both [OUT] and are never self-declared.",
-  "foundation_hash": "sha256:719ce4d2ac224c08642cc831b4f0de4752316845d998ee485fb9bb418fcd1c86",
-  "foundation_hash_note": "SHA-256 of concatenated canonical texts of admitted BASE statements (CL-02, CL-05, CL-06) in claim-id order. Format: '<id>: <statement>\\n' per line. Reproducible via checker/compute_foundation_hash.py. Frozen at P2 completion (2026-08-15).",
+  "foundation_hash": "sha256:cbd075a3da810661e4311f31bd0dabe9f9682e3ad65d05c595bf4d2d5d9f8c2a",
+  "foundation_hash_note": "SHA-256 of concatenated canonical texts of admitted BASE statements (CL-02, CL-05, CL-06) in claim-id order. Format: '<id>: <statement>\\n' per line. Reproducible via checker/compute_foundation_hash.py. Originally frozen at P2 completion (2026-08-15); refrozen on 2026-08-17 after source-precise CL-02 wording.",
   "allowed_assurances": [
     "formal-kernel",
     "deterministic-cap",

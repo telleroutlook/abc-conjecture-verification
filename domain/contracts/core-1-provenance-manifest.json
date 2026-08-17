@@ -10,7 +10,7 @@
     "mode": "joint",
     "required": [
       {"role": "source-dag", "media_type": "application/json", "digest": "sha256:7a9e6cfb44253e83a0896e12e6f156f9d81e2572c39f6acaeeb7f668e2343779"},
-      {"role": "assumption-manifest", "media_type": "application/json", "digest": "sha256:719ce4d2ac224c08642cc831b4f0de4752316845d998ee485fb9bb418fcd1c86"}
+      {"role": "assumption-manifest", "media_type": "application/json", "digest": "sha256:cbd075a3da810661e4311f31bd0dabe9f9682e3ad65d05c595bf4d2d5d9f8c2a"}
     ]
   },
   "checker": {

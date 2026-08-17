@@ -124,8 +124,19 @@ This is proved and gives confidence in the integer analogue (CL-06).
 points. This is the Mordell conjecture, proved, and is relevant via the Szpiro equivalence
 (CL-05).
 
-**[BASE]** Szpiro's conjecture (for semi-stable elliptic curves) is equivalent to the abc
-conjecture up to explicit constants. Both remain unproved over the integers (CL-02).
+**[BASE]** (Oesterlé, 1988) The abc conjecture is equivalent to the *modified Szpiro
+conjecture*: for every ε > 0 there is C(ε) > 0 such that, for every semi-stable
+elliptic curve E over Q with minimal-model invariants c₄(E), c₆(E) and conductor
+N_E,
+
+```
+max(|c₄(E)|³, |c₆(E)|²) ≤ C(ε) · N_E^(6+ε).
+```
+
+This is Oesterlé's Conjecture 4′. Both assertions remain unproved over the
+integers (CL-02). The discriminant-only strong Szpiro form is closely related,
+but it is not the precise equivalent asserted by CL-02 unless an additional
+bridge is supplied.
 
 ---
 
@@ -501,7 +512,7 @@ the following occurs:
 | Claim ID | Atomic statement | Status |
 |---|---|---|
 | CL-01 | rad(n) is well-defined and multiplicative for coprime inputs | [DEF] |
-| CL-02 | abc conjecture is equivalent to Szpiro's conjecture for elliptic curves | [BASE] |
+| CL-02 | abc conjecture is equivalent to the modified Szpiro conjecture (Oesterlé Conjecture 4′) | [BASE] |
 | CL-03 | Certificate (ε_bound, K_ε, P_height, P_ineq, P_finiteness) implies abc | [THM] |
 | CL-04 | Certificate existence is equivalent to abc (honesty check) | [THM] |
 | CL-05 | Faltings theorem: finitely many rational points on genus ≥ 2 curves | [BASE] |

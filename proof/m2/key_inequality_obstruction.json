@@ -13,8 +13,8 @@
     {
       "claim_id": "CL-02",
       "status": "BASE",
-      "role": "abc-szpiro-equivalence",
-      "note": "abc conjecture is equivalent to Szpiro's conjecture for elliptic curves — this equivalence is what makes Route A circular"
+      "role": "abc-modified-szpiro-equivalence",
+      "note": "abc is equivalent to Oesterle's modified Szpiro conjecture (Conjecture 4-prime): max(|c4(E)|^3, |c6(E)|^2) <= C(eps) * N_E^(6+eps) for semi-stable E/Q. This source-backed equivalence is what makes the Szpiro route circular."
     },
     {
       "claim_id": "CL-05",
@@ -39,9 +39,9 @@
     {
       "name": "Route A: Direct algebraic geometry (Szpiro/Arakelov)",
       "description": "Associate to each coprime triple (a,b,c) with a+b=c the Frey elliptic curve E: y^2 = x(x-a)(x+b). Bound the height h(E) via Arakelov intersection theory and relate it to c and rad(abc) via the conductor N_E.",
-      "obstruction": "The bound N_E <= C * rad(abc)^2 required for the height inequality is equivalent to Szpiro's conjecture: disc(E) <= C' * N_E^6. By CL-02, Szpiro's conjecture is equivalent to the abc conjecture. Any proof of the conductor bound is therefore a proof of abc.",
-      "why_circular": "Using Szpiro's conjecture (or any formulation equivalent to it) as an input to the height bound violates the forbidden-construction-leaf rule B2 (spec §3.3): 'Szpiro's conjecture assumed without proof' is explicitly forbidden. An independent proof of the conductor bound N_E <= C * rad(abc)^2 is required — and no such proof is known that does not assume abc or Szpiro.",
-      "resolution_path": "A proof of the Frey/Szpiro conductor bound from first principles (Arakelov intersection theory, without assuming abc or Szpiro) would close this route. Such a proof would itself be a proof of abc."
+      "obstruction": "A uniform Frey-curve height/conductor estimate of abc strength is required. The source-backed abc equivalence is with the modified Szpiro conjecture (Conjecture 4-prime), not with an unqualified discriminant-only phrase. Assuming modified Szpiro, or a strong Szpiro form used as an abc-equivalent input, is forbidden by the construction rules.",
+      "why_circular": "Using Szpiro's conjecture, modified Szpiro, or another abc-equivalent elliptic-curve bound as an input violates forbidden-construction-leaf rule B2 (spec §3.3): 'Szpiro's conjecture assumed without proof' is explicitly forbidden. The displayed N_E <= C * rad(abc)^2 sketch is a route localization, not itself a formal equivalence theorem.",
+      "resolution_path": "An independent proof of the required uniform Frey-curve bound from first principles (Arakelov intersection theory, without assuming abc, Szpiro, or modified Szpiro) would close this route."
     },
     {
       "name": "Route C: Baker / Linear Forms in Logarithms (S-unit)",
@@ -78,8 +78,8 @@
     {
       "step": 1,
       "label": "route-a-circular",
-      "claim": "Route A (algebraic geometry via Szpiro) is blocked: any proof of N_E <= C * rad(abc)^2 is a proof of Szpiro's conjecture, which is equivalent to abc (CL-02).",
-      "justification": "CL-02 (BASE): abc conjecture is equivalent to Szpiro's conjecture. Therefore using Szpiro as an input violates the forbidden-construction-leaf rule (spec §3.3: 'Szpiro's conjecture assumed without proof'). The circularity is exact: proving the conductor bound IS proving abc.",
+      "claim": "Route A (algebraic geometry via a Szpiro-type bound) is blocked: the source-backed modified Szpiro conjecture is equivalent to abc, and assuming any abc-equivalent Szpiro input is forbidden.",
+      "justification": "CL-02 (BASE) states the source-backed equivalence between abc and Oesterle's modified Szpiro Conjecture 4-prime. Therefore using modified Szpiro or an abc-equivalent Szpiro-type input violates the forbidden-construction-leaf rule (spec §3.3). The rough conductor sketch must not be described as an independently proved equivalence.",
       "from": ["CL-02"]
     },
     {
@@ -93,7 +93,7 @@
       "step": 3,
       "label": "exhaustion-of-known-routes",
       "claim": "Both known routes to the key inequality are currently blocked.",
-      "justification": "Route A requires an independent conductor bound (equivalent to abc). Route B requires machine-replayed Corollary 3.12. No third route is known that avoids both obstructions. The obstruction is precisely localized.",
+      "justification": "Route A requires an independent uniform Frey-curve bound of abc strength, while assuming modified Szpiro would be circular. Route B requires machine-replayed Corollary 3.12. No third route is known that avoids both obstructions. The obstruction is precisely localized.",
       "from": [1, 2]
     },
     {
@@ -108,7 +108,7 @@
   "iut_sub_obligation": "core3.iut-corollary-312-independently-verified",
   "iut_blocking_reason": "Scholze-Stix (2018): identification of objects across different Hodge theaters in IUTT-III requires an explicit isomorphism proof that has not been formalized or machine-replayed",
   "resolution_required": [
-    "Either: an independent proof of the Frey/Szpiro conductor bound N_E <= C * rad(abc)^2 not using abc or Szpiro as hypothesis",
+    "Either: an independent proof of the required uniform Frey-curve height/conductor bound, not using abc, Szpiro, or modified Szpiro as a hypothesis",
     "Or: a machine-replayed formal proof (Lean/Coq/Isabelle/Metamath) of Mochizuki's Corollary 3.12 (IUTT-III) resolving the Scholze-Stix isomorphism gap",
     "In either case: the proof must cover ALL coprime triples a+b=c, not just a fixed prime set S"
   ],

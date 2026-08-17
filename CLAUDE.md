@@ -186,7 +186,7 @@ supports any claim here. Key foundations that must be source-verified before use
 
 - **Faltings 1983** (Mordell conjecture / Faltings heights): cited as `[BASE]` in M4/CL-05
 - **Mason–Stothers** (polynomial abc): cited as `[BASE]` in M4/CL-06
-- **Szpiro equivalence** (abc ↔ Szpiro's conjecture): cited as `[BASE]` in M4/CL-02
+- **Szpiro equivalence** (abc ↔ modified Szpiro / Oesterlé Conjecture 4′): cited as `[BASE]` in M4/CL-02
 - **Mochizuki IUTT-I..IV** (Corollary 3.12 route): cited as the object of the OPEN gate
 
 Store verified source PDFs or tarballs under `baseline/`. For any new base theorem added
