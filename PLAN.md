@@ -747,6 +747,148 @@ det(L)/R and ‖ψ‖/R^{1/(ω−1)} as M varies.
 
 Run `papers/PAPER_LINT.md` fully before any external submission.
 
+#### Step E7b — Paper lint repair and source baselining (2026-08-17)
+
+**Target:** `papers/route-v-pasten/route-v-pasten.tex`
+
+**Defect classes fixed:**
+1. Abstract/introduction overclaim: exact sharp suprema and all-\(\omega\ge6\)
+   unboundedness were downgraded to unconditional upper bounds plus explicitly
+   conditional prime-pattern sharpness/unboundedness criteria.
+2. Non-squarefree scope leak: the exact type formulas now name the proper
+   valuation-coordinate sublattice \(F_{\mathrm{val}}\), distinguish
+   \(\mathrm{nd}_{\mathrm{val}}\) from the original Pasten minimum, and include
+   the counterexample \((1,8,9)\): original norm \(2\), valuation norm \(9\).
+3. Finite-verification formulas with an unproved all-nonzero case were changed
+   from theorem environments to `Candidate Formula` environments with evidence
+   proofs; they must not be used as theorems.
+4. Fixed the contradictory F31 wording, stale sharp-bound table, incorrect
+   Frobenius-number corollary, polynomial-time algorithm overclaim, and the
+   incomplete Pasten SDC exception family.
+5. Added primary-source baseline copies and exact statement record for Pasten
+   arXiv:2106.16165v3 and Vaaler (1979); the paper now derives the lattice
+   corollary directly from Vaaler Theorem 2 rather than citing an unverified
+   Cassels theorem.
+
+**Checker evidence (2026-08-17):**
+- `pdflatex -interaction=nonstopmode route-v-pasten.tex`, three passes:
+  exits `0,0,0`; final undefined-reference/citation/error grep: `0`;
+  overfull count `0` (underfull count `10`, draft-acceptable per P4).
+- Paper reference/bibliography scripts: hardcoded internal refs `0`, unused
+  labels `0`, uncited bibliography entries `0`.
+- Baseline source anchors: Pasten `Conjecture 1.2`, `Lemma 2.4`,
+  `Corollary 4.6`; Vaaler `THEOREM 2` and its geometric `COROLLARY`.
+- `~/.elan/bin/lake build` in `lean/`: exit `0`, `Build completed successfully
+  (2005 jobs)` (warnings are unused-variable/deprecation lint only).
+- Replay: `python3 discovery/m2_directions/t30_rho_distribution.py` exit `0`;
+  `python3 discovery/m2_directions/t96_edge_case_both_small_in_Pb.py` exit `0`,
+  `OB-15 violations: 0`.
+
+**Status:** the determinant/Minkowski implication and squarefree structural
+results remain paper-level mathematical claims; higher-dimensional non-squarefree
+exact formulas remain finite-verification candidates, not proof-tier claims.
+
+#### Step E7c — Execution-board and lint refresh (2026-08-17)
+
+**Goal:** keep the current repository hygiene work replayable while preserving
+the mathematical status boundaries.
+
+**Delivered:**
+
+1. Added `TODO.md` as an engineering execution board.  It explicitly states
+   that TODO checkboxes never change ledger statuses and that CORE-2/3/4 remain
+   checker-gated obligations.
+2. Repaired paper lint P2 by referencing `thm:f3` immediately after Theorem F3.
+3. Rebuilt `route-v-pasten.pdf` from the current TeX and refreshed
+   `PAPER_LINT_REPORT.md`.
+4. Added direct mirror-case evidence for type $(3,1,1)$:
+   `t82_nd_type311_verify.py` checks all 843 triples with `a,b\le300`, with
+   zero failures.  It remains discovery-tier finite evidence supporting a
+   Candidate Formula, not a theorem promotion.
+5. Converted `t95_all_successive_minima.py` into a deterministic refutation
+   replay.  The merged-multiples all-successive-minima candidate fails at
+   $(2,13,15)$ and $(3,7,10)$; F36/F37 are not affected.
+6. Expanded `outsource/README.md` from the stale three-row board to OB-01
+   through OB-17, distinguishing external-review status from internal closure
+   drafts and from proofctl ledger status.
+7. Removed the untracked legacy `t79_nd_type113_explore.py`; the tracked
+   `t79b_nd_type113_verify.py` is the retained fast verifier for that case.
+
+**Checker evidence:**
+
+- Paper P1/P2/P3: `0/0/0` findings (P2 audited all 56 labels).
+- Paper P4: three `pdflatex` passes exited `0,0,0`; final undefined/citation/error
+  findings `0`; overfull `0`; underfull `10` (draft-stage).
+- `python3 discovery/m2_directions/t82_nd_type311_verify.py`: exit `0`,
+  `843 OK, 0 FAIL`.
+- `python3 discovery/m2_directions/t95_all_successive_minima.py`: exit `0`;
+  expected refutation mismatches replayed exactly at $(2,13,15)$ and $(3,7,10)$.
+
+**Still open in this work stream:** decide the baseline PDF commit split and
+repair the ten underfull boxes before external paper submission.
+
+#### Baseline source refresh (2026-08-17)
+
+**Added primary/source PDFs:**
+
+1. `baseline/faltings-1983-abelian-varieties.pdf`
+   - Faltings, *Endlichkeitssätze für abelsche Varietäten über Zahlkörpern*,
+     Invent. Math. 73 (1983), 349--366.
+   - Satz 7, journal page 365, gives CL-05: a smooth curve of genus $g>2$ over
+     a number field has finitely many rational points.
+2. `baseline/oesterle-1988-nouvelles-approches-fermat.pdf`
+   - Oesterlé, Séminaire Bourbaki exposé 694, Astérisque 161--162 (1988).
+   - Printed page 169, Théorème 2, gives the polynomial abc theorem used as
+     CL-06, including the nonzero-derivative hypothesis in positive
+     characteristic.
+   - Printed pages 169--170 state and prove equivalence between abc and
+     Oesterlé's elliptic-curve Conjectures 4/4$'$ (the modified
+     $c_4,c_6$-conductor form).
+
+**Baseline-verify finding:** CL-02 must be worded with source precision.  The
+checked Oesterlé pages directly support abc $\Leftrightarrow$ modified
+Szpiro/Conjecture 4$'$, not a bare, unqualified phrase such as “the
+discriminant-only Szpiro form is equivalent to abc.”  Before CL-02 is used as
+a load-bearing premise, either narrow its statement to Conjecture 4$'$ or
+supply and verify the exact bridge from the intended discriminant formulation.
+No ledger status has been changed by this source audit.
+
+**Source availability:** the original Stothers 1981 publisher PDF returned
+HTTP 403.  Oesterlé's published theorem statement and proof are recorded as an
+exact secondary source for CL-06; obtaining the original remains a TODO.
+
+#### Session verification snapshot (2026-08-17)
+
+Commands and derived results after the TODO/lint/baseline updates:
+
+- `PYTHONPATH=. python3 -m pytest tests/ -q`
+  — `106 passed in 0.43s`.
+- `python3 checker/replay_kernel.py`
+  — `all_pass: true`; 4 replayed claims; `missing: 0`.
+- `~/github/proofctl/proofctl check --all`
+  — CORE-0/1/5 PASS; CORE-2/3/4 FAIL with `outcome=rejected`;
+  summary `3 passed, 3 failed, 0 skipped out of 6 checked`.
+- `~/github/proofctl/proofctl release --dry-run`
+  — `BLOCKED (dry-run)`, with the same three rejected claims and six missing
+  certificate metadata attestations.
+- `~/.elan/bin/lake build` in `lean/`
+  — exit `0`, `Build completed successfully (2005 jobs)`; only lint/deprecation
+  warnings.
+- Paper audit: P1 `0`; P2 `0/56`; P3 `0/2`; P4 three passes exited
+  `0,0,0`, final reference/citation/error findings `0`, overfull `0`,
+  underfull `10`.
+- `python3 discovery/m2_directions/t82_nd_type311_verify.py`
+  — `843 OK, 0 FAIL`.
+- `python3 discovery/m2_directions/t95_all_successive_minima.py`
+  — expected two-counterexample refutation replayed; exit `0`.
+- Local source-anchor extraction found Faltings `Satz7`, Oesterlé
+  `CONJECTURE 3`, `THÉORÈME 2`, and `CONJECTURE 4`.
+- `git diff --check` produced no output.
+
+No ledger status, CORE status, or `[OBL]`/`[OUT]` boundary was changed by this
+engineering session.
+
+
 ### Hard constraints (same as Part IX)
 
 - **B2:** No known abc triples as input to any proof of H1.
