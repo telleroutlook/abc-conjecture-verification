@@ -59,12 +59,12 @@ theorem intRad_mul_coprime (m n : ℤ)
 
 /-! ## OB-04-B: Discriminant height bound [★]
 
-ADMITTED (Silverman AEC 2nd ed. (2009), Lemma VIII.11.3(a), p. 263):
+ADMITTED (Silverman AEC 2nd ed. (2009), Lemma VIII.11.3(a), pp. 257--258):
   |Δ_min(E_{a,b,c})| ∈ { 16(abc)², 2^{-8}(abc)² }
 
 The algebraic bounds [★] follow and are PROVED below. -/
 
-/-- ADMITTED: Silverman AEC 2nd ed. (2009), Lemma VIII.11.3(a), p. 263.
+/-- ADMITTED: Silverman AEC 2nd ed. (2009), Lemma VIII.11.3(a), pp. 257--258.
     |Δ_min| is either 16(abc)² or 2^{-8}(abc)² for the Frey curve. -/
 axiom silverman_frey_disc_cases (a b : ℕ) (ha : 0 < a) (hb : 0 < b) (hcop : a.Coprime b) :
     ∃ Δ : ℝ, (Δ = 16 * ((a : ℝ) * b * (a + b)) ^ 2 ∨
@@ -109,7 +109,7 @@ theorem frey_disc_height_bound (a b : ℕ) (ha : 0 < a) (hb : 0 < b) (hcop : a.C
 ADMITTED (Silverman ATEC (1994), Theorem IV.10.4, p. 98):
   The 2-adic conductor exponent f₂ ≤ 8 for Frey curves over ℚ.
 
-ADMITTED (Silverman AEC 2nd ed. (2009), Lemma VIII.11.3(b), p. 263):
+ADMITTED (Silverman AEC 2nd ed. (2009), Lemma VIII.11.3(b), pp. 257--258):
   N_E = 2^{f₂-1} · R  where R = rad(abc).
 
 The algebraic bound log N_E ≤ log R + 7·log 2 is PROVED. -/

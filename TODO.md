@@ -39,6 +39,11 @@ exclusive responsibility of the offline checkers and the proof assistant.
       statement (positive-characteristic derivative hypothesis included).
 - [ ] Obtain the original Stothers 1981 publication if an authorized copy becomes
       available; the publisher PDF currently returns HTTP 403.
+- [x] Source-verify Silverman AEC 2nd ed. Lemma VIII.11.3(a),(b) from the
+       local primary-source PDF; correct the page anchor to pp. 257--258.
+- [ ] Obtain an authorized primary copy of Silverman ATEC 1994 Theorem IV.10.4.
+      Until then `frey_conductor_formula` remains an explicitly admitted premise
+      and cannot support CORE-2 acceptance.
 - [x] Anchor Mochizuki IUTT-III Corollary 3.12 to the May 2020 RIMS source
       PDF without closing or weakening the OPEN CORE-3 gate.
 - [x] Verify the newly added Pasten and Vaaler source anchors with local PDF
@@ -72,6 +77,8 @@ directions; closing them requires checker replay, not manual status edits.
       axiom manifest; do not describe them as fully formalized theorems.
 - [ ] OB-04: replace the two admitted Silverman axioms by source-verified
       formal imports, or keep OB-04 at PARTIAL-FORMALIZATION status.
+- [x] Register a checker-validated, non-accepting CORE-2 partial-evidence
+      manifest with content hashes for the OB-04 artifacts.
 - [ ] CORE-3 / CL-10: prove the universal key inequality without forbidden
       inputs and supply an explicit `K_epsilon`.
 - [ ] CORE-3 IUT sub-obligation: provide a machine-replayed proof of

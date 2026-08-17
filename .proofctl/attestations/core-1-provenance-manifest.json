@@ -8,7 +8,7 @@
   "checker": {
     "id": "abccv-bridge-v1",
     "protocol_version": 2,
-    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "checker_digest": "sha256:fd74f6c980ca068027afea406e846c466e94ac35920a3a155e24d350bf703b1d",
     "schema_digest": "sha256:6d4331a211a431c1c1b6e996d1eb2cb8f464d79af7192399e5fa1ac02fc6db64",
     "runtime": {
       "kind": "native",
@@ -24,14 +24,14 @@
   "outcome": "accepted",
   "assurance": "",
   "resources": {
-    "wall_millis": 42,
+    "wall_millis": 41,
     "cpu_millis": 0,
     "mem_bytes": 0
   },
-  "start_freshness": "2026-08-15",
-  "end_freshness": "2026-08-15",
-  "self_digest": "sha256:2393524fae957d2b1dc9260fcbf9da55f4fc7f85bcfce6d8a80f5cf7bf50f268",
-  "cache_key": "2530596bff54006aaeb7d77d8980e5ddc4be350c63638033a0021114f1260555",
+  "start_freshness": "2026-08-17",
+  "end_freshness": "2026-08-17",
+  "self_digest": "sha256:a4a16d9959e48eaa0e4eefbfbb18841b5f079d60a96a835c6ba19614bad47e09",
+  "cache_key": "d327fee5d0a4f2f0d1ed2fe6099de326757aa44aa2f6ab4e919b583c80ed0dd1",
   "toolchain": {
     "python": "3.14.6"
   },

@@ -193,3 +193,39 @@ representation.  Those hypotheses are not discharged here.  In particular, the
 Scholze--Stix concern about identification of objects across theaters remains
 a blocking reason; this source quote neither closes nor adjudicates that
 dispute.
+
+## Silverman (2009), The Arithmetic of Elliptic Curves, 2nd ed.
+
+Source file: `silverman-2009-arithmetic-elliptic-curves.pdf`.
+
+Checked edition: Joseph H. Silverman, *The Arithmetic of Elliptic Curves*,
+2nd ed., Graduate Texts in Mathematics 106, Springer, 2009.
+
+### Frey-curve minimal discriminant and odd-prime reduction
+
+Lemma VIII.11.3, on printed pages 257--258, states:
+
+> Let $A,B,C\in\mathbb Z$ be nonzero integers satisfying
+> $A+B=C$ and $\gcd(A,B,C)=1$, and let $E/\mathbb Q$ be the elliptic curve
+> \[
+>   E:y^2=x(x+A)(x-B).
+> \]
+> (a) The minimal discriminant $\Delta_E$ of $E$ is given by either
+> \[
+>   |\Delta_E|=2^4|ABC|^2\quad\text{or}\quad
+>   |\Delta_E|=2^{-8}|ABC|^2.
+> \]
+> In particular, $|\Delta_E|\ge2^{-8}|ABC|^2$.
+> (b) The curve $E$ has multiplicative reduction modulo $p$ for all odd primes
+> $p$ dividing $ABC$.
+
+This exactly supports the Lean admitted premise
+`silverman_frey_disc_cases` after the sign/label specialization of the Frey
+model.  It also establishes multiplicative reduction at odd primes dividing
+$ABC$.  The source page does not by itself supply the separate conductor
+formula encoded by `frey_conductor_formula`; that premise remains explicitly
+admitted.
+
+**Source precision correction:** the Lean comments previously cited page 263.
+The checked second-edition PDF places Lemma VIII.11.3 on printed pages
+257--258 (PDF pages 272--273).  The citation has been corrected.

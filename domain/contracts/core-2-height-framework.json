@@ -14,7 +14,7 @@
   },
   "checker": {
     "protocol": "proofctl-checker/v2",
-    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "checker_digest": "sha256:fd74f6c980ca068027afea406e846c466e94ac35920a3a155e24d350bf703b1d",
     "schema_digest": "sha256:6a502ca78ef9a80de1980551d0ea6dc1a7489e8c6c13c0d80f917ed26946cac1"
   },
   "runtime": {"class": "native-dev", "network": "none"},

@@ -22,7 +22,7 @@
   },
   "checker": {
     "protocol": "proofctl-checker/v2",
-    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "checker_digest": "sha256:fd74f6c980ca068027afea406e846c466e94ac35920a3a155e24d350bf703b1d",
     "schema_digest": "sha256:6d4331a211a431c1c1b6e996d1eb2cb8f464d79af7192399e5fa1ac02fc6db64"
   },
   "runtime": {

@@ -73,8 +73,9 @@ is NOT uniformly bounded over all elliptic curves (Murty–Pasten, J. Number The
 ## Allowed prior results (closed list — no other unproved results may be used)
 
 1. **Fundamental theorem of arithmetic** (unique factorization in Z).
-2. **Silverman, AEC 2nd ed. (2009), Lemma VIII.11.3(a),(b)** — minimal discriminant and
-   odd-prime conductor for Frey curves. No parity assumption in the lemma.
+2. **Silverman, AEC 2nd ed. (2009), Lemma VIII.11.3(a),(b), pp. 257--258** —
+   minimal discriminant and odd-prime multiplicative reduction for Frey curves.
+   No parity assumption in the lemma.
    URL: https://www.math.brown.edu/johsilve/AECHome.html
 3. **Silverman, ATEC (1994), Theorem IV.10.4** — local conductor exponent f_p ≤ 2 + 3v_p(3) + 6v_p(2),
    giving f₂ ≤ 8 over Q₂.

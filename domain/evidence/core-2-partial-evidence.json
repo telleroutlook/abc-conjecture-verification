@@ -1,0 +1,99 @@
+{
+  "schema_version": "abc-partial-evidence-v1",
+  "claim_id": "core-2-height-framework",
+  "artifact_status": "PARTIAL-FORMALIZATION",
+  "accepted": false,
+  "proofctl_gate": "rejected",
+  "ledger_status": "OBL",
+  "components": {
+    "OB-04-A": {
+      "status": "MACHINE_PROVED",
+      "theorems": [
+        "intRad_abs",
+        "intRad_ofNat",
+        "rad_prime_pow",
+        "rad_mul_coprime",
+        "intRad_mul_coprime"
+      ]
+    },
+    "OB-04-B": {
+      "status": "PARTIAL-FORMALIZATION",
+      "theorems": [
+        "weierstrass_disc_upper",
+        "minimal_disc_lower",
+        "frey_disc_height_bound"
+      ],
+      "admitted_premises": [
+        "silverman_frey_disc_cases"
+      ]
+    },
+    "OB-04-C": {
+      "status": "PARTIAL-FORMALIZATION",
+      "theorems": [
+        "conductor_log_bound"
+      ],
+      "admitted_premises": [
+        "frey_conductor_formula"
+      ]
+    },
+    "OB-04-D": {
+      "status": "MACHINE_PROVED",
+      "theorems": [
+        "quality_above_one"
+      ]
+    }
+  },
+  "admitted_premises": [
+    {
+      "name": "silverman_frey_disc_cases",
+      "source": "Silverman, The Arithmetic of Elliptic Curves, 2nd ed., Lemma VIII.11.3(a), pp. 257-258",
+      "source_verified": true
+    },
+    {
+      "name": "frey_conductor_formula",
+      "source": "Silverman, Advanced Topics in the Arithmetic of Elliptic Curves, Theorem IV.10.4 and AEC Lemma VIII.11.3(b)",
+      "source_verified": false,
+      "blocking_reason": "Primary ATEC source copy is not yet available; premise remains explicit and cannot support CORE-2 acceptance."
+    }
+  ],
+  "blocking_gaps": [
+    "The full P_height Faltings/Arakelov framework is not constructed.",
+    "The Frey conductor formula remains an admitted premise rather than a machine proof.",
+    "proofctl still rejects core-2-height-framework.",
+    "No epsilon or K_epsilon certificate artifact exists."
+  ],
+  "forbidden_inputs_used": [],
+  "non_circularity": "The partial artifacts use no abc triples, no fitted K_epsilon, no Szpiro premise, no IUT identification, and no abc-equivalent input. This manifest is diagnostic and never accepted as CORE-2 evidence.",
+  "artifacts": [
+    {
+      "role": "lean-kernel",
+      "path": "lean/AbcHeightKernel.lean",
+      "sha256": "sha256:273beae8828db4a2e7b14a3419fe4a8711157b1a198b71b7f288ef9ac43745b2"
+    },
+    {
+      "role": "lean-axiom-audit-test",
+      "path": "tests/test_lean_ob04.py",
+      "sha256": "sha256:6a76bca77d501f7e332e12b4e984416c6cfe6d9465e120b33dd4441941335afd"
+    },
+    {
+      "role": "baseline-record",
+      "path": "baseline/REFERENCE_BASELINE.md",
+      "sha256": "sha256:e9c703d8cb6c3b32ce45e4c1def775e799861c08c33d01c0c1ed1156471a1277"
+    },
+    {
+      "role": "silverman-aec-source",
+      "path": "baseline/silverman-2009-arithmetic-elliptic-curves.pdf",
+      "sha256": "sha256:72ee67bfa1e3fdf582ac7e4b032d7ca0b35a168ed6443ac39c121fbb788cab25"
+    },
+    {
+      "role": "outsource-problem",
+      "path": "outsource/OB-04-lean4-formalization-height-framework.md",
+      "sha256": "sha256:0622ebfe6e944dc9e8a5cef774ee5aafa0c11d61a58aa11a2c8362764b4b523a"
+    },
+    {
+      "role": "core2-nonacceptance-test",
+      "path": "tests/test_core2_partial_evidence.py",
+      "sha256": "sha256:b4d3fe7b051c5c9689b2ccfc467a8b5a8f1839a746c697acbd0f75fe89f9ebf3"
+    }
+  ]
+}

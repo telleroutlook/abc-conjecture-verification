@@ -8,7 +8,7 @@
   "checker": {
     "id": "abccv-bridge-v1",
     "protocol_version": 2,
-    "checker_digest": "sha256:a001ec3d2f64958a45b6897859f3ddef9433403de3f0a55de42bde2538de622b",
+    "checker_digest": "sha256:fd74f6c980ca068027afea406e846c466e94ac35920a3a155e24d350bf703b1d",
     "schema_digest": "sha256:6d4331a211a431c1c1b6e996d1eb2cb8f464d79af7192399e5fa1ac02fc6db64",
     "runtime": {
       "kind": "native",
@@ -24,14 +24,14 @@
   "outcome": "rejected",
   "assurance": "",
   "resources": {
-    "wall_millis": 26,
+    "wall_millis": 30,
     "cpu_millis": 0,
     "mem_bytes": 0
   },
-  "start_freshness": "2026-08-15",
-  "end_freshness": "2026-08-15",
-  "self_digest": "sha256:b7de49c9180bcca8815d2370347e6a156c28dbc56bc6d9bffe322aa4a38a1412",
-  "cache_key": "cb13f55f2acd370af840d84b15cf31b936b437b9c7854c3895e8af0041f0aa44",
+  "start_freshness": "2026-08-17",
+  "end_freshness": "2026-08-17",
+  "self_digest": "sha256:b8f848b34a2b86e4dc2e72e6f56da62a457559bd11531a9121c30230e627a7e1",
+  "cache_key": "c0d9138f958d52a2d4759455363ba8fda540ed73b9fe2ad7a16f0509903bf99d",
   "toolchain": {
     "python": "3.14.6"
   },
@@ -40,22 +40,22 @@
     {
       "id": "core2.rad-function-formally-defined",
       "verdict": "fail",
-      "witness_digest": "sha256:3570d63d1a51030f3e07f044728506628a43fe9157b3283a7b27e0d41e05c0df"
+      "witness_digest": "sha256:5532b6a1cdb7d54eb1b6ccdc87d8d763952c069d17be15746986fa31e2f6602d"
     },
     {
       "id": "core2.faltings-height-setup",
       "verdict": "fail",
-      "witness_digest": "sha256:3570d63d1a51030f3e07f044728506628a43fe9157b3283a7b27e0d41e05c0df"
+      "witness_digest": "sha256:5532b6a1cdb7d54eb1b6ccdc87d8d763952c069d17be15746986fa31e2f6602d"
     },
     {
       "id": "core2.arithmetic-geometry-framework",
       "verdict": "fail",
-      "witness_digest": "sha256:3570d63d1a51030f3e07f044728506628a43fe9157b3283a7b27e0d41e05c0df"
+      "witness_digest": "sha256:5532b6a1cdb7d54eb1b6ccdc87d8d763952c069d17be15746986fa31e2f6602d"
     },
     {
       "id": "core2.framework-built-without-forbidden-inputs",
       "verdict": "fail",
-      "witness_digest": "sha256:3570d63d1a51030f3e07f044728506628a43fe9157b3283a7b27e0d41e05c0df"
+      "witness_digest": "sha256:5532b6a1cdb7d54eb1b6ccdc87d8d763952c069d17be15746986fa31e2f6602d"
     }
   ]
 }

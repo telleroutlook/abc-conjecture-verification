@@ -103,14 +103,107 @@ def check_core2(inp: dict) -> list[dict]:
     Until proof/m1/ contains a formally verified height framework, all obligations
     fail with an honest OBL message.
     """
-    return [{"id": oid, "verdict": "fail",
-             "witness_digest": _note(
-                 "OBL: height/rad framework not yet supplied. "
-                 "CORE-2 requires P_height: Faltings heights and arithmetic geometry "
-                 "framework built without known abc triples, fitted K_epsilon, "
-                 "Szpiro assumed, or abc-equivalent input. "
-                 "This is an open construction obligation (spec §5.1, CL-09).")}
+    valid, evidence_message = _validate_core2_partial_evidence(_project_root())
+    message = (
+        "OBL: height/rad framework not yet supplied. "
+        "CORE-2 requires P_height: Faltings heights and arithmetic geometry "
+        "framework built without known abc triples, fitted K_epsilon, "
+        "Szpiro assumed, or abc-equivalent input. "
+        "This is an open construction obligation (spec §5.1, CL-09). "
+        + evidence_message
+    )
+    return [{"id": oid, "verdict": "fail", "witness_digest": _note(message)}
             for oid in inp["obligation_ids"]]
+
+
+def _validate_core2_partial_evidence(root: Path) -> tuple[bool, str]:
+    """
+    Validate the non-accepting CORE-2 partial-evidence manifest.
+
+    The manifest is diagnostic only.  A valid manifest never changes the CORE-2
+    verdict; it merely records machine-checked OB-04 sub-artifacts and their
+    content hashes so the rejection can say precisely what is and is not present.
+    """
+    path = root / "domain" / "evidence" / "core-2-partial-evidence.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return False, "No CORE-2 partial-evidence manifest is registered."
+    except (OSError, json.JSONDecodeError) as exc:
+        return False, f"CORE-2 partial-evidence manifest unreadable: {exc}"
+
+    required_values = {
+        "schema_version": "abc-partial-evidence-v1",
+        "claim_id": "core-2-height-framework",
+        "artifact_status": "PARTIAL-FORMALIZATION",
+        "accepted": False,
+        "proofctl_gate": "rejected",
+        "ledger_status": "OBL",
+        "forbidden_inputs_used": [],
+    }
+    for key, expected in required_values.items():
+        if data.get(key) != expected:
+            return False, (
+                f"CORE-2 partial-evidence manifest has invalid {key}: "
+                f"expected {expected!r}, got {data.get(key)!r}."
+            )
+
+    required_components = {
+        "OB-04-A": "MACHINE_PROVED",
+        "OB-04-B": "PARTIAL-FORMALIZATION",
+        "OB-04-C": "PARTIAL-FORMALIZATION",
+        "OB-04-D": "MACHINE_PROVED",
+    }
+    components = data.get("components", {})
+    if not isinstance(components, dict):
+        return False, "CORE-2 partial-evidence components must be an object."
+    for component, expected_status in required_components.items():
+        if components.get(component, {}).get("status") != expected_status:
+            return False, (
+                f"CORE-2 partial-evidence component {component} must have status "
+                f"{expected_status!r}."
+            )
+
+    expected_roles = {
+        "lean-kernel": "lean/AbcHeightKernel.lean",
+        "lean-axiom-audit-test": "tests/test_lean_ob04.py",
+        "baseline-record": "baseline/REFERENCE_BASELINE.md",
+        "silverman-aec-source": (
+            "baseline/silverman-2009-arithmetic-elliptic-curves.pdf"
+        ),
+        "outsource-problem": (
+            "outsource/OB-04-lean4-formalization-height-framework.md"
+        ),
+        "core2-nonacceptance-test": "tests/test_core2_partial_evidence.py",
+    }
+    artifacts = data.get("artifacts", [])
+    if not isinstance(artifacts, list):
+        return False, "CORE-2 partial-evidence artifacts must be a list."
+    by_role = {}
+    for artifact in artifacts:
+        if not isinstance(artifact, dict):
+            return False, "CORE-2 partial-evidence artifact entries must be objects."
+        role = artifact.get("role")
+        rel = artifact.get("path")
+        digest = artifact.get("sha256", "")
+        if role not in expected_roles or rel != expected_roles[role]:
+            return False, f"CORE-2 partial-evidence has unexpected artifact {rel!r}."
+        candidate = root / rel
+        try:
+            actual = "sha256:" + hashlib.sha256(candidate.read_bytes()).hexdigest()
+        except OSError as exc:
+            return False, f"CORE-2 partial-evidence artifact {rel} unreadable: {exc}"
+        if digest != actual:
+            return False, f"CORE-2 partial-evidence digest mismatch for {rel}."
+        by_role[role] = rel
+    if set(by_role) != set(expected_roles):
+        return False, "CORE-2 partial-evidence is missing required artifacts."
+
+    return True, (
+        "Partial OB-04 evidence manifest validated, but it is not P_height and "
+        "does not close CORE-2: admitted premises remain and the full height/"
+        "arithmetic-geometry construction is absent."
+    )
 
 
 def check_core3(inp: dict) -> list[dict]:

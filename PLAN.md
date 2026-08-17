@@ -102,7 +102,7 @@ Realized as a **proofctl domain adapter** (`~/github/proofctl`, Go), not a fork.
 | **P6 — conclusion** | deterministic CORE-5 firing | integration test §7.2 holds |
 
 **Current phase: ALL PHASES COMPLETE (2026-08-15).** System is in its final honest
-state. 112/112 tests pass (2026-08-17). All PLACEHOLDERs frozen. Discovery guard
+state. 116/116 tests pass (2026-08-17). All PLACEHOLDERs frozen. Discovery guard
 layer live.
 
 ### Phase completion status
@@ -144,9 +144,9 @@ layer live.
   - `checker/compute_contract_hashes.py` + all 6 `domain/contracts/*.json` frozen (0 PLACEHOLDERs)
   - `discovery/candidates/guard.py` — non-circularity wall for exploration candidates
   - Integration test (spec §7.2): CORE-1+2+3+4 ⟹ CORE-5 mechanically verified
-- **Tests**: 112/112 pass (adversarial + structural + P2 + P3 + P4 + P5 + P6 +
+- **Tests**: 116/116 pass (adversarial + structural + P2 + P3 + P4 + P5 + P6 +
   integration §7.2 + contract freeze + discovery guard + Route V replay +
-  OB-04 Lean axiom audit)
+  OB-04 Lean axiom audit + CORE-2 partial-evidence/source replay)
 
 ---
 
@@ -950,6 +950,56 @@ absolute-value invariance P1 and the integer-version P3 were missing.
 - `~/github/proofctl/proofctl check --all`
   — unchanged honest result: CORE-0/1/5 PASS, CORE-2/3/4 rejected,
   `3 passed, 3 failed, 0 skipped out of 6 checked`.
+
+#### CORE-2 partial evidence and Silverman source refresh (2026-08-17)
+
+**Primary source added:** `baseline/silverman-2009-arithmetic-elliptic-curves.pdf`
+(Silverman, *The Arithmetic of Elliptic Curves*, 2nd ed.).  Local extraction
+locates Lemma VIII.11.3 on printed pages 257--258 (PDF pages 272--273).  The
+lemma exactly states the two Frey minimal-discriminant cases and multiplicative
+reduction at odd primes dividing \(ABC\).  This corrects the earlier Lean/OB-04
+page citation “p. 263”.
+
+**Source boundary:** the AEC lemma supports
+`silverman_frey_disc_cases`, but it does not by itself supply the combined Frey
+conductor formula encoded by `frey_conductor_formula`.  An authorized primary
+copy of Silverman ATEC Theorem IV.10.4 is still unavailable, so that premise
+remains explicitly admitted and `source_verified: false` in the diagnostic
+manifest.
+
+**New checker-facing artifact:**
+`domain/evidence/core-2-partial-evidence.json`.
+
+The manifest records:
+
+- OB-04-A as machine-proved (P1--P3 over integers and naturals);
+- OB-04-B/C as partial formalization with named admitted premises;
+- OB-04-D as machine-proved;
+- content hashes for the Lean kernel, axiom-audit test, baseline record,
+  Silverman AEC PDF, OB-04 problem file, and CORE-2 non-acceptance test;
+- `accepted: false`, `proofctl_gate: rejected`, and `ledger_status: OBL`.
+
+`checker/check_certificate.py` now validates this manifest and appends its
+diagnostic to every CORE-2 rejection.  It does not read any producer-supplied
+PASS flag and a valid manifest cannot flip CORE-2 to pass.  The checker digest
+was therefore refrozen consistently in `graph.json`, `.proofctl/graph.json`,
+and all domain/proofctl contracts.
+
+**Checker evidence:**
+
+- `PYTHONPATH=. python3 -m pytest tests/test_core2_partial_evidence.py -q`
+  — `4 passed in 1.61s`.
+- `PYTHONPATH=. python3 -m pytest tests/ -q`
+  — `116 passed in 20.42s`.
+- `~/github/proofctl/proofctl check --all`
+  — CORE-0/1/5 PASS; CORE-2/3/4 rejected;
+  `3 passed, 3 failed, 0 skipped out of 6 checked`.
+- Foundation/source-lock hashes are unchanged:
+  `sha256:cbd075a3da810661e4311f31bd0dabe9f9682e3ad65d05c595bf4d2d5d9f8c2a`
+  and
+  `sha256:d094dff9cf5dda3feb1a19d0201845cfdb74bab98269212db3b16da34541c131`.
+- `python3 checker/replay_kernel.py`
+  — `all_pass: true`, `missing: 0`.
 
 #### Session verification snapshot (2026-08-17)
 

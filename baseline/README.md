@@ -26,6 +26,7 @@ must be verified from the actual source, not from a secondary summary.
 | Mochizuki IUTT-III (May 2020 RIMS PDF) | CORE-3 | Corollary 3.12 source statement; independent proof verification remains OPEN | `mochizuki-2020-iutt-iii.pdf` |
 | Pasten 2021 (arXiv v3) | Route V | Derivative lattice, SDC, abc equivalence | `pasten-2021-arithmetic-derivatives.pdf` |
 | Vaaler 1979 | Route V / determinant bound | Central hyperplane sections and lattice linear forms | `vaaler-1979-geometric-inequality.pdf` |
+| Silverman 2009, AEC 2nd ed. | OB-03/OB-04 | Frey minimal discriminant and odd-prime reduction | `silverman-2009-arithmetic-elliptic-curves.pdf` |
 
 ## Adding a new source
 
