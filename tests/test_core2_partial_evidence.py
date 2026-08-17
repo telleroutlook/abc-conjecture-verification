@@ -109,3 +109,23 @@ def test_silverman_aec_source_anchor_replays() -> None:
     assert "E : y 2 = x(x + A)(x − B)." in text
     assert "|ΔE | = 24 |ABC|2" in text
     assert "multiplicative reduction modulo p for all odd primes" in text
+
+
+def test_murty_pasten_height_source_anchor_replays() -> None:
+    pdf = (
+        REPO_ROOT
+        / "baseline"
+        / "murty-pasten-2013-modular-forms-effective-diophantine.pdf"
+    )
+    text = subprocess.run(
+        ["pdftotext", "-layout", str(pdf), "-"],
+        check=True,
+        capture_output=True,
+        text=True,
+        timeout=30,
+    ).stdout
+    assert "Theorem 5.1." in text
+    assert "12hF (E) = log |∆E |" in text
+    assert "12 log(2π)" in text
+    assert "Theorem 5.4." in text
+    assert "12hF (E) > log |∆E | + 28.326" in text

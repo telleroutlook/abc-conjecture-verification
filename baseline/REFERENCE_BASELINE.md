@@ -194,6 +194,48 @@ Scholze--Stix concern about identification of objects across theaters remains
 a blocking reason; this source quote neither closes nor adjudicates that
 dispute.
 
+## Murty--Pasten (2013/2014 author postprint)
+
+Source file: `murty-pasten-2013-modular-forms-effective-diophantine.pdf`.
+
+Checked version: M. Ram Murty and Héctor Pasten, *Modular forms and effective
+Diophantine approximation*, author-hosted postprint dated January 25, 2014.
+Published as Journal of Number Theory **133** (2013), no. 11, 3739--3754,
+DOI 10.1016/j.jnt.2013.05.006.
+
+### Faltings-height period formula
+
+On postprint page 7, Theorem 5.1 states:
+
+> If $E$ is an elliptic curve defined over $\mathbb Q$, then its Faltings
+> height satisfies
+> \[
+>   12h_F(E)
+>   =
+>   \log|\Delta_E|
+>   -\log\left(|\Delta(\tau_E)|(\operatorname{Im}\tau_E)^6\right)
+>   +12\log(2\pi).
+> \]
+
+This exactly supports the period-formula field required by the hypothetical
+Lean interface `FreyFaltingsHeightTarget`; it does not supply an instance of
+that interface.
+
+### Explicit archimedean lower bound
+
+On postprint page 8, Theorem 5.4 states:
+
+> If $E$ is an elliptic curve defined over $\mathbb Q$, then its Faltings height
+> satisfies
+> \[
+>   12h_F(E)>\log|\Delta_E|+28.326.
+> \]
+
+Together with a Frey-curve minimal-discriminant lower bound, this gives the
+shape of the lower-bound field in `FreyFaltingsHeightTarget`.  The remaining
+effective fixed-power radical upper bound is not supplied by this theorem and
+remains part of the CORE-2 obligation.
+
 ## Silverman (2009), The Arithmetic of Elliptic Curves, 2nd ed.
 
 Source file: `silverman-2009-arithmetic-elliptic-curves.pdf`.

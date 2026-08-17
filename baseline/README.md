@@ -27,6 +27,7 @@ must be verified from the actual source, not from a secondary summary.
 | Pasten 2021 (arXiv v3) | Route V | Derivative lattice, SDC, abc equivalence | `pasten-2021-arithmetic-derivatives.pdf` |
 | Vaaler 1979 | Route V / determinant bound | Central hyperplane sections and lattice linear forms | `vaaler-1979-geometric-inequality.pdf` |
 | Silverman 2009, AEC 2nd ed. | OB-03/OB-04 | Frey minimal discriminant and odd-prime reduction | `silverman-2009-arithmetic-elliptic-curves.pdf` |
+| Murty--Pasten 2013/2014 | CORE-2 true-height target | Faltings-height period formula and archimedean lower bound | `murty-pasten-2013-modular-forms-effective-diophantine.pdf` |
 
 ## Adding a new source
 

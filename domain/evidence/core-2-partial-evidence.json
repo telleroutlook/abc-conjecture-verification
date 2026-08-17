@@ -51,7 +51,11 @@
       "theorems": [
         "FreyFaltingsHeightTarget.logCRadBound"
       ],
-      "note": "Hypothetical true-Faltings-height interface; no instance is supplied and CORE-2 remains OBL."
+      "note": "Hypothetical true-Faltings-height interface; no instance is supplied and CORE-2 remains OBL.",
+      "source_anchors": [
+        "Murty-Pasten Theorem 5.1 period formula",
+        "Murty-Pasten Theorem 5.4 archimedean lower bound"
+      ]
     }
   },
   "admitted_premises": [
@@ -89,12 +93,17 @@
     {
       "role": "baseline-record",
       "path": "baseline/REFERENCE_BASELINE.md",
-      "sha256": "sha256:e9c703d8cb6c3b32ce45e4c1def775e799861c08c33d01c0c1ed1156471a1277"
+      "sha256": "sha256:7cd5d732ffce4cbf74a7a9dd9ee0447db677625089bb77b19b4d051dd4231d36"
     },
     {
       "role": "silverman-aec-source",
       "path": "baseline/silverman-2009-arithmetic-elliptic-curves.pdf",
       "sha256": "sha256:72ee67bfa1e3fdf582ac7e4b032d7ca0b35a168ed6443ac39c121fbb788cab25"
+    },
+    {
+      "role": "murty-pasten-source",
+      "path": "baseline/murty-pasten-2013-modular-forms-effective-diophantine.pdf",
+      "sha256": "sha256:96a888972c04e0b05fbf2e8234676ec2580e89b9bc5d518c9f35e07ee88b0231"
     },
     {
       "role": "outsource-problem",
@@ -104,7 +113,7 @@
     {
       "role": "core2-nonacceptance-test",
       "path": "tests/test_core2_partial_evidence.py",
-      "sha256": "sha256:d5d53f08bbe6e19cad528f2dbcb9e9a954db658f3841070ea16a36f75f91959b"
+      "sha256": "sha256:e02e6fa5f40e52ca5e564c78503a62399a07a2c4f617afc1c7426350fc3b2881"
     }
   ]
 }

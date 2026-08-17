@@ -171,6 +171,9 @@ def _validate_core2_partial_evidence(root: Path) -> tuple[bool, str]:
         "silverman-aec-source": (
             "baseline/silverman-2009-arithmetic-elliptic-curves.pdf"
         ),
+        "murty-pasten-source": (
+            "baseline/murty-pasten-2013-modular-forms-effective-diophantine.pdf"
+        ),
         "outsource-problem": (
             "outsource/OB-04-lean4-formalization-height-framework.md"
         ),

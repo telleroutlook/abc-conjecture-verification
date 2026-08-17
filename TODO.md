@@ -50,6 +50,9 @@ exclusive responsibility of the offline checkers and the proof assistant.
       fixed Frey minimal discriminant; define and bound \(h_\Delta\) in Lean.
 - [x] Anchor Mochizuki IUTT-III Corollary 3.12 to the May 2020 RIMS source
       PDF without closing or weakening the OPEN CORE-3 gate.
+- [x] Source-verify Murty--Pasten Theorems 5.1 and 5.4 for the true-Faltings
+      height period formula and archimedean lower bound; register the PDF in
+      the non-accepting CORE-2 evidence manifest.
 - [x] Verify the newly added Pasten and Vaaler source anchors with local PDF
       extraction.
 

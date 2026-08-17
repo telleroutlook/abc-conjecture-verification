@@ -102,7 +102,7 @@ Realized as a **proofctl domain adapter** (`~/github/proofctl`, Go), not a fork.
 | **P6 — conclusion** | deterministic CORE-5 firing | integration test §7.2 holds |
 
 **Current phase: ALL PHASES COMPLETE (2026-08-15).** System is in its final honest
-state. 122/122 tests pass (2026-08-18). All PLACEHOLDERs frozen. Discovery guard
+state. 123/123 tests pass (2026-08-18). All PLACEHOLDERs frozen. Discovery guard
 layer live.
 
 ### Phase completion status
@@ -144,7 +144,7 @@ layer live.
   - `checker/compute_contract_hashes.py` + all 6 `domain/contracts/*.json` frozen (0 PLACEHOLDERs)
   - `discovery/candidates/guard.py` — non-circularity wall for exploration candidates
   - Integration test (spec §7.2): CORE-1+2+3+4 ⟹ CORE-5 mechanically verified
-- **Tests**: 122/122 pass (adversarial + structural + P2 + P3 + P4 + P5 + P6 +
+- **Tests**: 123/123 pass (adversarial + structural + P2 + P3 + P4 + P5 + P6 +
   integration §7.2 + contract freeze + discovery guard + Route V replay +
   OB-04 Lean axiom audit + CORE-2 partial-evidence/source replay + checker-pin
   mirrors)
@@ -1123,6 +1123,50 @@ inhabitation and does not close CORE-2.
 -q` — `3 passed in 5.01s`; the full suite passes `122/122` (latest replay:
 `122 passed in 20.67s`).
 The combined CORE-2/Lean/checker-pin replay is `12 passed in 8.64s`.
+
+#### Murty--Pasten true-height source anchor (2026-08-18)
+
+**Source added:**
+`baseline/murty-pasten-2013-modular-forms-effective-diophantine.pdf`.
+
+Checked version: author-hosted postprint dated January 25, 2014; published as
+Journal of Number Theory **133** (2013), no. 11, 3739--3754,
+DOI 10.1016/j.jnt.2013.05.006.
+
+Local extraction verifies:
+
+1. **Theorem 5.1, page 7:** for \(E/\mathbb Q\),
+   \[
+     12h_F(E)
+     =
+     \log|\Delta_E|
+     -\log(|\Delta(\tau_E)|(\operatorname{Im}\tau_E)^6)
+     +12\log(2\pi).
+   \]
+   This is the exact period formula required by the
+   `FreyFaltingsHeightTarget` interface.
+2. **Theorem 5.4, page 8:**
+   \[
+     12h_F(E)>\log|\Delta_E|+28.326.
+   \]
+   This supports the shape of the interface's archimedean lower-bound field.
+
+The source does not provide the missing effective fixed-power radical upper
+bound and does not inhabit `FreyFaltingsHeightTarget`.  The PDF is now a
+hashed artifact in the non-accepting CORE-2 partial-evidence manifest.
+
+The checker validates this additional artifact role, and the checker digest
+was refrozen consistently across the domain and `.proofctl` mirrors.  CORE-2
+remains rejected.
+
+**Checker evidence:**
+
+- `PYTHONPATH=. python3 -m pytest tests/test_core2_partial_evidence.py
+  tests/test_checker_pin.py -q` — `10 passed in 1.70s`.
+- `PYTHONPATH=. python3 -m pytest tests/ -q`
+  — `123 passed in 21.13s`.
+- `python3 checker/replay_kernel.py`
+  — `all_pass: true`, `missing: 0`.
 
 #### CORE-2 partial evidence and Silverman source refresh (2026-08-17)
 

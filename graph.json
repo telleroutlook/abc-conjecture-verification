@@ -102,7 +102,7 @@
     {
       "id": "abccv-bridge-v1",
       "protocol_version": 2,
-      "checker_digest": "sha256:fd74f6c980ca068027afea406e846c466e94ac35920a3a155e24d350bf703b1d",
+      "checker_digest": "sha256:67bb85dfc3d42c6e89cc574c82a84771381dc45b3a372c7e5d9b6f4ee9e851c2",
       "schema_digest": "sha256:6d4331a211a431c1c1b6e996d1eb2cb8f464d79af7192399e5fa1ac02fc6db64",
       "runtime": {
         "kind": "native",
