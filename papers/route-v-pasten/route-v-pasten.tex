@@ -11,6 +11,7 @@
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{remark}{Remark}
+\newtheorem{candidate}{Candidate Formula}
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
@@ -37,23 +38,26 @@ For each coprime triple $(a,b,c)$ with $a+b=c$, Pasten (2021) constructs a
 linear constraint imposed by the weighted arithmetic derivative.  We prove that
 for \emph{squarefree} coprime triples, the lattice determinant satisfies
 $\det(F(a,b)) < \rad(abc)$.
-Combined with the Minkowski--Vaaler theorem, this yields a nonzero lattice
+Combined with Vaaler's subspace lattice theorem, this yields a nonzero lattice
 vector with $\ell^\infty$-norm $\|\psi\|_\infty \le \rad(abc)^{1/(\omega-1)}$.
 
-We give a complete classification of partition types by whether the minimum
+We give a structural classification of partition types by whether the minimum
 \emph{non-degenerate} norm ratio $\rho = \|\psi_\mathrm{nd}\|_\infty/R^{1/(\omega-1)}$
-is universally bounded: nine types are bounded (with exact analytical sharp bounds
-including $2^{-1/(\omega-1)}$ for balanced types at $\omega = 3, 4, 5$, $\sup\rho = 1$
-for two $\omega = 5$ types with $a=1$, $\sup\rho = 2^{-1/4}$ for type $(2,1,2)$,
-and $\sup\rho = 6^{-1/4}$ for type $(2,2,1)$). All $\omega \ge 6$ types are unbounded.
-All nine bounded $\omega = 5$ types have asymptotic suprema (never achieved).
-All sharp bounds have been verified over 44\,000 squarefree triples and the key
-inequalities formalized in Lean~4 (zero \texttt{sorry}).
+is universally bounded: nine types are bounded.  We prove unconditional
+upper bounds, including $2^{-1/(\omega-1)}$ for balanced types at
+$\omega = 3, 4, 5$, $\rho<1$ for two $\omega=5$ types with $a=1$,
+$\rho<2^{-1/4}$ for type $(2,1,2)$, and $\rho<6^{-1/4}$ for type $(2,2,1)$.
+For $\omega\ge6$ we prove an explicit unboundedness criterion; applying it to
+every partition type requires the corresponding infinite prime-pattern family.
+The asymptotic constants are sharp only under the relevant prime-pattern
+conjectures.  The inequalities have been checked over 44\,000 squarefree
+triples and the key inequalities formalized in Lean~4 (zero \texttt{sorry}).
 
 We prove a clean quality boundary: for squarefree triples with $a \le b$,
 $\mathrm{quality} > 1/2$ if and only if $a = 1$.  Combined with the classification,
 this shows that the triples hardest for abc (highest quality) are structurally opposite
-to the triples closest to the sharp $\rho$ bound.  The argument is self-contained
+to the triples closest to the extremal $\rho$ bound in the surveyed families.
+The argument is self-contained
 and uses no abc-equivalent hypothesis.
 \end{abstract}
 
@@ -98,9 +102,11 @@ reduces to a single integer linear equation.  Pasten showed that $F(a,b)$ has
 rank $\omega(abc)-1$, where $\omega(n)$ denotes the number of distinct prime
 divisors of $n$.
 
-Pasten's \emph{Small Derivatives Conjecture} (SDC) asserts that the minimum
-$\ell^\infty$-norm of a non-degenerate vector in $F(a,b)$ is at most $c^\eta$
-for some $\eta < 1$.  Pasten proved that SDC is equivalent to the abc conjecture.
+Pasten's \emph{Small Derivatives Conjecture} (SDC) asserts that, apart from
+finitely many triples and from triples of the form $(1,N,q)$ with $q$ prime
+(up to order), the minimum $\ell^\infty$-norm of a non-degenerate vector in
+$F(a,b)$ is at most $c^\eta$ for some $\eta < 1$.  Pasten proved that SDC and
+the abc conjecture are equivalent with an explicit relation of exponents.
 Siegel's lemma gives only $\eta = 1$ (the trivial bound); beating this would
 be a breakthrough.
 
@@ -128,19 +134,17 @@ $R = \rad(abc) = \prod_{p \in P} p$.
   satisfies $\gcd(|c_p| : p \in P) = 1$.
 \end{theorem}
 
-\begin{corollary}[Minkowski--Vaaler bound~{\cite{Cassels1959,Vaaler1979}}]\label{cor:minkowski}
+\begin{corollary}[Vaaler lattice bound~{\cite{Vaaler1979}}]\label{cor:minkowski}
   There exists a nonzero $\psi \in F(a,b)$ with
   $\|\psi\|_\infty \le \det(F(a,b))^{1/(\omega-1)} < R^{1/(\omega-1)}$.
 \end{corollary}
 
-For non-squarefree triples we prove the following extension
-(Theorem~\ref{thm:ob13b} below): the minimum non-degenerate norm satisfies
-$\mathrm{nd}(a,b) \le v_{\max} \cdot R^{1/(\omega^*-1)}$,
-where $v_{\max} = \max_{p} v_p(abc)$.
-We also establish a universal lower bound
-(Theorem~\ref{thm:nd_lb}): $\mathrm{nd}(a,b) \ge p_2$, the second-smallest prime
-in $\mathrm{rad}(abc)$, for every coprime triple regardless of squarefreeness;
-and an exact formula for $\omega^* = 2$ (Theorem~\ref{thm:nd_omega2}).
+For non-squarefree triples, Theorem~\ref{thm:ob13b} below gives the upper bound
+$\mathrm{nd}(a,b) \le v_{\max} \cdot R^{1/(\omega^*-1)}$ for Pasten's original
+lattice, where $v_{\max} = \max_{p} v_p(abc)$.
+The finer exact formulas introduced for non-squarefree triples apply to a
+valuation-coordinate sublattice defined below, not to the original lattice
+without further argument.
 
 
 
@@ -265,12 +269,15 @@ By Theorem~\ref{thm:det}, $\det(L) < R$.
 The lattice $L$ has rank $\omega-1$ as a sublattice of $\mathbb{Z}^\omega$,
 sitting in the hyperplane $H = \{\mathbf{x} : \mathbf{c}\cdot\mathbf{x}=0\}$.
 
-Minkowski's convex-body theorem~\cite{Cassels1959} gives a nonzero $\psi \in L$
-with $\ell^\infty$-norm bounded in some orthonormal basis of $H$.
-To recover the bound in the \emph{ambient} $\mathbb{Z}^\omega$ coordinates,
-we additionally invoke Vaaler's theorem~\cite{Vaaler1979}: every central
-hyperplane section of $[-1,1]^\omega$ has $(\omega-1)$-dimensional volume
-$\ge 2^{\omega-1}$.  Together these give a nonzero $\psi \in L$ with
+We use Theorem~2 of Vaaler~\cite{Vaaler1979}, which gives a precise form of
+Minkowski's linear-forms theorem in the subspace setting.  Let $A$ be the
+$\omega\times(\omega-1)$ matrix whose columns form a $\mathbb{Z}$-basis of $L$,
+and take the $\omega$ ambient coordinate functionals as the linear forms.
+Then $\det(A^{T}A)=\det(L)^2$.  Vaaler's theorem, with all coordinate bounds
+equal to $\lambda:=\det(L)^{1/(\omega-1)}$, gives a nonzero $\psi\in L$ with
+$\|\psi\|_\infty\le\lambda$.  Equivalently, its geometric corollary says that
+every central hyperplane section of $[-1,1]^\omega$ has $(\omega-1)$-dimensional
+volume at least $2^{\omega-1}$.  Therefore
 \[
   \|\psi\|_\infty \;\le\; \det(L)^{1/(\omega-1)} \;<\; R^{1/(\omega-1)}. \qedhere
 \]
@@ -306,35 +313,33 @@ $\omega$ & count & mean $\rho$ & max $\rho$ & $\%\!>\!1$ & note \\
 \centering
 \small\begin{tabular}{lrrrrrl}
 \hline
-Type & $n$ & mean $\rho$ & max $\rho$ & $\sup \rho$ & $\%\!>\!0.5$ & status \\
+Type & $n$ & mean $\rho$ & max $\rho$ & upper bound & $\%\!>\!0.5$ & status \\
 \hline
 $(1,1,1)$, $\omega=3$ & 35     & 0.693 & 0.706 & $2^{-1/2}{\approx}0.707$ & 100\% & BOUNDED \\
 $(0,2,2)$, $\omega=4$ & 69     & 0.147 & 0.505 & $3{\cdot}210^{-1/3}{\approx}0.505$  & 1.4\% & BOUNDED \\
 $(1,1,2)$, $\omega=4$ & 1\,029 & 0.356 & 0.781 & $2^{-1/3}{\approx}0.794$  & 30.0\% & BOUNDED \\
 $(1,2,1)$, $\omega=4$ & 1\,036 & 0.372 & 0.791 & $2^{-1/3}{\approx}0.794$  & 31.9\% & BOUNDED \\
-$(1,2,2)$, $\omega=5$ & 3\,450 & 0.104 & 0.817 & $2^{-1/4}{\approx}0.8408$ (not achieved) & 0.0\% & BOUNDED \\
-$(2,1,2)$, $\omega=5$ & 3\,115 & 0.093 & 0.634 & $2^{-1/4}{\approx}0.841$ (not achieved) & 0.3\% & BOUNDED \\
-$(2,2,1)$, $\omega=5$ & 3\,006 & 0.089 & 0.611 & $6^{-1/4}{\approx}0.6389$ (not achieved) & 0.4\% & BOUNDED \\
-$(0,2,3)$, $\omega=5$ & --- & --- & --- & $\sup = 1$ (not achieved) & --- & BOUNDED \\
-$(0,3,2)$, $\omega=5$ & --- & --- & --- & $\sup = 1$ (not achieved) & --- & BOUNDED \\
+$(1,2,2)$, $\omega=5$ & 3\,450 & 0.104 & 0.817 & $2^{-1/4}{\approx}0.8408$ & 0.0\% & BOUNDED \\
+$(2,1,2)$, $\omega=5$ & 3\,115 & 0.093 & 0.634 & $2^{-1/4}{\approx}0.841$ & 0.3\% & BOUNDED \\
+$(2,2,1)$, $\omega=5$ & 3\,006 & 0.089 & 0.611 & $6^{-1/4}{\approx}0.6389$ & 0.4\% & BOUNDED \\
+$(0,2,3)$, $\omega=5$ & --- & --- & --- & $1$ & --- & BOUNDED \\
+$(0,3,2)$, $\omega=5$ & --- & --- & --- & $1$ & --- & BOUNDED \\
 \hline
 \end{tabular}
 \caption{Distribution of $\rho$ for the nine universally-bounded partition types,
   $c \le 1000$ (for $\omega \le 4$ and $\omega=5$ multi-group types).
-  Types $(0,2,3)$ and $(0,3,2)$ have $a=1$ and two non-empty prime groups;
-  their $\sup\rho = 1$ is proved analytically (Theorem~\ref{thm:f23}) but never achieved.
-  Type $(2,2,1)$ has $\sup\rho = 6^{-1/4}\approx 0.6389$ (Theorem~\ref{thm:f24}), approached
-  via $a=6$, near-twin-prime $b=q_1 q_2$, $c=6+b$ prime; never achieved.
-  All other maxima stay below the proved sharp bounds.
+  The displayed constants are proved upper bounds.  Equality in an asymptotic
+  bound would require an infinite prime-pattern family (such as twin primes);
+  sharpness is therefore conditional and is not asserted by the table.
   P99 and P100 for combined $\omega=4$ bounded types: $0.775$ and $0.791$, both below
   $2^{-1/3} = 0.794$.}
 \label{tab:bounded}
 \end{table}
 
 The unbounded types drive the high mean $\rho$ for $\omega \le 5$.
-For the bounded partition types, the distribution concentrates well below the sharp bounds:
-the median $\rho$ for combined $\omega=4$ bounded types is $0.34$, and fewer than $1\%$
-of triples come within $0.02$ of the sharp bound $2^{-1/3}$.
+For the bounded partition types, the distribution concentrates well below the proved
+upper bounds: the median $\rho$ for combined $\omega=4$ bounded types is $0.34$, and
+fewer than $1\%$ of triples come within $0.02$ of $2^{-1/3}$.
 
 \section{Discussion}
 
@@ -342,7 +347,7 @@ of triples come within $0.02$ of the sharp bound $2^{-1/3}$.
 
 For $\omega=2$ triples, $F(a,b)$ has rank $1$, and the single generator is
 $\psi = (c_2/g, -c_1/g)$ where $g = \gcd(c_1, c_2)$.  In the squarefree case
-$c = \{p, q\}$ and the minimum norm is $\max(q, p)/1 = \max(p,q)$.
+$P=\{p,q\}$ and the minimum norm is $\max(q,p)=\max(p,q)$.
 For a Mersenne triple $(1, 2^k-1, 2^k)$ with $2^k-1$ prime:
 $P = \{2, 2^k-1\}$, $R = 2(2^k-1)$, $\|\psi\|_\infty = 2^k - 1 \approx R/2$.
 So $\|\psi\|_\infty / R \to 1/2$, not smaller.  The bound is essentially tight.
@@ -396,9 +401,10 @@ Proposition~\ref{prop:quality} implies that squarefree triples with quality $> 1
 are exactly the \emph{trivial} triples ($a = 1$).  For the harder non-trivial cases
 ($a \ge 2$), quality $\le 1/2$ with equality only in the limit.
 
-Within bounded partition types, quality and $\rho$ point in \emph{opposite} directions:
+Within the sampled bounded partition types, quality and $\rho$ point in
+\emph{opposite} directions:
 \begin{itemize}
-  \item \textbf{High-$\rho$ families} (balanced types approaching the sharp bound):
+  \item \textbf{High-$\rho$ families} (balanced types approaching the conditional extremal bound):
     e.g.\ type $(1,1,2)$ with $a = p \approx q$ both large odd primes.
     Here $\rho^3 \to 1/2$ (approaching $2^{-1/3}$) while
     $\text{quality} \to \log(2p)/\log(2p^3) = 1/3$.
@@ -410,16 +416,17 @@ Empirically (Table~\ref{tab:bounded}, $c \le 2000$), Pearson $r(\text{quality}, 
 for types $(1,1,2)$ and $(1,2,1)$.
 
 \textbf{Conclusion.}  The triples hardest for abc (highest quality, approaching
-quality $= 1/2$ from below) are not the triples closest to the sharp $\rho$ bound.
+quality $= 1/2$ from below) are not the triples closest to the extremal $\rho$
+bound in the surveyed families.
 The gap between ``hard for abc'' and ``hard for SDC'' is a provable structural feature:
 within the squarefree subfamily, maximizing quality and maximizing $\rho$ are
 \emph{geometrically opposite} in the parameter space of partition types.
 
-\subsubsection*{F31: joint quality-$\rho$ bound}
+\subsubsection*{F31: joint quality-\texorpdfstring{$\rho$}{rho} bound}
 
 The opposition between quality and $\rho$ is not merely empirical: for every
 \emph{bounded-$\rho$} partition type (those with $\sup_{\text{triples}} \rho < \infty$)
-the sum $\operatorname{quality} + \rho^{\omega-1}$ is provably bounded away from $1$.
+the sum $\operatorname{quality} + \rho^{\omega-1}$ is less than $1$.
 
 \begin{theorem}[F31: Quality-$\rho$ Joint Bound]\label{thm:f31}
   For every squarefree coprime triple $(a,b,c)$ with $a+b=c$, $a \ge 2$, belonging to
@@ -427,23 +434,30 @@ the sum $\operatorname{quality} + \rho^{\omega-1}$ is provably bounded away from
   \[
     \operatorname{quality}(a,b,c) + \rho(a,b,c)^{\omega-1} < 1.
   \]
-  The bound is strict and the supremum of the left-hand side over all such triples equals $1$.
+  The bound is strict.
 \end{theorem}
 
 \begin{proof}
   By Proposition~\ref{prop:quality} (quality boundary), $\operatorname{quality} < 1/2$ for all
   non-trivial squarefree triples ($a \ge 2$).
-  By Theorem~\ref{thm:sharp} (sharp $\rho$ bounds), every bounded-$\rho$
-  type has $\sup \rho \le 2^{-1/(\omega-1)}$, so
-  $\rho^{\omega-1} \le (2^{-1/(\omega-1)})^{\omega-1} = 1/2$ (strict: the supremum is
-  never achieved).
+  For a bounded type containing a one-prime constituent, let $g\ge2$ be the
+  smallest group minimum and $d$ the second-smallest.  Every remaining prime
+  is larger than $d$, so $R>2d^{\omega-1}$ and
+  $\rho^{\omega-1}<1/2$.  The only bounded type with $a\ge2$ and no
+  one-prime constituent is $(2,2,1)$.  In that case, writing $g,h$ for the
+  primes in the first constituent, $d,q_2$ for those in the second, and $r$
+  for the single third-prime, with $d$ the second-smallest group minimum,
+  gives $ghq_2r>6d^2$ and hence $\rho^{\omega-1}=d^3/(ghq_2r)<1/6$.
   Hence $\operatorname{quality} + \rho^{\omega-1} < 1/2 + 1/2 = 1$.
 \end{proof}
 
-\begin{remark}[Tightness for type $(1,1,1)$]
-  The supremum is approached only by type $(1,1,1)$ triples.
-  For the twin-prime family $(2,q,q+2)$: $\operatorname{quality} \to 1/2$ and
-  $\rho^2 = q/(2(q+2)) \to 1/2$ as $q \to \infty$, so the bound is tight.
+\begin{remark}[Conditional tightness for type $(1,1,1)$]
+  The bound would be tight along type $(1,1,1)$ triples if infinitely many twin
+  primes existed.  For the twin-prime family $(2,q,q+2)$,
+  $\operatorname{quality} \to 1/2$ and
+  $\rho^2 = q/(2(q+2)) \to 1/2$ as $q \to \infty$.  The infinitude of twin primes
+  is open, so this is conditional sharpness rather than an unconditional
+  determination of the supremum.
   The algebraic core --- $(q+2)^q < (2q)^{q+4}$ for all $q \ge 1$ (proved for $q=1$
   directly; for $q \ge 2$ by $q+2 \le 2q$ and $q < q+4$) ---
   is formalized as \texttt{pasten\_F31a} in the Lean kernel.
@@ -452,10 +466,12 @@ the sum $\operatorname{quality} + \rho^{\omega-1}$ is provably bounded away from
 \begin{remark}[Unbounded types]
   The bound fails for unbounded-$\rho$ types (e.g.\ type $(2,1,1)$: $\rho^3 \approx q/6
   \to \infty$).  For bounded types the gap to $1$ is large away from type $(1,1,1)$:
-  $\omega=4$ bounded types $\max(q+\rho^{\omega-1}) \approx 0.523$;
-  $\omega=5$ bounded types $\max(q+\rho^{\omega-1}) \approx 0.569$ (verified numerically, T51).
-  All $\omega \ge 6$ types are unbounded ($\rho^{\omega-1} \to \infty$); the bound
-  $q + \rho^{\omega-1} \le 1$ fails for all $\omega \ge 6$ types.
+  $\omega=4$ bounded types $\max(\operatorname{quality}+\rho^{\omega-1})
+  \approx 0.523$;
+  $\omega=5$ bounded types $\max(\operatorname{quality}+\rho^{\omega-1})
+  \approx 0.569$ (verified numerically, T51).
+  Under the F11 prime-pattern criterion, $\rho^{\omega-1}\to\infty$ and the
+  bound $\operatorname{quality}+\rho^{\omega-1}\le1$ fails along that sequence.
 \end{remark}
 
 \subsection{Non-degeneracy: complete classification for $\omega \le 5$}
@@ -505,8 +521,9 @@ $\ell^\infty$-norm at most $\sqrt{R} = \sqrt{pqr} < 2r$
 For every squarefree prime triple $(p,q,r)$ with $p+q=r$, the shortest non-zero
 vector of $F(p,q)$ is non-degenerate; equivalently, $\mathrm{nd}(p,q) < 2r$.
 \end{theorem}
-Therefore the \emph{shortest vector is always non-degenerate} for $\omega=3$ prime triples.
-This is Theorem~\ref{thm:f3}; four constituent lemmas are formalized in Lean~4 (zero \texttt{sorry}).
+Therefore Theorem~\ref{thm:f3} says that the \emph{shortest vector is always
+non-degenerate} for $\omega=3$ prime triples.
+Four constituent lemmas are formalized in Lean~4 (zero \texttt{sorry}).
 
 \subsubsection*{$\omega = 4$: complete partition-type classification}
 
@@ -521,8 +538,8 @@ Type & Degen? & Non-degen min & Ratio bound ($\rho = \|\psi_\mathrm{nd}\|/R^{1/3
 \hline
 $(0,2,2)$ & Never & $\max(p_b^{\min}, p_c^{\min})$ &
   $\le 3\cdot 210^{-1/3}\approx 0.505$, max at $(1,14,15)$ & BOUNDED \\
-$(1,1,2)$ & Never & $\max(p_a, p_b)$ & $\sup = 2^{-1/3} \approx 0.794$ (F14) & BOUNDED \\
-$(1,2,1)$ & iff $a > r$ & $\max(a, q)$ & $\sup = 2^{-1/3} \approx 0.794$ (F12) & BOUNDED \\
+$(1,1,2)$ & Never & $\max(p_a, p_b)$ & $<2^{-1/3} \approx 0.794$ (F14) & BOUNDED \\
+$(1,2,1)$ & iff $a > r$ & $\max(a, q)$ & $<2^{-1/3} \approx 0.794$ (F12) & BOUNDED \\
 $(2,1,1)$ & Always & $\max(p_1, r)$ & grows $\sim r^{1/3}$ & UNBOUNDED \\
 $(0,1,3)$ & Always & $r = b$ & grows $\sim r^{2/3}$ & UNBOUNDED \\
 $(0,3,1)$ & Always & $r = c$ & grows $\sim r^{2/3}$ & UNBOUNDED \\
@@ -535,8 +552,9 @@ Here $r$ (for types $(2,1,1)$, $(0,1,3)$, $(0,3,1)$) denotes the single prime in
 constituent with $n = 1$, which can grow without bound in infinite subfamilies.
 For type $(1,2,1)$, the degeneracy condition $a > r$ (where $r$ is the larger prime of $b$)
 forces $r < a \le 2r$, and the ratio $\max(a,q)/R^{1/3}$ is bounded by $2^{-1/3}$
-(proved by elementary calculus: the function $t^{2/3}/(2(t+2))^{1/3}$ is strictly increasing
-on $(1,2)$ with supremum $2^{-1/3}$ at $t \to 2$).
+(proved by elementary calculus: the function $t^{2/3}/(2(t+2))^{1/3}$ is
+strictly increasing on $(1,2)$ and remains below the conditional endpoint
+$2^{-1/3}$ at $t\to2$).
 
 The \emph{UNBOUNDED} types arise when a constituent with $n \ge 2$ prime factors shares
 the primes available for non-degenerate crossings with no small partner, forcing
@@ -552,11 +570,11 @@ The $\varphi$-coordinate classification extends directly to $\omega = 5$
 \hline
 Type & Degen/ND & Max $\rho$ ($= \|\psi_\mathrm{nd}\|/R^{1/4}$) & Achieved at & Pattern \\
 \hline
-$(1,2,2)$ & 0/219 & $2^{-1/4}{\approx}0.8408$ (sup) & --- & BOUNDED, sup$=2^{-1/4}$ (F26) \\
-$(2,1,2)$ & 17/171 & $2^{-1/4}{\approx}0.841$ (sup) & --- & BOUNDED, sup$=2^{-1/4}$ (F30) \\
-$(2,2,1)$ & 15/189 & $6^{-1/4}{\approx}0.6389$ (sup) & --- & BOUNDED, sup$=6^{-1/4}$ (F24) \\
-$(0,2,3)$ & ---    & $< 1$ (sup $= 1$) & --- & BOUNDED, sup$=1$ (F23) \\
-$(0,3,2)$ & ---    & $< 1$ (sup $= 1$) & --- & BOUNDED, sup$=1$ (F23) \\
+$(1,2,2)$ & 0/219 & $2^{-1/4}{\approx}0.8408$ (upper bound) & --- & BOUNDED (F26) \\
+$(2,1,2)$ & 17/171 & $2^{-1/4}{\approx}0.841$ (upper bound) & --- & BOUNDED (F30) \\
+$(2,2,1)$ & 15/189 & $6^{-1/4}{\approx}0.6389$ (upper bound) & --- & BOUNDED (F24) \\
+$(0,2,3)$ & ---    & $< 1$ & --- & BOUNDED (F23) \\
+$(0,3,2)$ & ---    & $< 1$ & --- & BOUNDED (F23) \\
 $(1,1,3)$ & 112/118 & $2.798$ & --- & UNBOUNDED (F11) \\
 $(1,3,1)$ & 106/110 & $2.798$ & --- & UNBOUNDED (F11) \\
 $(3,1,1)$ & 0/123 & $6.745$ & --- & UNBOUNDED (F11) \\
@@ -567,58 +585,102 @@ $(0,4,1)$ & ---    & $\to\infty$ & --- & UNBOUNDED (F22) \\
 \end{center}
 
 \noindent
-All five bounded $\omega=5$ types have \emph{asymptotic} suprema (never achieved at a finite triple).
+All five bounded $\omega=5$ types have strict upper bounds.  Their extremal
+constants are conditional on infinite prime-pattern families and are not
+asserted as unconditional suprema.
 Type $(1,2,2)$ extends the universal bound $2^{-1/(\omega-1)}$ to $\omega=5$:
 for $a=2$, $b=pq$, $c=rs$ with all four odd primes near equal and $2+pq=rs$,
 $\rho^4 = p^3/(2qrs) < 1/2$ since $q,r,s > p$ (Theorem~\ref{thm:f26}).
-As all four primes $\to n$: $\rho^4 \to 1/2$; $\sup\rho = 2^{-1/4} \approx 0.8408$.
+As all four primes $\to n$ in such a family: $\rho^4 \to 1/2$, giving
+conditional sharpness of $2^{-1/4}$.
 Verified: 0 violations of $\rho < 2^{-1/4}$ for $a=2$, $b \le 200\,000$.
-Types $(2,1,2)$ and $(1,2,2)$ share $\sup\rho = 2^{-1/4} \approx 0.8409$: by the $a \leftrightarrow b$
+Types $(2,1,2)$ and $(1,2,2)$ share the conditional extremal constant
+$2^{-1/4} \approx 0.8409$: by the $a \leftrightarrow b$
 symmetry of $\rho$ (which depends only on $\{\min P_a,\min P_b,\min P_c\}$ and $R$),
 any $(2,1,2)$ triple $(a,b,c)$ gives a $(1,2,2)$ triple $(b,a,c)$ with the same~$\rho$.
-Hence $\sup\rho$ for $(2,1,2)$ equals $\sup\rho$ for $(1,2,2)$, proved $= 2^{-1/4}$ by F26.
+Hence the conditional constant for $(2,1,2)$ equals that for $(1,2,2)$.
 The extremal family: $b=2$ (fixed), $a=p_1 p_2$, $c=p_1 p_2+2=r_1 r_2$ near-twin semiprimes;
 $\mathrm{nd}=p_1$, $\rho^4 = p_1^3/(2\,p_2\,r_1\,r_2) < 1/2$ (since $p_2\,r_1\,r_2 \ge p_1 p_2^2 > p_1^3$).
-As $p_1{\approx}p_2{\approx}r_1{\approx}r_2{\to}n$: $\rho^4 \to 1/2$.
+As $p_1{\approx}p_2{\approx}r_1{\approx}r_2{\to}n$ in such a family:
+$\rho^4 \to 1/2$.
 Verified: 0 violations of $\rho < 2^{-1/4}$ for $2{,}475{,}742$ triples at $c \le 50{,}000$
 (6 violations of the old incorrect bound $6^{-1/4}$; the old F25 claim was wrong).
 
-\begin{theorem}[F26: type $(1,2,2)$ bound]\label{thm:f26}
-For any type $(1,2,2)$ triple with $a=2$, $b=pq$, $c=rs$ (all four $p,q,r,s$ odd primes,
-$2+pq=rs$, $p \le q$, $r \le s$): $\rho^4 = p^3/(2qrs) < 1/2$, so $\rho < 2^{-1/4}$.
-This is the $\omega=5$ case of Theorem~\ref{thm:pattern} (type $(1,2,2)=(1,k_1,k_2)$ with
-$k_1{=}k_2{=}2$); $\sup\rho = 2^{-1/4}$ is never achieved.
+\begin{theorem}[F26: type $(1,2,2)$ upper bound]\label{thm:f26}
+For any type $(1,2,2)$ triple, $\rho^4<1/2$, so $\rho<2^{-1/4}$.
+In the subfamily $a=2$, $b=pq$, $c=rs$ (with $2+pq=rs$, $p\le q$, and
+$r\le s$), $\rho^4=p^3/(2qrs)$.  Equality is never attained.  The constant
+$2^{-1/4}$ would be sharp if the corresponding near-equal prime-pattern family
+were infinite; this sharpness is conditional and is not claimed as a theorem.
 \end{theorem}
 
-\begin{theorem}[F24: type $(2,2,1)$ bound]\label{thm:f24}
-For any type $(2,2,1)$ triple: $\rho^4 < 1/6$, so $\sup\rho \le 6^{-1/4} \approx 0.6389$.
-The supremum is never achieved; it is approached by the $a=6$ extremal family
-(near-twin-prime $b=q_1 q_2$, $c=6+b$ prime).
+\begin{proof}
+Let $g\ge2$ be the single-prime group's minimum and let $d$ be the second
+smallest of the three group minima.  The other two primes in the two-prime
+groups are strictly larger than their group minima, and the third group minimum
+is at least $d$.  Therefore the three primes other than $g$ and $d$ have
+product strictly larger than $d^3$.  Hence
+\[
+  \rho^4=\frac{d^4}{R}
+  <\frac{d^4}{2d\cdot d^3}
+  =\frac12. \qedhere
+\]
+\end{proof}
+
+\begin{theorem}[F24: type $(2,2,1)$ upper bound]\label{thm:f24}
+For any type $(2,2,1)$ triple, $\rho^4<1/6$, so
+$\rho<6^{-1/4}\approx0.6389$.  The bound is strict for every finite triple.
+It would be approached by an infinite $a=6$ near-twin-prime family if such a
+family exists; that conditional sharpness is not claimed unconditionally.
 (Lean: \texttt{pasten\_F29\_221\_rho4\_lt\_sixth}, which proves the general bound F29 covering all type $(2,2,1)$ triples.)
 \end{theorem}
 
-\begin{theorem}[F23: types $(0,2,3)$ and $(0,3,2)$ bound]\label{thm:f23}
-For any type $(0,2,3)$ or $(0,3,2)$ triple ($a=1$, two non-empty prime groups):
-with $p = \min P_b$ and $q = \min P_c$ (or vice versa), $p < q$:
+\begin{proof}
+Let $g$ be the smallest group minimum and $d$ the second-smallest; they lie in
+different groups.  Let $h>g$ be the other prime in $g$'s constituent, let
+$q_2>d$ be the other prime in $d$'s constituent, and let $r\ge d$ be the
+single prime in the third group.  Then
 \[
-  \rho^4 = \frac{p^3}{q(pq+1)} < \frac{p^2}{q^2} < 1,
+  \rho^4=\frac{d^4}{g h d q_2 r}
+  =\frac{d^3}{g h q_2 r}
+  <\frac16
 \]
-so $\rho < 1$ for every finite triple.  Yet $\sup\rho = 1$, approached as $p,q \to n$ near-equal.
+because $g\ge2$, $h\ge3$, $q_2\ge d+1$, and $r\ge d$, whence
+$g h q_2 r\ge6d(d+1)>6d^2$.
+\end{proof}
+
+\begin{theorem}[F23: types $(0,2,3)$ and $(0,3,2)$ upper bound]\label{thm:f23}
+For either type, $\rho^4<1$.  A supremum equal to $1$ would require an
+infinite near-equal prime family and is therefore conditional.
 \end{theorem}
 
-Type $(2,2,1)$ has $\sup\rho = 6^{-1/4} \approx 0.6389$ (Theorem~\ref{thm:f24}, general bound F29),
-approached but never achieved by the $a=6$ extremal family (see above).
+\begin{proof}
+Here $a=1$ and the two non-empty constituents each have at least two prime
+factors.  Let $d=\mathrm{nd}$ be the larger of their two group minima, and let
+$Y$ be the constituent whose minimum is $d$.  Write $Y=du$ with $u>d$; since
+the primes are distinct, $u\ge d+2$.  The other constituent is either $Y-1$
+or $Y+1$, so it is at least $Y-1$.  Since $R=\rad(abc)=bc=Y(Y\pm1)$,
+\[
+  R\ge d(d+2)(d^2+2d-1)>d^4.
+\]
+Thus $\rho^4=d^4/R<1$.
+
+In the special subfamily $b=pq$ with $3\le p<q$ and $c=pq+1$, this becomes
+$\rho^4=p^3/(q(pq+1))$, the formula used in the finite computations.
+\end{proof}
+
+Type $(2,2,1)$ has the strict upper bound $6^{-1/4}$ (Theorem~\ref{thm:f24});
+conditional sharpness is approached by the $a=6$ family (see above).
 Types $(0,2,3)$ and $(0,3,2)$ have $a=1$ (empty $P_a$), giving only two non-empty prime
 groups; their F10 nd $= \max(\min P_b, \min P_c)$ satisfies $\rho < 1$ always
-(Theorem~\ref{thm:f23}: $\rho^4 = p^3/(q(pq+1)) < (p/q)^2 < 1$ for $p < q$), but $\sup\rho = 1$
-approached by near-equal prime pairs.
+(Theorem~\ref{thm:f23}), with conditional sharpness at $1$.
 The unbounded types (0,1,4) and (0,4,1) have $\rho^4 \approx q^2 \to \infty$ analytically.
 
 \subsubsection*{F10: optimal crossing formula (general $\omega$)}
 
 The key structural insight from \texttt{t21} completes the classification at all $\omega$:
 
-\begin{theorem}[F10, proved 2026-08-15]\label{thm:f10}
+\begin{theorem}[F10]\label{thm:f10}
 For any cross-group pair $X \ne Y$ with $X, Y \in \{P_a, P_b, P_c\}$, the two-entry
 $\varphi$-vector with $\varphi_p = 1$ ($p \in X$) and $\varphi_q = \pm 1$ ($q \in Y$,
 sign chosen to satisfy $\sum \mathrm{sign}_q \varphi_q = 0$) is \emph{always}
@@ -668,7 +730,7 @@ non-degenerate $\psi\in F(a,b)$ satisfies
 \end{theorem}
 
 \begin{proof}
-By the Universal Divisibility Lemma (Theorem~\ref{thm:gcd}),
+By the Universal Divisibility Lemma (Theorem~\ref{thm:div}),
 $\psi_\ell=\ell\,\varphi_\ell$ with $\varphi_\ell\in\mathbb{Z}$.
 Suppose for contradiction that $\|\psi\|_\infty < \mathrm{nd}$.
 Then $\ell\,|\varphi_\ell|\le\|\psi\|_\infty<\mathrm{nd}$, so $\varphi_\ell=0$
@@ -683,7 +745,10 @@ Hence $S_b:=\sum_{\ell\in P_b}\varphi_\ell=0$ and $S_c:=\sum_{\ell\in P_c}\varph
 The lattice constraint (F8 $\varphi$-form) gives $S_a+S_b=S_c$, so $S_a=0$.
 Non-degeneracy requires $S_b\ne S_a$, i.e.\ $0\ne 0$---contradiction. \qed
 
-(The same argument works when $m_b$ or $m_c$ is the global minimum, by symmetry.)
+If $m_b$ is the global minimum, then $\mathrm{nd}=\min(m_a,m_c)$; every prime in
+$P_a\cup P_c$ is at least $\mathrm{nd}$, so $\varphi$ vanishes on $P_a\cup P_c$.
+The constraint gives $S_b=0$, contradicting $S_b\ne S_a=0$.  The case $m_c$
+global minimum is identical with $S_c$ in place of $S_b$.
 \end{proof}
 
 Theorems~\ref{thm:f10} and~\ref{thm:en} together give the complete characterisation:
@@ -695,12 +760,35 @@ $\omega=5$ (\texttt{t48}), $\omega=6$ (\texttt{t49})---all verified in $\le 1$\,
 
 \subsubsection*{OB-13B: non-squarefree upper bound}
 
-The squarefree bound $\mathrm{nd}(a,b) \le R^{1/(\omega^*-1)}$ extends to
-non-squarefree triples with a $v_{\max}$ factor, where
-$v_{\max} = \max_{p \in P} v_p(abc)$.
+The squarefree upper bound extends to non-squarefree triples with a
+$v_{\max}$ factor, where $v_{\max} = \max_{p \in P} v_p(abc)$.
+For the finer non-squarefree formulas, and for the remainder of this
+non-squarefree discussion until the next squarefree classification theorem,
+we use the \emph{valuation-coordinate lattice}
+\[
+  F_{\mathrm{val}}(a,b)
+  =\{\psi\in F(a,b): p\mid \psi_p \text{ for every } p\in P\}.
+\]
+Writing $\psi_p=p\varphi_p$, its constraint is
+\begin{equation}\label{eq:valuation_constraint}
+  \sum_{p\mid a}v_p(a)\varphi_p+
+  \sum_{p\mid b}v_p(b)\varphi_p-
+  \sum_{p\mid c}v_p(c)\varphi_p=0,
+\end{equation}
+and its Wronskian condition is
+$\sum_{p\mid b}\varphi_p\ne\sum_{p\mid a}\varphi_p$.
+The inherited norm is
+$\|\varphi\|_\infty=\max_{p\in P}p|\varphi_p|$.
+Let $\mathrm{nd}_{\mathrm{val}}$ denote the minimum non-degenerate norm on this
+sublattice; the symbol $\mathrm{nd}$ in these non-squarefree type formulas means
+$\mathrm{nd}_{\mathrm{val}}$.  This convention is essential: for $(1,8,9)$ the
+original lattice contains the non-degenerate vector $\psi=(1,2)$ of norm $2$,
+whereas the valuation-coordinate minimum is $9$.  Thus exact valuation-lattice
+formulas do not automatically determine the original Pasten minimum.
 
 \begin{theorem}[OB-13B: non-squarefree E$_n$ upper bound]\label{thm:ob13b}
 For every coprime triple $a + b = c$ (not necessarily squarefree) with $c \le 10^{12}$,
+write $\pi_1<\pi_2<\cdots<\pi_{\omega^*}$ for the primes dividing $R$.
 \[
   \mathrm{nd}(a,b) \;\le\; v_{\max} \cdot R^{1/(\omega^*-1)}.
 \]
@@ -715,8 +803,11 @@ For each cross-group prime pair $(p,q)$ with $p \in P_g$, $q \in P_{g'}$ ($g \ne
 and $g_0 = \gcd(v_p(g\text{-factor}),\, v_q(g'\text{-factor}))$, define the vector
 $\varphi^{(p,q)}$ by
 $\varphi_p = v_q/g_0$, $\varphi_q = -v_p/g_0$, and $\varphi_r = 0$ for all $r \notin \{p,q\}$.
-A direct computation shows $\varphi^{(p,q)} \in F(a,b)$ (the weighted constraint (C) is
-satisfied) and $W(\varphi^{(p,q)}) = \pm v_q/g_0 \ne 0$, so $\varphi^{(p,q)}$ is non-degenerate.
+A direct computation shows $\varphi^{(p,q)} \in F_{\mathrm{val}}(a,b)$
+(equation~\eqref{eq:valuation_constraint} is satisfied).  The corresponding
+original-lattice vector $\psi^{(p,q)}$ has $\psi_p=p\varphi_p$ and
+$\psi_q=q\varphi_q$, and its valuation-coordinate Wronskian is
+$\pm v_q/g_0\ne0$, so it is non-degenerate.
 Its norm is $\|\varphi^{(p,q)}\| = \max(p \cdot v_q/g_0,\; q \cdot v_p/g_0) \le v_{\max}
 \cdot \max(p,q)$.
 
@@ -769,9 +860,8 @@ implies $v\equiv2\pmod{4}$, so $37\mid c$ too.
 Hence $P_c\supseteq\{13,37,97\}$, $|P_c|\ge 3$, $\omega^*\ge 5$,
 $R\ge 6\cdot13\cdot37\cdot97=279\,942$.
 For $\omega^*=5$: $\pi_3^{\omega^*-1}=13^4=28\,561\le 279\,942=R$. $\checkmark$
-For $\omega^*>5$: each extra $P_c$ prime satisfies $q\ge\pi_3+2=15$; since
-$\mathrm{ord}(6\bmod37)=4$ forces $37\mid c$, in practice $q\ge 97$, so $R/\pi_3^{\omega^*-2}$
-grows as $\times(q/13)\ge\times(97/13)>1$ per additional prime. $\checkmark$
+For $\omega^*>5$: each extra $P_c$ prime satisfies $q\ge\pi_3+2=15$, so
+$R/\pi_3^{\omega^*-2}$ grows by a factor $q/13\ge15/13>1$ per additional prime. $\checkmark$
 
 For all other even-$v$ sub-cases ($M=6$, $v$ even, $v\not\equiv 6\pmod{12}$; $M=10$,
 $v$ even; $M\ge14$): exhaustive search (\texttt{t96}) over $c\le10^{12}$ finds no $R<c$
@@ -795,9 +885,11 @@ with margins $\times100$ and $\times565\,000$ respectively. $\checkmark$
 ``balanced load'' construction: for triples $(1,b,q^k)$ with $b$ squarefree and $|P_b| \ge 2$,
 the optimal vector distributes the constraint $k$ across a subset $T \subseteq P_b$,
 achieving norm $\max(q,\, k/\sum_{p_i \in T} p_i^{-1})$---strictly below the pairwise bound.
-The exact formula $\mathrm{nd}(1,b) = \max(q,\min_T\lceil k/H(T)\rceil^*)$
+The exact formula $\mathrm{nd}_{\mathrm{val}}(1,b)
+  = \max(q,\min_T\lceil k/H(T)\rceil^*)$
 with $H(T) = \sum_{p_i \in T} 1/p_i$ is verified for all tested cases; no simple
-closed form exists for arbitrary valuation profiles, but $\mathrm{nd}(a,b)$ is
+closed form exists for arbitrary valuation profiles, but
+$\mathrm{nd}_{\mathrm{val}}(a,b)$ is
 computable exactly via LLL lattice reduction (Theorem~\ref{thm:ob13c} below, OB-13C).
 (iii) Numerical verification (\texttt{t59}, \texttt{t65}, \texttt{t96}):
 OB-13B holds for all 24 high-quality triples with quality $> 1.15$ and $c \le 5000$,
@@ -811,45 +903,50 @@ $R=90909090910$, norm $= 121 \le 1710.5$ (ratio $0.07$).
 When a group $P_g$ contains two primes $p, q$ with \emph{distinct} $p$-adic valuations
 $v_p \ne v_q$ of the $g$-factor, a within-group vector $\varphi_p = v_q/g_0$,
 $\varphi_q = -v_p/g_0$ (all other coordinates zero, $g_0 = \gcd(v_p, v_q)$) satisfies
-the constraint~(C) (both sides of (C) vanish for this vector) and has
+the constraint~\eqref{eq:valuation_constraint} (both sides of~\ref{eq:valuation_constraint} vanish for this vector) and has
 $W(\varphi) = \pm(v_q - v_p)/g_0 \ne 0$.
-This construction can give $\mathrm{nd}(a,b) < \mathrm{med}(m_a,m_b,m_c)$,
+This construction can give
+$\mathrm{nd}_{\mathrm{val}}(a,b) < \mathrm{med}(m_a,m_b,m_c)$,
 i.e.\ below the squarefree E$_n$ formula.
 Example: $(a,b,c) = (72, 11, 83)$ with $a = 2^3 \cdot 3^2$, $P_a = \{2,3\}$,
 $P_b = \{11\}$, $P_c = \{83\}$. The within-group vector $\varphi_2 = 2$, $\varphi_3 = -3$
 satisfies $3 \cdot 2 + 2\cdot(-3) = 0$ and $W = 1 \ne 0$, giving
-$\mathrm{nd}(72,11) \le 9 < 11 = \mathrm{med}(m_a,m_b,m_c)$.
+$\mathrm{nd}_{\mathrm{val}}(72,11) \le 9 < 11 = \mathrm{med}(m_a,m_b,m_c)$.
 Thus the squarefree E$_n$ lower bound $\mathrm{nd} \ge \mathrm{med}$ does \emph{not} extend
 to non-squarefree triples when groups have $\ge 2$ primes with distinct valuations.
 
-\begin{corollary}[OB-13B sharp]\label{cor:ob13b-sharp}
+\begin{corollary}[OB-13B sharp for the valuation lattice]\label{cor:ob13b-sharp}
 Under the same hypotheses,
 \[
-  \mathrm{nd}(a,b) \;\le\; v_{\max} \cdot \mathrm{med}(m_a, m_b, m_c),
+  \mathrm{nd}_{\mathrm{val}}(a,b) \;\le\; v_{\max} \cdot \mathrm{med}(m_a, m_b, m_c),
 \]
 where $\mathrm{med}$ denotes the second smallest of $\{m_a, m_b, m_c\}$ (with $m_g = \infty$
 for empty groups).  This bound is tight: equality holds at $(a,b,c)=(1,8,9)$,
-where $v_{\max}=3$, $\mathrm{med}=3$, and $\mathrm{nd}=9$.
+where $v_{\max}=3$, $\mathrm{med}=3$, and $\mathrm{nd}_{\mathrm{val}}=9$.
 \end{corollary}
 
 \begin{proof}
-The proof of Theorem~\ref{thm:ob13b} establishes
-$\mathrm{nd}(a,b) \le v_{\max}\cdot\mathrm{med}(m_a,m_b,m_c)$ as an intermediate step
+The proof of Theorem~\ref{thm:ob13b} constructs
+$\mathrm{nd}_{\mathrm{val}}(a,b) \le v_{\max}\cdot\mathrm{med}(m_a,m_b,m_c)$ as an intermediate step
 (the Minkowski step that follows gives only a weaker bound).
 For $(1,8,9)$: $P_a=\emptyset$, $P_b=\{2\}$, $P_c=\{3\}$; $v_{\max}=3$ (from $v_2(8)=3$),
 $\mathrm{med}(\infty,2,3)=3$.  The optimal vector $\varphi_2=2$, $\varphi_3=3$
 satisfies $3\cdot2=2\cdot3$ (constraint) with $W=2\ne0$ and norm $\max(2\cdot2,3\cdot3)=9=3\cdot3$.
 \end{proof}
 
-\subsubsection*{OB-13C: algorithmic exact computation of $\mathrm{nd}(a,b)$}
+\subsubsection*{OB-13C: algorithmic exact computation of
+  $\mathrm{nd}_{\mathrm{val}}(a,b)$}
 
 While no simple closed-form formula generalises the squarefree E$_n$ expression
 $\mathrm{nd}_{\mathrm{sq}} = \mathrm{med}(m_a,m_b,m_c)$ to all non-squarefree triples,
-the exact value of $\mathrm{nd}(a,b)$ is computable in polynomial time via lattice reduction.
+the exact value of $\mathrm{nd}_{\mathrm{val}}(a,b)$ is computable by a finite
+deterministic lattice-reduction and enumeration procedure.
 
-\begin{theorem}[OB-13C: lattice SVP algorithm for $\mathrm{nd}$, all steps proved]\label{thm:ob13c}
+\begin{theorem}[OB-13C: valuation-lattice SVP algorithm]\label{thm:ob13c}
 Let $a + b = c$ be a coprime triple with $\omega^* = |P|$ distinct prime factors.
-Write the constraint~(C) as $\sum_{i=1}^{\omega^*} \alpha_i\,\varphi_i = 0$ where
+Assume $\omega^*\ge2$; the unique $\omega^*=1$ triple $(1,1,2)$ has rank $0$
+and no nonzero lattice vector.
+Write the constraint~\eqref{eq:valuation_constraint} as $\sum_{i=1}^{\omega^*} \alpha_i\,\varphi_i = 0$ where
 $\alpha_i = v_{p_i}(a)$ for $p_i \in P_a$, $\alpha_i = v_{p_i}(b)$ for $p_i \in P_b$,
 and $\alpha_i = -v_{p_i}(c)$ for $p_i \in P_c$.  The solution lattice
 $L = \{\varphi \in \mathbb{Z}^{\omega^*} : \sum \alpha_i\varphi_i = 0\}$
@@ -859,16 +956,22 @@ has rank $\omega^* - 1$.
 \item A $\mathbb{Z}$-basis for $L$ is computed in $O(\omega^{*2})$ operations by repeated
   application of the extended Euclidean algorithm to the coefficient vector $(\alpha_i)$.
 \item Applying the LLL algorithm to this basis with the weighted inner product
-  $\langle u, v\rangle = \sum_i p_i^2\, u_i v_i$ yields a reduced basis $\{b_1,\ldots,b_{\omega^*-1}\}$
+\[
+  \langle u, v\rangle = \sum_i p_i^2\, u_i v_i
+\]
+  yields a reduced basis $\{b_1,\ldots,b_{\omega^*-1}\}$
   with Gram--Schmidt vectors $b_1^*,\ldots,b_{\omega^*-1}^*$.
-\item Set $U := v_{\max} \cdot \bigl(\prod_{p\in P}p\bigr)^{1/(\omega^*-1)}$ (the upper bound from
-  Theorem~\ref{thm:ob13b}).  A standard depth-first enumeration over coordinates
+\item Set $U := v_{\max} \cdot \mathrm{med}(m_a,m_b,m_c)$, where $m_g=\min P_g$
+  and empty group minima are interpreted as $\infty$.  This is the
+  unconditional two-prime witness bound constructed in the proof of
+  Theorem~\ref{thm:ob13b}.  A standard depth-first enumeration over coordinates
   $c_{\omega^*-1},\ldots,c_1$ with half-width
   \[
     R_j \;:=\; \left\lceil \frac{U}{\|b_j^*\|_W} \right\rceil
   \]
   at level $j$ (center updated from outer coordinates at each level; see proof)
-  recovers the shortest non-degenerate vector, hence $\mathrm{nd}(a,b)$ exactly.
+  recovers the shortest non-degenerate valuation-coordinate vector, hence
+  $\mathrm{nd}_{\mathrm{val}}(a,b)$ exactly.
   The values $R_j$ are computable after Step~2.
   A uniform bound is $R_j \le 2^{(\omega^*-2)/2} U / p_1$
   where $p_1 = \min P$.
@@ -889,7 +992,8 @@ as its last $\omega^*-1$ columns; step~2 is standard LLL theory.
 The non-degeneracy constraint ($W \ne 0$) eliminates the degenerate sublattice $D \subset L$.
 
 \emph{Step~3}: let $\varphi^* = \sum_j c_j b_j$ be the nd-minimiser.
-By Theorem~\ref{thm:ob13b}, $\|\varphi^*\|_W \le U$.
+The two-prime valuation-coordinate witness gives
+$\|\varphi^*\|_W\le \mathrm{nd}_{\mathrm{val}}(a,b)\le U$.
 Expanding in the Gram--Schmidt basis: $\varphi^* = \sum_j \hat{c}_j b_j^*$ where
 $\hat{c}_j = c_j + \sum_{i>j} c_i \mu_{i,j}$ (the GS coefficient).  Cauchy--Schwarz
 in the weighted inner product gives
@@ -914,27 +1018,28 @@ universal lower bound that holds for all coprime triples, squarefree or not.
 
 \begin{lemma}[Single-prime constraint]\label{lem:single_prime}
   Let $p \in P$ be any prime in $\mathrm{rad}(abc)$.
-  If $\varphi \in F(a,b)$ satisfies $\varphi_q = 0$ for all $q \in P \setminus \{p\}$,
+  If $\varphi \in F_{\mathrm{val}}(a,b)$ satisfies $\varphi_q = 0$ for all $q \in P \setminus \{p\}$,
   then $\varphi_p = 0$.
 \end{lemma}
 
 \begin{proof}
   Each prime lies in exactly one of $P_a$, $P_b$, $P_c$.
-  With $\varphi_q = 0$ for all $q \ne p$, constraint~(C) reduces to
+  With $\varphi_q = 0$ for all $q \ne p$, constraint~\eqref{eq:valuation_constraint} reduces to
   $v_p(\cdot)\,\varphi_p = 0$, where $v_p(\cdot) \ge 1$ since $p \in P$.
   Hence $\varphi_p = 0$.
 \end{proof}
 
-\begin{theorem}[Universal lower bound for $\mathrm{nd}$]\label{thm:nd_lb}
+\begin{theorem}[Universal lower bound for $\mathrm{nd}_{\mathrm{val}}$]\label{thm:nd_lb}
   For every coprime triple $a + b = c$, let $p_1 < p_2$ be the two smallest
-  primes in $P = \mathrm{rad}(abc)$.  Then
+  primes in $P = \mathrm{rad}(abc)$.  Then every non-degenerate vector in
+  $F_{\mathrm{val}}(a,b)$ has norm at least
   \[
-    \mathrm{nd}(a,b) \;\ge\; p_2.
+  p_2.
   \]
 \end{theorem}
 
 \begin{proof}
-  Let $\varphi \in F(a,b)$ with $W(\varphi) \ne 0$.  Suppose $\|\varphi\| < p_2$.
+  Let $\varphi \in F_{\mathrm{val}}(a,b)$ with $W(\varphi) \ne 0$.  Suppose $\|\varphi\| < p_2$.
   For any $p \ge p_2$ in $P$, $p\,|\varphi_p| \le \|\varphi\| < p_2 \le p$ forces
   $|\varphi_p| < 1$, so $\varphi_p = 0$.
   The only prime in $P$ with $p < p_2$ is $p_1$, so $\varphi_q = 0$ for all $q \ne p_1$.
@@ -945,15 +1050,15 @@ universal lower bound that holds for all coprime triples, squarefree or not.
 \begin{remark}
   The bound is tight: for $(a,b,c) = (1,2,3)$ with $P = \{2,3\}$, the vector
   $\varphi_2 = \varphi_3 = 1$ satisfies the constraint ($1 \cdot 1 = 1 \cdot 1$)
-  and has $W = \varphi_2 = 1 \ne 0$, giving $\mathrm{nd}(1,2) = 3 = p_2$.
+  and has $W = \varphi_2 = 1 \ne 0$, giving $\mathrm{nd}_{\mathrm{val}}(1,2) = 3 = p_2$.
 
   For squarefree triples the E$_n$ theorem gives
-  $\mathrm{nd}(a,b) = \mathrm{med}(m_a,m_b,m_c) \ge p_2$ (each group minimum is a
+  $\mathrm{nd}_{\mathrm{val}}(a,b) = \mathrm{med}(m_a,m_b,m_c) \ge p_2$ (each group minimum is a
   prime in $P$), so Theorem~\ref{thm:nd_lb} is subsumed by E$_n$ in that case.
   For non-squarefree triples it is the tightest universal lower bound:
   the within-group construction of Remark~(iv) shows that
-  $\mathrm{nd}(a,b)$ can fall strictly below $\mathrm{med}(m_a,m_b,m_c)$
-  (counterexample $(72,11,83)$: $\mathrm{nd} = 9 > p_2 = 3$),
+  $\mathrm{nd}_{\mathrm{val}}(a,b)$ can fall strictly below $\mathrm{med}(m_a,m_b,m_c)$
+  (counterexample $(72,11,83)$: $\mathrm{nd}_{\mathrm{val}} = 9 > p_2 = 3$),
   so Theorem~\ref{thm:nd_lb} is the right replacement for E$_n$'s lower bound.
 
   Verified on 10 named non-squarefree examples including the within-group
@@ -963,19 +1068,21 @@ universal lower bound that holds for all coprime triples, squarefree or not.
 For triples with $\omega^* = 2$ the lower bound is sharp and the exact value
 is determined by a one-dimensional lattice.
 
-\begin{theorem}[Exact $\mathrm{nd}$ for $\omega^* = 2$]\label{thm:nd_omega2}
+\begin{theorem}[Exact $\mathrm{nd}_{\mathrm{val}}$ for $\omega^* = 2$]\label{thm:nd_omega2}
   Let $a + b = c$ be a coprime triple with $\omega^* = 2$,
   so $P = \{p, q\}$ with $p < q$.  Let $v$ be the $p$-adic valuation
   and $w$ the $q$-adic valuation of their respective factors in $abc$,
   and set $g = \gcd(v, w)$.  Then
   \[
-    \mathrm{nd}(a,b) \;=\; \max\!\Bigl(p\cdot\tfrac{w}{g},\; q\cdot\tfrac{v}{g}\Bigr) \;\ge\; q = p_2.
+  \mathrm{nd}_{\mathrm{val}}(a,b)
+  \;=\; \max\!\Bigl(p\cdot\tfrac{w}{g},\; q\cdot\tfrac{v}{g}\Bigr)
+  \;\ge\; q = p_2.
   \]
-  Equality $\mathrm{nd} = q$ holds if and only if $v = w = 1$.
+  Equality $\mathrm{nd}_{\mathrm{val}} = q$ holds if and only if $v = w = 1$.
 \end{theorem}
 
 \begin{proof}
-  The constraint~(C) is a single equation $v\,\varphi_p = w\,\varphi_q$ (with
+  The constraint~\eqref{eq:valuation_constraint} is a single equation $v\,\varphi_p = w\,\varphi_q$ (with
   appropriate sign depending on the group memberships of $p$ and $q$).
   The solution lattice $L$ has rank $1$; its primitive generator is
   $(\varphi_p, \varphi_q) = (w/g,\; \pm v/g)$.  All solutions are
@@ -984,7 +1091,7 @@ is determined by a one-dimensional lattice.
   The norm at $|k| = 1$ is $\max(p \cdot w/g,\; q \cdot v/g)$, which is the
   minimum since the norm scales as $|k|$.  The inequality $\ge q$ follows from
   $q \cdot v/g \ge q$ (as $v/g \ge 1$) and $p \cdot w/g \ge p \ge 2$.
-  Equality $\mathrm{nd} = q$ requires $p \cdot w/g \le q$ and $q \cdot v/g = q$,
+  Equality $\mathrm{nd}_{\mathrm{val}} = q$ requires $p \cdot w/g \le q$ and $q \cdot v/g = q$,
   i.e.\ $v = g$; combined with $w/g = 1$ from the bound $p \cdot w/g \le q$ this
   gives $v = w = g = 1$.
 \end{proof}
@@ -992,17 +1099,17 @@ is determined by a one-dimensional lattice.
 \begin{corollary}[Explicit $\omega^*=2$ formula]\label{cor:nd_omega2_simp}
   Under the hypotheses of Theorem~\ref{thm:nd_omega2}, with $v = v_{p_1}$ and $w = v_{p_2}$:
   \[
-    \mathrm{nd}(a,b) \;=\; \frac{\max(p_1\cdot v_{p_2},\; p_2\cdot v_{p_1})}{\gcd(v_{p_1},\, v_{p_2})}.
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \frac{\max(p_1\cdot v_{p_2},\; p_2\cdot v_{p_1})}{\gcd(v_{p_1},\, v_{p_2})}.
   \]
-  In particular, $p_2 \le \mathrm{nd}(a,b) \le p_2 \cdot v_{\max}$ with $v_{\max} = \max(v_{p_1}, v_{p_2})$.
+  In particular, $p_2 \le \mathrm{nd}_{\mathrm{val}}(a,b) \le p_2 \cdot v_{\max}$ with $v_{\max} = \max(v_{p_1}, v_{p_2})$.
 \end{corollary}
 
 \begin{proof}
   Substituting $p = p_1$, $q = p_2$, $v = v_{p_1}$, $w = v_{p_2}$, $g = \gcd(v_{p_1},v_{p_2})$
-  in Theorem~\ref{thm:nd_omega2} gives $\mathrm{nd}(a,b) = \max(p_1 w, p_2 v)/g
+  in Theorem~\ref{thm:nd_omega2} gives $\mathrm{nd}_{\mathrm{val}}(a,b) = \max(p_1 w, p_2 v)/g
   = \max(p_1 v_{p_2}, p_2 v_{p_1})/\gcd(v_{p_1},v_{p_2})$ directly.
-  The lower bound $\mathrm{nd} \ge p_2$ follows from $p_2 v/g \ge p_2 \ge p_2$ (as $v \ge g$).
-  The upper bound $\mathrm{nd} \le p_2 v_{\max}$ follows from
+  The lower bound $\mathrm{nd}_{\mathrm{val}} \ge p_2$ follows from $p_2 v/g \ge p_2 \ge p_2$ (as $v \ge g$).
+  The upper bound $\mathrm{nd}_{\mathrm{val}} \le p_2 v_{\max}$ follows from
   $\max(p_1 w, p_2 v)/g \le \max(p_2 w, p_2 v)/g = p_2 \cdot \max(v,w)/g \le p_2 v_{\max}$
   (since $p_1 \le p_2$ and $g \ge 1$).
 \end{proof}
@@ -1011,26 +1118,26 @@ is determined by a one-dimensional lattice.
   Under the hypotheses of Theorem~\ref{thm:nd_omega2}, the set of achievable norms of
   non-degenerate vectors in $F(a,b)$ is exactly
   \[
-    \Sigma(a,b) \;=\; \{k \cdot \mathrm{nd}(a,b) : k \in \mathbb{Z}_{>0}\}.
+    \Sigma(a,b) \;=\; \{k \cdot \mathrm{nd}_{\mathrm{val}}(a,b) : k \in \mathbb{Z}_{>0}\}.
   \]
-  In particular, the successive minima satisfy $\lambda_k = k \cdot \mathrm{nd}(a,b)$
+  In particular, the successive minima satisfy $\lambda_k = k \cdot \mathrm{nd}_{\mathrm{val}}(a,b)$
   for all $k \ge 1$.
 \end{corollary}
 
 \begin{proof}
   The proof of Theorem~\ref{thm:nd_omega2} shows that all non-degenerate lattice vectors
   are $m \cdot (w/g,\, \pm v/g)$ for $m \in \mathbb{Z} \setminus \{0\}$, with norm
-  $|m| \cdot \max(p w/g,\, q v/g) = |m| \cdot \mathrm{nd}(a,b)$.
-  Thus every positive multiple of $\mathrm{nd}$ is achieved (take $m = k$), and no other
+  $|m| \cdot \max(p w/g,\, q v/g) = |m| \cdot \mathrm{nd}_{\mathrm{val}}(a,b)$.
+  Thus every positive multiple of $\mathrm{nd}_{\mathrm{val}}$ is achieved (take $m = k$), and no other
   values occur.
 \end{proof}
 
-\begin{theorem}[Exact $\mathrm{nd}$ for type $(k,1,1)$ non-squarefree triples]\label{thm:nd_k11}
+\begin{theorem}[Exact $\mathrm{nd}_{\mathrm{val}}$ for type $(k,1,1)$ non-squarefree triples]\label{thm:nd_k11}
   Let $a + b = c$ be a coprime triple with $P_a = \{p\}$, $P_b = \{q\}$, $P_c = \{r\}$
   (one prime per group, $p < q < r$) and $v_p(a) = k \ge 1$, $v_q(b) = v_r(c) = 1$.
   Then
   \[
-    \mathrm{nd}(a,b) \;=\; \min(r,\; qk).
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \min(r,\; qk).
   \]
 \end{theorem}
 
@@ -1041,7 +1148,7 @@ is determined by a one-dimensional lattice.
   The vector $\varphi_p = -1$, $\varphi_q = k$, $\varphi_r = 0$ satisfies the constraint
   ($k(-1) + k = 0$), has $W = k - (-1) = k+1 \ne 0$, and norm $\max(p, qk) = qk$
   (as $q > p$ and $k \ge 1$ give $qk \ge q > p$).
-  Hence $\mathrm{nd}(a,b) \le \min(r, qk)$.
+  Hence $\mathrm{nd}_{\mathrm{val}}(a,b) \le \min(r, qk)$.
 
   \textit{Lower bound.}
   Let $\varphi = (\varphi_p, \varphi_q, \varphi_r)$ be a non-degenerate vector.
@@ -1057,8 +1164,8 @@ is determined by a one-dimensional lattice.
 
 \begin{remark}
   For $k = 1$ (squarefree), $\min(r, q) = q$ (as $q < r$), recovering the E$_n$ value.
-  For $k \ge 2$: $\mathrm{nd} = qk$ when $qk < r$
-  (the within-group effective valuation dominates), and $\mathrm{nd} = r$ otherwise.
+  For $k \ge 2$: $\mathrm{nd}_{\mathrm{val}} = qk$ when $qk < r$
+  (the within-group effective valuation dominates), and $\mathrm{nd}_{\mathrm{val}} = r$ otherwise.
   The crossover $qk = r$ gives a transition between two regimes.
 
   \textit{Examples.}  $(4, 3, 7)$: $p=2$, $q=3$, $r=7$, $k=2$.
@@ -1073,11 +1180,11 @@ is determined by a one-dimensional lattice.
 \begin{theorem}[F34: Second successive minimum for type $(k,1,1)$]\label{thm:f34}
   Under the hypotheses of Theorem~\ref{thm:nd_k11}, the second successive minimum is:
   \begin{enumerate}[(i)]
-    \item \textit{Valuation regime} ($qk < r$, $\mathrm{nd} = qk$):
+    \item \textit{Valuation regime} ($qk < r$, $\mathrm{nd}_{\mathrm{val}} = qk$):
       \[
         \lambda_2 = \min(r,\; 2qk).
       \]
-    \item \textit{Pairwise regime} ($qk \ge r$, $\mathrm{nd} = r$):
+    \item \textit{Pairwise regime} ($qk \ge r$, $\mathrm{nd}_{\mathrm{val}} = r$):
       \[
         \lambda_2 = \min\bigl\{ N \in \{2r,\; qk,\; q(k-1)\} : N > r \bigr\}.
       \]
@@ -1098,16 +1205,16 @@ is determined by a one-dimensional lattice.
       Norm $= \max(p, q(k-1), r) = q(k-1)$ (since $q(k-1) > r > p$).
   \end{itemize}
 
-  \textit{Gap (no norm between $\mathrm{nd}$ and $\lambda_2$).}
+  \textit{Gap (no norm between $\mathrm{nd}_{\mathrm{val}}$ and $\lambda_2$).}
   Let $M = \lambda_2$ and suppose $\varphi \ne 0$ is non-degenerate with
-  $\mathrm{nd} < \|\varphi\| < M$.
+  $\mathrm{nd}_{\mathrm{val}} < \|\varphi\| < M$.
 
-  \textit{(i) Valuation regime} ($\mathrm{nd}=qk$, $M=\min(r,2qk)$):
+  \textit{(i) Valuation regime} ($\mathrm{nd}_{\mathrm{val}}=qk$, $M=\min(r,2qk)$):
   $r|\varphi_r| \le \|\varphi\| < M \le r$ forces $\varphi_r = 0$.
-  Then $k\varphi_p + \varphi_q = 0$, so $\|\varphi\| = qk|\varphi_p| \ge qk = \mathrm{nd}$.
+  Then $k\varphi_p + \varphi_q = 0$, so $\|\varphi\| = qk|\varphi_p| \ge qk = \mathrm{nd}_{\mathrm{val}}$.
   Equality gives $|\varphi_p|=1$; the next value is $2qk \ge M$.
 
-  \textit{(ii) Pairwise regime} ($\mathrm{nd}=r$): write $\varphi_p = t$, $\varphi_q = j - kt$
+  \textit{(ii) Pairwise regime} ($\mathrm{nd}_{\mathrm{val}}=r$): write $\varphi_p = t$, $\varphi_q = j - kt$
   for integer $t$, where $\varphi_r = j$ (any integer).
   \begin{itemize}
     \item $|j| = 0$: $\|\varphi\| = qk|t| \ge qk \ge M$.
@@ -1116,9 +1223,9 @@ is determined by a one-dimensional lattice.
       For $\|\varphi\| < M$, we need $q|1-kt| < M$.
       Since $M \le q(k-1)$ (or $M=\min(2r,qk)$ when $q(k-1)\le r$), one checks that
       $|1-kt| \le k-2$ (or $|1-kt| \le k-1$ resp.)\ forces $kt \in [3-k, k-1]$,
-      leaving only $t = 0$ (giving $\|\varphi\|=r=\mathrm{nd}$) as an integer solution.
+      leaving only $t = 0$ (giving $\|\varphi\|=r=\mathrm{nd}_{\mathrm{val}}$) as an integer solution.
   \end{itemize}
-  In every case $\|\varphi\| \ge M$, so no norm lies strictly in $(\mathrm{nd}, M)$.
+  In every case $\|\varphi\| \ge M$, so no norm lies strictly in $(\mathrm{nd}_{\mathrm{val}}, M)$.
 \end{proof}
 
 \begin{remark}
@@ -1130,12 +1237,12 @@ is determined by a one-dimensional lattice.
   (four base primes $p\in\{2,3,5,7\}$, $k \le 9$, adaptive bound), zero failures.
 \end{remark}
 
-\begin{theorem}[Exact $\mathrm{nd}$ for type $(k,m,1)$ non-squarefree triples]\label{thm:nd_km1}
+\begin{theorem}[Exact $\mathrm{nd}_{\mathrm{val}}$ for type $(k,m,1)$ non-squarefree triples]\label{thm:nd_km1}
   Let $a + b = c$ be a coprime triple with $P_a = \{p\}$, $P_b = \{q\}$, $P_c = \{r\}$
   and $v_p(a) = k \ge 1$, $v_q(b) = m \ge 1$, $v_r(c) = 1$, $p < q < r$.
   Let $g = \gcd(k, m)$.  Then
   \[
-    \mathrm{nd}(a,b) \;=\; \min\!\left(r,\;\max\!\left(\frac{pm}{g},\frac{qk}{g}\right)\right).
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \min\!\left(r,\;\max\!\left(\frac{pm}{g},\frac{qk}{g}\right)\right).
   \]
 \end{theorem}
 
@@ -1145,12 +1252,12 @@ is determined by a one-dimensional lattice.
   the constraint ($k \cdot (-m/g) + m \cdot (k/g) = 0$),
   has $W = k/g + m/g = (k+m)/g \ne 0$,
   and norm $\max(pm/g,\, qk/g)$.
-  Hence $\mathrm{nd}(a,b) \le \max(pm/g, qk/g)$.
+  Hence $\mathrm{nd}_{\mathrm{val}}(a,b) \le \max(pm/g, qk/g)$.
   When $\max(pm/g, qk/g) \le r$ this gives the desired upper bound
-  $\mathrm{nd}(a,b) \le \min(r, \max(pm/g, qk/g))$.
+  $\mathrm{nd}_{\mathrm{val}}(a,b) \le \min(r, \max(pm/g, qk/g))$.
   When $\max(pm/g, qk/g) > r$ (pairwise regime, which forces $m=1$ for actual
   triples $a = p^k$, $b = q$, $c = p^k + q$ prime), the upper bound
-  $\mathrm{nd}(a,b) \le r$ follows from
+  $\mathrm{nd}_{\mathrm{val}}(a,b) \le r$ follows from
   Theorem~\ref{thm:nd_k11} (the vector $\varphi_p = 0$, $\varphi_q = 1$, $\varphi_r = 1$
   has norm $r$ when $m = 1$).
 
@@ -1164,16 +1271,16 @@ is determined by a one-dimensional lattice.
   \textit{Lower bound — $\varphi_r \ne 0$ case.}
   Then $r|\varphi_r| \ge r$, so $\|\varphi\| \ge r$.
 
-  Combining both cases, $\mathrm{nd}(a,b) \ge \min(r,\, \max(pm/g, qk/g))$.
+  Combining both cases, $\mathrm{nd}_{\mathrm{val}}(a,b) \ge \min(r,\, \max(pm/g, qk/g))$.
 \end{proof}
 
 \begin{remark}
   Theorem~\ref{thm:nd_k11} is the special case $m = 1$ (so $g = 1$,
   $\max(p, qk) = qk$ since $qk > p$ for $k \ge 1$, $q > p$).
   When $k = m$ (equal valuations), $g = k$ and
-  $\max(p, q) = q$, giving $\mathrm{nd} = q = p_2$:
+  $\max(p, q) = q$, giving $\mathrm{nd}_{\mathrm{val}} = q = p_2$:
   equal valuations always realise the lower bound.
-  When $k = m = 1$ (squarefree), $\mathrm{nd} = q$, recovering E$_n$.
+  When $k = m = 1$ (squarefree), $\mathrm{nd}_{\mathrm{val}} = q$, recovering E$_n$.
 \end{remark}
 
 \begin{corollary}[Valuation regime is independent of $n$]\label{cor:nd_kmn_val}
@@ -1182,7 +1289,7 @@ is determined by a one-dimensional lattice.
   $N_0 = \max(pm/g,\, qk/g)$.
   If $N_0 \le r$ (valuation regime), then
   \[
-    \mathrm{nd}(a,b) \;=\; N_0 \;=\; \max\!\left(\frac{pm}{g},\;\frac{qk}{g}\right),
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; N_0 \;=\; \max\!\left(\frac{pm}{g},\;\frac{qk}{g}\right),
   \]
   \emph{regardless of the exponent $n = v_r(c)$}.
 \end{corollary}
@@ -1214,7 +1321,7 @@ is determined by a one-dimensional lattice.
   \textit{Upper bound.}
   The vector $\varphi_p = -2m/g$, $\varphi_q = 2k/g$, $\varphi_r = 0$ lies in the
   lattice ($k(-2m/g) + m(2k/g) = 0$), has $W = 2k/g + 2m/g = 2(k+m)/g \ne 0$,
-  and achieves norm $2N_0 > N_0 = \mathrm{nd}(a,b)$.
+  and achieves norm $2N_0 > N_0 = \mathrm{nd}_{\mathrm{val}}(a,b)$.
   When $g = 1$ and $r \le 2N_0$: the minimal Bezout solution $(k_0, m_0)$ of
   $kk_0 + mm_0 = 1$ satisfies $|k_0| \le m/2$ and $|m_0| \le k/2$, so
   $p|k_0| \le N_0/2 < r$ and $q|m_0| \le N_0/2 < r$; thus the vector
@@ -1260,7 +1367,7 @@ is determined by a one-dimensional lattice.
   $(\varphi_{p_a}, \varphi_{p_b}, \varphi_{p_c}) = (-1, 2, 1)$
   satisfies $1 \cdot (-1) + 3 \cdot 2 = 5 \cdot 1$, has $W = 3 \ne 0$,
   and achieves norm $\max(5, 6, 2) = 6$.
-  Script T70 verifies $\mathrm{nd}(5, 27) = 6$ by exhaustive search.
+  Script T70 verifies $\mathrm{nd}_{\mathrm{val}}(5, 27) = 6$ by exhaustive search.
   In such cases the exact nd is computed by the LLL algorithm of
   Theorem~\ref{thm:ob13c}.
 \end{remark}
@@ -1284,18 +1391,18 @@ is determined by a one-dimensional lattice.
 
   In the pairwise regime $N > p_L$:
   \begin{enumerate}
-    \item[(i)] $\mathrm{nd}(a,b) \ge p_L$ (lower bound, since
+    \item[(i)] $\mathrm{nd}_{\mathrm{val}}(a,b) \ge p_L$ (lower bound, since
       $\varphi_{p_L}=0$ gives norm $\ge N > p_L$ and
       $\varphi_{p_L}\ne 0$ gives norm $\ge p_L$);
-    \item[(ii)] $\mathrm{nd}(a,b) = p_L$ if and only if $B \le p_L$;
-    \item[(iii)] $\mathrm{nd}(a,b) = \min(N,\, B)$ when $B > p_L$
+    \item[(ii)] $\mathrm{nd}_{\mathrm{val}}(a,b) = p_L$ if and only if $B \le p_L$;
+    \item[(iii)] $\mathrm{nd}_{\mathrm{val}}(a,b) = \min(N,\, B)$ when $B > p_L$
       (the exact value is either the pure-branch norm $N$
       or the Bezout-family minimum $B$, whichever is smaller).
   \end{enumerate}
   In particular, the \emph{unified exact formula} for all one-prime-per-group
   triples (both regimes) is
   \[
-    \mathrm{nd}(a,b) \;=\; \min\!\bigl(N,\; \max(p_L,\, B)\bigr).
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \min\!\bigl(N,\; \max(p_L,\, B)\bigr).
   \]
 \end{theorem}
 
@@ -1305,15 +1412,15 @@ is determined by a one-dimensional lattice.
 
   For (ii): if $B \le p_L$, the Bezout witness $\varphi_{p_L}=\pm 1$ with the
   optimal partner achieves norm $\max(p_L, B) = p_L$.
-  Conversely, if $\mathrm{nd}=p_L$, then a minimising vector $\varphi$ has norm $p_L$,
+  Conversely, if $\mathrm{nd}_{\mathrm{val}}=p_L$, then a minimising vector $\varphi$ has norm $p_L$,
   forcing $|\varphi_{p_L}| \le 1$; the $\varphi_{p_L}=0$ case gives norm $\ge N > p_L$,
   so $|\varphi_{p_L}|=1$ and that vector is a Bezout witness with
   max other-prime norm $\le p_L$, i.e.\ $B \le p_L$.
 
-  For (iii): $\mathrm{nd} = \min(\text{norm from }\varphi_{p_L}=0, \text{ norm from }
+  For (iii): $\mathrm{nd}_{\mathrm{val}} = \min(\text{norm from }\varphi_{p_L}=0, \text{ norm from }
   |\varphi_{p_L}|=1)$ since $|\varphi_{p_L}|\ge 2$ gives norm $\ge 2p_L > \min(N,B)$.
   The first gives $N$ and the second gives $\max(p_L,B)=B$ (since $B>p_L$),
-  so $\mathrm{nd} = \min(N,B)$.  The unified formula $\min(N,\max(p_L,B))$ covers
+  so $\mathrm{nd}_{\mathrm{val}} = \min(N,B)$.  The unified formula $\min(N,\max(p_L,B))$ covers
   both sub-cases and the valuation regime ($N \le p_L$, where it reduces to $N$).
 \end{proof}
 
@@ -1365,7 +1472,7 @@ is determined by a one-dimensional lattice.
   Set $g = \gcd(k, m)$ where $k = v_p(a)$, $m = v_q(b)$.
   Then
   \[
-    \mathrm{nd}(a,b) \;=\; \min\!\left(r_1,\; \max\!\left(\frac{pm}{g},\;\frac{qk}{g}\right)\right).
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \min\!\left(r_1,\; \max\!\left(\frac{pm}{g},\;\frac{qk}{g}\right)\right).
   \]
   In particular, the formula depends on $c$ only through $r_1 = \min P_c$:
   the higher primes in $P_c$ and their valuations are irrelevant.
@@ -1379,16 +1486,21 @@ is determined by a one-dimensional lattice.
   (identical to the $\varphi_r=0$ case in Theorem~\ref{thm:nd_km1}).
   If at least one coordinate $\varphi_r$ with $r \in P_c$ is nonzero, then
   $r|\varphi_r| \ge r \ge r_1$.
-  Hence $\mathrm{nd}(a,b) \ge \min(r_1, N_0)$.
+  Hence $\mathrm{nd}_{\mathrm{val}}(a,b) \ge \min(r_1, N_0)$.
 
   \textit{Upper bound.}
   The $P_c$-zero witness (from Theorem~\ref{thm:nd_km1}) achieves norm $N_0$.
-  The pairwise-regime bound $\mathrm{nd} \le r_1$ follows from
+  The pairwise-regime bound $\mathrm{nd}_{\mathrm{val}} \le r_1$ follows from
   Theorem~\ref{thm:nd_km1} applied to the sub-triple $(a, b, r_1^{v_{r_1}(c)})$
   (which has $P_c = \{r_1\}$, the same lower bound, and the same $N_0$).
 \end{proof}
 
-\begin{theorem}[Exact $\mathrm{nd}$ for $\omega^*=4$ with two $c$-group primes]\label{thm:nd_omega4_two_c}
+The next group of higher-dimensional type formulas has a common proof boundary:
+the displayed witnesses and the cases with a zero coordinate are proved, but the
+all-nonzero case has only finite verification.  They are therefore printed as
+candidate formulas rather than theorems.
+
+\begin{candidate}[Exact $\mathrm{nd}_{\mathrm{val}}$ for $\omega^*=4$ with two $c$-group primes]\label{thm:nd_omega4_two_c}
   Let $a + b = c$ be coprime with $P_a = \{p\}$, $P_b = \{q\}$, and
   $P_c = \{r, s\}$ (all four primes distinct), with
   $k = v_p(a)$, $m = v_q(b)$, $j = v_r(c)$, $n = v_s(c)$.
@@ -1400,7 +1512,7 @@ is determined by a one-dimensional lattice.
   \]
   Then
   \begin{align*}
-    \mathrm{nd}(a,b) \;=\; \min\!\Bigl(
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \min\!\Bigl(
       &\mathrm{nd}_{3}(p^k, q^m, r^j),\quad
        \mathrm{nd}_{3}(p^k, q^m, s^n),\\
       &\max(q,\, B_m),\quad
@@ -1409,9 +1521,9 @@ is determined by a one-dimensional lattice.
   \end{align*}
   where $\mathrm{nd}_{3}(\cdot)$ denotes the one-prime-per-group formula from
   Theorem~\ref{thm:nd_pairwise_bezout}.
-\end{theorem}
+\end{candidate}
 
-\begin{proof}
+\begin{proof}[Evidence]
   \textit{Upper bound.}
   Each branch gives an explicit non-degenerate witness:
   \begin{itemize}
@@ -1441,50 +1553,50 @@ is determined by a one-dimensional lattice.
 \end{proof}
 
 \begin{remark}
-  Script T74 verifies Theorem~\ref{thm:nd_omega4_two_c} on all $431$ such triples
+  Script T74 verifies Candidate Formula~\ref{thm:nd_omega4_two_c} on all $431$ such triples
   in $[1,120)$ (initial run: $262$ triples in $[1,80)$): $0$ failures in both ranges.
   The $\varphi_q=0$ branch is the minimum in $25$ cases
-  (e.g.\ $(37, 71)$: $p=37$, $q=71$, $c = 2^2 \cdot 3^3$, $\mathrm{nd}=37 = \max(37, B_1=3)$);
+  (e.g.\ $(37, 71)$: $p=37$, $q=71$, $c = 2^2 \cdot 3^3$, $\mathrm{nd}_{\mathrm{val}}=37 = \max(37, B_1=3)$);
   the $\varphi_p=0$ branch wins in $5$ cases.
   The two $\varphi_{c\text{-prime}}=0$ branches suffice in $223/262$ cases.
 \end{remark}
 
-\begin{theorem}[Exact $\mathrm{nd}$ for type $(2,1,1)$ triples]\label{thm:nd_type211}
+\begin{candidate}[Exact $\mathrm{nd}_{\mathrm{val}}$ for type $(2,1,1)$ triples]\label{thm:nd_type211}
   Let $a + b = c$ be coprime with $P_a = \{p, q\}$ ($p < q$, exponents
   $k_1 = v_p(a)$, $k_2 = v_q(a)$), $P_b = \{r\}$ (exponent $m$), $P_c = \{s\}$
   (exponent $n$), all four primes distinct.  Define the
-  \emph{$P_a$–$P_b$ interaction norm}
+  \emph{$P_a$--$P_b$ interaction norm}
   \[
     N_{s=0} \;:=\; \min\bigl\{\max(p|\varphi_p|,\,q|\varphi_q|,\,r|\varphi_r|) :
       k_1\varphi_p + k_2\varphi_q + m\varphi_r = 0,\;
       \varphi_r \ne \varphi_p + \varphi_q\bigr\}
   \]
   (zeroing the $P_c$-coordinate; subsumes the within-group norm and the two
-  $P_a$--$P_b$ pairwise norms), and the \emph{$P_a$–$P_c$ interaction norm}
+  $P_a$--$P_b$ pairwise norms), and the \emph{$P_a$--$P_c$ interaction norm}
   \[
     N_{r=0} \;:=\; \min\bigl\{\max(p|\varphi_p|,\,q|\varphi_q|,\,s|\varphi_s|) :
       k_1\varphi_p + k_2\varphi_q = n\varphi_s,\;\varphi_s \ne 0,\;
       \varphi_p + \varphi_q \ne 0\bigr\}
   \]
   (zeroing $P_b$; subsumes the two $P_a$--$P_c$ pairwise norms).
-  Let $\mathrm{nd}_3(p^{k_1}, r^m, s^n)$ and $\mathrm{nd}_3(q^{k_2}, r^m, s^n)$ denote
-  the exact $\mathrm{nd}$ values for the $\omega^*=3$ sub-problems at primes $(p,r,s)$
+  Let $\mathrm{nd}_{3}(p^{k_1}, r^m, s^n)$ and $\mathrm{nd}_{3}(q^{k_2}, r^m, s^n)$ denote
+  the exact $\mathrm{nd}_{\mathrm{val}}$ values for the $\omega^*=3$ sub-problems at primes $(p,r,s)$
   and $(q,r,s)$ with exponent vectors $(k_1,m,n)$ and $(k_2,m,n)$ (computed via
   Theorem~\ref{thm:nd_pairwise_bezout}; each subsumes the corresponding pairwise
   norms and the $P_b$--$P_c$ pairwise norm).  Then
   \[
-    \mathrm{nd}(a,b) \;=\; \min\!\Bigl(
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \min\!\Bigl(
       N_{s=0},\;\; N_{r=0},\;\;
-      \mathrm{nd}_3(p^{k_1},r^m,s^n),\;\;
-      \mathrm{nd}_3(q^{k_2},r^m,s^n)
+      \mathrm{nd}_{3}(p^{k_1},r^m,s^n),\;\;
+      \mathrm{nd}_{3}(q^{k_2},r^m,s^n)
     \Bigr).
   \]
-\end{theorem}
+\end{candidate}
 
-\begin{proof}
+\begin{proof}[Evidence]
   \textit{Upper bound.}  Each branch provides a constructive non-degenerate
   witness: $N_{s=0}$ and $N_{r=0}$ use a Bezout construction on the
-  $P_a$-sub-lattice (analogous to Theorem~\ref{thm:nd_omega4_two_c}); the
+  $P_a$-sub-lattice (analogous to Candidate Formula~\ref{thm:nd_omega4_two_c}); the
   $\omega^*=3$ branches use Theorem~\ref{thm:nd_pairwise_bezout} directly.
 
   \textit{Lower bound.}
@@ -1495,8 +1607,8 @@ is determined by a one-dimensional lattice.
     \item $\varphi_s = 0$: norm $\ge N_{s=0}$ by definition.
     \item $\varphi_r = 0$, $\varphi_s \ne 0$: norm $\ge N_{r=0}$ by definition.
     \item $\varphi_q = 0$: $\varphi$ lies in the $\omega^*=3$ sub-lattice for
-      $(p^{k_1},r^m,s^n)$, so norm $\ge \mathrm{nd}_3(p^{k_1},r^m,s^n)$.
-    \item $\varphi_p = 0$: analogously norm $\ge \mathrm{nd}_3(q^{k_2},r^m,s^n)$.
+      $(p^{k_1},r^m,s^n)$, so norm $\ge \mathrm{nd}_{3}(p^{k_1},r^m,s^n)$.
+    \item $\varphi_p = 0$: analogously norm $\ge \mathrm{nd}_{3}(q^{k_2},r^m,s^n)$.
     \item All four coordinates non-zero: verified computationally (script T77,
       $672$ triples in $[4,150)\times[1,150)$, $0$ failures).
   \end{itemize}
@@ -1513,64 +1625,64 @@ is determined by a one-dimensional lattice.
   remaining two pairwise norms for its $P_a$-prime.
   Script T77 ($672$ triples, $0$ failures) confirms that no all-nonzero vector
   can improve on this minimum: $N_{s=0}$ is the minimum in $582$ cases ($87\%$),
-  $\mathrm{nd}_3(p^{k_1},r^m,s^n)$ in $378$, $N_{r=0}$ in $70$,
-  $\mathrm{nd}_3(q^{k_2},r^m,s^n)$ in $172$.
+  $\mathrm{nd}_{3}(p^{k_1},r^m,s^n)$ in $378$, $N_{r=0}$ in $70$,
+  $\mathrm{nd}_{3}(q^{k_2},r^m,s^n)$ in $172$.
 \end{remark}
 
-\begin{theorem}[Exact $\mathrm{nd}$ for type $(1,2,1)$ triples]\label{thm:nd_type121}
+\begin{candidate}[Exact $\mathrm{nd}_{\mathrm{val}}$ for type $(1,2,1)$ triples]\label{thm:nd_type121}
   Let $a + b = c$ be coprime with $P_a = \{p\}$ (exponent $k$),
   $P_b = \{q, r\}$ ($q < r$, exponents $j = v_q(b)$, $m = v_r(b)$),
   $P_c = \{s\}$ (exponent $n$), all four primes distinct.  Define the
-  \emph{$P_a$–$P_b$ interaction norm}
+  \emph{$P_a$--$P_b$ interaction norm}
   \[
     N_{s=0} \;:=\; \min\bigl\{\max(p|\varphi_p|,\,q|\varphi_q|,\,r|\varphi_r|) :
       k\varphi_p + j\varphi_q + m\varphi_r = 0,\;
       (\varphi_q+\varphi_r) \ne \varphi_p\bigr\}
   \]
   (zeroing the $P_c$-coordinate; subsumes the within-group $P_b$ norm and the two
-  $P_a$--$P_b$ pairwise norms), and the \emph{$P_b$–$P_c$ interaction norm}
+  $P_a$--$P_b$ pairwise norms), and the \emph{$P_b$--$P_c$ interaction norm}
   \[
     N_{p=0} \;:=\; \min\bigl\{\max(q|\varphi_q|,\,r|\varphi_r|,\,s|\varphi_s|) :
       j\varphi_q + m\varphi_r = n\varphi_s,\;
       \varphi_q + \varphi_r \ne 0\bigr\}
   \]
   (zeroing $P_a$; subsumes the two $P_b$--$P_c$ pairwise norms).
-  Let $\mathrm{nd}_3(p^k,q^j,s^n)$ and $\mathrm{nd}_3(p^k,r^m,s^n)$ denote the
+  Let $\mathrm{nd}_{3}(p^k,q^j,s^n)$ and $\mathrm{nd}_{3}(p^k,r^m,s^n)$ denote the
   $\omega^*=3$ sub-problems (Theorem~\ref{thm:nd_pairwise_bezout}; each subsumes the
   $P_a$--$P_c$ pairwise norm and the corresponding $P_b$--$P_c$ norm).  Then
   \[
-    \mathrm{nd}(a,b) \;=\; \min\!\Bigl(
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \min\!\Bigl(
       N_{s=0},\;\; N_{p=0},\;\;
-      \mathrm{nd}_3(p^k,q^j,s^n),\;\;
-      \mathrm{nd}_3(p^k,r^m,s^n)
+      \mathrm{nd}_{3}(p^k,q^j,s^n),\;\;
+      \mathrm{nd}_{3}(p^k,r^m,s^n)
     \Bigr).
   \]
-\end{theorem}
+\end{candidate}
 
-\begin{proof}
+\begin{proof}[Evidence]
   The Wronskian is $W = (\varphi_q + \varphi_r) - \varphi_p$ and the constraint
   is $k\varphi_p + j\varphi_q + m\varphi_r = n\varphi_s$.  This has the same
-  algebraic structure as Theorem~\ref{thm:nd_type211} with $P_a$ and $P_b$
+  algebraic structure as Candidate Formula~\ref{thm:nd_type211} with $P_a$ and $P_b$
   exchanged: relabelling $p \leftrightarrow r$, $k_1 \leftrightarrow m$,
   $k_2 \leftrightarrow j$, and identifying the single-prime group as $P_a = \{p\}$
-  maps the four-branch formula of Theorem~\ref{thm:nd_type211} verbatim to the
+  maps the four-branch formula of Candidate Formula~\ref{thm:nd_type211} verbatim to the
   formula above.  The subsumption claims are verified by setting one or two
   coordinates to zero in the respective minimisation problems.
 \end{proof}
 
 \begin{remark}
-  Script T78\_formula verifies Theorem~\ref{thm:nd_type121} on all $1\,043$ type~$(1,2,1)$
+  Script T78\_formula verifies Candidate Formula~\ref{thm:nd_type121} on all $1\,043$ type~$(1,2,1)$
   triples with $a, b \le 200$: $0$ failures.
   Branch win counts (ties included): $N_{s=0}$ in $935$ cases ($90\%$),
-  $\mathrm{nd}_3(p^k,q^j,s^n)$ in $567$, $N_{p=0}$ in $395$,
-  $\mathrm{nd}_3(p^k,r^m,s^n)$ in $265$.
+  $\mathrm{nd}_{3}(p^k,q^j,s^n)$ in $567$, $N_{p=0}$ in $395$,
+  $\mathrm{nd}_{3}(p^k,r^m,s^n)$ in $265$.
   One spot-check case ($a = 2^7$, $b = 3 \cdot 23$, $c = 197$)
-  requires $|\varphi_3| = 7$ in the optimal witness via $N_{s=0}$ ($\mathrm{nd}=21$).
+  requires $|\varphi_3| = 7$ in the optimal witness via $N_{s=0}$ ($\mathrm{nd}_{\mathrm{val}}=21$).
 \end{remark}
 
 The same recursive strategy extends to $\omega=5$.
 
-\begin{theorem}[Exact $\mathrm{nd}$ for type $(2,2,1)$ triples]\label{thm:nd_type221}
+\begin{candidate}[Exact $\mathrm{nd}_{\mathrm{val}}$ for type $(2,2,1)$ triples]\label{thm:nd_type221}
   Let $a + b = c$ be coprime with $P_a = \{p, q\}$ (exponents $k_1, k_2$),
   $P_b = \{r, s\}$ (exponents $j_1, j_2$), $P_c = \{u\}$ (exponent $n$),
   five distinct primes.  Define the \emph{$P_a$--$P_b$ interaction norm}
@@ -1583,16 +1695,16 @@ The same recursive strategy extends to $\omega=5$.
       \end{aligned}
     \Bigr\}.
   \]
-  Let $B_{\varphi_q=0}$ (resp.~$B_{\varphi_p=0}$) be the exact $\mathrm{nd}$ of the
+  Let $B_{\varphi_q=0}$ (resp.~$B_{\varphi_p=0}$) be the exact $\mathrm{nd}_{\mathrm{val}}$ of the
   type-$(1,2,1)$ sub-problem on primes $(p,r,s,u)$ with exponents $(k_1,j_1,j_2,n)$
   (resp.~$(q,r,s,u)$ with $(k_2,j_1,j_2,n)$), computed via
-  Theorem~\ref{thm:nd_type121}.
-  Let $B_{\varphi_s=0}$ (resp.~$B_{\varphi_r=0}$) be the exact $\mathrm{nd}$ of the
+  Candidate Formula~\ref{thm:nd_type121}.
+  Let $B_{\varphi_s=0}$ (resp.~$B_{\varphi_r=0}$) be the exact $\mathrm{nd}_{\mathrm{val}}$ of the
   type-$(2,1,1)$ sub-problem on primes $(p,q,r,u)$ with exponents $(k_1,k_2,j_1,n)$
   (resp.~$(p,q,s,u)$ with $(k_1,k_2,j_2,n)$), computed via
-  Theorem~\ref{thm:nd_type211}.  Then
+  Candidate Formula~\ref{thm:nd_type211}.  Then
   \[
-    \mathrm{nd}(a,b) \;=\; \min\!\bigl(
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \min\!\bigl(
       N_{u=0},\;\;
       B_{\varphi_q=0},\;\;
       B_{\varphi_p=0},\;\;
@@ -1600,13 +1712,13 @@ The same recursive strategy extends to $\omega=5$.
       B_{\varphi_r=0}
     \bigr).
   \]
-\end{theorem}
+\end{candidate}
 
-\begin{proof}
+\begin{proof}[Evidence]
   \textit{Upper bound.}  Each branch supplies a constructive non-degenerate witness:
   $N_{u=0}$ by Bezout search on the four-prime homogeneous lattice;
-  $B_{\varphi_q=0}$, $B_{\varphi_p=0}$ by Theorem~\ref{thm:nd_type121};
-  $B_{\varphi_s=0}$, $B_{\varphi_r=0}$ by Theorem~\ref{thm:nd_type211}.
+  $B_{\varphi_q=0}$, $B_{\varphi_p=0}$ by Candidate Formula~\ref{thm:nd_type121};
+  $B_{\varphi_s=0}$, $B_{\varphi_r=0}$ by Candidate Formula~\ref{thm:nd_type211}.
 
   \textit{Lower bound.}
   Any non-degenerate $\varphi=(\varphi_p,\varphi_q,\varphi_r,\varphi_s,\varphi_u)$
@@ -1635,7 +1747,7 @@ The same recursive strategy extends to $\omega=5$.
   $B_{\varphi_s=0}$ or $B_{\varphi_r=0}$ wins in the remaining $20$ cases.
 \end{remark}
 
-\begin{theorem}[Exact $\mathrm{nd}$ for type $(1,2,2)$ triples]\label{thm:nd_type122}
+\begin{candidate}[Exact $\mathrm{nd}_{\mathrm{val}}$ for type $(1,2,2)$ triples]\label{thm:nd_type122}
   Let $a + b = c$ be coprime with $P_a = \{p\}$ (exponent $k$),
   $P_b = \{q, r\}$ (exponents $j, m$), $P_c = \{s, t\}$ (exponents $j_1, j_2$),
   five distinct primes.  The Wronskian is $W = (\varphi_q + \varphi_r) - \varphi_p$.
@@ -1646,14 +1758,14 @@ The same recursive strategy extends to $\omega=5$.
       j\varphi_q + m\varphi_r - j_1\varphi_s - j_2\varphi_t = 0,\;
       \varphi_q + \varphi_r \ne 0\bigr\}.
   \end{align*}
-  Let $B_{\varphi_r=0}$ (resp.~$B_{\varphi_q=0}$) be the exact $\mathrm{nd}$ of the
+  Let $B_{\varphi_r=0}$ (resp.~$B_{\varphi_q=0}$) be the exact $\mathrm{nd}_{\mathrm{val}}$ of the
   type-$(1,1,2)$ sub-problem on primes $(p,q,s,t)$ with exponents $(k,j,j_1,j_2)$
-  (resp.\ $(p,r,s,t)$ with $(k,m,j_1,j_2)$), via Theorem~\ref{thm:nd_omega4_two_c}.
-  Let $B_{\varphi_t=0}$ (resp.~$B_{\varphi_s=0}$) be the exact $\mathrm{nd}$ of the
+  (resp.\ $(p,r,s,t)$ with $(k,m,j_1,j_2)$), via Candidate Formula~\ref{thm:nd_omega4_two_c}.
+  Let $B_{\varphi_t=0}$ (resp.~$B_{\varphi_s=0}$) be the exact $\mathrm{nd}_{\mathrm{val}}$ of the
   type-$(1,2,1)$ sub-problem on primes $(p,q,r,s)$ with exponents $(k,j,m,j_1)$
-  (resp.\ $(p,q,r,t)$ with $(k,j,m,j_2)$), via Theorem~\ref{thm:nd_type121}.  Then
+  (resp.\ $(p,q,r,t)$ with $(k,j,m,j_2)$), via Candidate Formula~\ref{thm:nd_type121}.  Then
   \[
-    \mathrm{nd}(a,b) \;=\; \min\!\bigl(
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \min\!\bigl(
       N_{p=0},\;\;
       B_{\varphi_r=0},\;\;
       B_{\varphi_q=0},\;\;
@@ -1661,13 +1773,13 @@ The same recursive strategy extends to $\omega=5$.
       B_{\varphi_s=0}
     \bigr).
   \]
-\end{theorem}
+\end{candidate}
 
-\begin{proof}
+\begin{proof}[Evidence]
   \textit{Upper bound.}  Each branch supplies a constructive witness:
   $N_{p=0}$ by Bezout search on the four-prime homogeneous lattice;
-  $B_{\varphi_r=0}$, $B_{\varphi_q=0}$ by Theorem~\ref{thm:nd_omega4_two_c};
-  $B_{\varphi_t=0}$, $B_{\varphi_s=0}$ by Theorem~\ref{thm:nd_type121}.
+  $B_{\varphi_r=0}$, $B_{\varphi_q=0}$ by Candidate Formula~\ref{thm:nd_omega4_two_c};
+  $B_{\varphi_t=0}$, $B_{\varphi_s=0}$ by Candidate Formula~\ref{thm:nd_type121}.
 
   \textit{Lower bound.}  Any non-degenerate
   $\varphi = (\varphi_p, \varphi_q, \varphi_r, \varphi_s, \varphi_t)$
@@ -1692,14 +1804,14 @@ The same recursive strategy extends to $\omega=5$.
   $B_{\varphi_q=0}$ in $52$ ($5.2\%$), $B_{\varphi_t=0}$ in $3$ ($0.3\%$).
 \end{remark}
 
-\begin{corollary}[Exact $\mathrm{nd}$ for type $(2,1,2)$ triples]\label{cor:nd_type212}
+\begin{candidate}[Exact $\mathrm{nd}_{\mathrm{val}}$ for type $(2,1,2)$ triples]\label{cor:nd_type212}
   Let $a + b = c$ be coprime with $P_a = \{p, q\}$ (exponents $k_1, k_2$),
   $P_b = \{r\}$ (exponent $m$), $P_c = \{s, t\}$ (exponents $j_1, j_2$).
   By relabelling $a \leftrightarrow b$ (so $P_a \leftrightarrow P_b$), this is
   equivalent to a type-$(1,2,2)$ triple with the same five primes.
-  Applying Theorem~\ref{thm:nd_type122} with the label swap gives
+  Applying Candidate Formula~\ref{thm:nd_type122} with the label swap gives
   \[
-    \mathrm{nd}(a,b) \;=\; \min\!\bigl(
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \min\!\bigl(
       N_{r=0},\;\;
       B_{\varphi_q=0},\;\;
       B_{\varphi_p=0},\;\;
@@ -1709,11 +1821,11 @@ The same recursive strategy extends to $\omega=5$.
   \]
   where $N_{r=0}$ is the $P_a$--$P_c$ homogeneous interaction (zeroing $\varphi_r$),
   $B_{\varphi_q=0}$ and $B_{\varphi_p=0}$ are type-$(1,1,2)$ sub-problems via
-  Theorem~\ref{thm:nd_omega4_two_c}, and $B_{\varphi_t=0}$, $B_{\varphi_s=0}$
-  are type-$(2,1,1)$ sub-problems via Theorem~\ref{thm:nd_type211}.
-\end{corollary}
+  Candidate Formula~\ref{thm:nd_omega4_two_c}, and $B_{\varphi_t=0}$, $B_{\varphi_s=0}$
+  are type-$(2,1,1)$ sub-problems via Candidate Formula~\ref{thm:nd_type211}.
+\end{candidate}
 
-\begin{theorem}[Exact $\mathrm{nd}$ for type $(1,1,3)$ triples]\label{thm:nd_type113}
+\begin{candidate}[Exact $\mathrm{nd}_{\mathrm{val}}$ for type $(1,1,3)$ triples]\label{thm:nd_type113}
   Let $a + b = c$ be coprime with $P_a = \{p\}$ (exponent $k$),
   $P_b = \{q\}$ (exponent $m$), $P_c = \{r, s, t\}$ (exponents $n_1, n_2, n_3$),
   five distinct primes.  The constraint is $k\varphi_p + m\varphi_q
@@ -1729,21 +1841,21 @@ The same recursive strategy extends to $\omega=5$.
       k\varphi_p = n_1\varphi_r + n_2\varphi_s + n_3\varphi_t,\;\varphi_p \ne 0
     \bigr\}.
   \end{align*}
-  Let $\mathrm{nd}_4(\cdot)$ denote the type-$(1,1,2)$ formula
-  (Theorem~\ref{thm:nd_omega4_two_c}).  Then
+  Let $\mathrm{nd}_{4}(\cdot)$ denote the type-$(1,1,2)$ formula
+  (Candidate Formula~\ref{thm:nd_omega4_two_c}).  Then
   \begin{align*}
-    \mathrm{nd}(a,b) \;=\; \min\!\Bigl(
-      &\mathrm{nd}_4(p^k,q^m,s^{n_2},t^{n_3}),\;\;
-       \mathrm{nd}_4(p^k,q^m,r^{n_1},t^{n_3}),\;\;
-       \mathrm{nd}_4(p^k,q^m,r^{n_1},s^{n_2}),\\
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \min\!\Bigl(
+      &\mathrm{nd}_{4}(p^k,q^m,s^{n_2},t^{n_3}),\;\;
+       \mathrm{nd}_{4}(p^k,q^m,r^{n_1},t^{n_3}),\;\;
+       \mathrm{nd}_{4}(p^k,q^m,r^{n_1},s^{n_2}),\\
       &N_{p=0},\;\; N_{q=0}
     \Bigr).
   \end{align*}
-\end{theorem}
+\end{candidate}
 
-\begin{proof}
-  \textit{Upper bound.}  The three $\mathrm{nd}_4$ branches use
-  Theorem~\ref{thm:nd_omega4_two_c} on the sub-triple obtained by setting
+\begin{proof}[Evidence]
+  \textit{Upper bound.}  The three $\mathrm{nd}_{4}$ branches use
+  Candidate Formula~\ref{thm:nd_omega4_two_c} on the sub-triple obtained by setting
   one $c$-prime coordinate to zero; $N_{p=0}$ takes $\varphi_p = 0$ with
   $W = \varphi_q \ne 0$; $N_{q=0}$ takes $\varphi_q = 0$ with $W = -\varphi_p \ne 0$.
 
@@ -1751,9 +1863,9 @@ The same recursive strategy extends to $\omega=5$.
   Any non-degenerate $\varphi$ satisfies at least one of:
   \begin{itemize}
     \item $\varphi_r = 0$: $\varphi$ lies in the type-$(1,1,2)$ sub-lattice for
-      $(p^k,q^m,s^{n_2}t^{n_3})$, so norm $\ge \mathrm{nd}_4(p^k,q^m,s^{n_2},t^{n_3})$.
-    \item $\varphi_s = 0$: analogously norm $\ge \mathrm{nd}_4(p^k,q^m,r^{n_1},t^{n_3})$.
-    \item $\varphi_t = 0$: analogously norm $\ge \mathrm{nd}_4(p^k,q^m,r^{n_1},s^{n_2})$.
+      $(p^k,q^m,s^{n_2}t^{n_3})$, so norm $\ge \mathrm{nd}_{4}(p^k,q^m,s^{n_2},t^{n_3})$.
+    \item $\varphi_s = 0$: analogously norm $\ge \mathrm{nd}_{4}(p^k,q^m,r^{n_1},t^{n_3})$.
+    \item $\varphi_t = 0$: analogously norm $\ge \mathrm{nd}_{4}(p^k,q^m,r^{n_1},s^{n_2})$.
     \item $\varphi_p = 0$: $W = \varphi_q \ne 0$, so $m\varphi_q
       = n_1\varphi_r + n_2\varphi_s + n_3\varphi_t$ with $\varphi_q \ne 0$,
       hence norm $\ge N_{p=0}$.
@@ -1766,15 +1878,15 @@ The same recursive strategy extends to $\omega=5$.
 \end{proof}
 
 \begin{remark}
-  Script T81 verifies Theorem~\ref{thm:nd_type113} on all $729$ type-$(1,1,3)$
+  Script T81 verifies Candidate Formula~\ref{thm:nd_type113} on all $729$ type-$(1,1,3)$
   triples with $a, b \le 300$, spot-check $60$: $0$ failures.
-  Branch win counts: $\mathrm{nd}_4(\cdot,r^{n_1},s^{n_2})$ (zeroing $\varphi_t$) in
-  $669$ cases ($91.8\%$); $\mathrm{nd}_4(\cdot,r^{n_1},t^{n_3})$ in $32$ ($4.4\%$);
+  Branch win counts: $\mathrm{nd}_{4}(\cdot,r^{n_1},s^{n_2})$ (zeroing $\varphi_t$) in
+  $669$ cases ($91.8\%$); $\mathrm{nd}_{4}(\cdot,r^{n_1},t^{n_3})$ in $32$ ($4.4\%$);
   $N_{q=0}$ in $16$ ($2.2\%$); $N_{p=0}$ in $12$ ($1.6\%$);
-  $\mathrm{nd}_4(\cdot,s^{n_2},t^{n_3})$ in $0$ cases.
+  $\mathrm{nd}_{4}(\cdot,s^{n_2},t^{n_3})$ in $0$ cases.
 \end{remark}
 
-\begin{theorem}[Exact $\mathrm{nd}$ for type $(1,3,1)$ triples]\label{thm:nd_type131}
+\begin{candidate}[Exact $\mathrm{nd}_{\mathrm{val}}$ for type $(1,3,1)$ triples]\label{thm:nd_type131}
   Let $a + b = c$ be coprime with $P_a = \{p\}$ (exponent $k$),
   $P_b = \{q, r, s\}$ (exponents $n_1, n_2, n_3$), $P_c = \{t\}$ (exponent $m$),
   five distinct primes.  The Wronskian is $W = (\varphi_q+\varphi_r+\varphi_s)-\varphi_p$.
@@ -1799,11 +1911,11 @@ The same recursive strategy extends to $\omega=5$.
     \Bigr\}.
   \]
   Let $B_{\varphi_q=0}$ (resp.\ $B_{\varphi_r=0}$, $B_{\varphi_s=0}$) be the exact
-  $\mathrm{nd}$ of the type-$(1,2,1)$ sub-problem on primes $(p,r,s,t)$ with exponents
+  $\mathrm{nd}_{\mathrm{val}}$ of the type-$(1,2,1)$ sub-problem on primes $(p,r,s,t)$ with exponents
   $(k,n_2,n_3,m)$ (resp.\ $(p,q,s,t)$ with $(k,n_1,n_3,m)$; $(p,q,r,t)$ with
-  $(k,n_1,n_2,m)$), computed via Theorem~\ref{thm:nd_type121}.  Then
+  $(k,n_1,n_2,m)$), computed via Candidate Formula~\ref{thm:nd_type121}.  Then
   \[
-    \mathrm{nd}(a,b) \;=\; \min\!\bigl(
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \min\!\bigl(
       N_{t=0},\;\;
       N_{p=0},\;\;
       B_{\varphi_q=0},\;\;
@@ -1811,12 +1923,12 @@ The same recursive strategy extends to $\omega=5$.
       B_{\varphi_s=0}
     \bigr).
   \]
-\end{theorem}
+\end{candidate}
 
-\begin{proof}
+\begin{proof}[Evidence]
   \textit{Upper bound.}  $N_{t=0}$ takes $\varphi_t=0$ with $W\ne 0$;
   $N_{p=0}$ takes $\varphi_p=0$ with $W=\varphi_q+\varphi_r+\varphi_s\ne 0$;
-  each $B_{\varphi_\bullet=0}$ uses Theorem~\ref{thm:nd_type121} on the sub-lattice
+  each $B_{\varphi_\bullet=0}$ uses Candidate Formula~\ref{thm:nd_type121} on the sub-lattice
   obtained by setting one $b$-prime coordinate to zero.
 
   \textit{Lower bound.}
@@ -1835,7 +1947,7 @@ The same recursive strategy extends to $\omega=5$.
 \end{proof}
 
 \begin{remark}
-  Script T82 verifies Theorem~\ref{thm:nd_type131} on all $843$ type-$(1,3,1)$
+  Script T82 verifies Candidate Formula~\ref{thm:nd_type131} on all $843$ type-$(1,3,1)$
   triples with $a, b \le 300$, spot-check $60$: $0$ failures.
   Branch win counts: $N_{t=0}$ in $803$ cases ($95.3\%$); $N_{p=0}$ in $40$
   ($4.7\%$); the three $B_{\varphi_\bullet=0}$ branches in $0$ cases.
@@ -1844,13 +1956,13 @@ The same recursive strategy extends to $\omega=5$.
   triples, $0$ failures).
 \end{remark}
 
-\begin{corollary}[Exact $\mathrm{nd}$ for type $(3,1,1)$ triples]\label{cor:nd_type311}
+\begin{candidate}[Exact $\mathrm{nd}_{\mathrm{val}}$ for type $(3,1,1)$ triples]\label{cor:nd_type311}
   Let $a + b = c$ be coprime with $P_a = \{p, q, r\}$ (exponents $k_1, k_2, k_3$),
   $P_b = \{s\}$ (exponent $m$), $P_c = \{t\}$ (exponent $n$), five distinct primes.
-  The exact $\mathrm{nd}$ formula is obtained from Theorem~\ref{thm:nd_type131} by
+  The exact $\mathrm{nd}_{\mathrm{val}}$ formula is obtained from Candidate Formula~\ref{thm:nd_type131} by
   the $P_a \leftrightarrow P_b$ label swap:
   \[
-    \mathrm{nd}(a,b) \;=\; \min\!\bigl(
+    \mathrm{nd}_{\mathrm{val}}(a,b) \;=\; \min\!\bigl(
       \tilde{N}_{t=0},\;\;
       \tilde{N}_{s=0},\;\;
       \tilde{B}_{\varphi_p=0},\;\;
@@ -1862,19 +1974,25 @@ The same recursive strategy extends to $\omega=5$.
   $W\ne 0$), $\tilde{N}_{s=0}$ is the $P_a$--$P_c$ interaction norm
   (zero $\varphi_s$, $\varphi_p+\varphi_q+\varphi_r\ne 0$), and
   $\tilde{B}_{\varphi_p=0}$, $\tilde{B}_{\varphi_q=0}$, $\tilde{B}_{\varphi_r=0}$
-  are type-$(1,2,1)$ sub-problems via Theorem~\ref{thm:nd_type121}.
-\end{corollary}
+  are type-$(1,2,1)$ sub-problems via Candidate Formula~\ref{thm:nd_type121}.
+\end{candidate}
 
-\begin{proof}
+\begin{proof}[Evidence]
   The constraint for type $(3,1,1)$ is
   $k_1\varphi_p + k_2\varphi_q + k_3\varphi_r + m\varphi_s = n\varphi_t$ with
   $W = \varphi_s - (\varphi_p+\varphi_q+\varphi_r)$.  Under $a \leftrightarrow b$
-  this maps to the type-$(1,3,1)$ setup of Theorem~\ref{thm:nd_type131} with
+  this maps to the type-$(1,3,1)$ setup of Candidate Formula~\ref{thm:nd_type131} with
   $P_a \leftrightarrow P_b$ and $W \to -W$; non-degeneracy is symmetric in sign of $W$,
-  so Theorem~\ref{thm:nd_type131} applies verbatim.
+  so Candidate Formula~\ref{thm:nd_type131} applies verbatim.
 \end{proof}
 
 \subsubsection*{Zero-coordinate minimizer property}
+
+The results in this and the following subsection that are printed as
+\emph{Candidate Formula} are finite-verification formulas: their displayed
+witnesses and branch reductions are proved, but the all-nonzero coordinate
+case has only been checked on the stated finite sample.  They must not be
+used as unconditional theorems.
 
 \begin{theorem}[Squarefree minimizer support]\label{thm:nd_sqfree_support}
   Let $a+b=c$ be a \emph{squarefree} coprime triple ($v_p(abc)=1$ for all $p$)
@@ -1919,29 +2037,34 @@ The same recursive strategy extends to $\omega=5$.
   and all-nonzero minimizers can occur.
 \end{remark}
 
-The individual exact nd formulas (Theorems~\ref{thm:nd_type211}--\ref{cor:nd_type311})
+The individual exact nd formulas (Candidate Formulas~\ref{thm:nd_type211}--\ref{cor:nd_type311})
 share a common structural feature: in every verified case, the minimum non-degenerate
 norm is achieved by a lattice vector with at least one prime coordinate equal to zero.
-We record this as a standalone theorem.
+We record the non-squarefree instances as a finite-verification candidate.
 
-\begin{theorem}[Zero-coordinate minimizer property]\label{thm:nd_zero_coord}
+\begin{candidate}[Zero-coordinate minimizer property]\label{thm:nd_zero_coord}
   Let $a+b=c$ be a coprime triple with $\omega^*$ distinct primes.  Define, for
   each prime $p \in P_a \cup P_b \cup P_c$,
   \[
     B_p \;:=\; \min\bigl\{
-      \|\varphi\|_{\mathrm{nd}} : \varphi \in F(a,b),\; \varphi_p = 0,\;
+      \max_q q|\varphi_q| : \varphi \in F_{\mathrm{val}}(a,b),\; \varphi_p = 0,\;
       W(\varphi) \ne 0
     \bigr\}.
   \]
+  In parts (ii)--(iv), $F(a,b)$ is the valuation-coordinate lattice
+  $F_{\mathrm{val}}(a,b)$ and $\mathrm{nd}$ means $\mathrm{nd}_{\mathrm{val}}$.
   Then:
   \begin{enumerate}[(i)]
     \item For \emph{squarefree} triples of any $\omega^*\ge 3$:
       $\mathrm{nd}(a,b) = \min_{p} B_p$ (proved, Theorem~\ref{thm:nd_sqfree_support}).
-    \item For \emph{non-squarefree} $\omega^* = 4$: $\mathrm{nd}(a,b) = \min_{p} B_p$
-      (proved from Theorems~\ref{thm:nd_type211}, \ref{thm:nd_type121},
-      \ref{thm:nd_omega4_two_c}).
+    \item For \emph{non-squarefree} $\omega^* = 4$:
+      $\mathrm{nd}_{\mathrm{val}}(a,b) = \min_{p} B_p$
+      (supported by Candidate Formulas~\ref{thm:nd_type211},
+      \ref{thm:nd_type121}, and \ref{thm:nd_omega4_two_c}, each with the
+      all-nonzero case verified only on the stated finite sample).
     \item For \emph{non-squarefree} $\omega^* \in \{5, 6\}$:
-      $\mathrm{nd}(a,b) = \min_{p} B_p$.
+      $\mathrm{nd}_{\mathrm{val}}(a,b) = \min_{p} B_p$ on the finite samples
+      described below.
       Both cases use the $p_k$-forcing argument (primes labelled $p_1<\cdots<p_k$,
       $k=\omega^*$): any all-nonzero $\varphi$ with $\|\varphi\|<B_{p_k}$ satisfies
       $p_k|\varphi_{p_k}|\le\|\varphi\|<p_k$, forcing $\varphi_{p_k}=0$.
@@ -1959,24 +2082,25 @@ We record this as a standalone theorem.
       $39$ (2.0\%) via $B_{p_6}\le p_6$ directly
       (T85bis, BB\,=\,8, $0$ violations, $0$ skips).
     \item For \emph{non-squarefree} $\omega^* = 3$: the identity \emph{fails}.
-      The triple $(5,27,32)$ has $\mathrm{nd}=6$ (achieved by $\varphi=(-1,2,1)$,
+      The triple $(5,27,32)$ has $\mathrm{nd}_{\mathrm{val}}=6$
+      (achieved by $\varphi=(-1,2,1)$,
       all coordinates non-zero), while $\min_p B_p = 15$.
   \end{enumerate}
-\end{theorem}
+\end{candidate}
 
-\begin{proof}
+\begin{proof}[Evidence]
   \textit{Part (i).}  Theorem~\ref{thm:nd_sqfree_support}: integrality forces
   $\varphi_p=0$ for all $p > \mathrm{nd} \le m_2$ (second group minimum).
 
-  \textit{Part (ii).}  For type $(2,1,1)$: Theorem~\ref{thm:nd_type211}
+  \textit{Part (ii).}  For type $(2,1,1)$: Candidate Formula~\ref{thm:nd_type211}
   decomposes $\mathrm{nd}$ into four branches each zeroing one prime
   ($N_{s=0}$, $N_{r=0}$, two nd-111 sub-problems with $\varphi_q=0$ or
   $\varphi_p=0$).  Types $(1,2,1)$ and $(1,1,2)$ follow analogously
-  from Theorems~\ref{thm:nd_type121} and~\ref{thm:nd_omega4_two_c}.
+  from Candidate Formulas~\ref{thm:nd_type121} and~\ref{thm:nd_omega4_two_c}.
 
   \textit{Part (iii).}  Label the primes $p_1<\cdots<p_k$ ($k=\omega^*\in\{5,6\}$).
   The \emph{$p_k$-forcing argument} applies uniformly:
-  any all-nonzero $\varphi\in F(a,b)$ with $W(\varphi)\ne 0$
+  any all-nonzero $\varphi\in F_{\mathrm{val}}(a,b)$ with $W(\varphi)\ne 0$
   satisfies $p_k|\varphi_{p_k}|\le\|\varphi\|$; if $\|\varphi\|<B_{p_k}$ then
   $p_k|\varphi_{p_k}|<p_k$, forcing $\varphi_{p_k}=0$ — contradiction.
   Hence nd$(a,b)\ge B_{p_k}$, and equality nd$(a,b)=\min_p B_p$ holds as soon as
@@ -1999,7 +2123,8 @@ We record this as a standalone theorem.
   $P_c=\{2\}$, exponents $1,3,5$.  The vector $\varphi=(-1,2,1)$ satisfies
   the lattice constraint ($1\cdot(-1)+3\cdot2=5\cdot1$), $W=2-(-1)=3\ne 0$,
   and $\|\varphi\|=\max(5,6,2)=6$.  The three zero-coordinate branches give
-  norms $15,25,15$ (computed from nd111 sub-problems), so $\min_p B_p=15>6$.
+  norms $15,25,15$ (computed from the one-prime-per-group base case), so
+  $\min_p B_p=15>6$.
 \end{proof}
 
 \begin{remark}
@@ -2014,10 +2139,12 @@ We record this as a standalone theorem.
 
 \subsubsection*{General recursive nd algorithm}
 
-Theorems~\ref{thm:nd_zero_coord} and the individual exact-nd results combine into
-a complete recursive algorithm for $\mathrm{nd}(a,b)$.
+Candidate Formula~\ref{thm:nd_zero_coord} and the individual exact-nd results
+suggest the following recursion for $\mathrm{nd}(a,b)$; its non-squarefree
+branches concern $\mathrm{nd}_{\mathrm{val}}$ and are finite-verification claims
+outside the squarefree case.
 
-\begin{theorem}[General recursive nd formula]\label{thm:nd_recursive}
+\begin{candidate}[General recursive nd formula]\label{thm:nd_recursive}
   Let $a+b=c$ be a coprime triple with $\omega^*\ge 3$ distinct primes partitioned
   as $P_a\cup P_b\cup P_c$.  For each prime $p \in P_a\cup P_b\cup P_c$, define
   the \emph{$p$-branch} $B_p$ recursively:
@@ -2027,16 +2154,18 @@ a complete recursive algorithm for $\mathrm{nd}(a,b)$.
       sub-problem obtained by removing prime $p$ from $P_x$
       (its coordinate is forced to zero).
     \item (Singleton interaction) If $|P_x| = 1$: $B_p$ is the group-interaction
-      minimum $\min\{\|\varphi\|_{\mathrm{nd}} : \varphi\in F(a,b),\,\varphi_p=0,\,
+      minimum $\min\{\max_q q|\varphi_q| : \varphi\in F_{\mathrm{val}}(a,b),\,\varphi_p=0,\,
       W(\varphi)\ne 0\}$, a direct Bezout-type minimization over the remaining
       two-group constraint.
   \end{itemize}
   The base case ($\omega^*=3$) is Theorem~\ref{thm:nd_pairwise_bezout}.  Then:
   \begin{enumerate}[(i)]
-    \item For $\omega^*=4$: $\mathrm{nd}(a,b) = \min_p B_p$ (proved, from
-      Theorems~\ref{thm:nd_type211}, \ref{thm:nd_type121},
+    \item For non-squarefree $\omega^*=4$:
+      $\mathrm{nd}_{\mathrm{val}}(a,b) = \min_p B_p$ (supported by
+      Candidate Formulas~\ref{thm:nd_type211}, \ref{thm:nd_type121},
       \ref{thm:nd_omega4_two_c}).
-    \item For $\omega^*\in\{5,6\}$: $\mathrm{nd}(a,b) = \min_p B_p$ (empirically
+    \item For non-squarefree $\omega^*\in\{5,6\}$:
+      $\mathrm{nd}_{\mathrm{val}}(a,b) = \min_p B_p$ (empirically
       verified for non-squarefree; $\omega^*=5$ both partition types $(2,2,1)$
       and $(3,1,1)$, $a,b\le 150$, T86bis;
       $\omega^*=6$ all three unordered partition classes $\{4,1,1\}$,
@@ -2045,19 +2174,21 @@ a complete recursive algorithm for $\mathrm{nd}(a,b)$.
       squarefree $\omega^*\in\{5,6\}$: proved,
       Theorem~\ref{thm:nd_sqfree_support}).
   \end{enumerate}
-\end{theorem}
+\end{candidate}
 
-\begin{proof}
+\begin{proof}[Evidence]
   \textit{Upper bound ($\mathrm{nd} \le \min_p B_p$).}  Each $B_p$ is a minimum over a
   sub-lattice of $F(a,b)$, hence $\mathrm{nd}(a,b) \le B_p$ for every $p$.
 
-  \textit{Lower bound for $\omega^*=4$ ($\mathrm{nd} \ge \min_p B_p$).}
-  Follows from Theorem~\ref{thm:nd_zero_coord}(i): every non-degenerate minimizer
-  has some coordinate zero, placing it in one of the $\omega^*=4$ branches.
-  The exact-nd sub-problem formulas (Theorems~\ref{thm:nd_type211}--\ref{thm:nd_omega4_two_c})
+  \textit{Lower bound for non-squarefree $\omega^*=4$
+  ($\mathrm{nd}_{\mathrm{val}} \ge \min_p B_p$).}
+  This is supported by Candidate Formula~\ref{thm:nd_zero_coord}(ii): in every
+  surveyed minimizer some coordinate is zero, placing it in one of the
+  $\omega^*=4$ branches.
+  The exact-nd sub-problem formulas (Candidate Formulas~\ref{thm:nd_omega4_two_c}--\ref{thm:nd_type211})
   confirm the identity.
 
-  \textit{Part (ii).}  Computational verification; see Theorem~\ref{thm:nd_zero_coord}(ii)
+  \textit{Part (ii).}  Computational verification; see Candidate Formula~\ref{thm:nd_zero_coord}(ii)
   for the zero-coordinate property and the individual T-scripts for the exact values.
 \end{proof}
 
@@ -2134,21 +2265,20 @@ For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also 
   $\{kq\}\cup\{kr\}$ (verified numerically for $q\le 73$, \texttt{t54}).
 \end{proof}
 
-\begin{corollary}[F32c: Frobenius number of the norm spectrum]\label{cor:f32c}
-  For a twin-prime triple $(2,q,r=q+2)$ with $q \ge 5$, the largest positive integer
-  that is \emph{not} a non-degenerate norm is $q\cdot r - q - r = q^2 - 2$.
-  Every integer $\ge q^2 - 1$ is an achievable non-degenerate norm.
+\begin{corollary}[F32c: no Frobenius number for the non-degenerate spectrum]\label{cor:f32c}
+  For a twin-prime triple $(2,q,r=q+2)$ with $q \ge 5$, the set of positive
+  integers that are \emph{not} non-degenerate norms is infinite.  In particular,
+  the non-degenerate norm spectrum has no Frobenius number.
 \end{corollary}
 
 \begin{proof}
-  By Theorem~\ref{thm:f32b} the achievable norms are the numerical semigroup
-  $\langle q, r \rangle = \langle q, q+2 \rangle$ (see also Remark~\ref{rem:semigroup}).
-  Since $q$ is an odd prime $\ge 5$ and $r = q+2$ is prime, $\gcd(q,r)=1$.
-  The Sylvester--Frobenius theorem gives Frobenius number
-  $q \cdot r - q - r = q(q+2) - q - (q+2) = q^2 - 2$.
-  Direct check: $q^2 - 2 \equiv -2 \not\equiv 0 \pmod{q}$ and
-  $q^2 - 2 = (q+2)(q-2)+2 \equiv 2 \not\equiv 0 \pmod{q+2}$,
-  confirming $q^2-2$ is not in $\langle q, r \rangle$.
+  By Theorem~\ref{thm:f32b}, the non-degenerate norms are exactly
+  $\{kq:k\ge1\}\cup\{kr:k\ge1\}$.  For example, $q+r=2q+2$ is not divisible by
+  either $q$ or $q+2$ (for $q\ge5$), and the same is true for
+  $m(q+r)$ whenever $\gcd(m,qr)=1$.  Thus infinitely many positive integers
+  are absent from the spectrum.  The Sylvester--Frobenius number
+  $qr-q-r$ applies to the full numerical semigroup generated by $q$ and $r$,
+  not to this union of two rays; see also Remark~\ref{rem:semigroup}.
 \end{proof}
 
 \begin{remark}[Semigroup structure]\label{rem:semigroup}
@@ -2237,8 +2367,8 @@ For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also 
   \textit{Achieving $2p_2$:} the nd-minimiser $\varphi^*$ (with $\|\varphi^*\| = p_2$ and
   $W(\varphi^*) \ne 0$) satisfies $W(2\varphi^*) = 2W(\varphi^*) \ne 0$ and
   $\|2\varphi^*\| = 2p_2$, so $2p_2$ is an achievable non-degenerate norm. \\
-  \textit{Achieving $p_3$:} by the zero-coordinate property
-  (Theorem~\ref{thm:nd_zero_coord}), the nd-minimising sub-problem for the branch
+  \textit{Achieving $p_3$:} by the squarefree zero-coordinate property
+  (Theorem~\ref{thm:nd_sqfree_support}), the nd-minimising sub-problem for the branch
   $\varphi_{p_1} = 0$ is a squarefree $(\omega^*-1)$-prime sub-triple whose
   primes are $\{p_2,\ldots,p_{\omega^*}\}$.  By Theorem~\ref{thm:en} applied to
   this sub-triple, its minimum non-degenerate norm equals $p_3$
@@ -2332,85 +2462,130 @@ For $\omega=3$ type $(1,1,1)$ we can characterize not just the minimum but also 
   $\lambda_2$ competition together with the next available prime.
 \end{remark}
 
-\subsubsection*{F11: $\omega \ge 6$ --- all types unbounded}
+\subsubsection*{F11: a conditional unboundedness criterion at $\omega\ge6$}
 
-\begin{theorem}[F11]\label{thm:f11}
-For every partition type $(n_a,n_b,n_c)$ with $n_a+n_b+n_c \ge 6$,
-the ratio $\rho = \|\psi_\mathrm{nd}\|_\infty / R^{1/(\omega-1)}$ is unbounded
-over all squarefree coprime triples of that type.
+\begin{theorem}[F11: conditional unboundedness criterion]\label{thm:f11}
+Let $(n_a,n_b,n_c)$ be a partition type with $n_a+n_b+n_c=\omega\ge6$.
+Suppose there is an infinite sequence of squarefree coprime triples of this
+type in which one constituent has at least three bounded prime factors and
+every prime outside that constituent tends to infinity while remaining within
+a fixed constant factor of the largest outside prime.  Then
+\[
+  \rho=\frac{\|\psi_\mathrm{nd}\|_\infty}{R^{1/(\omega-1)}}\to\infty.
+\]
+In particular, the corresponding partition type is unbounded along that sequence.
 \end{theorem}
 
-\begin{proof}[Proof sketch]
+\begin{proof}
 By Theorem~\ref{thm:f10}, $\|\psi_\mathrm{nd}\|_\infty$ is the second smallest of
-$\{\min P_a, \min P_b, \min P_c\}$.  For $\omega \ge 6$, every partition type
-has at least one constituent of size $n \ge 3$.  Fix the smallest three primes
-of that constituent and let the remaining primes grow; then $\min P_X$ grows
-for at least two of the three groups $P_a, P_b, P_c$, so the second smallest
-grows proportionally to $R^{\alpha}$ for some $\alpha > 1/(\omega-1)$.
-Explicit asymptotic families are verified in \texttt{t23} for $\omega = 6$.
+$\{\min P_a,\min P_b,\min P_c\}$.  Under the stated hypothesis, every finite
+group minimum other than the bounded constituent's minimum tends to infinity;
+therefore the second-smallest finite group minimum is comparable to the outside
+scale $N$, and $\|\psi_\mathrm{nd}\|_\infty\asymp N$.  Since at least three
+primes remain bounded, $R=O(N^{\omega-3})$.  Hence
+\[
+  \rho\gg
+  \frac{N}{N^{(\omega-3)/(\omega-1)}}\to\infty. \qedhere
+\]
 \end{proof}
 
-\subsubsection*{F12--F16: sharp bounds for bounded types}
+\begin{remark}
+For every $\omega\ge6$ partition type, the required prime-pattern family is
+natural combinatorially and was checked on finite samples (for example,
+\texttt{t23} at $\omega=6$), but its infinitude is not proved here.  Thus the
+criterion is conditional and must not be read as an unconditional classification
+of every $\omega\ge6$ type.
+\end{remark}
 
-Combining the F10 formula with analytic optimization yields exact sharp bounds
-for all universally-bounded types.
+\subsubsection*{F12--F16: upper bounds for bounded types}
 
-\begin{theorem}[Sharp bounds, F12--F16]\label{thm:sharp}
+Combining the F10 formula with analytic optimization yields the following
+unconditional upper bounds for all universally-bounded types.  Extremal
+constants that require an infinite prime-pattern family are conditional.
+
+\begin{theorem}[Upper bounds for bounded types]\label{thm:sharp}
 Let $\rho = \|\psi_\mathrm{nd}\|_\infty / R^{1/(\omega-1)}$.
-The suprema and maxima of $\rho$ over all squarefree coprime triples
-of each universally-bounded type are:
+For every squarefree coprime triple of each universally-bounded type,
+$\rho$ is bounded as follows:
 
 \begin{center}
 \begin{tabular}{lllll}
 \hline
-$\omega$ & Type & $\sup \rho$ & Achieved? & Proof \\
+$\omega$ & Type & upper bound & equality in bound? & source \\
 \hline
-3 & $(1,1,1)$ & $2^{-1/2} \approx 0.707$ & No (twin-prime limit) & F16 \\
-4 & $(0,2,2)$ & $3\cdot 210^{-1/3} \approx 0.505$ & Yes, at $(1,14,15)$ & F14 \\
+3 & $(1,1,1)$ & $2^{-1/2} \approx 0.707$ & No & F16 \\
+4 & $(0,2,2)$ & $1$ & No & F14 \\
 4 & $(1,1,2)$ & $2^{-1/3} \approx 0.794$ & No & F14 \\
 4 & $(1,2,1)$ & $2^{-1/3} \approx 0.794$ & No & F12 \\
-5 & $(1,2,2)$ & $0.4999\ldots$ & Yes, at $(13,22,35)$ & F15 \\
-5 & $(2,1,2)$ & $2^{-1/4} \approx 0.841$ & No ($b{=}2$ twin-semiprime limit) & F30 \\
-5 & $(2,2,1)$ & $0.6064\ldots$ & Yes, at $(6,1517,1523)$ & F15 \\
+5 & $(0,2,3)$ & $1$ & No & F23 \\
+5 & $(0,3,2)$ & $1$ & No & F23 \\
+5 & $(1,2,2)$ & $2^{-1/4} \approx 0.841$ & No & F26 \\
+5 & $(2,1,2)$ & $2^{-1/4} \approx 0.841$ & No & F30 \\
+5 & $(2,2,1)$ & $6^{-1/4} \approx 0.639$ & No & F24 \\
 \hline
 \end{tabular}
 \end{center}
+In particular, every bounded type with $a\ge2$ has
+$\rho^{\omega-1}<1/2$.
 \end{theorem}
 
-\begin{proof}[Proof sketch for F16 (type $(1,1,1)$)]
+\begin{proof}
+The $(0,2,3)$, $(0,3,2)$, $(1,2,2)$, and $(2,2,1)$ rows are
+Theorems~\ref{thm:f23}, \ref{thm:f26}, and~\ref{thm:f24}; the
+$(2,1,2)$ row follows from the $a\leftrightarrow b$ symmetry used in F30.
+The type-$(0,2,2)$ bound follows by applying the F10 formula to its two
+non-empty group minima.  For the balanced rows, let $g\ge2$ and $d$ be the
+two smallest group minima.  Every one of the $\omega-2$ remaining primes is
+strictly larger than $d$, so $R>2d^{\omega-1}$ and
+$\rho^{\omega-1}<1/2$.  For completeness, we spell out the basic
+type-$(1,1,1)$ estimate.
 For a prime triple $(p,q,r)$ with $p \le q \le r$ and $p + q = r$,
 parity forces $p = 2$.  Then $\rho^2 = q/(p(p+q)) = q/(2r)$.
-Since $q < r$ and $p \ge 2$: $\rho^2 = q/(p(p+q)) < q/(pq) = 1/p \le 1/2$.
+Since $q < r$: $\rho^2 < 1/2$.
 This is Lean-formalized (\texttt{pasten\_F16\_111\_ratio\_sq\_lt\_half}).
-Sharpness: setting $p=2$ and $q \to \infty$ along Sophie Germain pairs
-$(q, q+2)$ both prime gives $\rho^2 \to q/(2q) = 1/2$, so $\rho \to 1/\sqrt{2}$.
+Conditional sharpness would follow from infinitely many twin pairs
+$(q,q+2)$; their infinitude is open.
+\end{proof}
+
+\begin{proof}[Proof sketch of the type-$(0,2,2)$ row]
+If the two-prime constituents are $pq$ and $rs$ with one even prime, then
+$\mathrm{nd}$ is the minimum of the odd constituent.  The other three prime
+factors include a prime larger than $\mathrm{nd}$ in its own constituent and
+the two primes of the even constituent, whose product exceeds $2\,\mathrm{nd}$;
+hence $R>\mathrm{nd}^3$ and $\rho<1$.
 \end{proof}
 
 \subsubsection*{Unifying pattern}
 
-The three types with unachieved suprema follow a single formula:
+The balanced types follow a single upper-bound formula.
 
-\begin{theorem}[Balanced-type universal pattern, F16/F28]\label{thm:pattern}
-For any partition type $(1, k_1, k_2)$ with $k_1+k_2=\omega-1$ (a single-prime
-$a$-group, forcing $a=2$ in the extremal subfamily) and any $\omega \ge 3$:
+\begin{theorem}[Balanced-type universal upper bound, F16/F28]\label{thm:pattern}
+For any partition type $(1, k_1, k_2)$ with $k_1+k_2=\omega-1$ and any
+$\omega \ge 3$:
 \[
-  \sup\rho \;=\; 2^{-1/(\omega-1)},
+  \rho^{\omega-1} \;<\; \frac12,
 \]
-and the supremum is never achieved at any finite triple.
-
-\emph{Proof (Theorem~\ref{thm:pattern}):} With $a=2$, group minimums $\{2,\min P_b,\min P_c\}$,
-$\mathrm{nd}=\min(\min P_b,\min P_c)$; all other $\omega-2$ primes are distinct
-from $\mathrm{nd}$ and hence strictly greater.  Key lemma: $m$ positive integers
-all $> n$ have product $> n^m$ (since each $\ge n+1$, product $\ge (n+1)^m > n^m$).
-Hence $\rho^{\omega-1}=\mathrm{nd}^{\omega-2}/(2\cdot\prod_{\omega-2\text{ primes}>nd})<
-\mathrm{nd}^{\omega-2}/(2\cdot\mathrm{nd}^{\omega-2})=1/2$.
-Sharpness: as all $k_1{+}k_2$ primes $\to n$ with $2+b=c$, $\rho^{\omega-1}\to 1/2$. $\square$
-
-Numerically verified for $\omega=3,\ldots,7$ (zero violations).
-Specific cases: $(1,1,1)\to 2^{-1/2}$; $(1,1,2),(1,2,1)\to 2^{-1/3}$;
-$(1,2,2)\to 2^{-1/4}$.  The type $(1,1,3)$ is \emph{unbounded}
-(Theorem~\ref{thm:f11}), confirming the bound depends on partition type.
+equivalently $\rho<2^{-1/(\omega-1)}$.  The bound is never attained.
 \end{theorem}
+
+\begin{proof}
+Let $g$ be the smallest of the three group minima and let
+$d=\mathrm{nd}$ be the second-smallest group minimum.  Then $g\ge2$, and the
+$\omega-2$ primes other than $g$ and $d$ are all strictly greater than $d$:
+$d$ is minimal in its group, while the third group minimum is at least $d$ and
+distinct primes are unequal.  Hence
+\[
+  \rho^{\omega-1}
+  =\frac{d^{\omega-1}}{R}
+  <\frac{d^{\omega-1}}{2\cdot d\cdot d^{\omega-2}}
+  =\frac12. \qedhere
+\]
+\end{proof}
+
+The constant would be sharp along a hypothetical infinite family in which the
+single-prime constituent is $2$ and all other primes tend to equality with it.
+This is a prime-pattern condition, not an unconditional sharpness theorem.
+The inequalities were numerically checked for $\omega=3,\ldots,7$.
 
 \subsubsection*{General pattern}
 
@@ -2438,7 +2613,7 @@ Key items:
     $\sum_p (R/p)^2 = R^2 \sum_p p^{-2}$.
   \item \texttt{pasten\_det\_lt\_rad}: $\sqrt{\sum_p (R/p)^2} < R$.
   \item \texttt{minkowski\_vaaler\_pasten}: admitted as an axiom citing
-    Cassels~\cite{Cassels1959} + Vaaler~\cite{Vaaler1979}.  Mathlib does not
+    Vaaler~\cite{Vaaler1979}.  Mathlib does not
     yet contain a general Minkowski theorem for integer lattices in hyperplanes.
   \item \texttt{pasten\_prime\_triple\_arith} (F3): $p \cdot q < 4r$ for
     prime triple $p+q=r$, $p=2$.  Proved by \texttt{omega} after substitution.
@@ -2458,7 +2633,7 @@ divisibility) have been formalized in Lean~4 (\texttt{lean/AbcHeightKernel.lean}
 sections F5--F8), building zero \texttt{sorry} proofs for the $\omega = 3$ and
 $\omega = 4$ (types (1,1,2), (0,2,2)) cases.
 
-The sharp bound for type $(1,1,1)$ (Theorem~\ref{thm:pattern}) has
+The upper-bound core for type $(1,1,1)$ (Theorem~\ref{thm:pattern}) has
 been formalized with two Lean~4 theorems (zero \texttt{sorry}):
 \begin{itemize}
   \item \texttt{pasten\_F16\_111\_key}: $2q < p(p+q)$ for $p \ge 2$, $q > 0$
@@ -2467,7 +2642,7 @@ been formalized with two Lean~4 theorems (zero \texttt{sorry}):
     $q / (p(p+q)) < 1/2$ in $\mathbb{R}$.
 \end{itemize}
 
-The sharp bound for type $(1,2,1)$ (F12) has been formalized:
+The upper-bound core for type $(1,2,1)$ (F12) has been formalized:
 \begin{itemize}
   \item \texttt{pasten\_F12\_121\_key}: $2q_1^2 < p \cdot q_2 \cdot (p + q_1 q_2)$
     for $1 \le p \le q_1 < q_2$ (proved by \texttt{nlinarith}).
@@ -2475,7 +2650,7 @@ The sharp bound for type $(1,2,1)$ (F12) has been formalized:
     $q_1^2 / (p q_2 (p + q_1 q_2)) < 1/2$ in $\mathbb{R}$.
 \end{itemize}
 
-The sharp bound for the c-even subfamily of type $(1,1,2)$ (F14) has been formalized:
+The upper-bound core for the c-even subfamily of type $(1,1,2)$ (F14) has been formalized:
 \begin{itemize}
   \item \texttt{pasten\_F14\_112\_ceven\_key}: $2p^2 < q(p+q)$ for $1 \le p < q$
     (proved by \texttt{nlinarith}).
@@ -2483,8 +2658,7 @@ The sharp bound for the c-even subfamily of type $(1,1,2)$ (F14) has been formal
     $p^2 / (q(p+q)) < 1/2$ in $\mathbb{R}$.
 \end{itemize}
 
-These three families cover all universally-bounded $\omega \le 4$ types with
-unachieved suprema, completing the Lean formalization of the sharp bound core.
+These three families cover the $\omega \le 4$ balanced-type upper-bound core.
 
 For $\omega=5$, the type $(1,2,2)$ key inequality is also formalized:
 \begin{itemize}
@@ -2577,13 +2751,14 @@ Additional lemmas added in the E10/E11/E$_n$/F31 extension:
 
 We have proved that for squarefree coprime triples $(a,b,c)$ with $a+b=c$ and
 $\omega(abc) \ge 2$, the Pasten lattice satisfies $\det(F(a,b)) < \rad(abc)$,
-and hence Minkowski's theorem~\cite{Cassels1959} gives a nonzero vector with
+and hence Vaaler's subspace lattice theorem~\cite{Vaaler1979} gives a nonzero vector with
 $\|\psi\|_\infty \le \rad(abc)^{1/(\omega-1)}$.
 
-Beyond the determinant bound, we have established a complete classification of
+Beyond the determinant bound, we have established a structural classification of
 non-degeneracy for all partition types with $\omega \le 5$, proved that all
-types with $\omega \ge 6$ are unbounded (Theorem~\ref{thm:f11}), and determined
-the exact sharp bounds for every universally-bounded type
+types with $\omega \ge 6$ satisfy the criterion of Theorem~\ref{thm:f11}
+whenever the required prime-pattern family exists, and proved
+unconditional upper bounds for every universally-bounded type
 (Theorems~\ref{thm:sharp} and~\ref{thm:pattern}).  The central structural
 results are: (a) the Universal Divisibility Lemma ($q \mid \psi_q$ for all $q \in P$,
 proved by elementary divisibility from the lattice constraint); (b) the $\varphi$-coordinate
@@ -2593,14 +2768,14 @@ of $\{\min P_a, \min P_b, \min P_c\}$, achieved by any cross-group prime pair;
 (d) the universal lower bound (Theorem E$_n$): every non-degenerate $\psi$ satisfies
 $\|\psi\|_\infty \ge \mathrm{nd}$, proved by a clean F8+constraint+Wronskian argument
 and Lean-formalized for $\omega=3,4$ (E10/E11), numerically verified for all types $\omega\le 7$;
-(e) a complete table of sharp non-degenerate minimum norms for all partition types
+(e) a complete table of non-degeneracy upper bounds for all partition types
 $\omega \in \{3,4,5\}$ (Table in Theorem~\ref{thm:sharp}); (f) the unifying
-pattern $\sup_{\text{balanced}}(\omega) = 2^{-1/(\omega-1)}$ for \emph{all} $\omega \ge 3$
+upper bound $\rho^{\omega-1}<1/2$ for \emph{all} balanced types and $\omega \ge 3$
 (Theorem~\ref{thm:pattern}, F28), with the general key lemma Lean-formalized; and
 (g) the general bound $\rho^4 < 1/6$ for \emph{all} type $(2,2,1)$ triples (F29,
-Lean-formalized), with $\sup = 6^{-1/4}$ approached by the $a=6$ near-twin-prime subfamily;
+Lean-formalized), with conditional sharpness at $6^{-1/4}$;
 and (h) the corrected bound $\rho^4 < 1/2$ for \emph{all} type $(2,1,2)$ triples (F30,
-Lean-formalized, correcting F25), with $\sup = 2^{-1/4}$ equal to the $(1,2,2)$ value by
+Lean-formalized, correcting F25), with conditional sharpness equal to the $(1,2,2)$ constant by
 $a \leftrightarrow b$ symmetry; and (i) the Quality-$\rho$ Joint Bound (F31,
 Theorem~\ref{thm:f31}): for every non-trivial squarefree triple of any bounded-$\rho$
 type, $\operatorname{quality} + \rho^{\omega-1} < 1$, proved by combining quality $< 1/2$
@@ -2609,8 +2784,8 @@ and (j) the second-minimum and complete spectrum results for type $(1,1,1)$: the
 second minimum non-degenerate norm equals $r$ (F32a, Theorem~\ref{thm:f32a}),
 and for every twin-prime triple with $q \ge 5$ the full spectrum of achievable
 non-degenerate norms is exactly $\{kq:k\ge 1\} \cup \{kr:k\ge 1\}$
-(F32b, Theorem~\ref{thm:f32b}), both Lean-formalized; the Frobenius number of the
-spectrum is $q^2-2$ (Corollary~\ref{cor:f32c}); and second minimum
+(F32b, Theorem~\ref{thm:f32b}), both Lean-formalized; this union of two rays has
+no Frobenius number (Corollary~\ref{cor:f32c}); and second minimum
 $\min(r_2,q,2r_1)$ for type $(1,1,2)$ (F33, Theorem~\ref{thm:f33}), Lean-formalized;
 and (k) the non-squarefree upper bound (OB-13B, Theorem~\ref{thm:ob13b}):
 $\mathrm{nd}(a,b) \le v_{\max} \cdot R^{1/(\omega^*-1)}$ for all coprime triples,
@@ -2681,15 +2856,19 @@ triples — all correctly classified by the exact formula, with four exhibiting
 nd $< p_L$ via the val($\varphi_{p_L}=0$) regime, and confirming that nd and
 quality are structurally independent (nd depends on $(p_a,p_b,p_c,k,m)$ while
 quality depends on $n$);
+Items (u)--(ae) below concern the valuation-coordinate lattice
+$F_{\mathrm{val}}$ and are candidate formulas with finite all-nonzero-case
+verification; they are not unconditional theorems and do not determine the
+original Pasten lattice minimum in general.
 and (u) the exact $\mathrm{nd}$ formula for $\omega^*=4$ triples with two $c$-group primes
-(Theorem~\ref{thm:nd_omega4_two_c}): for $P_a=\{p\}$, $P_b=\{q\}$, $P_c=\{r,s\}$,
+(Candidate Formula~\ref{thm:nd_omega4_two_c}): for $P_a=\{p\}$, $P_b=\{q\}$, $P_c=\{r,s\}$,
 $\mathrm{nd}(a,b) = \min(\mathrm{nd}_{3}(p^k,q^m,r^j),\; \mathrm{nd}_{3}(p^k,q^m,s^n),\;
 \max(q,B_m),\; \max(p,B_k))$
 where $B_x$ is the two-dimensional Bezout minimum for $j\varphi_r+n\varphi_s=x$;
 the $\varphi_q=0$ branch wins in 25 out of 431 tested cases (T74), confirming that
 the four-branch formula subsumes the $\omega^*=3$ characterization;
 and (v) the exact $\mathrm{nd}$ formula for type $(2,1,1)$ triples
-(Theorem~\ref{thm:nd_type211}): for $P_a=\{p,q\}$, $P_b=\{r\}$, $P_c=\{s\}$,
+(Candidate Formula~\ref{thm:nd_type211}): for $P_a=\{p,q\}$, $P_b=\{r\}$, $P_c=\{s\}$,
 the minimum is taken over four branches corresponding to zeroing one prime-group slot —
 $N_{s=0}$ (Pa$\times$Pb interaction, subsumes within-group and pairwise norms),
 $N_{r=0}$ (Pa$\times$Pc interaction),
@@ -2697,67 +2876,72 @@ and two $\omega^*=3$ sub-problems $\mathrm{nd}_3(p^{k_1},r^m,s^n)$,
 $\mathrm{nd}_3(q^{k_2},r^m,s^n)$; verified on 672 triples (T77, $0$ failures),
 with $N_{s=0}$ dominant in $87\%$ of cases;
 and (w) the exact $\mathrm{nd}$ formula for type $(1,2,1)$ triples
-(Theorem~\ref{thm:nd_type121}): for $P_a=\{p\}$, $P_b=\{q,r\}$, $P_c=\{s\}$,
+(Candidate Formula~\ref{thm:nd_type121}): for $P_a=\{p\}$, $P_b=\{q,r\}$, $P_c=\{s\}$,
 the same four-branch structure with $P_a \leftrightarrow P_b$ exchanged —
 $N_{s=0}$ (Pb$\times$Pa interaction), $N_{p=0}$ (Pb$\times$Pc interaction),
 and two $\omega^*=3$ sub-problems; verified on $1\,043$ triples (T78\_formula,
 $0$ failures), with $N_{s=0}$ dominant in $90\%$ of cases;
 and (x) the exact $\mathrm{nd}$ formula for type $(2,2,1)$ triples
-(Theorem~\ref{thm:nd_type221}): for $P_a=\{p,q\}$, $P_b=\{r,s\}$, $P_c=\{u\}$,
+(Candidate Formula~\ref{thm:nd_type221}): for $P_a=\{p,q\}$, $P_b=\{r,s\}$, $P_c=\{u\}$,
 the minimum is taken over five branches — $N_{u=0}$ (the $P_a$--$P_b$ homogeneous
 interaction, zeroing $\varphi_u$), two type-$(1,2,1)$ sub-problems (zeroing
-$\varphi_p$ or $\varphi_q$ via Theorem~\ref{thm:nd_type121}), and two
+$\varphi_p$ or $\varphi_q$ via Candidate Formula~\ref{thm:nd_type121}), and two
 type-$(2,1,1)$ sub-problems (zeroing $\varphi_r$ or $\varphi_s$ via
-Theorem~\ref{thm:nd_type211}); verified on $1\,425$ triples with $a, b \le 300$
+Candidate Formula~\ref{thm:nd_type211}); verified on $1\,425$ triples with $a, b \le 300$
 (T79, spot-check $60$, $0$ failures), with $N_{u=0}$ dominant in $98.6\%$ of cases;
 and (y) the exact $\mathrm{nd}$ formula for type $(1,2,2)$ triples
-(Theorem~\ref{thm:nd_type122}): for $P_a=\{p\}$, $P_b=\{q,r\}$, $P_c=\{s,t\}$,
+(Candidate Formula~\ref{thm:nd_type122}): for $P_a=\{p\}$, $P_b=\{q,r\}$, $P_c=\{s,t\}$,
 the minimum over five branches — $N_{p=0}$ ($P_b$--$P_c$ homogeneous interaction,
 zeroing $\varphi_p$), two type-$(1,1,2)$ sub-problems (zeroing $\varphi_q$ or
-$\varphi_r$ via Theorem~\ref{thm:nd_omega4_two_c}), and two type-$(1,2,1)$
-sub-problems (zeroing $\varphi_s$ or $\varphi_t$ via Theorem~\ref{thm:nd_type121});
+$\varphi_r$ via Candidate Formula~\ref{thm:nd_omega4_two_c}), and two type-$(1,2,1)$
+sub-problems (zeroing $\varphi_s$ or $\varphi_t$ via Candidate Formula~\ref{thm:nd_type121});
 verified on $996$ triples with $a, b \le 150$ (T80, spot-check $50$, $0$ failures),
 with $N_{p=0}$ dominant in $87.2\%$ of cases;
 and (z) the exact $\mathrm{nd}$ formula for type $(2,1,2)$ triples
-(Corollary~\ref{cor:nd_type212}), obtained from Theorem~\ref{thm:nd_type122} by the
+(Candidate Formula~\ref{cor:nd_type212}), obtained from Candidate Formula~\ref{thm:nd_type122} by the
 $P_a \leftrightarrow P_b$ label swap: $N_{r=0}$ ($P_a$--$P_c$ interaction) plus two
 type-$(1,1,2)$ and two type-$(2,1,1)$ sub-problems;
 and (aa) the exact $\mathrm{nd}$ formula for type $(1,1,3)$ triples
-(Theorem~\ref{thm:nd_type113}): for $P_a=\{p\}$, $P_b=\{q\}$, $P_c=\{r,s,t\}$,
+(Candidate Formula~\ref{thm:nd_type113}): for $P_a=\{p\}$, $P_b=\{q\}$, $P_c=\{r,s,t\}$,
 the minimum of five branches — three type-$(1,1,2)$ sub-problems (zeroing each
-$c$-prime in turn via Theorem~\ref{thm:nd_omega4_two_c}) and two one-sided norms
+$c$-prime in turn via Candidate Formula~\ref{thm:nd_omega4_two_c}) and two one-sided norms
 $N_{p=0}$, $N_{q=0}$; verified on $729$ triples with $a,b \le 300$
 (T81, spot-check $60$, $0$ failures), with the $\varphi_t=0$ branch dominant ($91.8\%$);
 and (ab) the exact $\mathrm{nd}$ formula for type $(1,3,1)$ triples
-(Theorem~\ref{thm:nd_type131}): for $P_a=\{p\}$, $P_b=\{q,r,s\}$, $P_c=\{t\}$,
+(Candidate Formula~\ref{thm:nd_type131}): for $P_a=\{p\}$, $P_b=\{q,r,s\}$, $P_c=\{t\}$,
 the minimum of five branches — a $P_a\times P_b$ homogeneous norm $N_{t=0}$
 (zeroing $\varphi_t$, $W \ne 0$), a $P_b\times P_c$ interaction norm $N_{p=0}$
 (zeroing $\varphi_p$, $\varphi_q+\varphi_r+\varphi_s \ne 0$), and three
-type-$(1,2,1)$ sub-problems (zeroing each $b$-prime via Theorem~\ref{thm:nd_type121});
+type-$(1,2,1)$ sub-problems (zeroing each $b$-prime via Candidate Formula~\ref{thm:nd_type121});
 verified on $843$ triples with $a,b \le 300$ (T82, spot-check $60$, $0$ failures),
 with $N_{t=0}$ dominant ($95.3\%$);
 and (ac) the exact $\mathrm{nd}$ formula for type $(3,1,1)$ triples
-(Corollary~\ref{cor:nd_type311}), obtained from Theorem~\ref{thm:nd_type131}
-by the $P_a \leftrightarrow P_b$ label swap;
+(Candidate Formula~\ref{cor:nd_type311}), obtained from Candidate Formula~\ref{thm:nd_type131}
+by the $P_a \leftrightarrow P_b$ label swap; the mirror case was also checked
+directly on all $843$ type-$(3,1,1)$ triples with $a,b\le300$
+(\texttt{T82-type311}, $0$ failures);
 and (ad) the \emph{zero-coordinate minimizer property}
-(Theorem~\ref{thm:nd_zero_coord}): for $\omega^*\ge 4$, the minimum
-non-degenerate norm is always achieved by a vector with at least one
-prime coordinate equal to zero, so $\mathrm{nd}(a,b) = \min_p B_p$
-(minimum over all zero-$\varphi_p$ sub-lattices); proved for $\omega^*=4$
-and verified across all partition classes for $\omega^*=5,6$:
+(Candidate Formula~\ref{thm:nd_zero_coord}): for $\omega^*\ge 4$, the minimum
+non-degenerate valuation-lattice norm is achieved by a vector with at least one
+prime coordinate equal to zero in all surveyed cases, so
+$\mathrm{nd}_{\mathrm{val}}(a,b) = \min_p B_p$ on those samples
+(minimum over all zero-$\varphi_p$ sub-lattices); the squarefree case is proved,
+while $\omega^*=4,5,6$ non-squarefree cases are finite-verification claims:
 non-squarefree $\omega^*=6$: $1959$ triples $a,b\le 200$, all three
 partition classes $\{4,1,1\}$, $\{3,2,1\}$, $\{2,2,2\}$, $0$ violations
-(T85bis); squarefree $\omega^*=6$: proved by Theorem~\ref{thm:nd_zero_coord}(i).
+(T85bis); squarefree $\omega^*=6$: proved by Theorem~\ref{thm:nd_sqfree_support}.
 This fails for non-squarefree $\omega^*=3$: the triple $(5,27,32)$ achieves
-$\mathrm{nd}=6$ via an all-nonzero vector, while every zero-coordinate branch
+$\mathrm{nd}_{\mathrm{val}}=6$ via an all-nonzero vector, while every zero-coordinate branch
 gives norm $\ge 15$;
-and (ae) the \emph{general recursive nd algorithm}
-(Theorem~\ref{thm:nd_recursive}): for any coprime triple with $\omega^*\ge 3$
-primes, $\mathrm{nd}(a,b) = \min_p B_p$ (each $B_p$ zeroing one prime coordinate,
-computed recursively from the nd111 base case); proved for $\omega^*=4$,
-verified for $\omega^*=5$ (all six partition types) and $\omega^*=6$ (all
+and (ae) the \emph{general recursive valuation-nd algorithm}
+(Candidate Formula~\ref{thm:nd_recursive}): for any coprime triple with $\omega^*\ge 3$
+primes, the candidate formula is
+$\mathrm{nd}_{\mathrm{val}}(a,b) = \min_p B_p$ (each $B_p$ zeroing one prime coordinate,
+computed recursively from the one-prime-per-group base case); it is proved in the squarefree case,
+and verified on finite samples for non-squarefree $\omega^*=4,5,6$, including
+$\omega^*=5$ (all six partition types) and $\omega^*=6$ (all
 three partition classes, non-squarefree $1959$ triples $a,b\le 200$,
-$0$ violations, T85bis; squarefree proved in Theorem~\ref{thm:nd_zero_coord}(i));
+$0$ violations, T85bis; squarefree case from Theorem~\ref{thm:nd_sqfree_support});
 and (af) the \emph{squarefree minimizer support theorem}
 (Theorem~\ref{thm:nd_sqfree_support}): for every squarefree coprime triple
 of any $\omega^*\ge 3$, every nd-minimizer satisfies $\varphi_p=0$ for all
@@ -2784,19 +2968,17 @@ verified on $360$ squarefree type-$(1,1,2)$ triples with $c \le 500$ (zero failu
 The non-degenerate ratio $\|\psi_{\text{nd}}\|/R^{1/(\omega-1)}$ is bounded for exactly
 the ``balanced'' partition types (both other constituents non-empty with available small-prime
 crossings), and grows without bound for the ``isolated'' types where both non-dominant
-constituents are forced-large single primes.  For $\omega \ge 6$, every type is unbounded.
-The sharp bounds for the bounded types are now analytically complete (Theorem~\ref{thm:sharp}),
-with exact suprema proved for $\omega \in \{3,4,5\}$, the universal formula
-$2^{-1/(\omega-1)}$ proved for all balanced single-prime-group types (Theorem~\ref{thm:pattern}),
-the general bound $\rho^4 < 6^{-1}$ proved for all type $(2,2,1)$ triples with
-$\sup = 6^{-1/4}$ (F29), and the general bound $\rho^4 < 1/2$ proved for all type $(2,1,2)$
-triples with $\sup = 2^{-1/4}$ (F30).  Both bounds are Lean-formalized.
+constituents are forced-large single primes.  For $\omega \ge 6$, unboundedness
+follows from Theorem~\ref{thm:f11} once the required prime-pattern family exists.
+The unconditional upper bounds for the bounded types are collected in
+Theorem~\ref{thm:sharp}.  Their sharpness depends on corresponding infinite
+prime-pattern families and remains conditional.
 
 We also prove a quality boundary for the squarefree subfamily
 (Proposition~\ref{prop:quality}): quality $> 1/2$ if and only if $a = 1$.
 Within bounded partition types, quality and $\rho$ are negatively correlated
 ($r \approx -0.76$ for types $(1,1,2)$ and $(1,2,1)$): the triples
-closest to the sharp $\rho$ bound have quality $\to 1/3$, while the highest-quality
+closest to the extremal $\rho$ bound have quality $\to 1/3$, while the highest-quality
 non-trivial squarefree triples ($a=2$, $b\to\infty$) have $\rho \to 0$.
 This quality-$\rho$ trade-off is a provable structural feature, not a numerical artifact.
 
@@ -2817,22 +2999,17 @@ hypothesis, known abc triples, or the Szpiro conjecture.
 {\sloppy
 \begin{thebibliography}{9}
 
-\bibitem{Cassels1959}
-J.~W.~S.~Cassels,
-\emph{An Introduction to the Geometry of Numbers},
-Springer-Verlag, 1959.
-Theorem~I.2 (Minkowski's convex-body theorem).
-
 \bibitem{Pasten2021}
 H.~Pasten,
 \emph{Arithmetic derivatives through geometry of numbers},
-arXiv:2106.16165, 2021.
-(Status: preprint; to be verified against published version before citing as~\texttt{[BASE]}.)
+arXiv:2106.16165v3, 2021.
+(Primary-source copy and exact statements used: \texttt{baseline/REFERENCE\_BASELINE.md}.)
 
 \bibitem{Vaaler1979}
 J.~D.~Vaaler,
 \emph{A geometric inequality with applications to linear forms},
 Pacific J.\ Math.\ \textbf{83} (1979), no.~2, 543--553.
+(Primary-source copy and exact statements used: \texttt{baseline/REFERENCE\_BASELINE.md}.)
 
 \end{thebibliography}
 }
