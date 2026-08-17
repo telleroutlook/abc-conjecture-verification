@@ -877,6 +877,20 @@ The Route-A obstruction now treats the displayed conductor sketch as a route
 localization rather than claiming an unsourced exact equivalence for that
 sketch.
 
+**IUTT-III source anchor (2026-08-17):** added the May 2020 RIMS author-hosted
+PDF `baseline/mochizuki-2020-iutt-iii.pdf`.  Local extraction locates
+Corollary 3.12, “Log-volume Estimates for Θ-Pilot Objects,” on journal pages
+173--174.  The recorded statement inherits the full situation of Theorem 3.11,
+defines the Θ-pilot and q-pilot procession-normalized mono-analytic
+log-volumes, and concludes
+\[
+  -|\!\log(\Theta)| \ge -|\!\log(q)|.
+\]
+The source quote changes no gate status: the indeterminacies and
+cross-theater identifications are not independently formalized, so
+`core3.iut-corollary-312-independently-verified` remains OPEN with the
+Scholze--Stix concern recorded as the blocking reason.
+
 #### Session verification snapshot (2026-08-17)
 
 Commands and derived results after the TODO/lint/baseline updates:

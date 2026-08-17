@@ -155,3 +155,41 @@ discriminant-only form is equivalent to full abc.  Any ledger use of CL-02 must
 therefore name the modified invariant form or supply the missing bridge from
 that exact discriminant form.  This is a source-precision issue, not a proof of
 abc or Szpiro.
+
+## Mochizuki (May 2020), Inter-universal Teichmüller Theory III
+
+Source file: `mochizuki-2020-iutt-iii.pdf`.
+
+Checked version: Shinichi Mochizuki, *Inter-universal Teichmüller Theory III:
+Canonical Splittings of the Log-theta-lattice*, May 2020, RIMS author-hosted
+PDF (199 pages).  This is a source anchor only: storing and quoting the paper
+does not verify its proof and does not affect the OPEN CORE-3 sub-obligation
+`core3.iut-corollary-312-independently-verified`.
+
+### Corollary 3.12
+
+On journal pages 173--174, Corollary 3.12 is titled “Log-volume Estimates for
+Θ-Pilot Objects” and begins:
+
+> Suppose that we are in the situation of Theorem 3.11. Write
+> $-|\!\log(\Theta)|\in\mathbb R\cup\{+\infty\}$ for the procession-normalized
+> mono-analytic log-volume ... of the holomorphic hull ... of the union of the
+> possible images of a Θ-pilot object ..., in the multiradial representation of
+> Theorem 3.11, (i), which we regard as subject to the indeterminacies
+> (Ind1), (Ind2), (Ind3) described in Theorem 3.11, (i), (ii).
+
+It then defines $-|\!\log(q)|$ as the procession-normalized mono-analytic
+log-volume of the image of a q-pilot object, *not* regarded as subject to
+Ind1--Ind3, and concludes:
+
+> Then it holds that $-|\!\log(\Theta)|\in\mathbb R$, and
+> \[
+>   -|\!\log(\Theta)| \ge -|\!\log(q)|.
+> \]
+
+The hypotheses inherit the full “situation of Theorem 3.11,” including initial
+Θ-data, the log-theta-lattice construction, and the cited Kummer/multiradial
+representation.  Those hypotheses are not discharged here.  In particular, the
+Scholze--Stix concern about identification of objects across theaters remains
+a blocking reason; this source quote neither closes nor adjudicates that
+dispute.

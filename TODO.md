@@ -39,8 +39,8 @@ exclusive responsibility of the offline checkers and the proof assistant.
       statement (positive-characteristic derivative hypothesis included).
 - [ ] Obtain the original Stothers 1981 publication if an authorized copy becomes
       available; the publisher PDF currently returns HTTP 403.
-- [ ] Keep Mochizuki IUTT-III Corollary 3.12 as the object of the OPEN CORE-3
-      gate; storing a source is not verification and must not close the gate.
+- [x] Anchor Mochizuki IUTT-III Corollary 3.12 to the May 2020 RIMS source
+      PDF without closing or weakening the OPEN CORE-3 gate.
 - [x] Verify the newly added Pasten and Vaaler source anchors with local PDF
       extraction.
 
