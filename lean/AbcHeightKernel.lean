@@ -180,6 +180,52 @@ theorem quality_above_one : Real.log 9 / Real.log 6 > 1 := by
   rw [gt_iff_lt, one_lt_div hlog6pos]
   exact Real.log_lt_log (by norm_num) (by norm_num)
 
+/-! ## CORE-2 target interface: true Faltings height
+
+This is a *hypothetical target object*, not an instance.  Supplying an instance
+would require a genuine Arakelov-theoretic construction of the true Faltings
+height, its Murty--Pasten period formula, a universal lower bound, and an
+effective fixed-power radical upper bound.  No such instance is provided here.
+In particular, the discriminant height `freyDiscriminantHeight` above is not a
+value of this interface. -/
+
+structure FreyFaltingsHeightTarget where
+  /-- The true Arakelov-theoretic Faltings height of the Frey curve. -/
+  height : ℕ → ℕ → ℝ
+  /-- The archimedean period term in the Murty--Pasten normalization. -/
+  archimedeanTerm : ℕ → ℕ → ℝ
+  /-- Additive constant in the universal lower bound. -/
+  lowerConstant : ℝ
+  /-- Effective fixed-power height constant. -/
+  upperConstant : ℝ
+  hUpperPositive : 0 < upperConstant
+  /-- Murty--Pasten normalization; a future instance must prove this. -/
+  murtyPastenFormula (a b : ℕ) :
+      12 * height a b =
+        Real.log (freyMinimalDiscriminant a b)
+        - archimedeanTerm a b
+        + 12 * Real.log (2 * Real.pi)
+  /-- The period term is nonnegative for the supplied construction. -/
+  archimedeanTermNonnegative (a b : ℕ) : 0 ≤ archimedeanTerm a b
+  /-- Universal Frey-curve lower bound. -/
+  lowerBound (a b : ℕ) :
+      lowerConstant + Real.log ((a : ℝ) + b) / 6 ≤ height a b
+  /-- Effective fixed-power radical upper bound. -/
+  upperBound (a b : ℕ) :
+      height a b ≤ upperConstant * Real.log (rad (a * b * (a + b)))
+
+/-- A true-Faltings-height target implies an effective bounded-quality bound.
+This is a conditional theorem about a hypothetical interface; it does not assert
+that the interface is inhabited. -/
+theorem FreyFaltingsHeightTarget.logCRadBound
+    (target : FreyFaltingsHeightTarget) (a b : ℕ) :
+    Real.log ((a : ℝ) + b) ≤
+      6 * target.upperConstant * Real.log (rad (a * b * (a + b)))
+        - 6 * target.lowerConstant := by
+  have hl := target.lowerBound a b
+  have hu := target.upperBound a b
+  linarith
+
 -- Machine-audit the boundary between proved OB-04 algebra and admitted
 -- Silverman premises.  A direct `lake env lean` replay must show these lines.
 #print axioms intRad_abs
@@ -197,6 +243,7 @@ theorem quality_above_one : Real.log 9 / Real.log 6 > 1 := by
 #print axioms conductor_log_bound
 #print axioms frey_conductor_log_bound
 #print axioms quality_above_one
+#print axioms FreyFaltingsHeightTarget.logCRadBound
 
 /-! ## Sanity checks -/
 

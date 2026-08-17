@@ -73,6 +73,8 @@ These items remain open obligations.  They are listed here only as work
 directions; closing them requires checker replay, not manual status edits.
 
 - [ ] CORE-2 / CL-09: construct and replay `P_height`.
+- [x] Define the Lean target interface `FreyFaltingsHeightTarget` and prove
+      only its conditional bounded-quality implication; supply no instance.
 - [x] OB-04-A: close the missing Lean P1 artifact for integer absolute-value
       invariance of the radical (P2 and P3 are already formalized).
 - [x] OB-04-A: also state P3 over the integers, using coprime absolute values,

@@ -26,6 +26,8 @@ def test_ob04_source_declares_expected_theorems_and_admitted_premises() -> None:
         "theorem conductor_log_bound",
         "theorem frey_conductor_log_bound",
         "theorem quality_above_one",
+        "structure FreyFaltingsHeightTarget",
+        "theorem FreyFaltingsHeightTarget.logCRadBound",
     ):
         assert declaration in source
     assert "axiom silverman_frey_disc_cases" in source
@@ -34,6 +36,20 @@ def test_ob04_source_declares_expected_theorems_and_admitted_premises() -> None:
     assert "axiom frey_conductor_formula" in source
     assert "Silverman AEC 2nd ed. (2009), Lemma VIII.11.3(a)" in source
     assert "Silverman ATEC (1994), Theorem IV.10.4" in source
+    assert "hypothetical target object" in source
+
+
+def test_no_frey_faltings_target_instance_is_supplied() -> None:
+    source = LEAN_FILE.read_text(encoding="utf-8")
+    producer = re.search(
+        r"^\s*(?:def|instance|axiom)\s+[^\n]*FreyFaltingsHeightTarget",
+        source,
+        re.MULTILINE,
+    )
+    assert producer is None, (
+        "A global producer of FreyFaltingsHeightTarget would illegitimately "
+        "assert the missing CORE-2 construction."
+    )
 
 
 def test_ob04_axiom_audit_replays() -> None:
@@ -76,5 +92,8 @@ def test_ob04_axiom_audit_replays() -> None:
     assert axioms("frey_conductor_log_bound") == standard | {
         "freyConductor",
         "frey_conductor_formula",
+    }
+    assert axioms("FreyFaltingsHeightTarget.logCRadBound") == standard | {
+        "freyMinimalDiscriminant",
     }
     assert "sorryAx" not in output

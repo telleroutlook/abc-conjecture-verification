@@ -102,7 +102,7 @@ Realized as a **proofctl domain adapter** (`~/github/proofctl`, Go), not a fork.
 | **P6 — conclusion** | deterministic CORE-5 firing | integration test §7.2 holds |
 
 **Current phase: ALL PHASES COMPLETE (2026-08-15).** System is in its final honest
-state. 121/121 tests pass (2026-08-18). All PLACEHOLDERs frozen. Discovery guard
+state. 122/122 tests pass (2026-08-18). All PLACEHOLDERs frozen. Discovery guard
 layer live.
 
 ### Phase completion status
@@ -144,7 +144,7 @@ layer live.
   - `checker/compute_contract_hashes.py` + all 6 `domain/contracts/*.json` frozen (0 PLACEHOLDERs)
   - `discovery/candidates/guard.py` — non-circularity wall for exploration candidates
   - Integration test (spec §7.2): CORE-1+2+3+4 ⟹ CORE-5 mechanically verified
-- **Tests**: 121/121 pass (adversarial + structural + P2 + P3 + P4 + P5 + P6 +
+- **Tests**: 122/122 pass (adversarial + structural + P2 + P3 + P4 + P5 + P6 +
   integration §7.2 + contract freeze + discovery guard + Route V replay +
   OB-04 Lean axiom audit + CORE-2 partial-evidence/source replay + checker-pin
   mirrors)
@@ -1074,9 +1074,55 @@ occurs.  This is \(h_\Delta\), not the Arakelov-theoretic Faltings height, and
 it does not close CORE-2.
 
 **Checker evidence:** `PYTHONPATH=. python3 -m pytest tests/test_lean_ob04.py
--q` — `2 passed in 4.95s`; the full suite passes `121/121` (latest replay:
-`121 passed in 20.11s`).
-- `PYTHONPATH=. python3 -m pytest tests/ -q` — `121 passed in 20.59s`.
+-q` — `2 passed in 4.95s`.
+
+#### True-Faltings-height target interface (2026-08-18)
+
+**New Lean interface:** `FreyFaltingsHeightTarget`.  It packages exactly what a
+future CORE-2 construction must supply:
+
+1. a height function for the Frey curve;
+2. an archimedean period term in the Murty--Pasten normalization;
+3. the exact formula
+   \[
+     12h_F
+     =
+     \log|\Delta_{\min}|
+     -\text{archimedean term}
+     +12\log(2\pi);
+   \]
+4. nonnegativity of the archimedean term;
+5. a universal lower bound
+   \[
+     C+\frac{1}{6}\log c \le h_F;
+   \]
+6. an effective fixed-power radical upper bound
+   \[
+     h_F \le K\log R.
+   \]
+
+The conditional theorem
+`FreyFaltingsHeightTarget.logCRadBound` derives:
+\[
+  \log c
+  \le
+  6K\log R-6C.
+\]
+
+This is an interface only.  No `def`, `instance`, or `axiom` producing a
+`FreyFaltingsHeightTarget` is supplied, and the regression test explicitly
+rejects such a global producer.  `freyDiscriminantHeight` is not claimed to
+inhabit this interface.
+
+**Axiom boundary:** the conditional bounded-quality theorem depends only on the
+standard Lean axioms plus `freyMinimalDiscriminant`, the latter entering through
+the target's required Murty--Pasten formula.  It does not assert target
+inhabitation and does not close CORE-2.
+
+**Checker evidence:** `PYTHONPATH=. python3 -m pytest tests/test_lean_ob04.py
+-q` — `3 passed in 5.01s`; the full suite passes `122/122` (latest replay:
+`122 passed in 20.67s`).
+The combined CORE-2/Lean/checker-pin replay is `12 passed in 8.64s`.
 
 #### CORE-2 partial evidence and Silverman source refresh (2026-08-17)
 

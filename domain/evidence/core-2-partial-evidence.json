@@ -45,6 +45,13 @@
       "theorems": [
         "quality_above_one"
       ]
+    },
+    "P_HEIGHT_TARGET": {
+      "status": "INTERFACE_ONLY",
+      "theorems": [
+        "FreyFaltingsHeightTarget.logCRadBound"
+      ],
+      "note": "Hypothetical true-Faltings-height interface; no instance is supplied and CORE-2 remains OBL."
     }
   },
   "admitted_premises": [
@@ -72,12 +79,12 @@
     {
       "role": "lean-kernel",
       "path": "lean/AbcHeightKernel.lean",
-      "sha256": "sha256:02309e5fd35567899adf304f812838282f81bd77e97721c4a4d4c3bbc8688e05"
+      "sha256": "sha256:b9709e96783df183669a3062ddc2f70c77947ec27b294fe53016b8695fff405c"
     },
     {
       "role": "lean-axiom-audit-test",
       "path": "tests/test_lean_ob04.py",
-      "sha256": "sha256:73fd847d68bc254719a4e4f30682393055f17b1f178127a55b4adc24e35bd92e"
+      "sha256": "sha256:3d1676439d4c41ca1b407323176ae4f594d701a9f620447c8e0f70a0c0670981"
     },
     {
       "role": "baseline-record",
@@ -92,7 +99,7 @@
     {
       "role": "outsource-problem",
       "path": "outsource/OB-04-lean4-formalization-height-framework.md",
-      "sha256": "sha256:29278bad85d11e5c8f06f45e18b7da3f7611b65eafa263058c8dcb02d5f164ca"
+      "sha256": "sha256:437a89a9e7d61b58393d0c3fdf288ec653397b9e1df823bf2bc5eae16dc27683"
     },
     {
       "role": "core2-nonacceptance-test",

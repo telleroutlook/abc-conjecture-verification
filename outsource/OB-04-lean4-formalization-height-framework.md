@@ -28,6 +28,11 @@ to the two Silverman cases, and `freyDiscriminantHeight` is explicitly the
 discriminant height — not the Faltings height.  The scaled two-sided bound is
 `frey_discriminant_height_bound`.
 
+`FreyFaltingsHeightTarget` is a separate hypothetical interface for the true
+Arakelov-theoretic height.  It packages the Murty--Pasten period formula, a
+universal lower bound, and an effective fixed-power radical upper bound.  No
+instance is supplied, and `freyDiscriminantHeight` does not inhabit it.
+
 ---
 
 ## All definitions (self-contained — everything is here)
