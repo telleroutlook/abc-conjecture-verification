@@ -20,9 +20,12 @@ must be verified from the actual source, not from a secondary summary.
 
 | Source | CL item | Key result | File |
 |---|---|---|---|
-| Faltings 1983 | CL-05 | Mordell conjecture (Faltings heights) | (add when obtained) |
-| Mason–Stothers | CL-06 | Polynomial abc theorem | (add when obtained) |
+| Faltings 1983 | CL-05 | Mordell conjecture / finiteness of rational points | `faltings-1983-abelian-varieties.pdf` |
+| Mason–Stothers | CL-06 | Polynomial abc theorem | `oesterle-1988-nouvelles-approches-fermat.pdf` (exact published secondary source; original Stothers PDF currently paywalled) |
+| Oesterlé 1988 | CL-02 | abc ↔ modified Szpiro/Conjecture 4′ precision record | `oesterle-1988-nouvelles-approches-fermat.pdf` |
 | Mochizuki IUTT-III | CORE-3 | Corollary 3.12 (IUT route) | (add when verified) |
+| Pasten 2021 (arXiv v3) | Route V | Derivative lattice, SDC, abc equivalence | `pasten-2021-arithmetic-derivatives.pdf` |
+| Vaaler 1979 | Route V / determinant bound | Central hyperplane sections and lattice linear forms | `vaaler-1979-geometric-inequality.pdf` |
 
 ## Adding a new source
 
