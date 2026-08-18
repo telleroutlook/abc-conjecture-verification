@@ -2270,3 +2270,20 @@ all six claims — OK
 The expected semantic gate state is unchanged: CORE-0/1/5 are accepted by replay,
 while CORE-2/3/4 remain rejected/open obligations. In particular, this cleanup does
 not prove abc, verify IUT, or promote any `[OBL]` item.
+
+### Route V preprint Zenodo readiness (2026-08-18)
+
+**Status:** PDF rendering and metadata draft complete; publication awaits explicit
+license confirmation; Lin Tao is now the recorded author and creator.
+
+- Replaced default red PDF hyperlink borders with dark-blue colored link text and
+  added PDF title/author/subject/keyword metadata.
+- Added an acknowledgement thanking Lin Lue for reviewing the paper.
+- Added `papers/route-v-pasten/ZENODO_METADATA.txt` as a plain-text metadata draft.
+  It deliberately instructs the depositor not to bundle third-party baseline PDFs
+  without verifying redistribution rights.
+- Rebuilt the PDF with three successful `pdflatex` passes.  The rendered
+  table-of-contents page had 0 red-dominant pixels after the change.
+
+The draft records Lin Tao as author and creator, and uses CC BY 4.0 as Zenodo's
+default recommendation; the rights holder must still confirm that license before publication.

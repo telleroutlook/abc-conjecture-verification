@@ -1,0 +1,23 @@
+Upload type: Publication
+Publication type: Preprint
+Title: Minkowski Bounds for Pasten's Arithmetic Derivative Lattices in the Squarefree Subfamily
+Creator: Lin Tao
+Contributor: Lin Lue (reviewer)
+Publication date: 2026-08-18
+Version: 1.0.0
+Language: English
+License: CC BY 4.0
+Access right: Open access
+
+Description: This preprint studies the squarefree subfamily of the arithmetic-derivative lattices introduced by Hector Pasten. It proves an exact determinant identity and combines it with Vaaler's subspace lattice theorem to obtain explicit lattice-vector bounds. It further develops a structural classification of non-degenerate partition types, records unconditional upper bounds, identifies which sharpness claims depend on infinite prime-pattern families, and separates finite-verification candidate formulas from theorem-tier results.
+
+The accompanying Lean 4 development formalizes selected key inequalities with zero `sorry`, while deterministic Python scripts replay the finite evidence cited by the paper. The work also records a quality-rho structural boundary for squarefree triples.
+
+Important scope note: this paper does not prove the abc conjecture, does not prove Pasten's Small Derivatives Conjecture, and does not claim progress on the hard high-quality cases. Its contribution is a structural and reproducible analysis of Pasten's lattice geometry.
+
+Keywords: abc conjecture; arithmetic derivatives; Pasten lattice; squarefree triples; geometry of numbers; Vaaler theorem; successive minima; Lean
+Related identifier: https://github.com/telleroutlook/abc-conjecture-verification
+Upload file: route-v-pasten.pdf
+SHA-256: ff6705f6d2f856bfdbd9d5a11c69898aa64f8a3d2f2f82e24c29e533bcb98d07
+Optional source file: route-v-pasten.tex
+Redistribution note: Do not bundle third-party baseline PDFs without verifying their redistribution licenses. In particular, do not include the Pasten arXiv PDF or the Vaaler journal PDF in a repository-wide Zenodo archive merely because this paper cites them. The authored PDF may be uploaded on its own.

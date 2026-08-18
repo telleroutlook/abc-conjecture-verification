@@ -6,6 +6,12 @@ Target: `route-v-pasten.tex`
 This report records the checks run after the repairs described in `PLAN.md`.
 “0 findings” means that the displayed checker/grep produced no output lines.
 
+Post-review rendering amendment (2026-08-18): hyperlink borders were replaced by
+dark-blue colored text, PDF metadata was added, the date was updated, and an
+acknowledgement for Lin Lue's review was added.  The authored PDF and Zenodo
+record now identify Lin Tao as author/creator.  P1--P4 were rerun after that
+amendment; mathematical content was unchanged.
+
 ## Part I — compilation and structure
 
 - **P1 hardcoded internal references:** 0 findings.  The external-source
@@ -19,6 +25,10 @@ This report records the checks run after the repairs described in `PLAN.md`.
   Long Candidate Formula statements, the formal-verification section, and the
   bibliography use ragged-right typography for unbreakable identifiers and
   source paths.
+  After the rendering amendment, three further passes again exited `0, 0, 0`;
+  the same reference/citation/error and box audits were empty.  The rendered
+  table-of-contents page changed from 9417 red-dominant pixels to 0, with the
+  expected dark-blue link text and no hyperlink border boxes.
 - **P5 short title:** the optional short-title field is absent, so the full
   scoped title is used; no semantic mismatch.
 

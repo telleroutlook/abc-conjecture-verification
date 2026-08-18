@@ -92,6 +92,11 @@ exclusive responsibility of the offline checkers and the proof assistant.
 - [x] Repair the ten draft-stage underfull boxes before external submission.
 - [x] Add regression/replay wrappers for discovery scripts whose output is cited
       as finite evidence.
+- [x] Prepare the Zenodo metadata record for the Route V preprint, including
+      the Lin Lue acknowledgement and a red-border-free PDF rendering.
+- [ ] Confirm the final Zenodo license choice before publishing; Lin Tao is
+      now recorded as the author and creator, and the draft uses Zenodo's
+      default CC BY 4.0 recommendation.
 
 ## Priority 3 — mathematical frontier (checker-gated, not TODO prose)
 

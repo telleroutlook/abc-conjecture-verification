@@ -1,9 +1,22 @@
 \documentclass[12pt]{article}
 
 \usepackage{amsmath, amsthm, amssymb}
-\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[
+  colorlinks=true,
+  linkcolor=linkblue,
+  citecolor=linkblue,
+  urlcolor=linkblue,
+  filecolor=linkblue,
+  pdftitle={Minkowski Bounds for Pasten's Arithmetic Derivative Lattices in the Squarefree Subfamily},
+  pdfauthor={Lin Tao},
+  pdfsubject={Geometry of numbers and structural lattice bounds},
+  pdfkeywords={abc conjecture, arithmetic derivatives, Pasten lattice, squarefree triples, geometry of numbers, Vaaler theorem, Lean}
+]{hyperref}
 \usepackage[margin=1in]{geometry}
 \usepackage{enumerate}
+
+\definecolor{linkblue}{RGB}{0, 63, 114}
 
 % Theorem environments
 \newtheorem{theorem}{Theorem}
@@ -26,8 +39,8 @@
 
 \title{Minkowski Bounds for Pasten's Arithmetic Derivative Lattices\\
        in the Squarefree Subfamily}
-\author{Anonymous (verification kernel project)}
-\date{2026-08-15}
+\author{Lin Tao}
+\date{2026-08-18}
 
 \begin{document}
 \maketitle
@@ -3024,6 +3037,10 @@ not progress toward abc.  The abc conjecture requires $\|\psi\|_\infty = o(c^\va
 for all $\varepsilon>0$ (Pasten's SDC), and the gap between our bound and SDC is
 the full depth of the problem.  We have made no use of any abc-equivalent
 hypothesis, known abc triples, or the Szpiro conjecture.
+
+\section*{Acknowledgements}
+The author thanks Lin Lue for reviewing the paper and for comments that improved
+its presentation and verification discipline.
 
 {\sloppy\raggedright
 \begin{thebibliography}{9}
