@@ -1,5 +1,4 @@
-"""
-T21 — Optimal crossing classification (F10 correction)
+"""T21 — Optimal crossing classification (F10 correction)
 
 KEY INSIGHT (F10):
   The minimum non-degenerate norm is the GLOBAL minimum over ALL cross-group pairs,
@@ -40,26 +39,36 @@ GENERAL RULE (F10):
   single-prime constituents are on opposite sides that grow together.
 """
 
-import math
+from collections import defaultdict
+
 
 def factorize(n):
-    f = {}; d = 2
-    while d*d <= n:
-        while n%d == 0: f[d]=f.get(d,0)+1; n//=d
+    f = {}
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            f[d] = f.get(d, 0) + 1
+            n //= d
         d += 1
-    if n > 1: f[n] = 1
+    if n > 1:
+        f[n] = 1
     return f
 
+
 def gcd(a, b):
-    while b: a, b = b, a%b
+    while b:
+        a, b = b, a % b
     return abs(a)
 
+
 def is_squarefree(n):
-    return all(v==1 for v in factorize(n).values())
+    return all(v == 1 for v in factorize(n).values())
+
 
 def partition_type(a, b, c):
     fa, fb, fc = factorize(a), factorize(b), factorize(c)
     return (len(fa), len(fb), len(fc))
+
 
 def optimal_nd_norm(a, b, c):
     """Return minimum non-degenerate norm using ALL cross-group pairs."""
@@ -68,67 +77,78 @@ def optimal_nd_norm(a, b, c):
     Pb = sorted(fb.keys())
     Pc = sorted(fc.keys())
 
-    min_a = Pa[0] if Pa else float('inf')
-    min_b = Pb[0] if Pb else float('inf')
-    min_c = Pc[0] if Pc else float('inf')
+    min_a = Pa[0] if Pa else float("inf")
+    min_b = Pb[0] if Pb else float("inf")
+    min_c = Pc[0] if Pc else float("inf")
 
     # All three cross-group minimums (if groups non-empty)
     candidates = []
-    if Pa and Pb: candidates.append(max(min_a, min_b))  # Pa x Pb
-    if Pa and Pc: candidates.append(max(min_a, min_c))  # Pa x Pc
-    if Pb and Pc: candidates.append(max(min_b, min_c))  # Pb x Pc
+    if Pa and Pb:
+        candidates.append(max(min_a, min_b))  # Pa x Pb
+    if Pa and Pc:
+        candidates.append(max(min_a, min_c))  # Pa x Pc
+    if Pb and Pc:
+        candidates.append(max(min_b, min_c))  # Pb x Pc
 
     if not candidates:
-        return float('inf'), None
+        return float("inf"), None
 
     best = min(candidates)
     if Pa and Pb and max(min_a, min_b) == best:
-        pair = ('Pa', 'Pb', min_a, min_b)
+        pair = ("Pa", "Pb", min_a, min_b)
     elif Pa and Pc and max(min_a, min_c) == best:
-        pair = ('Pa', 'Pc', min_a, min_c)
+        pair = ("Pa", "Pc", min_a, min_c)
     else:
-        pair = ('Pb', 'Pc', min_b, min_c)
+        pair = ("Pb", "Pc", min_b, min_c)
     return best, pair
+
 
 def rad(a, b, c):
     fa, fb, fc = factorize(a), factorize(b), factorize(c)
-    primes = set(fa)|set(fb)|set(fc)
+    primes = set(fa) | set(fb) | set(fc)
     r = 1
-    for p in primes: r *= p
+    for p in primes:
+        r *= p
     return r
 
+
 print("T21: Optimal crossing classification — correcting F9 (c ≤ 300)")
-print("="*70)
+print("=" * 70)
 print()
 
-# Collect all squarefree coprime triples by partition type
-from collections import defaultdict
 types_data = defaultdict(list)  # type -> list of (a,b,c, ratio)
 
 for c in range(4, 301):
     for a in range(1, c):
         b = c - a
-        if b <= 0 or b < a: continue
-        if gcd(a,b) != 1: continue
-        if not (is_squarefree(a) and is_squarefree(b) and is_squarefree(c)): continue
+        if b <= 0 or b < a:
+            continue
+        if gcd(a, b) != 1:
+            continue
+        if not (is_squarefree(a) and is_squarefree(b) and is_squarefree(c)):
+            continue
         fa, fb, fc = factorize(a), factorize(b), factorize(c)
-        omega = len(set(fa)|set(fb)|set(fc))
-        if omega < 3 or omega > 6: continue
+        omega = len(set(fa) | set(fb) | set(fc))
+        if omega < 3 or omega > 6:
+            continue
         pt = partition_type(a, b, c)
         R = rad(a, b, c)
-        if R <= 0: continue
+        if R <= 0:
+            continue
         nd_norm, pair = optimal_nd_norm(a, b, c)
-        if nd_norm == float('inf'): continue
-        ratio = nd_norm / (R ** (1.0/(omega-1)))
+        if nd_norm == float("inf"):
+            continue
+        ratio = nd_norm / (R ** (1.0 / (omega - 1)))
         types_data[(omega, pt)].append((a, b, c, ratio, nd_norm, pair))
 
 print("ω=4 TYPES:")
 print(f"  {'Type':12}  {'#triples':>8}  {'max_ratio':>10}  {'bound?':>8}  {'notes'}")
-print("  " + "-"*65)
+print("  " + "-" * 65)
 for omega in [4]:
-    for pt in sorted(t[1] for t in types_data if t[0]==omega):
+    for pt in sorted(t[1] for t in types_data if t[0] == omega):
         key = (omega, pt)
-        if key not in types_data: continue
+        if key not in types_data:
+            continue
         data = types_data[key]
         ratios = [d[3] for d in data]
         max_r = max(ratios)
@@ -139,70 +159,87 @@ for omega in [4]:
         # Second smallest of {min_Pa,min_Pb,min_Pc} in optimal subfamily
         # UNBOUNDED if both Pb and Pc are size-1 groups (forced large together)
         # when Pa is the only multi-prime group, OR if n_a=0 and Pb or Pc is size-1
-        if na==0 and (nb==1 or nc==1):
+        if na == 0 and (nb == 1 or nc == 1):
             pred = "UNBOUNDED"
-        elif na>=2 and nb==1 and nc==1:
+        elif na >= 2 and nb == 1 and nc == 1:
             pred = "UNBOUNDED"
         else:
             pred = "bounded"
-        print(f"  {str(pt):12}  {len(data):>8}  {max_r:>10.4f}  {pred:>8}  worst=({worst[0]},{worst[1]},{worst[2]})")
+        print(
+            f"  {str(pt):12}  {len(data):>8}  {max_r:>10.4f}  {pred:>8}  worst=({worst[0]},{worst[1]},{worst[2]})"
+        )
 
 print()
 print("ω=5 TYPES:")
 print(f"  {'Type':12}  {'#triples':>8}  {'max_ratio':>10}  {'bound?':>8}  {'notes'}")
-print("  " + "-"*65)
+print("  " + "-" * 65)
 for omega in [5]:
-    for pt in sorted(t[1] for t in types_data if t[0]==omega):
+    for pt in sorted(t[1] for t in types_data if t[0] == omega):
         key = (omega, pt)
-        if key not in types_data: continue
+        if key not in types_data:
+            continue
         data = types_data[key]
         ratios = [d[3] for d in data]
         max_r = max(ratios)
         worst = max(data, key=lambda x: x[3])
         best = min(data, key=lambda x: x[3])
         na, nb, nc = pt
-        if na==0 and (nb==1 or nc==1):
+        if na == 0 and (nb == 1 or nc == 1):
             pred = "UNBOUNDED"
-        elif na>=2 and nb==1 and nc==1:
+        elif na >= 2 and nb == 1 and nc == 1:
             pred = "UNBOUNDED"
-        elif nb>=2 and na==1 and nc==1:
+        elif nb >= 2 and na == 1 and nc == 1:
             pred = "UNBOUNDED"
-        elif nc>=2 and na==1 and nb==1:
+        elif nc >= 2 and na == 1 and nb == 1:
             pred = "UNBOUNDED"
         else:
             pred = "bounded"
-        print(f"  {str(pt):12}  {len(data):>8}  {max_r:>10.4f}  {pred:>8}  worst=({worst[0]},{worst[1]},{worst[2]})")
+        print(
+            f"  {str(pt):12}  {len(data):>8}  {max_r:>10.4f}  {pred:>8}  worst=({worst[0]},{worst[1]},{worst[2]})"
+        )
 
 print()
 print("DETAIL: ω=5 type (1,1,3) — showing pairs used for min nd norm:")
 print(f"  {'(a,b,c)':>18}  {'nd_norm':>8}  {'pair':>10}  {'R^{1/4}':>8}  {'ratio':>8}")
-print("  " + "-"*60)
+print("  " + "-" * 60)
 cnt = 0
-for a,b,c,ratio,nd_norm,pair in sorted(types_data.get((5,(1,1,3)),[]), key=lambda x:x[2])[:15]:
-    R = rad(a,b,c)
+for a, b, c, ratio, nd_norm, pair in sorted(
+    types_data.get((5, (1, 1, 3)), []), key=lambda x: x[2]
+)[:15]:
+    R = rad(a, b, c)
     Rp = R**0.25
     pstr = f"{pair[0]}×{pair[1]}({pair[2]},{pair[3]})" if pair else "?"
-    print(f"  ({a:>4},{b:>4},{c:>4})  {nd_norm:>8}  {pstr:>14}  {Rp:>8.2f}  {ratio:>8.4f}")
+    print(
+        f"  ({a:>4},{b:>4},{c:>4})  {nd_norm:>8}  {pstr:>14}  {Rp:>8.2f}  {ratio:>8.4f}"
+    )
 
 print()
 print("DETAIL: ω=5 type (1,3,1) — showing pairs used for min nd norm:")
 print(f"  {'(a,b,c)':>18}  {'nd_norm':>8}  {'pair':>10}  {'R^{1/4}':>8}  {'ratio':>8}")
-print("  " + "-"*60)
-for a,b,c,ratio,nd_norm,pair in sorted(types_data.get((5,(1,3,1)),[]), key=lambda x:x[2])[:15]:
-    R = rad(a,b,c)
+print("  " + "-" * 60)
+for a, b, c, ratio, nd_norm, pair in sorted(
+    types_data.get((5, (1, 3, 1)), []), key=lambda x: x[2]
+)[:15]:
+    R = rad(a, b, c)
     Rp = R**0.25
     pstr = f"{pair[0]}×{pair[1]}({pair[2]},{pair[3]})" if pair else "?"
-    print(f"  ({a:>4},{b:>4},{c:>4})  {nd_norm:>8}  {pstr:>14}  {Rp:>8.2f}  {ratio:>8.4f}")
+    print(
+        f"  ({a:>4},{b:>4},{c:>4})  {nd_norm:>8}  {pstr:>14}  {Rp:>8.2f}  {ratio:>8.4f}"
+    )
 
 print()
 print("DETAIL: ω=5 type (3,1,1) — showing why UNBOUNDED:")
 print(f"  {'(a,b,c)':>18}  {'nd_norm':>8}  {'pair':>10}  {'R^{1/4}':>8}  {'ratio':>8}")
-print("  " + "-"*60)
-for a,b,c,ratio,nd_norm,pair in sorted(types_data.get((5,(3,1,1)),[]), key=lambda x:-x[3])[:10]:
-    R = rad(a,b,c)
+print("  " + "-" * 60)
+for a, b, c, ratio, nd_norm, pair in sorted(
+    types_data.get((5, (3, 1, 1)), []), key=lambda x: -x[3]
+)[:10]:
+    R = rad(a, b, c)
     Rp = R**0.25
     pstr = f"{pair[0]}×{pair[1]}({pair[2]},{pair[3]})" if pair else "?"
-    print(f"  ({a:>4},{b:>4},{c:>4})  {nd_norm:>8}  {pstr:>14}  {Rp:>8.2f}  {ratio:>8.4f}")
+    print(
+        f"  ({a:>4},{b:>4},{c:>4})  {nd_norm:>8}  {pstr:>14}  {Rp:>8.2f}  {ratio:>8.4f}"
+    )
 
 print()
 print("THEOREM F10 (general ω, proved 2026-08-15):")

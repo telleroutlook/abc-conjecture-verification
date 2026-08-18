@@ -146,6 +146,12 @@ The finer exact formulas introduced for non-squarefree triples apply to a
 valuation-coordinate sublattice defined below, not to the original lattice
 without further argument.
 
+Results printed in the separate \emph{Candidate Formula} environment are
+finite-verification formulas: their constructive witnesses and stated branch
+reductions are proved, but their all-nonzero coordinate cases have only been
+checked on the stated finite samples.  They are not used as unconditional
+theorems elsewhere in this paper.
+
 
 
 Corollary~\ref{cor:minkowski} does \emph{not} imply abc for the following reasons:
@@ -239,14 +245,14 @@ We prove this for any finite set $P$ of primes by an elementary telescoping
 argument.  Set $M = \max P$.  For each $n \ge 2$:
 \[
   \frac{1}{n^2}
-  \;\le\; \frac{1}{n-1} - \frac{1}{n},
+  \;<\; \frac{1}{n-1} - \frac{1}{n},
 \]
 which follows from the identity
 $\frac{1}{n-1} - \frac{1}{n} - \frac{1}{n^2} = \frac{1}{n^2(n-1)} > 0$.
 Therefore
 \[
   \sum_{p \in P} \frac{1}{p^2}
-  \;\le\; \sum_{p \in P} \Bigl(\frac{1}{p-1} - \frac{1}{p}\Bigr)
+  \;<\; \sum_{p \in P} \Bigl(\frac{1}{p-1} - \frac{1}{p}\Bigr)
   \;\le\; \sum_{n=2}^{M} \Bigl(\frac{1}{n-1} - \frac{1}{n}\Bigr)
   \;=\; 1 - \frac{1}{M}
   \;<\; 1.
@@ -273,11 +279,18 @@ We use Theorem~2 of Vaaler~\cite{Vaaler1979}, which gives a precise form of
 Minkowski's linear-forms theorem in the subspace setting.  Let $A$ be the
 $\omega\times(\omega-1)$ matrix whose columns form a $\mathbb{Z}$-basis of $L$,
 and take the $\omega$ ambient coordinate functionals as the linear forms.
-Then $\det(A^{T}A)=\det(L)^2$.  Vaaler's theorem, with all coordinate bounds
-equal to $\lambda:=\det(L)^{1/(\omega-1)}$, gives a nonzero $\psi\in L$ with
-$\|\psi\|_\infty\le\lambda$.  Equivalently, its geometric corollary says that
-every central hyperplane section of $[-1,1]^\omega$ has $(\omega-1)$-dimensional
-volume at least $2^{\omega-1}$.  Therefore
+Then $\det(A^{T}A)=\det(L)^2$.  In the real, rank-$K$ case, Vaaler's
+Theorem~2 takes the common coordinate bound
+\[
+  \varepsilon
+  = |\det(A^{T}A)|^{1/(2K)}
+  = \det(L)^{1/K}.
+\]
+With $K=\omega-1$, this is exactly
+$\lambda:=\det(L)^{1/(\omega-1)}$, and the theorem gives a nonzero
+$\psi\in L$ with $\|\psi\|_\infty\le\lambda$.  Equivalently, its geometric
+corollary says that every central hyperplane section of $[-1,1]^\omega$ has
+$(\omega-1)$-dimensional volume at least $2^{\omega-1}$.  Therefore
 \[
   \|\psi\|_\infty \;\le\; \det(L)^{1/(\omega-1)} \;<\; R^{1/(\omega-1)}. \qedhere
 \]
@@ -301,6 +314,7 @@ $\omega$ & count & mean $\rho$ & max $\rho$ & $\%\!>\!1$ & note \\
 5 & 14\,009 & 0.961 & 31.105 & 24.1\% & $(1,1,3)$, $(1,3,1)$, $(3,1,1)$ unbounded \\
 6 & 18\,739 & 0.465 & 17.889 & 5.3\%  & all types unbounded \\
 7 & 7\,766  & 0.248 & 1.631  & 1.0\%  & all types unbounded \\
+8 & 658     & 0.311 & 1.280  & 1.5\%  & all types unbounded \\
 \hline
 \end{tabular}
 \caption{Empirical summary of $\rho = \|\psi_\mathrm{nd}\|_\infty / R^{1/(\omega-1)}$
@@ -495,7 +509,9 @@ with $\omega \le 5$.
   The integer lattice constraint isolates $\psi_q$:
   $(R/q)\psi_q = -\sum_{p \ne q} \operatorname{sign}(p)(R/p)\psi_p$.
   For each $p \ne q$: $R/p$ contains $q$ as a factor (since $q \in P$, $q \ne p$).
-  Hence $q \mid \text{RHS}$.  Since $\gcd(q, R/q) = 1$: $q \mid \psi_q$.
+  Hence $q \mid \text{RHS}$.  Also $R/q$ is the product of the distinct primes
+  in $P\setminus\{q\}$, so it is not divisible by $q$ and
+  $\gcd(q, R/q)=1$.  Therefore $q \mid \psi_q$.
 \end{proof}
 
 Define $\varphi_q = \psi_q/q \in \mathbb{Z}$ (well-defined by Theorem~\ref{thm:div}).
@@ -2606,9 +2622,13 @@ small primes --- equivalently, when $\max(n_a, n_b, n_c) \le 2$.
 \section{Formal verification status}
 \begingroup\raggedright
 
-The proofs of Theorem~\ref{thm:det} and Theorem~\ref{thm:gcd} have been
-formalized in Lean~4 (Mathlib), as part of the abc conjecture verification
-kernel project (\texttt{lean/AbcHeightKernel.lean}, sections E3--E4, F3).
+The coefficient identity and the strict coefficient-norm bound used in
+Theorem~\ref{thm:det} have been formalized in Lean~4 (Mathlib), as part of the
+abc conjecture verification kernel project
+(\texttt{lean/AbcHeightKernel.lean}, sections E3--E4, F3).  The paper-level
+primitive-constraint-to-determinant identity and Theorem~\ref{thm:gcd} are not
+separately formalized there as named Lean theorems; the Lean result named
+\texttt{pasten\_det\_lt\_rad} is literally the coefficient-norm bound.
 Key items:
 \begin{itemize}
   \item \texttt{finite\_prime\_recip\_sq\_lt\_one}: for any finite set $P$ of
@@ -2617,9 +2637,12 @@ Key items:
   \item \texttt{pasten\_coeff\_sq\_sum}: the coefficient identity
     $\sum_p (R/p)^2 = R^2 \sum_p p^{-2}$.
   \item \texttt{pasten\_det\_lt\_rad}: $\sqrt{\sum_p (R/p)^2} < R$.
-  \item \texttt{minkowski\_vaaler\_pasten}: admitted as an axiom citing
-    Vaaler~\cite{Vaaler1979}.  Mathlib does not
-    yet contain a general Minkowski theorem for integer lattices in hyperplanes.
+  \item \texttt{minkowski\_vaaler\_pasten}: an admitted, non-vacuous
+    matrix-form interface for Vaaler~\cite{Vaaler1979}.  Its conclusion is the
+    existence of a nonzero integer coefficient vector whose ambient-coordinate
+    image is bounded by the Gram determinant to the power
+    $1/(\omega-1)$.  It is an imported premise, not a Lean proof of Vaaler's
+    theorem; Mathlib does not yet contain the needed subspace form.
   \item \texttt{pasten\_prime\_triple\_arith} (F3): $p \cdot q < 4r$ for
     prime triple $p+q=r$, $p=2$.  Proved by \texttt{omega} after substitution.
   \item \texttt{pasten\_rad\_sqrt\_lt\_twice\_r} (F3): $\sqrt{pqr} < 2r$ for

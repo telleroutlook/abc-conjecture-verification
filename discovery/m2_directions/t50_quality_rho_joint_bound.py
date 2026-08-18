@@ -26,29 +26,39 @@ Analytical proof sketch for p=2:
 
 import math
 
+
 def is_prime(n):
-    if n < 2: return False
-    if n < 4: return True
-    if n % 2 == 0: return False
-    for i in range(3, int(n**0.5)+1, 2):
-        if n % i == 0: return False
+    if n < 2:
+        return False
+    if n < 4:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(n**0.5) + 1, 2):
+        if n % i == 0:
+            return False
     return True
+
 
 def rad(n):
     r = 1
     temp = n
     d = 2
-    while d*d <= temp:
+    while d * d <= temp:
         if temp % d == 0:
             r *= d
-            while temp % d == 0: temp //= d
+            while temp % d == 0:
+                temp //= d
         d += 1
-    if temp > 1: r *= temp
+    if temp > 1:
+        r *= temp
     return r
+
 
 def quality(a, b, c):
     R = rad(a) * rad(b) * rad(c)  # rad(abc) = rad(a)*rad(b)*rad(c) for squarefree
     return math.log(c) / math.log(R)
+
 
 def nd_and_rho(pa, pb, pc):
     """F10 nd and ρ for given prime groups"""
@@ -56,27 +66,30 @@ def nd_and_rho(pa, pb, pc):
     nd = group_mins[1]
     R = 1
     for grp in [pa, pb, pc]:
-        for p in grp: R *= p
+        for p in grp:
+            R *= p
     omega = len(pa) + len(pb) + len(pc)
-    rho_power = nd / R**(1/(omega-1))  # ρ^{ω-1} = nd/R^{1/(ω-1)}... wait
-    # Actually ρ = nd / R^{1/(ω-1)}, so ρ^{ω-1} = nd^{ω-1} / R
-    rho = nd / R**(1/(omega-1))
+    # ρ = nd / R^{1/(ω-1)}, so ρ^{ω-1} = nd^{ω-1} / R.
+    rho = nd / R ** (1 / (omega - 1))
     return nd, R, rho, omega
 
+
 print("T50: Quality vs ρ joint bound for squarefree abc triples")
-print("="*70)
+print("=" * 70)
 
 # ====== Type (1,1,1): ω=3, p=2 ======
 print("\nType (1,1,1): a=p, b=q, c=r=p+q (all prime, p=2)")
 print(f"{'(p,q,r)':15}  {'quality':>10}  {'rho^2':>10}  {'q+rho^2':>10}  {'<1?'}")
-print("-"*60)
+print("-" * 60)
 
 primes = [x for x in range(2, 5000) if is_prime(x)]
 results_111 = []
 for q in primes:
-    if q == 2: continue
+    if q == 2:
+        continue
     r = 2 + q
-    if r not in set(primes): continue
+    if r not in set(primes):
+        continue
     q_abc = quality(2, q, r)
     nd, R, rho, omega = nd_and_rho([2], [q], [r])
     rho2 = rho**2
@@ -93,41 +106,47 @@ for q, r, qa, rho2, s in results_111[-5:]:
     ok = "✓" if s < 1 else "✗ FAILS"
     print(f"(2,{q},{r}){'':5}  {qa:10.6f}  {rho2:10.6f}  {s:10.6f}  {ok}")
 
-max_sum_111 = max(s for _,_,_,_,s in results_111)
-all_ok_111 = all(s < 1 for _,_,_,_,s in results_111)
+max_sum_111 = max(s for _, _, _, _, s in results_111)
+all_ok_111 = all(s < 1 for _, _, _, _, s in results_111)
 print(f"\nAll quality+rho²<1: {'✓' if all_ok_111 else '✗'}")
 print(f"Max quality+rho² = {max_sum_111:.8f} (over {len(results_111)} triples, q≤4999)")
-print(f"Limit as q→∞: quality→1/2, rho²→1/2, sum→1 (never achieved)")
+print("Limit as q→∞: quality→1/2, rho²→1/2, sum→1 (never achieved)")
 
 # ====== Analytical check ======
 print("\n--- Analytical verification for type (1,1,1), p=2 ---")
 print("Claim: quality + rho² < 1 iff (r-2)*log(r) < (r+2)*log(2*(r-2))")
 print("where r = 2+q, checked for r prime, q=r-2 prime:")
 for q in [3, 5, 11, 41, 101, 1009, 5003]:
-    if not is_prime(q): continue
+    if not is_prime(q):
+        continue
     r = 2 + q
-    if not is_prime(r): continue
-    lhs = (r-2) * math.log(r)
-    rhs = (r+2) * math.log(2*(r-2))
+    if not is_prime(r):
+        continue
+    lhs = (r - 2) * math.log(r)
+    rhs = (r + 2) * math.log(2 * (r - 2))
     ok = "✓" if lhs < rhs else "✗"
     print(f"  r={r:6d}: LHS={lhs:.4f}  RHS={rhs:.4f}  LHS<RHS: {ok}")
 
 # ====== Type (1,1,2): ω=4 ======
 print("\n\nType (1,1,2): a=p, b=q, c=r1*r2 (all prime)")
 print(f"{'(p,q,r1,r2)':20}  {'quality':>10}  {'rho^3':>10}  {'q+rho^3':>10}  {'<1?'}")
-print("-"*65)
+print("-" * 65)
 
 prime_set = set(primes[:200])
 results_112 = []
 for p in primes[:10]:
     for q in primes:
-        if q <= p: continue
+        if q <= p:
+            continue
         c = p + q
         for r1 in primes:
-            if r1 >= c: break
-            if c % r1 != 0: continue
+            if r1 >= c:
+                break
+            if c % r1 != 0:
+                continue
             r2 = c // r1
-            if r2 <= r1 or r2 not in prime_set: continue
+            if r2 <= r1 or r2 not in prime_set:
+                continue
             q_abc = quality(p, q, c)
             nd, R, rho, omega = nd_and_rho([p], [q], [r1, r2])
             rho3 = rho**3
@@ -139,13 +158,13 @@ for p, q, r1, r2, qa, rho3, s in results_112[:15]:
     print(f"({p},{q},{r1},{r2}){'':5}  {qa:10.6f}  {rho3:10.6f}  {s:10.6f}  {ok}")
 
 if results_112:
-    max_sum_112 = max(s for *_,s in results_112)
-    all_ok_112 = all(s < 1 for *_,s in results_112)
+    max_sum_112 = max(s for *_, s in results_112)
+    all_ok_112 = all(s < 1 for *_, s in results_112)
     print(f"\nAll quality+rho³<1: {'✓' if all_ok_112 else '✗'}")
     print(f"Max quality+rho³ = {max_sum_112:.8f} (over {len(results_112)} triples)")
 
 # ====== General conjecture ======
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("CONJECTURE (Quality-ρ Joint Bound):")
 print("  For any squarefree coprime abc with ω(abc)=ω and quality q=log(c)/log(rad):")
 print("  quality + ρ^{ω-1} < 1")
@@ -154,6 +173,8 @@ print()
 print("  The bound is TIGHT: quality + ρ^{ω-1} → 1 in the extremal families")
 print("  (e.g., ω=3 type (1,1,1) with p=2 and q→∞ along Sophie Germain pairs).")
 print()
-print("  This is a NEW JOINT BOUND connecting abc quality with Pasten lattice geometry.")
+print(
+    "  This is a NEW JOINT BOUND connecting abc quality with Pasten lattice geometry."
+)
 print("  Note: quality < 1 trivially (squarefree); ρ^{ω-1} < 1 from F3/F10.")
 print("  The JOINT bound quality+ρ^{ω-1}<1 is stronger than either alone.")

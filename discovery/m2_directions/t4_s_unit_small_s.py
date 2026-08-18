@@ -19,8 +19,8 @@ The results are sanity checks only.
 """
 
 import math
-from itertools import product
 from functools import reduce
+
 
 def factorize(n):
     factors = {}
@@ -111,7 +111,7 @@ for S in PRIME_SETS:
     print(f"  Coprime triples a+b=c (a≤b), all S-smooth: {len(triples)}")
 
     if triples:
-        print(f"  Top 5 by quality:")
+        print("  Top 5 by quality:")
         print(f"  {'a':>10} {'b':>10} {'c':>10}  {'R':>8}  {'q':>8}")
         for a, b, c, q, R in triples[:5]:
             print(f"  {a:>10} {b:>10} {c:>10}  {R:>8}  {q:>8.4f}")
@@ -123,7 +123,7 @@ for S in PRIME_SETS:
             a, b, c, q, R = triples[0]
             print(f"  Best witness: ({a},{b},{c}), R={R}, q={q:.4f} > 1")
         else:
-            print(f"  All triples have q ≤ 1 for this S (rare!)")
+            print("  All triples have q ≤ 1 for this S (rare!)")
 
 
 print()

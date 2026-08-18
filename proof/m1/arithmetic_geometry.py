@@ -19,8 +19,7 @@ import math
 from typing import NamedTuple
 
 from proof.m0.provenance import assert_zero_free, assert_no_abc_input
-from proof.m1.rad import rad, rad_triple
-from proof.m1.heights import FreyCurveData, FaltingsHeightScaffold, HEIGHT_FRAMEWORK_STATUS
+from proof.m1.rad import rad_triple
 
 assert_zero_free(__file__)
 assert_no_abc_input(

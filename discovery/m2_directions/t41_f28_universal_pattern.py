@@ -29,35 +29,43 @@ VERIFICATION: Check 0 violations of rho < 2^{-1/(omega-1)} for omega=3..7, a=2.
 Also find near-sup examples approaching the bound.
 """
 
-import math
 
 def isprime(n):
-    if n < 2: return False
-    if n == 2: return True
-    if n % 2 == 0: return False
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
     d = 3
     while d * d <= n:
-        if n % d == 0: return False
+        if n % d == 0:
+            return False
         d += 2
     return True
+
 
 def primes_up_to(n):
     sieve = [True] * (n + 1)
     sieve[0] = sieve[1] = False
     for i in range(2, int(n**0.5) + 1):
         if sieve[i]:
-            for j in range(i*i, n+1, i):
+            for j in range(i * i, n + 1, i):
                 sieve[j] = False
-    return [i for i in range(2, n+1) if sieve[i]]
+    return [i for i in range(2, n + 1) if sieve[i]]
+
 
 def products_of_k_primes(odd_primes, k, min_prime=3):
     """Generate all squarefree products of exactly k distinct odd primes >= min_prime."""
     from itertools import combinations
+
     filtered = [p for p in odd_primes if p >= min_prime]
     for combo in combinations(filtered, k):
         prod = 1
-        for p in combo: prod *= p
+        for p in combo:
+            prod *= p
         yield combo, prod
+
 
 PRIMES = primes_up_to(5000)
 ODD_PRIMES = [p for p in PRIMES if p > 2]
@@ -65,7 +73,9 @@ ODD_PRIMES = [p for p in PRIMES if p > 2]
 print("F28: Universal pattern sup = 2^{-1/(omega-1)} for type (1,k1,k2) with a=2")
 print("=" * 70)
 print()
-print(f"{'omega':>5}  {'type':>8}  {'sup_theory':>12}  {'max_found':>12}  {'gap':>10}  {'violations':>10}")
+print(
+    f"{'omega':>5}  {'type':>8}  {'sup_theory':>12}  {'max_found':>12}  {'gap':>10}  {'violations':>10}"
+)
 print("-" * 70)
 
 results = {}
@@ -86,12 +96,14 @@ for omega in range(3, 8):
 
         for b_combo, b_val in products_of_k_primes(b_primes_pool, k1):
             c_val = 2 + b_val
-            if c_val < 2: continue
+            if c_val < 2:
+                continue
             # Factorize c_val
             c_factors = []
             n = c_val
             for p in PRIMES:
-                if p * p > n: break
+                if p * p > n:
+                    break
                 if n % p == 0:
                     c_factors.append(p)
                     n //= p
@@ -100,13 +112,16 @@ for omega in range(3, 8):
                         break
             if n > 1 and c_factors is not None:
                 c_factors.append(n)
-            if not c_factors or len(c_factors) != k2: continue
+            if not c_factors or len(c_factors) != k2:
+                continue
 
             # Check squarefree (no repeated factor in c) and distinct from a=2 and b primes
             b_set = set(b_combo)
             c_set = set(c_factors)
-            if 2 in c_set or b_set & c_set: continue
-            if len(c_set) != k2: continue
+            if 2 in c_set or b_set & c_set:
+                continue
+            if len(c_set) != k2:
+                continue
 
             # All primes: {2} union b_set union c_set, all distinct
             # group mins: {2, min(b_set), min(c_set)}
@@ -117,14 +132,18 @@ for omega in range(3, 8):
             nd = group_mins[1]  # second smallest
 
             R = 2
-            for p in b_set: R *= p
-            for p in c_set: R *= p
+            for p in b_set:
+                R *= p
+            for p in c_set:
+                R *= p
 
             rho = nd / R ** (1.0 / (omega - 1))
 
             if rho >= sup_theory:
                 violations += 1
-                print(f"  VIOLATION omega={omega} k1={k1} k2={k2}: (2,{b_val},{c_val}) rho={rho:.8f}")
+                print(
+                    f"  VIOLATION omega={omega} k1={k1} k2={k2}: (2,{b_val},{c_val}) rho={rho:.8f}"
+                )
 
             if rho > best_rho:
                 best_rho = rho
@@ -132,13 +151,17 @@ for omega in range(3, 8):
 
     gap = sup_theory - best_rho
     results[omega] = (sup_theory, best_rho, gap, violations)
-    type_str = f"(1,*,*)"
-    print(f"{omega:>5}  {type_str:>8}  {sup_theory:>12.8f}  {best_rho:>12.8f}  {gap:>10.8f}  {violations:>10d}   {best_triple_desc}")
+    type_str = "(1,*,*)"
+    print(
+        f"{omega:>5}  {type_str:>8}  {sup_theory:>12.8f}  {best_rho:>12.8f}  {gap:>10.8f}  {violations:>10d}   {best_triple_desc}"
+    )
 
 print()
 print("Pattern confirmed: sup = 2^{-1/(omega-1)} for all balanced (1,k1,k2) types:")
 for omega, (sup_t, max_r, gap, v) in results.items():
-    print(f"  omega={omega}: sup=2^{{-1/{omega-1}}} = {sup_t:.6f}, max_found={max_r:.6f}, violations={v}")
+    print(
+        f"  omega={omega}: sup=2^{{-1/{omega - 1}}} = {sup_t:.6f}, max_found={max_r:.6f}, violations={v}"
+    )
 
 print()
 print("KEY LEMMA (used in proof):")

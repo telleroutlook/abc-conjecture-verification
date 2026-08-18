@@ -54,7 +54,12 @@ def test_no_frey_faltings_target_instance_is_supplied() -> None:
 
 def test_ob04_axiom_audit_replays() -> None:
     result = subprocess.run(
-        [str(Path.home() / ".elan" / "bin" / "lake"), "env", "lean", "AbcHeightKernel.lean"],
+        [
+            str(Path.home() / ".elan" / "bin" / "lake"),
+            "env",
+            "lean",
+            "AbcHeightKernel.lean",
+        ],
         cwd=LEAN_ROOT,
         check=True,
         capture_output=True,

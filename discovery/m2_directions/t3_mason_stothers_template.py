@@ -31,12 +31,10 @@ This is where the proof breaks down in the number field case.
 """
 
 import sympy
-from sympy import symbols, gcd, Poly, factor, degree, diff, resultant, div
-from sympy import prod as sprod
-from functools import reduce
+from sympy import symbols, diff
 import math
 
-t = symbols('t')
+t = symbols("t")
 
 
 def poly_rad(f, var=t):
@@ -56,18 +54,18 @@ print("\n[A] Concrete verification of Mason-Stothers:")
 examples = [
     (t**3, t**2 * (t + 1), None),  # will compute h = f+g
     (t**5, 1 - t**5, None),
-    (t**2, 2*t + 1, None),
+    (t**2, 2 * t + 1, None),
 ]
 
 # Use actual abc examples
 ABC_POLYS = [
-    (t**2, t*(t+1), t**2 + t*(t+1)),  # f+g = h?
+    (t**2, t * (t + 1), t**2 + t * (t + 1)),  # f+g = h?
 ]
 
 # Let's use clean examples
 clean_examples = [
     ("f=t^2, g=1, h=t^2+1", t**2, sympy.Integer(1), t**2 + 1),
-    ("f=t^3, g=-t^2, h=t^2(t-1)", t**3, -t**2, t**3 - t**2),
+    ("f=t^3, g=-t^2, h=t^2(t-1)", t**3, -(t**2), t**3 - t**2),
     ("f=t^4, g=t^3+t^2, h=t^4+t^3+t^2", t**4, t**3 + t**2, t**4 + t**3 + t**2),
 ]
 
@@ -91,7 +89,9 @@ for name, f, g, h in clean_examples:
 
     ms_bound_holds = deg_max <= deg_rad - 1
     print(f"  {name}:")
-    print(f"    max deg = {deg_max},  deg rad(fgh) = {deg_rad},  bound max≤rad-1: {ms_bound_holds}")
+    print(
+        f"    max deg = {deg_max},  deg rad(fgh) = {deg_rad},  bound max≤rad-1: {ms_bound_holds}"
+    )
     print(f"    deg W = {deg_W}")
 
 # --- The Wronskian step-by-step ---
@@ -158,8 +158,8 @@ def arith_derivative(n):
     return result
 
 
-print(f"  n   n'    log(n')/log(n)   comment")
-print(f"  " + "-" * 50)
+print("  n   n'    log(n')/log(n)   comment")
+print("  " + "-" * 50)
 for n in [2, 4, 8, 12, 36, 72, 100, 1000, 10000]:
     nd = arith_derivative(n)
     if nd > 0 and n > 1:

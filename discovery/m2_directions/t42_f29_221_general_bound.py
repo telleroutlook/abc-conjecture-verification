@@ -32,6 +32,7 @@ SHARPNESS: As q1 -> q2 -> n and p1=2, p2=3 (a=6 fixed):
 
 import math
 
+
 def factorize(n):
     f = {}
     d = 2
@@ -44,12 +45,14 @@ def factorize(n):
         f[n] = 1
     return f
 
+
 def gcd(a, b):
     while b:
         a, b = b, a % b
     return abs(a)
 
-SUP = (1/6) ** 0.25
+
+SUP = (1 / 6) ** 0.25
 print(f"F29: type (2,2,1) universal bound rho < (1/6)^{{1/4}} = {SUP:.8f}")
 print()
 
@@ -61,14 +64,14 @@ print()
 # Check analytically: q1*(q1+1)^2 > q1^3 for all q1>=2
 print("  q1*(q1+1)^2 > q1^3 for q1>=2?")
 for q1 in range(2, 20):
-    lhs = q1 * (q1+1)**2
+    lhs = q1 * (q1 + 1) ** 2
     rhs = q1**3
     assert lhs > rhs, f"FAIL q1={q1}"
 print("  VERIFIED for q1=2..19 (trivial: (q1+1)^2 > q1^2 always)")
 print()
 
 # Full numerical verification
-print(f"Verifying rho < (1/6)^{{1/4}} for all type (2,2,1) with c<=20000...")
+print("Verifying rho < (1/6)^{1/4} for all type (2,2,1) with c<=20000...")
 violations = 0
 max_rho = 0.0
 max_triple = None
@@ -105,7 +108,7 @@ for c in range(6, 20001):
         nd = group_mins[1]
 
         R = math.prod(pa | pb | pc)
-        rho = nd / R ** 0.25
+        rho = nd / R**0.25
 
         count += 1
         if rho >= SUP:
@@ -121,7 +124,7 @@ print(f"Violations: {violations}")
 if max_triple:
     a, b, c, p1, p2, q1, q2, r = max_triple
     print(f"Max rho = {max_rho:.8f} at ({a},{b},{c})")
-    print(f"  a={a}={p1}*{p2}, b={b}={q1}*{q2}, c={c}, nd=max({p1},{q1})={max(p1,q1)}")
+    print(f"  a={a}={p1}*{p2}, b={b}={q1}*{q2}, c={c}, nd=max({p1},{q1})={max(p1, q1)}")
     print(f"  Gap to sup: {SUP - max_rho:.8f}")
 print()
 
@@ -129,24 +132,33 @@ print()
 print("PROOF STEPS for extremal example (a=6, near-twin b):")
 for q1 in [5, 11, 101, 1009]:
     q2 = q1 + 2
+
     # check q1, q2 prime
     def isp(n):
-        if n < 2: return False
-        for i in range(2, int(n**0.5)+1):
-            if n % i == 0: return False
+        if n < 2:
+            return False
+        for i in range(2, int(n**0.5) + 1):
+            if n % i == 0:
+                return False
         return True
-    while not isp(q2): q2 += 2
+
+    while not isp(q2):
+        q2 += 2
     r_val = 6 + q1 * q2
     # check r prime (may not be)
     for dr in range(0, 200):
-        if isp(r_val + dr) and (r_val+dr) not in {2,3,q1,q2}:
+        if isp(r_val + dr) and (r_val + dr) not in {2, 3, q1, q2}:
             r_val = r_val + dr
             break
 
     rho4 = q1**3 / (6 * q2 * r_val)
     step1_bound = q1**3 / (6 * q1 * q2**2)  # = q1^2/(6*q2^2)
-    print(f"  q1={q1}, q2={q2}, r={r_val}: rho^4={rho4:.6f}, step1_bound={step1_bound:.6f}, 1/6={1/6:.6f}")
-    print(f"    6*q1^3={6*q1**3}, p1*p2*q2*r >= 6*q1*q2^2={6*q1*q2**2} > 6*q1^3: {6*q1*q2**2 > 6*q1**3}")
+    print(
+        f"  q1={q1}, q2={q2}, r={r_val}: rho^4={rho4:.6f}, step1_bound={step1_bound:.6f}, 1/6={1 / 6:.6f}"
+    )
+    print(
+        f"    6*q1^3={6 * q1**3}, p1*p2*q2*r >= 6*q1*q2^2={6 * q1 * q2**2} > 6*q1^3: {6 * q1 * q2**2 > 6 * q1**3}"
+    )
 
 print()
 print("F29 THEOREM: For ALL type (2,2,1) triples: rho^4 < 1/6.")

@@ -24,7 +24,8 @@ PROGRAM:
 """
 
 import math
-from itertools import product as iproduct, combinations
+from itertools import product as iproduct
+
 
 def factorize(n):
     f = {}
@@ -38,14 +39,17 @@ def factorize(n):
         f[n] = f.get(n, 0) + 1
     return f
 
+
 def rad(n):
     return math.prod(factorize(n).keys()) if n > 1 else 1
+
 
 def extended_gcd(a, b):
     if b == 0:
         return a, 1, 0
     g, x, y = extended_gcd(b, a % b)
     return g, y, x - (a // b) * y
+
 
 def lattice_basis_from_constraint(alpha):
     n = len(alpha)
@@ -66,23 +70,24 @@ def lattice_basis_from_constraint(alpha):
         a_work[col] = 0
     return [[U[r][c] for r in range(n)] for c in range(1, n)]
 
+
 def lll_reduce(basis, primes, delta=0.75):
     n_v = len(basis)
     n_d = len(basis[0])
     B = [list(v) for v in basis]
 
     def dot(u, v):
-        return sum(primes[i]**2 * u[i] * v[i] for i in range(n_d))
+        return sum(primes[i] ** 2 * u[i] * v[i] for i in range(n_d))
 
     def gs_full(vecs):
         gs = []
-        mu = [[0.0]*len(vecs) for _ in range(len(vecs))]
+        mu = [[0.0] * len(vecs) for _ in range(len(vecs))]
         for i, v in enumerate(vecs):
             u = list(v)
             for j in range(i):
                 d = dot(gs[j], gs[j])
                 mu[i][j] = dot(v, gs[j]) / d if d > 1e-12 else 0
-                u = [u[k] - mu[i][j]*gs[j][k] for k in range(n_d)]
+                u = [u[k] - mu[i][j] * gs[j][k] for k in range(n_d)]
             gs.append(u)
         return gs, mu
 
@@ -91,20 +96,21 @@ def lll_reduce(basis, primes, delta=0.75):
         if k >= n_v:
             break
         gs, mu = gs_full(B)
-        for j in range(k-1, -1, -1):
+        for j in range(k - 1, -1, -1):
             if abs(mu[k][j]) > 0.5:
                 m = round(mu[k][j])
-                B[k] = [B[k][i] - m*B[j][i] for i in range(n_d)]
+                B[k] = [B[k][i] - m * B[j][i] for i in range(n_d)]
                 gs, mu = gs_full(B)
         gs, mu = gs_full(B)
         lhs = dot(gs[k], gs[k])
-        rhs = (delta - mu[k][k-1]**2) * dot(gs[k-1], gs[k-1])
+        rhs = (delta - mu[k][k - 1] ** 2) * dot(gs[k - 1], gs[k - 1])
         if lhs >= rhs:
             k += 1
         else:
-            B[k], B[k-1] = B[k-1], B[k]
-            k = max(k-1, 1)
+            B[k], B[k - 1] = B[k - 1], B[k]
+            k = max(k - 1, 1)
     return B
+
 
 def nd_svp(a, b, R=20):
     c = a + b
@@ -118,20 +124,21 @@ def nd_svp(a, b, R=20):
     basis = lattice_basis_from_constraint(alpha)
     basis_red = lll_reduce(basis, primes)
     rank = len(basis_red)
-    best = float('inf')
-    for coords in iproduct(range(-R, R+1), repeat=rank):
-        if all(c==0 for c in coords):
+    best = float("inf")
+    for coords in iproduct(range(-R, R + 1), repeat=rank):
+        if all(c == 0 for c in coords):
             continue
-        phi = [sum(coords[k]*basis_red[k][i] for k in range(rank)) for i in range(n)]
-        if sum(alpha[i]*phi[i] for i in range(n)) != 0:
+        phi = [sum(coords[k] * basis_red[k][i] for k in range(rank)) for i in range(n)]
+        if sum(alpha[i] * phi[i] for i in range(n)) != 0:
             continue
-        W = sum(ws[i]*phi[i] for i in range(n))
+        W = sum(ws[i] * phi[i] for i in range(n))
         if W == 0:
             continue
-        norm = max(primes[i]*abs(phi[i]) for i in range(n))
+        norm = max(primes[i] * abs(phi[i]) for i in range(n))
         if norm > 0:
             best = min(best, norm)
-    return best if best < float('inf') else None
+    return best if best < float("inf") else None
+
 
 # ── Lower bound candidates ────────────────────────────────────────────────────
 def lower_bounds(a, b):
@@ -140,36 +147,45 @@ def lower_bounds(a, b):
     primes = sorted(set(list(fa.keys()) + list(fb.keys()) + list(fc.keys())))
     if not primes:
         return {}
-    v_max = max([max(fa.values()) if fa else 0,
-                 max(fb.values()) if fb else 0,
-                 max(fc.values()) if fc else 0])
-    R = rad(a*b*c)
+    v_max = max(
+        [
+            max(fa.values()) if fa else 0,
+            max(fb.values()) if fb else 0,
+            max(fc.values()) if fc else 0,
+        ]
+    )
+    R = rad(a * b * c)
     omega = len(primes)
     # Group minima
-    ma = min(fa.keys()) if fa else float('inf')
-    mb = min(fb.keys()) if fb else float('inf')
-    mc = min(fc.keys()) if fc else float('inf')
-    sorted_gm = sorted([x for x in [ma,mb,mc] if x < float('inf')])
-    median_gm = sorted_gm[1] if len(sorted_gm) >= 2 else (sorted_gm[0] if sorted_gm else 0)
+    ma = min(fa.keys()) if fa else float("inf")
+    mb = min(fb.keys()) if fb else float("inf")
+    mc = min(fc.keys()) if fc else float("inf")
+    sorted_gm = sorted([x for x in [ma, mb, mc] if x < float("inf")])
+    median_gm = (
+        sorted_gm[1] if len(sorted_gm) >= 2 else (sorted_gm[0] if sorted_gm else 0)
+    )
     min_gm = min(sorted_gm) if sorted_gm else 0
     second_global = primes[1] if omega >= 2 else primes[0]  # 2nd smallest prime in P
     # squarefree E_n formula: second smallest group minimum
     en_sq = median_gm  # holds for squarefree; NOT a lower bound for non-sq
     return {
-        'v_max': v_max,
-        'R': R,
-        'omega': omega,
-        'min_gm': min_gm,
-        'median_gm': median_gm,
-        'second_global': second_global,
-        'en_sq': en_sq,
+        "v_max": v_max,
+        "R": R,
+        "omega": omega,
+        "min_gm": min_gm,
+        "median_gm": median_gm,
+        "second_global": second_global,
+        "en_sq": en_sq,
     }
+
 
 # ── Main analysis ─────────────────────────────────────────────────────────────
 print("T66: Lower bound analysis for nd(a,b) in non-squarefree triples")
 print("=" * 120)
-print(f"{'(a,b,c)':<18} {'omega':>5} {'nd':>5} {'min_gm':>7} {'med_gm':>7} "
-      f"{'2nd_glb':>8} {'nd>=mgm':>8} {'nd>=2ng':>8} {'nd/min_gm':>10}")
+print(
+    f"{'(a,b,c)':<18} {'omega':>5} {'nd':>5} {'min_gm':>7} {'med_gm':>7} "
+    f"{'2nd_glb':>8} {'nd>=mgm':>8} {'nd>=2ng':>8} {'nd/min_gm':>10}"
+)
 print("-" * 120)
 
 violations_median = []
@@ -197,16 +213,18 @@ for c in range(3, C_MAX + 1):
         nd = nd_svp(a, b, R=15)
         if nd is None:
             continue
-        min_gm = lb['min_gm']
-        median_gm = lb['median_gm']
-        second_global = lb['second_global']
+        min_gm = lb["min_gm"]
+        median_gm = lb["median_gm"]
+        second_global = lb["second_global"]
         ok_median = nd >= median_gm
         ok_2nd = nd >= second_global
         ok_min = nd >= min_gm
         if not ok_median:
             violations_median.append((a, b, c, nd, min_gm, median_gm, second_global))
         if not ok_2nd:
-            violations_2nd_global.append((a, b, c, nd, min_gm, median_gm, second_global))
+            violations_2nd_global.append(
+                (a, b, c, nd, min_gm, median_gm, second_global)
+            )
         if not ok_min:
             violations_min_gm.append((a, b, c, nd, min_gm, median_gm, second_global))
 
@@ -215,22 +233,26 @@ print()
 print(f"nd >= median(m_a, m_b, m_c)  violations: {len(violations_median)}")
 if violations_median[:5]:
     print("  (first 5):")
-    for (a,b,c,nd,mgm,med,sg) in violations_median[:5]:
-        print(f"    ({a},{b},{c}): nd={nd}, median={med}, min_gm={mgm}, 2nd_global={sg}")
+    for a, b, c, nd, mgm, med, sg in violations_median[:5]:
+        print(
+            f"    ({a},{b},{c}): nd={nd}, median={med}, min_gm={mgm}, 2nd_global={sg}"
+        )
 print()
 print(f"nd >= second_global_prime    violations: {len(violations_2nd_global)}")
 if violations_2nd_global[:5]:
-    for (a,b,c,nd,mgm,med,sg) in violations_2nd_global[:5]:
+    for a, b, c, nd, mgm, med, sg in violations_2nd_global[:5]:
         print(f"    ({a},{b},{c}): nd={nd}, 2nd_global={sg}")
 print()
 print(f"nd >= min_gm                 violations: {len(violations_min_gm)}")
 if violations_min_gm[:3]:
-    for (a,b,c,nd,mgm,med,sg) in violations_min_gm[:3]:
+    for a, b, c, nd, mgm, med, sg in violations_min_gm[:3]:
         print(f"    ({a},{b},{c}): nd={nd}, min_gm={mgm}")
 print()
 
 # ── Check specific conjecture: nd >= second_global_prime ─────────────────────
-print("CONJECTURE: nd(a,b) >= second-smallest prime in P (= min over cross-group pairs of max(p,q))")
+print(
+    "CONJECTURE: nd(a,b) >= second-smallest prime in P (= min over cross-group pairs of max(p,q))"
+)
 print("  This is the F10 lower bound: nd >= min_{g1!=g2} max(min_g1, min_g2)")
 print()
 
@@ -252,10 +274,10 @@ for c in range(3, 500 + 1):
         if omega < 2 or omega > 5:
             continue
         # F10 value: second smallest of group minima
-        ma = min(fa.keys()) if fa else float('inf')
-        mb = min(fb.keys()) if fb else float('inf')
-        mc = min(fc.keys()) if fc else float('inf')
-        gm = sorted([x for x in [ma,mb,mc] if x < float('inf')])
+        ma = min(fa.keys()) if fa else float("inf")
+        mb = min(fb.keys()) if fb else float("inf")
+        mc = min(fc.keys()) if fc else float("inf")
+        gm = sorted([x for x in [ma, mb, mc] if x < float("inf")])
         if len(gm) < 2:
             continue
         f10_val = gm[1]  # second smallest group minimum
@@ -263,12 +285,14 @@ for c in range(3, 500 + 1):
         if nd is None:
             continue
         if nd < f10_val:
-            f10_violations.append((a,b,c,nd,f10_val,ma,mb,mc))
+            f10_violations.append((a, b, c, nd, f10_val, ma, mb, mc))
 
-print(f"F10 lower bound (nd >= second_smallest_group_min) violations in c<=500: {len(f10_violations)}")
+print(
+    f"F10 lower bound (nd >= second_smallest_group_min) violations in c<=500: {len(f10_violations)}"
+)
 if f10_violations[:8]:
     print("  Violations:")
-    for (a,b,c,nd,f10v,ma,mb,mc) in f10_violations[:8]:
+    for a, b, c, nd, f10v, ma, mb, mc in f10_violations[:8]:
         print(f"    ({a},{b},{c}): nd={nd} < f10={f10v} (group mins: {ma},{mb},{mc})")
 else:
     print("  None found! F10 lower bound holds for all non-squarefree tested triples.")
@@ -276,8 +300,14 @@ else:
 print()
 print("CONCLUSION:")
 if not f10_violations:
-    print("  CONJECTURE SUPPORTED: nd(a,b) >= second_smallest_group_minimum for all tested non-squarefree.")
-    print("  If true, combined with OB-13B: second_smallest_gm <= nd <= v_max * second_smallest_gm.")
-    print("  This would EXACTLY extend E_n to non-squarefree, with v_max as the error factor.")
+    print(
+        "  CONJECTURE SUPPORTED: nd(a,b) >= second_smallest_group_minimum for all tested non-squarefree."
+    )
+    print(
+        "  If true, combined with OB-13B: second_smallest_gm <= nd <= v_max * second_smallest_gm."
+    )
+    print(
+        "  This would EXACTLY extend E_n to non-squarefree, with v_max as the error factor."
+    )
 else:
     print(f"  CONJECTURE FAILS: {len(f10_violations)} violations found.")

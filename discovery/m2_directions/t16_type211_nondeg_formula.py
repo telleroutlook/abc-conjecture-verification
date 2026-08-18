@@ -31,81 +31,114 @@ THEOREM F6 (proved analytically, 2026-08-15):
 DISCOVERY TIER: no abc triples used.
 """
 
-import math
 
 def factorize(n):
-    f = {}; d = 2
-    while d*d <= n:
-        while n%d == 0: f[d]=f.get(d,0)+1; n//=d
+    f = {}
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            f[d] = f.get(d, 0) + 1
+            n //= d
         d += 1
-    if n > 1: f[n] = 1
+    if n > 1:
+        f[n] = 1
     return f
 
+
 def gcd(a, b):
-    while b: a, b = b, a % b
+    while b:
+        a, b = b, a % b
     return abs(a)
 
-def lcm(a, b): return a*b//gcd(a,b)
+
+def lcm(a, b):
+    return a * b // gcd(a, b)
+
 
 def is_prime(n):
-    if n < 2: return False
-    if n == 2: return True
-    if n % 2 == 0: return False
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
     d = 3
-    while d*d <= n:
-        if n % d == 0: return False
+    while d * d <= n:
+        if n % d == 0:
+            return False
         d += 2
     return True
+
 
 def is_squarefree(n):
     return all(v == 1 for v in factorize(n).values())
 
+
 def wronskian_check(a, b, psi_map, fa, fb):
-    sb = sum(fb[p]*psi_map.get(p,0)/p for p in fb)
-    sa = sum(fa[p]*psi_map.get(p,0)/p for p in fa)
-    return a*b*(sb - sa)
+    sb = sum(fb[p] * psi_map.get(p, 0) / p for p in fb)
+    sa = sum(fa[p] * psi_map.get(p, 0) / p for p in fa)
+    return a * b * (sb - sa)
+
 
 def setup_int_coeffs(a, b, c):
     fa, fb, fc = factorize(a), factorize(b), factorize(c)
-    primes = sorted(set(fa)|set(fb)|set(fc))
+    primes = sorted(set(fa) | set(fb) | set(fc))
     denom = 1
-    for p in primes: denom = lcm(denom, p)
+    for p in primes:
+        denom = lcm(denom, p)
     coeff = {}
-    for p in fa: coeff[p] = coeff.get(p,0) + fa[p]*(denom//p)
-    for p in fb: coeff[p] = coeff.get(p,0) + fb[p]*(denom//p)
-    for p in fc: coeff[p] = coeff.get(p,0) - fc[p]*(denom//p)
+    for p in fa:
+        coeff[p] = coeff.get(p, 0) + fa[p] * (denom // p)
+    for p in fb:
+        coeff[p] = coeff.get(p, 0) + fb[p] * (denom // p)
+    for p in fc:
+        coeff[p] = coeff.get(p, 0) - fc[p] * (denom // p)
     return primes, coeff, fa, fb, fc
 
+
 def check_lattice(psi_map, coeff, primes):
-    return sum(coeff[p]*psi_map.get(p,0) for p in primes)
+    return sum(coeff[p] * psi_map.get(p, 0) for p in primes)
+
 
 print("T16: Type (2,1,1) squarefree ω=4 — exact non-degeneracy formula")
-print("="*75)
+print("=" * 75)
 print()
 
 # Part 1: Verify F6 formula for all type (2,1,1) triples c<=200
 print("[Part 1: Verify formula for all type (2,1,1) triples, c<=200]")
 print()
-print(f"  {'(a,b,c)':>16}  {'p1':>3}  {'p2':>3}  {'r':>3}  {'s':>4}  {'degen_gen':>10}  {'nd_vec':>12}  {'ratio':>8}  {'ok?'}")
-print("  " + "-"*85)
+print(
+    f"  {'(a,b,c)':>16}  {'p1':>3}  {'p2':>3}  {'r':>3}  {'s':>4}  {'degen_gen':>10}  {'nd_vec':>12}  {'ratio':>8}  {'ok?'}"
+)
+print("  " + "-" * 85)
 
-passed = 0; failed = 0
-max_ratio = 0.0; max_triple = None
+passed = 0
+failed = 0
+max_ratio = 0.0
+max_triple = None
 ratios_by_p2r = []  # for growth analysis
 
 for c in range(4, 201):
-    if not is_prime(c): continue
-    for a in range(4, c//2 + 1):
+    if not is_prime(c):
+        continue
+    for a in range(4, c // 2 + 1):
         b = c - a
-        if b <= 0 or b < a: continue
-        if gcd(a, b) != 1: continue
-        if not (is_squarefree(a) and is_squarefree(b) and is_squarefree(c)): continue
-        if not is_prime(b): continue
+        if b <= 0 or b < a:
+            continue
+        if gcd(a, b) != 1:
+            continue
+        if not (is_squarefree(a) and is_squarefree(b) and is_squarefree(c)):
+            continue
+        if not is_prime(b):
+            continue
         fa = factorize(a)
-        if len(fa) != 2: continue  # a must be product of exactly 2 primes
-        fb = factorize(b); fc = factorize(c)
-        omega = len(set(fa)|set(fb)|set(fc))
-        if omega != 4: continue
+        if len(fa) != 2:
+            continue  # a must be product of exactly 2 primes
+        fb = factorize(b)
+        fc = factorize(c)
+        omega = len(set(fa) | set(fb) | set(fc))
+        if omega != 4:
+            continue
 
         pa = sorted(fa.keys())
         p1, p2 = pa[0], pa[1]  # p1 < p2
@@ -131,7 +164,7 @@ for c in range(4, 201):
         nd_ok = (lat_nd == 0) and (abs(W_nd) > 1e-9)
         nd_norm = max(p1, r)
 
-        ratio = nd_norm / R**(1.0/3)
+        ratio = nd_norm / R ** (1.0 / 3)
 
         ok = degen_ok and nd_ok
         if ok:
@@ -148,10 +181,12 @@ for c in range(4, 201):
 
         ratios_by_p2r.append((p1, p2, r, s, R, nd_norm, ratio))
 
-        print(f"  {str((a,b,c)):>16}  {p1:>3}  {p2:>3}  {r:>3}  {s:>4}  {str((p1,-p2,0,0)):>10}  {str((-p1,0,r,0)):>12}  {ratio:>8.4f}  {'✓' if ok else '✗'}")
+        print(
+            f"  {str((a, b, c)):>16}  {p1:>3}  {p2:>3}  {r:>3}  {s:>4}  {str((p1, -p2, 0, 0)):>10}  {str((-p1, 0, r, 0)):>12}  {ratio:>8.4f}  {'✓' if ok else '✗'}"
+        )
 
 print()
-print(f"  Checked {passed+failed} triples: {passed} passed, {failed} failed")
+print(f"  Checked {passed + failed} triples: {passed} passed, {failed} failed")
 print(f"  Max ratio: {max_ratio:.4f} at {max_triple[:3]}")
 print()
 
@@ -162,17 +197,17 @@ print("  For p1=2, p2=3 (a=6), b=r prime, c=6+r prime:")
 print("  ratio = r / (2*3*r*(6+r))^{1/3} = r^{2/3} / (6*(6+r))^{1/3}")
 print()
 print(f"  {'r':>8}  {'s=6+r':>8}  {'R':>12}  {'ratio':>8}  {'approx r^{1/3}·C'}")
-print("  " + "-"*55)
+print("  " + "-" * 55)
 
-primes_r = [r for r in range(5, 500) if is_prime(r) and is_prime(6+r)]
+primes_r = [r for r in range(5, 500) if is_prime(r) and is_prime(6 + r)]
 C_approx = None
 
 for r in primes_r[:20]:
     s = 6 + r
-    R = 2*3*r*s
+    R = 2 * 3 * r * s
     nd_norm = max(2, r)
-    ratio = nd_norm / R**(1.0/3)
-    asymp = r**(1.0/3) * (6**(-1.0/3))  # leading term for large r
+    ratio = nd_norm / R ** (1.0 / 3)
+    asymp = r ** (1.0 / 3) * (6 ** (-1.0 / 3))  # leading term for large r
     print(f"  {r:>8}  {s:>8}  {R:>12}  {ratio:>8.4f}  {asymp:>8.4f}")
 
 print()
@@ -202,15 +237,21 @@ print("  minimum (-p,0,r,0) has norm r=b which grows independently of p,q.")
 print()
 print("  Analogy with ω=3:")
 print("    ω=3 obstruction: a=1 (trivial), b=pq → L₀ has (p,-q,0), nd-min = r = pq+1.")
-print("    ω=4 obstruction: a=p₁p₂ (non-trivial), b=r → L₀ has (p₁,-p₂,0,0), nd-min = max(p₁,r).")
+print(
+    "    ω=4 obstruction: a=p₁p₂ (non-trivial), b=r → L₀ has (p₁,-p₂,0,0), nd-min = max(p₁,r)."
+)
 print()
 print("[Conclusion — Theorem F6]")
 print()
 print("  THEOREM F6 [proved analytically, 2026-08-15]:")
 print("  For squarefree ω=4 type (2,1,1) with a=p₁p₂, b=r, c=s=p₁p₂+r:")
 print("  1. L₀ generator (p₁,-p₂,0,0) has norm p₂. [proven by ring+W=0 check]")
-print("  2. Vector (-p₁,0,r,0) is non-degenerate with norm max(p₁,r). [proven by ring+W≠0]")
-print("  3. Ratio max(p₁,r)/R^{1/3} is UNBOUNDED: grows like r^{1/3}/6^{1/3} for p₁=2,p₂=3.")
+print(
+    "  2. Vector (-p₁,0,r,0) is non-degenerate with norm max(p₁,r). [proven by ring+W≠0]"
+)
+print(
+    "  3. Ratio max(p₁,r)/R^{1/3} is UNBOUNDED: grows like r^{1/3}/6^{1/3} for p₁=2,p₂=3."
+)
 print()
 print("  CONSEQUENCE: there is NO universal non-degenerate bound analogous to")
 print("  ‖ψ_nd‖ ≤ C·R^{1/3} for type (2,1,1). The obstruction is structural:")
@@ -218,4 +259,6 @@ print("  the 'double-prime' factor a=p₁p₂ creates a persistent degenerate di
 print()
 print("  HONEST SCOPE: This is a structural result about Pasten's lattice geometry.")
 print("  It does NOT constitute progress toward abc or SDC.")
-print("  The abc conjecture requires ‖ψ_nd‖ = o(c^ε) for all ε>0 — far beyond these bounds.")
+print(
+    "  The abc conjecture requires ‖ψ_nd‖ = o(c^ε) for all ε>0 — far beyond these bounds."
+)

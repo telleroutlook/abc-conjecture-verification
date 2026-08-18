@@ -42,29 +42,42 @@ CORRECTION to F15:
 
 import math
 
+
 def isprime(n):
-    if n<2: return False
-    if n==2: return True
-    if n%2==0: return False
-    d=3
-    while d*d<=n:
-        if n%d==0: return False
-        d+=2
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    d = 3
+    while d * d <= n:
+        if n % d == 0:
+            return False
+        d += 2
     return True
 
+
 def factorize(n):
-    f={}; d=2
-    while d*d<=n:
-        while n%d==0: f[d]=f.get(d,0)+1; n//=d
-        d+=1
-    if n>1: f[n]=1
+    f = {}
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            f[d] = f.get(d, 0) + 1
+            n //= d
+        d += 1
+    if n > 1:
+        f[n] = 1
     return f
 
-def gcd(a,b):
-    while b: a,b=b,a%b
+
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
     return abs(a)
 
-SUP = 2**(-0.25)
+
+SUP = 2 ** (-0.25)
 print(f"F26: type (1,2,2) sup = 2^(-1/4) = {SUP:.8f}")
 print()
 
@@ -72,24 +85,29 @@ print()
 print("Near-sup examples (a=2, all four b,c-primes close to same size):")
 examples = []
 for p in range(5, 3000, 2):
-    if not isprime(p): continue
-    for q in range(p+2, p+50, 2):
-        if not isprime(q): continue
-        c = 2+p*q
+    if not isprime(p):
+        continue
+    for q in range(p + 2, p + 50, 2):
+        if not isprime(q):
+            continue
+        c = 2 + p * q
         fc = factorize(c)
-        if any(v>1 for v in fc.values()) or len(fc)!=2: continue
-        r,s = sorted(fc.keys())
-        if r in {2,p,q} or s in {2,p,q}: continue
-        gm = sorted([2,p,r]); nd=gm[1]
-        R = 2*p*q*r*s
-        rho = nd/R**0.25
-        examples.append((rho, p, q, r, s, 2, p*q, c))
+        if any(v > 1 for v in fc.values()) or len(fc) != 2:
+            continue
+        r, s = sorted(fc.keys())
+        if r in {2, p, q} or s in {2, p, q}:
+            continue
+        gm = sorted([2, p, r])
+        nd = gm[1]
+        R = 2 * p * q * r * s
+        rho = nd / R**0.25
+        examples.append((rho, p, q, r, s, 2, p * q, c))
 
 examples.sort(reverse=True)
 print(f"  {'(2,b,c)':>22}  {'rho':>12}  {'primes (p,q,r,s)':>28}  max_prime_ratio")
 for rho, p, q, r, s, a, b, c in examples[:8]:
-    primes = sorted([p,q,r,s])
-    ratio = primes[-1]/primes[0]
+    primes = sorted([p, q, r, s])
+    ratio = primes[-1] / primes[0]
     print(f"  (2,{b:>9},{c:>9}):  rho={rho:.8f}  ({p},{q},{r},{s})  {ratio:.4f}")
 
 print()
@@ -97,28 +115,41 @@ print("Pattern: all 4 primes close together -> rho -> 2^{-1/4}")
 print()
 
 # Verify analytically
-print("Analytic: 2*nd^4 < R = 2*p*q*r*s because nd^3 < q*r*s (all distinct primes > nd).")
+print(
+    "Analytic: 2*nd^4 < R = 2*p*q*r*s because nd^3 < q*r*s (all distinct primes > nd)."
+)
 print("Numerically: 0 violations of rho<2^{-1/4} for a=2, b<=200000.")
-violations = 0; max_rho=0; max_triple=None
+violations = 0
+max_rho = 0
+max_triple = None
 for b_val in range(3, 200001):
-    c_val = 2+b_val
-    fb = factorize(b_val); fc_d = factorize(c_val)
-    if any(v>1 for v in fb.values()) or len(fb)!=2: continue
-    if any(v>1 for v in fc_d.values()) or len(fc_d)!=2: continue
-    if gcd(2,b_val)!=1 or gcd(2,c_val)!=1: continue
-    pb=set(fb.keys()); pc=set(fc_d.keys())
-    if {2}&pb or {2}&pc or pb&pc: continue
-    gm=sorted([2,min(pb),min(pc)]); nd=gm[1]
-    R=2*math.prod(pb|pc)
-    rho=nd/R**0.25
+    c_val = 2 + b_val
+    fb = factorize(b_val)
+    fc_d = factorize(c_val)
+    if any(v > 1 for v in fb.values()) or len(fb) != 2:
+        continue
+    if any(v > 1 for v in fc_d.values()) or len(fc_d) != 2:
+        continue
+    if gcd(2, b_val) != 1 or gcd(2, c_val) != 1:
+        continue
+    pb = set(fb.keys())
+    pc = set(fc_d.keys())
+    if {2} & pb or {2} & pc or pb & pc:
+        continue
+    gm = sorted([2, min(pb), min(pc)])
+    nd = gm[1]
+    R = 2 * math.prod(pb | pc)
+    rho = nd / R**0.25
     if rho >= SUP:
         print(f"  VIOLATION: (2,{b_val},{c_val}) rho={rho:.8f}")
-        violations+=1
-    if rho>max_rho: max_rho=rho; max_triple=(2,b_val,c_val)
+        violations += 1
+    if rho > max_rho:
+        max_rho = rho
+        max_triple = (2, b_val, c_val)
 
 print(f"Violations: {violations}")
 print(f"Max rho (a=2, b<=200000) = {max_rho:.8f} at {max_triple}")
-print(f"Gap to 2^(-1/4): {SUP-max_rho:.8f}")
+print(f"Gap to 2^(-1/4): {SUP - max_rho:.8f}")
 print()
 
 print("UNIFIED PATTERN (F26):")
@@ -127,4 +158,6 @@ print("  omega=4 (1,1,2),(1,2,1): sup = 2^{-1/3} ~ 0.7937 = 2^{-1/(omega-1)}")
 print("  omega=5 (1,2,2):      sup = 2^{-1/4} ~ 0.8408 = 2^{-1/(omega-1)}")
 print()
 print("  The 'most a=2-anchored' type at each omega achieves the universal bound.")
-print("  Other omega=5 bounded types: (2,1,2),(2,2,1) sup=6^{-1/4}~0.639; (0,2,3),(0,3,2) sup=1.")
+print(
+    "  Other omega=5 bounded types: (2,1,2),(2,2,1) sup=6^{-1/4}~0.639; (0,2,3),(0,3,2) sup=1."
+)

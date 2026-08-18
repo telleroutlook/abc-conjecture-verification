@@ -28,6 +28,7 @@ GOAL: Verify both predictions numerically and find the correct threshold.
 import math
 from functools import reduce
 
+
 def factorize(n):
     factors = {}
     d = 2
@@ -40,8 +41,10 @@ def factorize(n):
         factors[n] = factors.get(n, 0) + 1
     return factors
 
+
 def rad(n):
     return reduce(lambda x, p: x * p, factorize(n).keys(), 1)
+
 
 def arith_deriv(n):
     if n <= 1:
@@ -58,6 +61,7 @@ def arith_deriv(n):
         result += n // m
     return result
 
+
 def is_prime(n):
     if n < 2:
         return False
@@ -72,6 +76,7 @@ def is_prime(n):
         d += 2
     return True
 
+
 print("T6: Refining ADAI — original form vs log-corrected form")
 print("=" * 65)
 
@@ -79,7 +84,9 @@ print("=" * 65)
 print()
 print("[A] Mersenne primes (1, 2^k-1, 2^k): theoretical worst case for ADAI")
 print()
-print(f"{'k':>4}  {'c=2^k':>10}  {'R':>12}  {'c_deriv':>12}  {'orig_ratio':>12}  {'log_ratio':>12}")
+print(
+    f"{'k':>4}  {'c=2^k':>10}  {'R':>12}  {'c_deriv':>12}  {'orig_ratio':>12}  {'log_ratio':>12}"
+)
 print("-" * 70)
 
 mersenne_ks = [2, 3, 5, 7, 13, 17, 19, 31]  # Mersenne prime exponents
@@ -120,12 +127,14 @@ TRIPLES = [
     (32, 49, 81),
 ]
 
-print(f"{'triple':>20}  {'orig(a+b+R)/c':>14}  {'log(a+b+R*lnR)/c':>18}  {'R*lnR/c':>10}")
+print(
+    f"{'triple':>20}  {'orig(a+b+R)/c':>14}  {'log(a+b+R*lnR)/c':>18}  {'R*lnR/c':>10}"
+)
 print("-" * 70)
 
-min_orig = float('inf')
-min_log_corr = float('inf')
-min_rlogr = float('inf')
+min_orig = float("inf")
+min_log_corr = float("inf")
+min_rlogr = float("inf")
 
 for a, b, c in TRIPLES:
     da, db, dc = arith_deriv(a), arith_deriv(b), arith_deriv(c)
@@ -149,7 +158,9 @@ print(f"  Min R*log(R)/c' ratio: {min_rlogr:.4f}")
 print()
 print("[C] Triples (1, 2^k-1, 2^k) for k=2..40 (including non-Mersenne-prime):")
 print()
-print(f"{'k':>4}  {'Mersenne?':>10}  {'orig_ratio':>12}  {'logcorr_ratio':>14}  {'R*lnR/c':>10}")
+print(
+    f"{'k':>4}  {'Mersenne?':>10}  {'orig_ratio':>12}  {'logcorr_ratio':>14}  {'R*lnR/c':>10}"
+)
 print("-" * 58)
 
 orig_ratios = []
@@ -172,14 +183,16 @@ for k in range(2, 41):
     logcorr_ratios.append((k, log_corr))
 
     is_m = is_prime(b)
-    print(f"{k:>4}  {'YES':>10}  {orig:>12.6f}  {log_corr:>14.6f}  {rlogr:>10.4f}"
-          if is_m else
-          f"{k:>4}  {'no':>10}  {orig:>12.6f}  {log_corr:>14.6f}  {rlogr:>10.4f}")
+    print(
+        f"{k:>4}  {'YES':>10}  {orig:>12.6f}  {log_corr:>14.6f}  {rlogr:>10.4f}"
+        if is_m
+        else f"{k:>4}  {'no':>10}  {orig:>12.6f}  {log_corr:>14.6f}  {rlogr:>10.4f}"
+    )
 
 print()
 min_logcorr_all = min(v for _, v in logcorr_ratios)
 print(f"  Min log-corrected ratio over k=2..40: {min_logcorr_all:.6f}")
-print(f"  Theoretical asymptote (Mersenne): 4*log(2) = {4*math.log(2):.6f}")
+print(f"  Theoretical asymptote (Mersenne): 4*log(2) = {4 * math.log(2):.6f}")
 
 # --- Part D: Conjecture refinement ---
 print()

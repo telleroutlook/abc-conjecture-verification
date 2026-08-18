@@ -62,16 +62,16 @@ print()
 
 # High-quality triples to analyze
 TRIPLES = [
-    (1, 8, 9),       # q ≈ 1.226
-    (1, 80, 81),     # q ≈ 1.292 (81=3^4, 80=2^4·5, rad=30)
-    (1, 48, 49),     # 49=7^2, 48=2^4·3, rad=42
-    (5, 27, 32),     # q ≈ 1.246
-    (1, 2, 3),       # q = 1 exactly (sanity)
-    (1, 4374, 4375), # 4374=2·3^7, 4375=5^4·7, rad=210 — high quality
-    (2, 6859, 6861), # 6859=19^3, 6861=3·2287? check below
-    (1, 728, 729),   # 729=3^6, 728=2^3·7·13, rad=2·3·7·13=546
-    (3, 125, 128),   # 128=2^7, 125=5^3, 3 is prime; rad=30
-    (32, 49, 81),    # 32=2^5, 49=7^2, 81=3^4; rad=2·3·7=42; q=log81/log42≈1.19
+    (1, 8, 9),  # q ≈ 1.226
+    (1, 80, 81),  # q ≈ 1.292 (81=3^4, 80=2^4·5, rad=30)
+    (1, 48, 49),  # 49=7^2, 48=2^4·3, rad=42
+    (5, 27, 32),  # q ≈ 1.246
+    (1, 2, 3),  # q = 1 exactly (sanity)
+    (1, 4374, 4375),  # 4374=2·3^7, 4375=5^4·7, rad=210 — high quality
+    (2, 6859, 6861),  # 6859=19^3, 6861=3·2287? check below
+    (1, 728, 729),  # 729=3^6, 728=2^3·7·13, rad=2·3·7·13=546
+    (3, 125, 128),  # 128=2^7, 125=5^3, 3 is prime; rad=30
+    (32, 49, 81),  # 32=2^5, 49=7^2, 81=3^4; rad=2·3·7=42; q=log81/log42≈1.19
 ]
 
 print(f"{'triple':>16}  {'R':>6}  {'q':>6}  {'Szpiro_ratio_UB':>16}  {'implied_A':>10}")
@@ -90,9 +90,9 @@ for a, b, c in TRIPLES:
     q = math.log(c) / math.log(R)
 
     # OB-04 bounds:
-    log_disc_ub = 2 * math.log(abc_prod) + 4 * LOG2   # upper bound on log|Δ_min|
-    log_NE_lb = math.log(R)                             # lower bound on log N_E (no conductor factors)
-    log_NE_ub = math.log(R) + 7 * LOG2                 # upper bound on log N_E
+    log_disc_ub = 2 * math.log(abc_prod) + 4 * LOG2  # upper bound on log|Δ_min|
+    log_NE_lb = math.log(R)  # lower bound on log N_E (no conductor factors)
+    log_NE_ub = math.log(R) + 7 * LOG2  # upper bound on log N_E
 
     # Szpiro ratio: log|Δ_min| / log N_E
     # Upper bound on ratio:
@@ -104,9 +104,11 @@ for a, b, c in TRIPLES:
     # So implied quality bound = A_Szpiro / 2
     implied_quality_bound = szpiro_ratio_ub / 2
 
-    print(f"  ({a:>4},{b:>5},{c:>5})  "
-          f"{R:>6}  {q:>6.3f}  "
-          f"{szpiro_ratio_ub:>16.3f}  {implied_quality_bound:>10.3f}")
+    print(
+        f"  ({a:>4},{b:>5},{c:>5})  "
+        f"{R:>6}  {q:>6.3f}  "
+        f"{szpiro_ratio_ub:>16.3f}  {implied_quality_bound:>10.3f}"
+    )
 
 print()
 print("INTERPRETATION:")

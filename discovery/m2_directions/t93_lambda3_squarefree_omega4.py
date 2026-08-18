@@ -24,13 +24,13 @@ Candidate formulas (Minkowski-inspired, working upward from λ₂):
 """
 
 import math
-from sympy import isprime
 from collections import defaultdict
 
 
 def squarefree_omega4_triples(max_val=300):
     """Generate coprime (a,b,c) with a+b=c, all squarefree, ω*=4 distinct primes."""
     from sympy import factorint
+
     triples = []
     for a in range(1, max_val):
         for b in range(a, max_val):
@@ -54,8 +54,10 @@ def squarefree_omega4_triples(max_val=300):
 def classify_groups(a, b, c, primes):
     """Return (Pa, Pb, Pc) as sorted prime lists."""
     from sympy import factorint
+
     def primes_of(n):
         return sorted(factorint(n).keys())
+
     Pa = primes_of(a) if a > 1 else []
     Pb = primes_of(b) if b > 1 else []
     Pc = primes_of(c) if c > 1 else []
@@ -79,17 +81,19 @@ def brute_minima(Pa, Pb, Pc, bound=20):
     # This matches F(a,b) definition from OB-09/OB-10.
 
     norms = []
-    ranges = [range(-bound, bound+1)] * n
+    ranges = [range(-bound, bound + 1)] * n
 
     import itertools
+
     for vals in itertools.product(*ranges):
         if all(v == 0 for v in vals):
             continue
         phi = list(vals)
-        na = len(Pa); nb = len(Pb); nc = len(Pc)
+        na = len(Pa)
+        nb = len(Pb)
         phi_pa = phi[:na]
-        phi_pb = phi[na:na+nb]
-        phi_pc = phi[na+nb:]
+        phi_pb = phi[na : na + nb]
+        phi_pc = phi[na + nb :]
 
         # Constraint: sum_Pa φ + sum_Pb φ = sum_Pc φ
         if sum(phi_pa) + sum(phi_pb) != sum(phi_pc):
@@ -133,13 +137,13 @@ fail_l2 = 0
 fail_l3 = 0
 formula_hits = defaultdict(int)
 
-for (a, b, c, primes) in triples[:200]:  # cap for speed
+for a, b, c, primes in triples[:200]:  # cap for speed
     Pa, Pb, Pc = classify_groups(a, b, c, primes)
     p1, p2, p3, p4 = primes  # sorted
 
     # Theoretical λ₁ and λ₂
     lam1_theory = p2
-    lam2_theory = min(2*p2, p3)
+    lam2_theory = min(2 * p2, p3)
 
     minima = brute_minima(Pa, Pb, Pc, bound=8)
     if len(minima) < 3:
@@ -149,11 +153,15 @@ for (a, b, c, primes) in triples[:200]:  # cap for speed
 
     if lam1_b != lam1_theory:
         fail_nd += 1
-        print(f"  ND-FAIL ({a},{b},{c}) primes={primes}: theory={lam1_theory} brute={lam1_b}")
+        print(
+            f"  ND-FAIL ({a},{b},{c}) primes={primes}: theory={lam1_theory} brute={lam1_b}"
+        )
         continue
     if lam2_b != lam2_theory:
         fail_l2 += 1
-        print(f"  L2-FAIL ({a},{b},{c}) primes={primes}: theory={lam2_theory} brute={lam2_b}")
+        print(
+            f"  L2-FAIL ({a},{b},{c}) primes={primes}: theory={lam2_theory} brute={lam2_b}"
+        )
         continue
 
     lam3_formula = formula_lambda3(p1, p2, p3, p4, lam2_b)
@@ -163,7 +171,7 @@ for (a, b, c, primes) in triples[:200]:  # cap for speed
     else:
         fail_l3 += 1
         # Diagnose: which branch wins?
-        c1, c2, c3, c4 = 3*p2, p2+p3, 2*p3, p4
+        c1, c2, c3, c4 = 3 * p2, p2 + p3, 2 * p3, p4
         print(f"  L3-MISS ({a},{b},{c}) primes={primes} λ₂={lam2_b} brute_λ₃={lam3_b}")
         print(f"    3p₂={c1} p₂+p₃={c2} 2p₃={c3} p₄={c4} → formula={lam3_formula}")
 
@@ -179,10 +187,12 @@ print()
 # Analyze which candidate wins for λ₃
 print("=== λ₃ winner analysis ===")
 winner_stats = defaultdict(int)
-for (a, b, c, primes, l1, l2, l3, lf) in results:
+for a, b, c, primes, l1, l2, l3, lf in results:
     p1, p2, p3, p4 = primes
-    c1, c2, c3, c4 = 3*p2, p2+p3, 2*p3, p4
-    above_l2 = {k: v for k, v in [("3p2",c1),("p2+p3",c2),("2p3",c3),("p4",c4)] if v > l2}
+    c1, c2, c3, c4 = 3 * p2, p2 + p3, 2 * p3, p4
+    above_l2 = {
+        k: v for k, v in [("3p2", c1), ("p2+p3", c2), ("2p3", c3), ("p4", c4)] if v > l2
+    }
     winner = min(above_l2, key=lambda k: above_l2[k]) if above_l2 else "none"
     winner_stats[winner] += 1
 
@@ -191,20 +201,33 @@ for w, cnt in sorted(winner_stats.items(), key=lambda x: -x[1]):
 
 print()
 print("=== Sample table (first 20) ===")
-print(f"{'triple':18s} {'primes':16s} {'λ₁':>5} {'λ₂':>5} {'λ₃_b':>7} {'λ₃_f':>7} {'ok':>3}")
-for (a, b, c, primes, l1, l2, l3, lf) in results[:20]:
+print(
+    f"{'triple':18s} {'primes':16s} {'λ₁':>5} {'λ₂':>5} {'λ₃_b':>7} {'λ₃_f':>7} {'ok':>3}"
+)
+for a, b, c, primes, l1, l2, l3, lf in results[:20]:
     ok = "✓" if l3 == lf else "✗"
-    print(f"({a},{b},{c}){'':<7} {str(primes):<16} {l1:>5} {l2:>5} {l3:>7} {str(lf):>7} {ok:>3}")
+    print(
+        f"({a},{b},{c}){'':<7} {str(primes):<16} {l1:>5} {l2:>5} {l3:>7} {str(lf):>7} {ok:>3}"
+    )
 
 # Additional: check if a refined formula fixes misses
 if fail_l3 > 0:
     print("\n=== Diagnosing λ₃ misses — extended candidates ===")
-    for (a, b, c, primes, l1, l2, l3, lf) in results:
+    for a, b, c, primes, l1, l2, l3, lf in results:
         if l3 != lf:
             p1, p2, p3, p4 = primes
             # Extended: also check p2+p4, 2p2+p3, etc.
-            ext = {"3p2": 3*p2, "p2+p3": p2+p3, "2p3": 2*p3, "p4": p4,
-                   "p2+p4": p2+p4, "2p2+p3": 2*p2+p3, "p3+p4": p3+p4}
+            ext = {
+                "3p2": 3 * p2,
+                "p2+p3": p2 + p3,
+                "2p3": 2 * p3,
+                "p4": p4,
+                "p2+p4": p2 + p4,
+                "2p2+p3": 2 * p2 + p3,
+                "p3+p4": p3 + p4,
+            }
             above = {k: v for k, v in ext.items() if v > l2}
             best = min(above, key=lambda k: above[k]) if above else "?"
-            print(f"  ({a},{b},{c}) primes={primes} λ₂={l2} brute_λ₃={l3} best_ext={best}={above.get(best,'?')}")
+            print(
+                f"  ({a},{b},{c}) primes={primes} λ₂={l2} brute_λ₃={l3} best_ext={best}={above.get(best, '?')}"
+            )

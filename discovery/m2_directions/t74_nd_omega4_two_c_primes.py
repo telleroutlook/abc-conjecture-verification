@@ -39,6 +39,7 @@ This script verifies both conjectures.
 import math
 from itertools import product as iproduct
 
+
 def factorize(n):
     f = {}
     d = 2
@@ -51,13 +52,19 @@ def factorize(n):
         f[n] = f.get(n, 0) + 1
     return f
 
+
 def is_prime(n):
-    if n < 2: return False
-    if n == 2: return True
-    if n % 2 == 0: return False
-    for d in range(3, int(n**0.5)+1, 2):
-        if n % d == 0: return False
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    for d in range(3, int(n**0.5) + 1, 2):
+        if n % d == 0:
+            return False
     return True
+
 
 def nd_brute(a, b, bound=25):
     c = a + b
@@ -68,7 +75,7 @@ def nd_brute(a, b, bound=25):
         return None
     alpha = [fa.get(p, fb.get(p, -fc.get(p, 0))) for p in primes]
     ws = [1 if p in fb else (-1 if p in fa else 0) for p in primes]
-    best = float('inf')
+    best = float("inf")
     for coords in iproduct(range(-bound, bound + 1), repeat=n):
         if all(c == 0 for c in coords):
             continue
@@ -80,7 +87,8 @@ def nd_brute(a, b, bound=25):
         norm = max(primes[i] * abs(coords[i]) for i in range(n))
         if norm > 0:
             best = min(best, norm)
-    return best if best < float('inf') else None
+    return best if best < float("inf") else None
+
 
 def extended_gcd(a, b):
     if b == 0:
@@ -88,13 +96,14 @@ def extended_gcd(a, b):
     g, x, y = extended_gcd(b, a % b)
     return g, y, x - (a // b) * y
 
+
 def bezout_min_norm_1d(m, n, k, pb, pc):
     """
     Min over (phi_b, phi_c) of max(pb|phi_b|, pc|phi_c|)
     subject to m*phi_b - n*phi_c = k (and m*phi_b - n*phi_c = -k).
     Returns minimum norm (inf if no solution).
     """
-    best = float('inf')
+    best = float("inf")
     for sign in [+1, -1]:
         rhs = sign * k
         g, u0, v0 = extended_gcd(m, n)
@@ -116,23 +125,24 @@ def bezout_min_norm_1d(m, n, k, pb, pc):
             best = min(best, norm)
     return best
 
+
 def bezout_min_2d(j, n, m_rhs, pr, ps):
     """
     Min over (phi_r, phi_s) of max(pr|phi_r|, ps|phi_s|)
     subject to j*phi_r + n*phi_s = m_rhs.
     Tries both m_rhs and -m_rhs (for phi_p=+1 and phi_p=-1 sub-cases).
     """
-    best = float('inf')
+    best = float("inf")
     for rhs in [m_rhs, -m_rhs]:
         g, u0, v0 = extended_gcd(j, n)
         if rhs % g != 0:
             continue
         # Particular solution: j*u0 + n*v0 = g, scaled
-        r_part = u0 * (rhs // g)    # phi_r particular
-        s_part = v0 * (rhs // g)    # phi_s particular
+        r_part = u0 * (rhs // g)  # phi_r particular
+        s_part = v0 * (rhs // g)  # phi_s particular
         # General solution: phi_r = r_part + (n/g)*t, phi_s = s_part - (j/g)*t
         step_r = n // g
-        step_s = j // g   # phi_s decreases as t increases
+        step_s = j // g  # phi_s decreases as t increases
         # Balance: pr*(r_part+step_r*t) = ps*(s_part-step_s*t)
         # t*(pr*step_r + ps*step_s) = ps*s_part - pr*r_part
         denom = pr * step_r + ps * step_s
@@ -146,6 +156,7 @@ def bezout_min_2d(j, n, m_rhs, pr, ps):
             norm = max(pr * abs(phi_r), ps * abs(phi_s))
             best = min(best, norm)
     return best
+
 
 def nd_omega3_exact(k, m, n, p, q, r):
     """
@@ -190,6 +201,7 @@ def nd_omega3_exact(k, m, n, p, q, r):
         N = min(N0, N1, N2)
         return min(N, max(pL, B))
 
+
 # -----------------------------------------------------------------------
 # Collect omega*=4 triples with Pa={1 prime}, Pb={1 prime}, Pc={2 primes}
 # -----------------------------------------------------------------------
@@ -202,41 +214,56 @@ RANGE = 120
 
 for a in range(2, RANGE):
     fa = factorize(a)
-    if len(fa) != 1: continue
-    p = list(fa.keys())[0]; k = fa[p]
+    if len(fa) != 1:
+        continue
+    p = list(fa.keys())[0]
+    k = fa[p]
     for b in range(1, RANGE):
         fb = factorize(b)
-        if len(fb) != 1: continue
-        q = list(fb.keys())[0]; m = fb[q]
-        if q == p: continue
+        if len(fb) != 1:
+            continue
+        q = list(fb.keys())[0]
+        m = fb[q]
+        if q == p:
+            continue
         c = a + b
         fc = factorize(c)
-        if len(fc) != 2: continue  # EXACTLY 2 distinct primes in c
+        if len(fc) != 2:
+            continue  # EXACTLY 2 distinct primes in c
         r_list = sorted(fc.keys())
         r, s = r_list[0], r_list[1]
         j, nv = fc[r], fc[s]
-        if r == p or r == q or s == p or s == q: continue
-        key = (min(a,b), max(a,b))
-        if key in seen: continue
+        if r == p or r == q or s == p or s == q:
+            continue
+        key = (min(a, b), max(a, b))
+        if key in seen:
+            continue
         seen.add(key)
         triples4.append((a, b, p, q, r, s, k, m, j, nv))
 
-print(f"Found {len(triples4)} omega*=4 one-primes-per-Pa-Pb, two-primes-in-Pc triples in [1,{RANGE})")
+print(
+    f"Found {len(triples4)} omega*=4 one-primes-per-Pa-Pb, two-primes-in-Pc triples in [1,{RANGE})"
+)
 print()
 
 # -----------------------------------------------------------------------
 # Test formula for each triple
 # -----------------------------------------------------------------------
-formula_ok = 0; formula_fail = 0
-strong_formula_ok = 0; strong_formula_fail = 0
-branch_wins = {'phi_r0': 0, 'phi_s0': 0, 'phi_p0': 0, 'phi_q0': 0, 'tie': 0}
+formula_ok = 0
+formula_fail = 0
+strong_formula_ok = 0
+strong_formula_fail = 0
+branch_wins = {"phi_r0": 0, "phi_s0": 0, "phi_p0": 0, "phi_q0": 0, "tie": 0}
 
-print(f"{'Triple':18s} {'p,q,r,s':16s} {'nd':4s} {'form':4s} {'phi_r0':6s} {'phi_s0':6s} {'phi_p0':6s} {'phi_q0':6s} {'OK':3s}")
+print(
+    f"{'Triple':18s} {'p,q,r,s':16s} {'nd':4s} {'form':4s} {'phi_r0':6s} {'phi_s0':6s} {'phi_p0':6s} {'phi_q0':6s} {'OK':3s}"
+)
 print("-" * 75)
 
-for (a, b, p, q, r, s, k, m, j, nv) in triples4:
+for a, b, p, q, r, s, k, m, j, nv in triples4:
     nd_b = nd_brute(a, b, bound=12)
-    if nd_b is None: continue
+    if nd_b is None:
+        continue
 
     # Branch phi_r=0: nd_omega3 for (p^k, q^m, s^nv)
     nd_phi_r0 = nd_omega3_exact(k, m, nv, p, q, s)
@@ -244,17 +271,17 @@ for (a, b, p, q, r, s, k, m, j, nv) in triples4:
     nd_phi_s0 = nd_omega3_exact(k, m, j, p, q, r)
     # Branch phi_p=0: max(q, BEZ2D(j,nv,m,r,s))
     bez_phi_p0 = bezout_min_2d(j, nv, m, r, s)
-    nd_phi_p0 = max(q, bez_phi_p0) if bez_phi_p0 < float('inf') else float('inf')
+    nd_phi_p0 = max(q, bez_phi_p0) if bez_phi_p0 < float("inf") else float("inf")
     # Branch phi_q=0: max(p, BEZ2D(j,nv,k,r,s))
     bez_phi_q0 = bezout_min_2d(j, nv, k, r, s)
-    nd_phi_q0 = max(p, bez_phi_q0) if bez_phi_q0 < float('inf') else float('inf')
+    nd_phi_q0 = max(p, bez_phi_q0) if bez_phi_q0 < float("inf") else float("inf")
 
     formula = min(nd_phi_r0, nd_phi_s0, nd_phi_p0, nd_phi_q0)
-    formula_match = (formula == nd_b)
+    formula_match = formula == nd_b
 
     # Strong formula: just min(phi_r0, phi_s0)
     strong_formula = min(nd_phi_r0, nd_phi_s0)
-    strong_match = (strong_formula == nd_b)
+    strong_match = strong_formula == nd_b
 
     ok_str = "OK" if formula_match else "FAIL"
     if formula_match:
@@ -272,52 +299,71 @@ for (a, b, p, q, r, s, k, m, j, nv) in triples4:
     if formula_match:
         winning = min(nd_phi_r0, nd_phi_s0, nd_phi_p0, nd_phi_q0)
         branches_at_min = []
-        if nd_phi_r0 == winning: branches_at_min.append('phi_r0')
-        if nd_phi_s0 == winning: branches_at_min.append('phi_s0')
-        if nd_phi_p0 == winning: branches_at_min.append('phi_p0')
-        if nd_phi_q0 == winning: branches_at_min.append('phi_q0')
+        if nd_phi_r0 == winning:
+            branches_at_min.append("phi_r0")
+        if nd_phi_s0 == winning:
+            branches_at_min.append("phi_s0")
+        if nd_phi_p0 == winning:
+            branches_at_min.append("phi_p0")
+        if nd_phi_q0 == winning:
+            branches_at_min.append("phi_q0")
         if len(branches_at_min) > 1:
-            branch_wins['tie'] += 1
+            branch_wins["tie"] += 1
         else:
             branch_wins[branches_at_min[0]] += 1
 
     pqs_str = f"{p},{q},{r},{s}"
     nd_phi_p0_disp = nd_phi_p0 if nd_phi_p0 < 999 else 999
     nd_phi_q0_disp = nd_phi_q0 if nd_phi_q0 < 999 else 999
-    print(f"  ({a:3d},{b:3d}):  {pqs_str:16s} nd={nd_b:3d} f={formula:3d}  "
-          f"r0={nd_phi_r0:4d}  s0={nd_phi_s0:4d}  p0={nd_phi_p0_disp:4d}  q0={nd_phi_q0_disp:4d}  {ok_str}")
+    print(
+        f"  ({a:3d},{b:3d}):  {pqs_str:16s} nd={nd_b:3d} f={formula:3d}  "
+        f"r0={nd_phi_r0:4d}  s0={nd_phi_s0:4d}  p0={nd_phi_p0_disp:4d}  q0={nd_phi_q0_disp:4d}  {ok_str}"
+    )
 
 print()
 print("=" * 75)
 print(f"Full formula (min of 4 branches): {formula_ok} OK, {formula_fail} FAIL")
-print(f"Strong formula (min of phi_r0, phi_s0 only): {strong_formula_ok} OK, {strong_formula_fail} FAIL")
+print(
+    f"Strong formula (min of phi_r0, phi_s0 only): {strong_formula_ok} OK, {strong_formula_fail} FAIL"
+)
 print()
 print("Branch that achieves minimum (among formula-OK cases):")
 for bname, cnt in branch_wins.items():
     print(f"  {bname}: {cnt}")
 print()
 if formula_fail == 0:
-    print("THEOREM CONFIRMED: nd = min(nd_omega3(k,m,j,p,q,r), nd_omega3(k,m,nv,p,q,s),")
+    print(
+        "THEOREM CONFIRMED: nd = min(nd_omega3(k,m,j,p,q,r), nd_omega3(k,m,nv,p,q,s),"
+    )
     print("                           max(q,BEZ2D(j,nv,m)), max(p,BEZ2D(j,nv,k)))")
     print("for all omega*=4 one-prime-per-Pa/Pb, two-primes-in-Pc triples tested.")
 if strong_formula_fail == 0:
     print()
     print("STRONG THEOREM CONFIRMED: nd = min(nd_omega3_phis0, nd_omega3_phir0)")
-    print("  i.e., the two phi_c-branch formulas suffice; phi_p0 and phi_q0 never improve.")
+    print(
+        "  i.e., the two phi_c-branch formulas suffice; phi_p0 and phi_q0 never improve."
+    )
 elif strong_formula_fail > 0:
     print(f"STRONG THEOREM FAILS for {strong_formula_fail} cases:")
     # re-scan to print failures
-    for (a, b, p, q, r, s, k, m, j, nv) in triples4:
+    for a, b, p, q, r, s, k, m, j, nv in triples4:
         nd_b = nd_brute(a, b, bound=12)
-        if nd_b is None: continue
+        if nd_b is None:
+            continue
         nd_phi_r0 = nd_omega3_exact(k, m, nv, p, q, s)
         nd_phi_s0 = nd_omega3_exact(k, m, j, p, q, r)
         strong_formula = min(nd_phi_r0, nd_phi_s0)
         if strong_formula != nd_b:
             bez_phi_p0 = bezout_min_2d(j, nv, m, r, s)
-            nd_phi_p0 = max(q, bez_phi_p0) if bez_phi_p0 < float('inf') else float('inf')
+            nd_phi_p0 = (
+                max(q, bez_phi_p0) if bez_phi_p0 < float("inf") else float("inf")
+            )
             bez_phi_q0 = bezout_min_2d(j, nv, k, r, s)
-            nd_phi_q0 = max(p, bez_phi_q0) if bez_phi_q0 < float('inf') else float('inf')
-            print(f"  ({a},{b}) p={p}^{k} q={q}^{m} r={r}^{j} s={s}^{nv}: "
-                  f"nd={nd_b} strong={strong_formula} "
-                  f"phi_r0={nd_phi_r0} phi_s0={nd_phi_s0} phi_p0={nd_phi_p0} phi_q0={nd_phi_q0}")
+            nd_phi_q0 = (
+                max(p, bez_phi_q0) if bez_phi_q0 < float("inf") else float("inf")
+            )
+            print(
+                f"  ({a},{b}) p={p}^{k} q={q}^{m} r={r}^{j} s={s}^{nv}: "
+                f"nd={nd_b} strong={strong_formula} "
+                f"phi_r0={nd_phi_r0} phi_s0={nd_phi_s0} phi_p0={nd_phi_p0} phi_q0={nd_phi_q0}"
+            )

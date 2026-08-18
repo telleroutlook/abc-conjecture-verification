@@ -22,9 +22,10 @@ def test_manifest_declares_non_acceptance() -> None:
     assert data["proofctl_gate"] == "rejected"
     assert data["ledger_status"] == "OBL"
     assert data["forbidden_inputs_used"] == []
-    assert "The full P_height Faltings/Arakelov framework is not constructed." in data[
-        "blocking_gaps"
-    ]
+    assert (
+        "The full P_height Faltings/Arakelov framework is not constructed."
+        in data["blocking_gaps"]
+    )
 
 
 def test_manifest_artifacts_validate() -> None:
@@ -34,9 +35,7 @@ def test_manifest_artifacts_validate() -> None:
 
 
 def _copy_partial_evidence_tree(root: Path) -> dict:
-    source_manifest = (
-        REPO_ROOT / "domain" / "evidence" / "core-2-partial-evidence.json"
-    )
+    source_manifest = REPO_ROOT / "domain" / "evidence" / "core-2-partial-evidence.json"
     data = json.loads(source_manifest.read_text(encoding="utf-8"))
     for artifact in data["artifacts"]:
         destination = root / artifact["path"]

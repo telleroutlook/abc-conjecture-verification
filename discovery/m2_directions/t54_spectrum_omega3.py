@@ -27,20 +27,27 @@ not prime). So every type (1,1,1) triple is (2, q, q+2) with q, q+2 both prime.
 The only exception to F32b is the (2,3,5) triple.
 """
 
+
 def is_prime(n):
-    if n < 2: return False
-    if n < 4: return True
-    if n % 2 == 0: return False
-    for i in range(3, int(n**0.5)+1, 2):
-        if n % i == 0: return False
+    if n < 2:
+        return False
+    if n < 4:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(n**0.5) + 1, 2):
+        if n % i == 0:
+            return False
     return True
+
 
 primes_list = [x for x in range(2, 200) if is_prime(x)]
 
+
 def find_all_norms(p, q, r, bound=20):
     norms = set()
-    for alpha in range(-bound, bound+1):
-        for beta in range(-bound, bound+1):
+    for alpha in range(-bound, bound + 1):
+        for beta in range(-bound, bound + 1):
             phi_r = alpha + beta
             if alpha == beta:
                 continue
@@ -51,25 +58,27 @@ def find_all_norms(p, q, r, bound=20):
                 norms.add(norm)
     return norms
 
+
 def expected_spectrum(q, r, max_k=20):
     s = set()
-    for k in range(1, max_k+1):
+    for k in range(1, max_k + 1):
         s.add(k * q)
         s.add(k * r)
     return s
 
+
 print("T54: Non-degenerate norm spectrum for omega=3 type-(1,1,1)")
-print("="*70)
+print("=" * 70)
 print()
 
 # Verify F32b for all twin-prime triples
-twin_primes = [(2, q, q+2) for q in primes_list if q < 80 and is_prime(q+2)]
+twin_primes = [(2, q, q + 2) for q in primes_list if q < 80 and is_prime(q + 2)]
 
 print("F32b verification: achieved norms = {k*q} u {k*r} for q >= 5?")
 print("(Testing with bound=20, checking norms up to 20*q)")
 print()
 
-for (p, q, r) in twin_primes:
+for p, q, r in twin_primes:
     got = find_all_norms(p, q, r, bound=20)
     threshold = 20 * q
     # For the p-dominance proof: any norm N <= threshold achieved with |phi| <= bound?
@@ -79,8 +88,8 @@ for (p, q, r) in twin_primes:
     # Instead: for q >= 5 we PROVED no non-multiples exist (proof above). Just check multiples.
     got_small = {n for n in got if n <= threshold}
     exp_small = {n for n in expected_spectrum(q, r, max_k=20) if n <= threshold}
-    surplus = got_small - exp_small   # got but not in {kq, kr}
-    missing  = exp_small - got_small  # in {kq, kr} but not got
+    surplus = got_small - exp_small  # got but not in {kq, kr}
+    missing = exp_small - got_small  # in {kq, kr} but not got
 
     if q == 3:
         status = "(exceptional q=3)"
@@ -93,11 +102,13 @@ for (p, q, r) in twin_primes:
     print(f"  (2,{q},{r}): {status}")
 
 print()
-print("="*70)
+print("=" * 70)
 print()
 print("CONCLUSION:")
 print("  F32a: second min = r for all type (1,1,1). PROVED analytically.")
 print("  F32b: spectrum = {k*q} u {k*r} for q >= 5. PROVED analytically.")
-print("  (2,3,5) exception: q=3 < 2p=4 allows p-term dominance; full spectrum is richer.")
+print(
+    "  (2,3,5) exception: q=3 < 2p=4 allows p-term dominance; full spectrum is richer."
+)
 print()
 print("Lean: pasten_F32a_gap, pasten_F32a_upper (second min = r formalized).")

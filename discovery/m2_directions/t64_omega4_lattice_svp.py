@@ -23,6 +23,7 @@ KEY QUESTION: does the 3D lattice SVP always recover exact brute-force nd for om
 import math
 from itertools import product as iproduct
 
+
 def factorize(n):
     f = {}
     d = 2
@@ -35,14 +36,17 @@ def factorize(n):
         f[n] = f.get(n, 0) + 1
     return f
 
+
 def extended_gcd(a, b):
     if b == 0:
         return a, 1, 0
     g, x, y = extended_gcd(b, a % b)
     return g, y, x - (a // b) * y
 
+
 def rad(n):
     return math.prod(factorize(n).keys()) if n > 1 else 1
+
 
 def get_alpha(a, b):
     """Return (primes_sorted, alpha_vec) for the constraint Σ alpha_i phi_i = 0."""
@@ -52,17 +56,17 @@ def get_alpha(a, b):
     alpha = []
     for p in primes:
         if p in fa:
-            alpha.append(fa[p])       # Pa: positive coefficient
+            alpha.append(fa[p])  # Pa: positive coefficient
         elif p in fb:
-            alpha.append(fb[p])       # Pb: positive coefficient
+            alpha.append(fb[p])  # Pb: positive coefficient
         elif p in fc:
-            alpha.append(-fc[p])      # Pc: negative coefficient
+            alpha.append(-fc[p])  # Pc: negative coefficient
     return primes, alpha
+
 
 def get_wronskian_signs(a, b, primes):
     """Return +1 if p in Pb, -1 if p in Pa, 0 otherwise (for W = Σ_{Pb} phi_p - Σ_{Pa} phi_p)."""
-    c = a + b
-    fa, fb, fc = factorize(a), factorize(b), factorize(c)
+    fa, fb = factorize(a), factorize(b)
     signs = []
     for p in primes:
         if p in fb:
@@ -72,6 +76,7 @@ def get_wronskian_signs(a, b, primes):
         else:
             signs.append(0)
     return signs
+
 
 def lattice_basis_from_constraint(alpha):
     """
@@ -122,9 +127,11 @@ def lattice_basis_from_constraint(alpha):
     # Each basis vector is a column of U.
     return basis  # list of (n-1) vectors, each of length n
 
+
 def inner_product(u, v, primes):
     """Weighted Euclidean inner product <u,v> = Σ pᵢ² uᵢ vᵢ (approximates weighted inf-norm)."""
-    return sum(primes[i]**2 * u[i] * v[i] for i in range(len(u)))
+    return sum(primes[i] ** 2 * u[i] * v[i] for i in range(len(u)))
+
 
 def gram_schmidt_2d(b1, b2, primes):
     """2D Gram-Schmidt with weighted inner product."""
@@ -133,6 +140,7 @@ def gram_schmidt_2d(b1, b2, primes):
     mu = dot12 / dot11 if dot11 > 0 else 0
     b2_gs = [b2[i] - mu * b1[i] for i in range(len(b1))]
     return b2_gs, mu
+
 
 def lll_reduce(basis, primes, delta=0.75):
     """
@@ -144,7 +152,7 @@ def lll_reduce(basis, primes, delta=0.75):
     B = [list(v) for v in basis]
 
     def dot(u, v):
-        return sum(primes[i]**2 * u[i] * v[i] for i in range(n_dim))
+        return sum(primes[i] ** 2 * u[i] * v[i] for i in range(n_dim))
 
     def norm2(v):
         return dot(v, v)
@@ -156,7 +164,11 @@ def lll_reduce(basis, primes, delta=0.75):
         for i, v in enumerate(vecs):
             u = list(v)
             for j in range(i):
-                mu_mat[i][j] = dot(v, gs[j]) / dot(gs[j], gs[j]) if dot(gs[j], gs[j]) > 1e-12 else 0
+                mu_mat[i][j] = (
+                    dot(v, gs[j]) / dot(gs[j], gs[j])
+                    if dot(gs[j], gs[j]) > 1e-12
+                    else 0
+                )
                 u = [u[k] - mu_mat[i][j] * gs[j][k] for k in range(n_dim)]
             gs.append(u)
         return gs, mu_mat
@@ -177,19 +189,22 @@ def lll_reduce(basis, primes, delta=0.75):
         # Lovász condition
         gs, mu_mat = gram_schmidt_full(B)
         lhs = norm2(gs[k])
-        rhs = (delta - mu_mat[k][k-1]**2) * norm2(gs[k-1])
+        rhs = (delta - mu_mat[k][k - 1] ** 2) * norm2(gs[k - 1])
         if lhs >= rhs:
             k += 1
         else:
-            B[k], B[k-1] = B[k-1], B[k]
+            B[k], B[k - 1] = B[k - 1], B[k]
             k = max(k - 1, 1)
     return B
+
 
 def norm_phi(phi, primes):
     return max(primes[i] * abs(phi[i]) for i in range(len(primes)))
 
+
 def wronskian(phi, w_signs):
     return sum(w_signs[i] * phi[i] for i in range(len(phi)))
+
 
 def brute_nd(a, b, bound=10):
     c = a + b
@@ -214,7 +229,7 @@ def brute_nd(a, b, bound=10):
             w_signs.append(-1)
         else:
             w_signs.append(0)
-    best = float('inf')
+    best = float("inf")
     for vals in iproduct(*[range(-bound, bound + 1)] * n):
         if all(v == 0 for v in vals):
             continue
@@ -227,7 +242,8 @@ def brute_nd(a, b, bound=10):
         if norm == 0:
             continue
         best = min(best, norm)
-    return best if best < float('inf') else None
+    return best if best < float("inf") else None
+
 
 def nd_svp(a, b, search_radius=25):
     """
@@ -267,7 +283,7 @@ def nd_svp(a, b, search_radius=25):
     basis_red = lll_reduce(basis, primes)
 
     # Search in reduced coordinates
-    best = float('inf')
+    best = float("inf")
     for coords in iproduct(range(-search_radius, search_radius + 1), repeat=rank):
         if all(c == 0 for c in coords):
             continue
@@ -284,7 +300,8 @@ def nd_svp(a, b, search_radius=25):
         norm = max(primes[i] * abs(phi[i]) for i in range(n))
         if norm > 0:
             best = min(best, norm)
-    return best if best < float('inf') else None
+    return best if best < float("inf") else None
+
 
 # ── Test cases ────────────────────────────────────────────────────────────────
 print("T64: omega=4 lattice SVP vs brute-force nd")
@@ -295,30 +312,30 @@ print("-" * 90)
 # omega=4 test cases: squarefree and non-squarefree
 test_cases_4 = [
     # squarefree omega=4 types
-    (1, 14, 15),   # (0,2,2): Pa={}, Pb={2,7}, Pc={3,5}
-    (2, 13, 15),   # (1,1,2): Pa={2}, Pb={13}, Pc={3,5}
-    (3, 10, 13),   # (1,2,1): Pa={3}, Pb={2,5}, Pc={13}
-    (6, 7, 13),    # (2,1,1): Pa={2,3}, Pb={7}, Pc={13}
+    (1, 14, 15),  # (0,2,2): Pa={}, Pb={2,7}, Pc={3,5}
+    (2, 13, 15),  # (1,1,2): Pa={2}, Pb={13}, Pc={3,5}
+    (3, 10, 13),  # (1,2,1): Pa={3}, Pb={2,5}, Pc={13}
+    (6, 7, 13),  # (2,1,1): Pa={2,3}, Pb={7}, Pc={13}
     # non-squarefree omega=4
-    (1, 3, 4),     # omega=2 — skip
-    (4, 5, 9),     # omega=3 — skip
-    (2, 9, 11),    # Pa={2}, Pb={3^2}, Pc={11}: omega=3 only
-    (1, 8, 9),     # omega=2: skip
-    (4, 9, 13),    # Pa={2}, Pb={3}, Pc={13}: omega=3
-    (9, 16, 25),   # Pa={3}, Pb={2}, Pc={5}: omega=3
-    (8, 9, 17),    # Pa={2}, Pb={3}, Pc={17}: omega=3
-    (1, 35, 36),   # Pa={}, Pb={5,7}, Pc={2^2, 3^2}: omega=4 ns!
-    (4, 21, 25),   # Pa={2}, Pb={3,7}, Pc={5}: omega=4 ns
-    (9, 7, 16),    # Pa={3}, Pb={7}, Pc={2}: omega=3
+    (1, 3, 4),  # omega=2 — skip
+    (4, 5, 9),  # omega=3 — skip
+    (2, 9, 11),  # Pa={2}, Pb={3^2}, Pc={11}: omega=3 only
+    (1, 8, 9),  # omega=2: skip
+    (4, 9, 13),  # Pa={2}, Pb={3}, Pc={13}: omega=3
+    (9, 16, 25),  # Pa={3}, Pb={2}, Pc={5}: omega=3
+    (8, 9, 17),  # Pa={2}, Pb={3}, Pc={17}: omega=3
+    (1, 35, 36),  # Pa={}, Pb={5,7}, Pc={2^2, 3^2}: omega=4 ns!
+    (4, 21, 25),  # Pa={2}, Pb={3,7}, Pc={5}: omega=4 ns
+    (9, 7, 16),  # Pa={3}, Pb={7}, Pc={2}: omega=3
     (25, 11, 36),  # Pa={5}, Pb={11}, Pc={2,3}: omega=4 sq
-    (4, 11, 15),   # Pa={2}, Pb={11}, Pc={3,5}: omega=4 ns
-    (9, 26, 35),   # Pa={3}, Pb={2,13}, Pc={5,7}: omega=5 sq
-    (4, 45, 49),   # Pa={2}, Pb={3,5}, Pc={7}: omega=4 ns
-    (8, 25, 33),   # Pa={2}, Pb={5}, Pc={3,11}: omega=4 ns
-    (16, 9, 25),   # omega=3 only
-    (4, 5, 9),     # omega=3
-    (1, 80, 81),   # Pa={}, Pb={2,5}, Pc={3}: omega=3, but 81=3^4 so ns
-    (4, 75, 79),   # Pa={2}, Pb={3,5}, Pc={79}: omega=4 ns
+    (4, 11, 15),  # Pa={2}, Pb={11}, Pc={3,5}: omega=4 ns
+    (9, 26, 35),  # Pa={3}, Pb={2,13}, Pc={5,7}: omega=5 sq
+    (4, 45, 49),  # Pa={2}, Pb={3,5}, Pc={7}: omega=4 ns
+    (8, 25, 33),  # Pa={2}, Pb={5}, Pc={3,11}: omega=4 ns
+    (16, 9, 25),  # omega=3 only
+    (4, 5, 9),  # omega=3
+    (1, 80, 81),  # Pa={}, Pb={2,5}, Pc={3}: omega=3, but 81=3^4 so ns
+    (4, 75, 79),  # Pa={2}, Pb={3,5}, Pc={79}: omega=4 ns
     (16, 45, 61),  # Pa={2}, Pb={3,5}, Pc={61}: omega=4 ns!
     (25, 36, 61),  # Pa={5}, Pb={2,3}, Pc={61}: omega=4 ns
 ]
@@ -339,7 +356,9 @@ for entry4 in test_cases_4:
     omega4_cases += 1
 
     # type string
-    na = len(fa); nb = len(fb); nc = len(fc)
+    na = len(fa)
+    nb = len(fb)
+    nc = len(fc)
     sq = all(v == 1 for d in [fa, fb, fc] for v in d.values())
     typ = f"({na},{nb},{nc})" + ("" if sq else " ns")
 
@@ -348,7 +367,9 @@ for entry4 in test_cases_4:
     match = nd_b == nd_s
     if not match:
         all_match = False
-    print(f"  ({a},{b},{c}){'':<6} {typ:>10} {str(nd_b):>6} {str(nd_s):>6} {'✓' if match else f'✗({nd_b}≠{nd_s})':>6}")
+    print(
+        f"  ({a},{b},{c}){'':<6} {typ:>10} {str(nd_b):>6} {str(nd_s):>6} {'✓' if match else f'✗({nd_b}≠{nd_s})':>6}"
+    )
 
 print()
 print("=" * 90)
@@ -363,17 +384,22 @@ print(f"{'(a,b,c)':<18} {'type':>12} {'brute':>6} {'svp':>6} {'match':>6}")
 print("-" * 90)
 
 test_cases_5 = [
-    (2, 3*5*7, None),   (2, 5*7*11, None),
-    (2, 3*7*13, None),  (6, 5*7*11, None),
-    (1, 2**8 - 1, None), (4*9, 5*7, None),
-    (4, 3*5*7, None),   (9, 2*5*7, None),
-    (8, 3*5*7, None),   (25, 2*3*7, None),
+    (2, 3 * 5 * 7, None),
+    (2, 5 * 7 * 11, None),
+    (2, 3 * 7 * 13, None),
+    (6, 5 * 7 * 11, None),
+    (1, 2**8 - 1, None),
+    (4 * 9, 5 * 7, None),
+    (4, 3 * 5 * 7, None),
+    (9, 2 * 5 * 7, None),
+    (8, 3 * 5 * 7, None),
+    (25, 2 * 3 * 7, None),
 ]
 
 omega5_cases = 0
 omega5_match = True
 
-for (a, b, _) in test_cases_5:
+for a, b, _ in test_cases_5:
     if math.gcd(a, b) != 1:
         continue
     c = a + b
@@ -384,7 +410,9 @@ for (a, b, _) in test_cases_5:
         continue
     omega5_cases += 1
 
-    na = len(fa); nb = len(fb); nc = len(fc)
+    na = len(fa)
+    nb = len(fb)
+    nc = len(fc)
     sq = all(v == 1 for d in [fa, fb, fc] for v in d.values())
     typ = f"({na},{nb},{nc})" + ("" if sq else " ns")
 
@@ -393,7 +421,9 @@ for (a, b, _) in test_cases_5:
     match = nd_b == nd_s
     if not match:
         omega5_match = False
-    print(f"  ({a},{b},{c}){'':<6} {typ:>12} {str(nd_b):>6} {str(nd_s):>6} {'✓' if match else f'✗({nd_b}≠{nd_s})':>6}")
+    print(
+        f"  ({a},{b},{c}){'':<6} {typ:>12} {str(nd_b):>6} {str(nd_s):>6} {'✓' if match else f'✗({nd_b}≠{nd_s})':>6}"
+    )
 
 print()
 print("=" * 90)

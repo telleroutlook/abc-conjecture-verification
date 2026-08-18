@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -27,6 +28,38 @@ def test_t30_rho_distribution_replays() -> None:
     output = replay("t30_rho_distribution.py")
     assert "Total squarefree coprime triples" in output
     assert "SUMMARY (F19)" in output
+
+
+def test_paper_omega_table_matches_t30_replay() -> None:
+    output = replay("t30_rho_distribution.py")
+    total_match = re.search(
+        r"Total squarefree coprime triples \(3 ≤ ω, c ≤ 1000\): ([0-9]+)",
+        output,
+    )
+    assert total_match is not None
+    total = int(total_match.group(1))
+
+    statistics = output.split("Statistics by ω:", 1)[1].split(
+        "Bounded-type ρ concentration", 1
+    )[0]
+    script_counts = {
+        int(omega): int(count)
+        for omega, count in re.findall(
+            r"^\s*([0-9]+)\s+([0-9]+)\s+", statistics, re.MULTILINE
+        )
+    }
+
+    tex = (REPO_ROOT / "papers" / "route-v-pasten" / "route-v-pasten.tex").read_text()
+    table = tex.split(r"\label{tab:data}", 1)[0].rsplit(r"\begin{tabular}", 1)[1]
+    paper_counts = {
+        int(omega): int(count.replace(r"\,", "").replace(",", ""))
+        for omega, count in re.findall(
+            r"^\s*([0-9]+)\s*&\s*([0-9\\,]+)\s*&", table, re.MULTILINE
+        )
+    }
+
+    assert paper_counts == script_counts
+    assert sum(paper_counts.values()) == total
 
 
 def test_t82_type311_mirror_case_replays() -> None:

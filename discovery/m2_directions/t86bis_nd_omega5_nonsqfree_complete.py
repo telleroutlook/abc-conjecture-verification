@@ -25,7 +25,6 @@ Result: nd(a,b) = min_p B_p for all 2446 non-squarefree omega*=5 triples,
 
 import math
 from itertools import product as iproduct
-from collections import Counter
 
 LIMIT = 150
 BB_B2 = 8
@@ -46,7 +45,7 @@ def factorize(n):
 
 def nd_sublattice(primes4, alpha4, ws4, bound):
     """Brute-force nd for a 4-prime sub-lattice (zero-p5 branch)."""
-    best = float('inf')
+    best = float("inf")
     for coords in iproduct(range(-bound, bound + 1), repeat=4):
         if all(x == 0 for x in coords):
             continue
@@ -57,7 +56,7 @@ def nd_sublattice(primes4, alpha4, ws4, bound):
         nrm = max(primes4[i] * abs(coords[i]) for i in range(4))
         if nrm > 0:
             best = min(best, nrm)
-    return best if best < float('inf') else None
+    return best if best < float("inf") else None
 
 
 def find_sqfree_cross_pair(sub4_primes, groups, vals):
@@ -86,7 +85,9 @@ for a in range(2, LIMIT + 1):
             continue
         if set(fa) & set(fb) or set(fa) & set(fc) or set(fb) & set(fc):
             continue
-        if all(v == 1 for v in list(fa.values()) + list(fb.values()) + list(fc.values())):
+        if all(
+            v == 1 for v in list(fa.values()) + list(fb.values()) + list(fc.values())
+        ):
             continue  # squarefree: handled analytically by thm:nd_sqfree_support
         key = tuple(sorted([a, b]))
         if key in seen:
@@ -101,7 +102,7 @@ print(f"T86bis: omega*=5 non-squarefree zero-coord property (a,b<={LIMIT})")
 print(f"Total triples: {len(triples)}")
 print()
 
-case_b1 = 0   # analytically proved via squarefree cross-pair
+case_b1 = 0  # analytically proved via squarefree cross-pair
 case_b2_ok = 0  # computationally verified (p5-forcing)
 case_b2_viol = 0
 case_skip = 0
@@ -117,13 +118,13 @@ for a, b, primes, alpha, ws, vmax, fa, fb, fc in triples:
     vals = {}
     for p in sub4_primes:
         if p in fa:
-            groups[p] = 'a'
+            groups[p] = "a"
             vals[p] = fa[p]
         elif p in fb:
-            groups[p] = 'b'
+            groups[p] = "b"
             vals[p] = fb[p]
         else:
-            groups[p] = 'c'
+            groups[p] = "c"
             vals[p] = fc[p]
 
     # Sub-case B1: analytic
@@ -132,7 +133,9 @@ for a, b, primes, alpha, ws, vmax, fa, fb, fc in triples:
         pi, pj = pair
         claimed_ub = max(pi, pj)
         # Verify: claimed_ub <= p5 (trivially true since pi,pj in {p1,...,p4})
-        assert claimed_ub < p5, f"B1 claim failed: max({pi},{pj})={claimed_ub} >= p5={p5}"
+        assert claimed_ub < p5, (
+            f"B1 claim failed: max({pi},{pj})={claimed_ub} >= p5={p5}"
+        )
         case_b1 += 1
         continue
 
@@ -143,7 +146,9 @@ for a, b, primes, alpha, ws, vmax, fa, fb, fc in triples:
 
     if bp5 is None:
         case_skip += 1
-        print(f"  SKIP ({a},{b}): B_{{p5={p5}}} not found with BB={BB_B2}, primes={primes}")
+        print(
+            f"  SKIP ({a},{b}): B_{{p5={p5}}} not found with BB={BB_B2}, primes={primes}"
+        )
         continue
 
     if bp5 <= p5:
@@ -154,9 +159,13 @@ for a, b, primes, alpha, ws, vmax, fa, fb, fc in triples:
         print(f"  VIOLATION ({a},{b}): B_{{p5={p5}}}={bp5} > p5={p5}, primes={primes}")
 
 total_verified = case_b1 + case_b2_ok
-print(f"Results:")
-print(f"  Sub-case B1 (analytically proved):      {case_b1:4d}  ({100*case_b1/len(triples):.1f}%)")
-print(f"  Sub-case B2 OK (B_{{p5}} <= p5, BB={BB_B2}): {case_b2_ok:4d}  ({100*case_b2_ok/len(triples):.1f}%)")
+print("Results:")
+print(
+    f"  Sub-case B1 (analytically proved):      {case_b1:4d}  ({100 * case_b1 / len(triples):.1f}%)"
+)
+print(
+    f"  Sub-case B2 OK (B_{{p5}} <= p5, BB={BB_B2}): {case_b2_ok:4d}  ({100 * case_b2_ok / len(triples):.1f}%)"
+)
 print(f"  Sub-case B2 VIOLATIONS:                 {case_b2_viol:4d}")
 print(f"  Skipped (BB insufficient):              {case_skip:4d}")
 print(f"  Total verified: {total_verified}/{len(triples)}, violations: {case_b2_viol}")
@@ -165,5 +174,9 @@ if case_b2_viol == 0 and case_skip == 0:
     print("ZERO-COORDINATE PROPERTY FULLY VERIFIED for all omega*=5 non-squarefree")
     print(f"triples with a,b <= {LIMIT}.")
     print()
-    print(f"B2 sub-case: B_{{p5}} range = [{min(d[3] for d in b2_details)}, {max(d[3] for d in b2_details)}]")
-    print(f"B2 worst margin (B_{{p5}} / p5): {max(d[3]/d[4] for d in b2_details):.3f}")
+    print(
+        f"B2 sub-case: B_{{p5}} range = [{min(d[3] for d in b2_details)}, {max(d[3] for d in b2_details)}]"
+    )
+    print(
+        f"B2 worst margin (B_{{p5}} / p5): {max(d[3] / d[4] for d in b2_details):.3f}"
+    )

@@ -2,6 +2,7 @@ import Mathlib.Data.Nat.PrimeFin
 import Mathlib.Algebra.Order.Group.Unbundled.Int
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.LinearAlgebra.Determinant
 
 /-!
 # OB-04: Lean 4 formal verification of the P_height framework (CORE-2)
@@ -303,16 +304,19 @@ theorem adai_log_implies_weak_deriv_bound
 -- For c = 2^k with 2^k−1 Mersenne prime: (a′+b′+R·logR)/c′ → 4·log2 ≈ 2.77 (O(1)·c).
 -- This is recorded as a note; see discovery/m2_directions/t6_adai_refined.py.
 
-/-! ## E3: Pasten lattice — squarefree determinant bound (Route V)
+/-! ## E3: Pasten lattice — squarefree coefficient-norm bound (Route V)
 
-Formalizes the result proved in outsource/OB-09 (CONFIRMED 2026-08-15):
-For squarefree coprime (a,b,c) with a+b=c, the Pasten lattice has det(L) < R.
+Formalizes the coefficient-norm ingredient in outsource/OB-09 (CONFIRMED
+2026-08-15): for a squarefree prime set P with radical R,
+‖c‖₂ < R.  The primitive-constraint/determinant identity and GCD lemma are
+proved in the paper but are not separately formalized here.
 
 Two key steps are formalized as theorems; two are admitted as axioms:
 - [AXIOM] `prime_recip_sq_sum_lt_one`: ∑_{p prime} 1/p² ≤ 11/18 < 1.
   Proof exists (OB-09 Step 3, integral bound); not formalized (requires tsum).
-- [AXIOM] `minkowski_vaaler_pasten`: shortest vector bound from Minkowski + Vaaler (1979).
-  Citation: Cassels "Geometry of Numbers" Thm I.2 + Vaaler, Pacific J. Math. 83 (1979).
+- [AXIOM] `minkowski_vaaler_pasten`: Vaaler's Theorem 2 as a non-vacuous
+  integer-matrix premise (positive Gram determinant ⇒ ambient-coordinate bound).
+  Citation: Vaaler, Pacific J. Math. 83 (1979), Theorem 2.
 
 Non-circularity: no abc conjecture, Szpiro, IUT, or known abc triples used or assumed.
 -/
@@ -326,8 +330,8 @@ axiom prime_recip_sq_sum_lt_one :
     ∑' (p : {p : ℕ // p.Prime}), (1 : ℝ) / (p : ℝ) ^ 2 < 1
 
 /-- For a finite set P of distinct primes, ∑_{p ∈ P} 1/p² < 1.
-    Elementary proof: 1/n² ≤ 1/(n-1) - 1/n for n ≥ 2, so the sum over
-    P ⊆ Ico 2 (max P + 1) telescopes to ≤ 1 - 1/max(P) < 1. No tsum needed. -/
+    Elementary proof: 1/n² < 1/(n-1) - 1/n for n ≥ 2, so the sum over
+    P ⊆ Ico 2 (max P + 1) telescopes to < 1. No tsum needed. -/
 theorem finite_prime_recip_sq_lt_one (P : Finset ℕ) (hP : ∀ p ∈ P, Nat.Prime p) :
     ∑ p ∈ P, (1 : ℝ) / (p : ℝ) ^ 2 < 1 := by
   rcases P.eq_empty_or_nonempty with rfl | hne
@@ -338,16 +342,16 @@ theorem finite_prime_recip_sq_lt_one (P : Finset ℕ) (hP : ∀ p ∈ P, Nat.Pri
   have hM_pos : (0 : ℝ) < (M : ℝ) := by exact_mod_cast (show 0 < M by omega)
   have hP_sub : P ⊆ Finset.Ico 2 (M + 1) := fun p hp =>
     Finset.mem_Ico.mpr ⟨(hP p hp).two_le, Nat.lt_succ_of_le (Finset.le_max' P p hp)⟩
-  -- For n ≥ 2: 1/n² ≤ 1/(n-1) - 1/n  (key bound; proved via field_simp + nlinarith)
+  -- For n ≥ 2: 1/n² < 1/(n-1) - 1/n  (key bound; proved via field_simp + nlinarith)
   have hterm : ∀ n ∈ Finset.Ico 2 (M + 1),
-      (1 : ℝ) / (n : ℝ) ^ 2 ≤ 1 / ((n : ℝ) - 1) - 1 / (n : ℝ) := by
+      (1 : ℝ) / (n : ℝ) ^ 2 < 1 / ((n : ℝ) - 1) - 1 / (n : ℝ) := by
     intro n hn
     have hn2 : 2 ≤ n := (Finset.mem_Ico.mp hn).1
     have hn_pos : (0 : ℝ) < (n : ℝ) := by exact_mod_cast (show 0 < n by omega)
     have hn1_pos : (0 : ℝ) < (n : ℝ) - 1 := by
       linarith [show (1 : ℝ) < (n : ℝ) from by exact_mod_cast (show 1 < n by omega)]
-    -- Show 1/(n-1) - 1/n - 1/n² ≥ 0  (equals 1/(n²·(n-1)) > 0)
-    have h_diff_nn : (0 : ℝ) ≤ 1 / ((n : ℝ) - 1) - 1 / (n : ℝ) - 1 / (n : ℝ) ^ 2 := by
+    -- Show 1/(n-1) - 1/n - 1/n² > 0  (equals 1/(n²·(n-1)) > 0)
+    have h_diff_nn : (0 : ℝ) < 1 / ((n : ℝ) - 1) - 1 / (n : ℝ) - 1 / (n : ℝ) ^ 2 := by
       have h_eq : (1:ℝ) / ((n:ℝ)-1) - 1/(n:ℝ) - 1/(n:ℝ)^2 = 1 / ((n:ℝ)^2 * ((n:ℝ)-1)) := by
         have h1 : (n:ℝ) - 1 ≠ 0 := ne_of_gt hn1_pos
         have h2 : (n:ℝ) ≠ 0 := ne_of_gt hn_pos
@@ -391,8 +395,9 @@ theorem finite_prime_recip_sq_lt_one (P : Finset ℕ) (hP : ∀ p ∈ P, Nat.Pri
     have h_eq : (1:ℝ)/((n:ℝ)-1) - 1/(n:ℝ) = 1 / ((n:ℝ) * ((n:ℝ)-1)) := by field_simp; ring
     rw [h_eq]; positivity
   calc ∑ p ∈ P, (1 : ℝ) / (p : ℝ) ^ 2
-      ≤ ∑ p ∈ P, (1 / ((p : ℝ) - 1) - 1 / (p : ℝ)) :=
-          Finset.sum_le_sum (fun p hp => hterm p (hP_sub hp))
+      < ∑ p ∈ P, (1 / ((p : ℝ) - 1) - 1 / (p : ℝ)) :=
+          Finset.sum_lt_sum_of_nonempty hne
+            (fun p hp => hterm p (hP_sub hp))
     _ ≤ ∑ n ∈ Finset.Ico 2 (M + 1), (1 / ((n : ℝ) - 1) - 1 / (n : ℝ)) :=
           Finset.sum_le_sum_of_subset_of_nonneg hP_sub h_nonneg
     _ = 1 - 1 / (M : ℝ) := h_tele_M
@@ -406,10 +411,10 @@ theorem pasten_coeff_sq_sum (P : Finset ℕ) (R : ℕ) (hR : R = ∏ p ∈ P, p)
     ∑ p ∈ P, ((R : ℝ) / p) ^ 2 = (R : ℝ) ^ 2 * ∑ p ∈ P, (1 : ℝ) / (p : ℝ) ^ 2 := by
   rw [Finset.mul_sum]; congr 1; ext p; simp [div_pow]; ring
 
-/-- Determinant bound: for squarefree coprime triple with distinct prime set P and
-    radical R, the squared Euclidean norm of the coefficient vector satisfies
+/-- Coefficient-norm bound: for a squarefree coprime triple with distinct prime
+    set P and radical R, the squared Euclidean norm of the coefficient vector satisfies
     ‖c‖₂² = R² · ∑_{p∈P} 1/p² < R².
-    Combined with gcd(c_p) = 1 (Theorem B, proved below), this gives det(L) < R. -/
+    In the paper, combining this with gcd(c_p)=1 gives det(L) < R. -/
 theorem pasten_coeff_norm_sq_lt_rad_sq (P : Finset ℕ) (hP : ∀ p ∈ P, Nat.Prime p)
     (R : ℕ) (hR : R = ∏ p ∈ P, p) (hpos : 0 < R) :
     ∑ p ∈ P, ((R : ℝ) / p) ^ 2 < (R : ℝ) ^ 2 := by
@@ -418,9 +423,10 @@ theorem pasten_coeff_norm_sq_lt_rad_sq (P : Finset ℕ) (hP : ∀ p ∈ P, Nat.P
   have hR2 : (0 : ℝ) < (R : ℝ) ^ 2 := by positivity
   nlinarith
 
-/-- [THM] Pasten lattice determinant bound (squarefree subfamily):
+/-- [THM] Pasten coefficient-norm bound (squarefree subfamily):
     ‖c‖₂ < R, i.e., the Euclidean norm of the coefficient vector is strictly less than R.
-    This is the main content of OB-09 (CONFIRMED): det(L) = ‖c‖₂/gcd(c) = ‖c‖₂ < R. -/
+    This is the formalized arithmetic core of OB-09; the paper separately proves
+    gcd(c)=1 and det(L)=‖c‖₂. -/
 theorem pasten_det_lt_rad (P : Finset ℕ) (hP : ∀ p ∈ P, Nat.Prime p)
     (R : ℕ) (hR : R = ∏ p ∈ P, p) (hpos : 0 < R) :
     Real.sqrt (∑ p ∈ P, ((R : ℝ) / p) ^ 2) < (R : ℝ) := by
@@ -431,25 +437,29 @@ theorem pasten_det_lt_rad (P : Finset ℕ) (hP : ∀ p ∈ P, Nat.Prime p)
             (pasten_coeff_norm_sq_lt_rad_sq P hP R hR hpos)
     _ = (R : ℝ) := Real.sqrt_sq hR_pos.le
 
-/-- AXIOM: Minkowski + Vaaler (1979) ambient-coordinate shortest vector bound.
-    For a rank-(k-1) integer lattice L ⊂ ℤ^k defined by a single linear constraint
-    with det(L) < D, there exists a nonzero lattice point with ℓ^∞-norm ≤ D^{1/(k-1)}.
-    Citation: Cassels, "An Introduction to the Geometry of Numbers," Theorem I.2 (1959)
-    + Vaaler, J.D. "A geometric inequality with applications to linear forms,"
-      Pacific J. Math. 83 (1979), no. 2, 543–553.
-    The Vaaler component is needed because L sits in a hyperplane of ℤ^k. -/
-axiom minkowski_vaaler_pasten (k : ℕ) (hk : 2 ≤ k) (det_L R : ℝ)
-    (hdet : det_L < R) (hR : 0 < R) :
-    ∃ norm_bound : ℝ, norm_bound < R ^ ((1 : ℝ) / ((k : ℝ) - 1)) ∧ 0 < norm_bound
+/-- AXIOM: Vaaler (1979), Theorem 2, in an explicit integer-matrix form.
+    If A is k×(k−1) with positive Gram determinant, there is a nonzero integer
+    coefficient vector v such that every coordinate of A·v has absolute value at
+    most sqrt(det(AᵀA))^(1/(k−1)).
+    Citation: Vaaler, J.D. "A geometric inequality with applications to linear
+    forms," Pacific J. Math. 83 (1979), no. 2, 543–553, Theorem 2.
+    This is an admitted external premise, not a Lean proof. -/
+axiom minkowski_vaaler_pasten (k : ℕ) (hk : 2 ≤ k)
+    (A : Matrix (Fin k) (Fin (k - 1)) ℤ)
+    (hdet : (0 : ℝ) < Real.sqrt (((Matrix.det (A.transpose * A) : ℤ) : ℝ))) :
+    ∃ v : Fin (k - 1) → ℤ, v ≠ 0 ∧
+      ∀ i : Fin k, |(((A.mulVec v) i : ℤ) : ℝ)| ≤
+        (Real.sqrt (((Matrix.det (A.transpose * A) : ℤ) : ℝ))) ^
+          ((1 : ℝ) / ((k : ℝ) - 1))
 
 /-!
 ## F3: Non-degeneracy for squarefree ω=3 prime triples (proved 2026-08-15)
 
 For squarefree coprime (a, b, c) = (p, q, r) with p, q, r distinct primes and
-p + q = r (p = 2 forced by parity), the degenerate sublattice L₀ ⊂ F(p, q) is
-generated by (p, q, 2r) with ℓ∞-norm 2r.  Meanwhile det(L) < R (OB-09) gives a
-Minkowski vector with ‖ψ‖ ≤ √R = √(pqr) < 2r.  Hence the shortest vector is
-non-degenerate.  All four items: zero sorry.
+p + q = r (p = 2 forced by parity), the paper proves that the degenerate
+sublattice L₀ ⊂ F(p, q) is generated by (p, q, 2r) with ℓ∞-norm 2r, while
+Vaaler gives a vector with ‖ψ‖ ≤ √R = √(pqr) < 2r.  The Lean results below
+formalize the arithmetic cores, not the paper-level Vaaler instantiation.
 -/
 
 /-- [THM] F3.1: Key arithmetic inequality for prime triples p + q = r with p = 2.
@@ -470,8 +480,8 @@ theorem pasten_L0_gen_wronskian (p q : ℕ) : q * p = p * q := mul_comm q p
 
 /-- [THM] F3.4: √(pqr) < 2r for prime triples with p = 2.
     Proof: p*q < 4*r (F3.1) implies p*q*r < (2r)², so √(pqr) < √((2r)²) = 2r.
-    Combined with OB-09 (det < R) and Minkowski–Vaaler: ‖ψ_min‖ ≤ √R < 2r,
-    hence the shortest Pasten lattice vector is non-degenerate. -/
+    In the paper, OB-09 plus Vaaler gives ‖ψ_min‖ ≤ √R < 2r, so the shortest
+    Pasten lattice vector is non-degenerate. -/
 theorem pasten_rad_sqrt_lt_twice_r (p q r : ℕ) (hp2 : p = 2)
     (hq : Nat.Prime q) (hr : Nat.Prime r) (hadd : p + q = r) :
     Real.sqrt ((p * q * r : ℕ) : ℝ) < 2 * (r : ℝ) := by

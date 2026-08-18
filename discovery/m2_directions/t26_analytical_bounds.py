@@ -66,52 +66,72 @@ SUB-CASE c ODD (r₁≥3): c=r₁r₂ with r₁ < r₂ odd primes. p+q=r₁r₂.
 """
 
 import math
-from collections import defaultdict
+
 
 def factorize(n):
-    f = {}; d = 2
-    while d*d <= n:
-        while n%d == 0: f[d]=f.get(d,0)+1; n//=d
+    f = {}
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            f[d] = f.get(d, 0) + 1
+            n //= d
         d += 1
-    if n > 1: f[n] = 1
+    if n > 1:
+        f[n] = 1
     return f
 
-def gcd(a,b):
-    while b: a,b=b,a%b
+
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
     return abs(a)
 
+
 def isprime(n):
-    if n<2: return False
-    if n==2: return True
-    if n%2==0: return False
-    d=3
-    while d*d<=n:
-        if n%d==0: return False
-        d+=2
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    d = 3
+    while d * d <= n:
+        if n % d == 0:
+            return False
+        d += 2
     return True
 
+
 def is_squarefree(n):
-    return all(v==1 for v in factorize(n).values())
+    return all(v == 1 for v in factorize(n).values())
 
-def rad_abc(a,b,c):
-    return math.prod(set(factorize(a))|set(factorize(b))|set(factorize(c)))
 
-def nd_norm(a,b,c):
-    fa,fb,fc=factorize(a),factorize(b),factorize(c)
-    Pa=sorted(fa); Pb=sorted(fb); Pc=sorted(fc)
-    mA=Pa[0] if Pa else float('inf')
-    mB=Pb[0] if Pb else float('inf')
-    mC=Pc[0] if Pc else float('inf')
-    cands=[]
-    if Pa and Pb: cands.append(max(mA,mB))
-    if Pa and Pc: cands.append(max(mA,mC))
-    if Pb and Pc: cands.append(max(mB,mC))
-    return min(cands) if cands else float('inf')
+def rad_abc(a, b, c):
+    return math.prod(set(factorize(a)) | set(factorize(b)) | set(factorize(c)))
 
-BOUND = 2**(-1/3)
+
+def nd_norm(a, b, c):
+    fa, fb, fc = factorize(a), factorize(b), factorize(c)
+    Pa = sorted(fa)
+    Pb = sorted(fb)
+    Pc = sorted(fc)
+    mA = Pa[0] if Pa else float("inf")
+    mB = Pb[0] if Pb else float("inf")
+    mC = Pc[0] if Pc else float("inf")
+    cands = []
+    if Pa and Pb:
+        cands.append(max(mA, mB))
+    if Pa and Pc:
+        cands.append(max(mA, mC))
+    if Pb and Pc:
+        cands.append(max(mB, mC))
+    return min(cands) if cands else float("inf")
+
+
+BOUND = 2 ** (-1 / 3)
 
 print("T26: Analytical sharp bounds for types (0,2,2) and (1,1,2)")
-print("="*60)
+print("=" * 60)
 print()
 print(f"2^{{-1/3}} = {BOUND:.8f}")
 print()
@@ -122,90 +142,108 @@ print("  Checking all squarefree (0,2,2) triples with c ≤ 2000...")
 sup_022 = 0
 worst_022 = None
 for c in range(6, 2001):
-    for a in range(1, (c+1)//2+1):
+    for a in range(1, (c + 1) // 2 + 1):
         b = c - a
-        if b < a or gcd(a,b) != 1: continue
-        if a != 1: continue  # type (0,2,2) requires a=1
-        fa,fb,fc = factorize(a), factorize(b), factorize(c)
-        if len(fa) != 0 or len(fb) != 2 or len(fc) != 2: continue
-        if not (is_squarefree(b) and is_squarefree(c)): continue
-        R = rad_abc(a,b,c)
-        omega = len(set(fa)|set(fb)|set(fc))
-        nd = nd_norm(a,b,c)
-        ratio = nd / R**(1/(omega-1))
+        if b < a or gcd(a, b) != 1:
+            continue
+        if a != 1:
+            continue  # type (0,2,2) requires a=1
+        fa, fb, fc = factorize(a), factorize(b), factorize(c)
+        if len(fa) != 0 or len(fb) != 2 or len(fc) != 2:
+            continue
+        if not (is_squarefree(b) and is_squarefree(c)):
+            continue
+        R = rad_abc(a, b, c)
+        omega = len(set(fa) | set(fb) | set(fc))
+        nd = nd_norm(a, b, c)
+        ratio = nd / R ** (1 / (omega - 1))
         if ratio > sup_022:
             sup_022 = ratio
-            worst_022 = (a,b,c,ratio)
+            worst_022 = (a, b, c, ratio)
 print(f"  max ratio = {sup_022:.6f} at {worst_022[:3]}")
-print(f"  3·210^{{-1/3}} = {3*210**(-1/3):.6f}")
-print(f"  Unique maximum: {'YES' if worst_022[:3]==(1,14,15) else 'MULTIPLE'}")
+print(f"  3·210^{{-1/3}} = {3 * 210 ** (-1 / 3):.6f}")
+print(f"  Unique maximum: {'YES' if worst_022[:3] == (1, 14, 15) else 'MULTIPLE'}")
 print()
 
 # Verify formula for (1,14,15)
 print("  Formula check (1,14,15): ρ³ = q₁³/(p₁p₂(1+p₁p₂))")
-print(f"  q₁=3, p₁=2, p₂=7: 27/(2*7*15) = {27/(2*7*15):.6f}")
-print(f"  27/210 = {27/210:.6f}")
-print(f"  (27/210)^{{1/3}} = {(27/210)**(1/3):.6f}")
+print(f"  q₁=3, p₁=2, p₂=7: 27/(2*7*15) = {27 / (2 * 7 * 15):.6f}")
+print(f"  27/210 = {27 / 210:.6f}")
+print(f"  (27/210)^{{1/3}} = {(27 / 210) ** (1 / 3):.6f}")
 print()
 
 # ── TYPE (1,1,2) ANALYTICAL VERIFICATION ─────────────────────────────────────
 print("CLAIM B: sup ρ for type (1,1,2) = 2^{{-1/3}}")
 print("  C EVEN case formula: ρ = (p²/(q(p+q)))^{{1/3}}, sup → 2^{{-1/3}} as q/p→1")
 print()
-print("  Growing sequence toward 2^{{-1/3}} (p,q consecutive prime pair with (p+q)/2 prime):")
+print(
+    "  Growing sequence toward 2^{{-1/3}} (p,q consecutive prime pair with (p+q)/2 prime):"
+)
 print(f"  {'(p,q,r1,r2)':>28}  {'ρ':>10}  {'2^(-1/3)-ρ':>12}")
-print("  " + "-"*55)
-TARGET = 2**(-1/3)
+print("  " + "-" * 55)
+TARGET = 2 ** (-1 / 3)
 count = 0
 for p in range(3, 1000000, 2):
-    if not isprime(p): continue
+    if not isprime(p):
+        continue
     # find smallest prime q > p such that (p+q)/2 is prime
     q = p + 2
     while q < p * 3:
-        if isprime(q) and (p+q) % 2 == 0 and isprime((p+q)//2):
+        if isprime(q) and (p + q) % 2 == 0 and isprime((p + q) // 2):
             break
         q += 2
     else:
         continue
-    s = (p+q)//2
-    c = 2*s
-    if not is_squarefree(p) or not is_squarefree(q) or not is_squarefree(c): continue
-    if len(factorize(c)) != 2: continue  # c must have exactly 2 prime factors (2*s)
+    s = (p + q) // 2
+    c = 2 * s
+    if not is_squarefree(p) or not is_squarefree(q) or not is_squarefree(c):
+        continue
+    if len(factorize(c)) != 2:
+        continue  # c must have exactly 2 prime factors (2*s)
     R = rad_abc(p, q, c)
-    omega = len(set(factorize(p))|set(factorize(q))|set(factorize(c)))
+    omega = len(set(factorize(p)) | set(factorize(q)) | set(factorize(c)))
     nd = nd_norm(p, q, c)
-    ratio = nd / R**(1/(omega-1))
-    formula_ratio = (p**2 / (q*(p+q)))**(1/3)
-    print(f"  ({p:>6},{q:>6},{2:>3},{s:>6})  {ratio:>10.8f}  {TARGET-ratio:>12.10f}")
+    ratio = nd / R ** (1 / (omega - 1))
+    formula_ratio = (p**2 / (q * (p + q))) ** (1 / 3)
+    print(f"  ({p:>6},{q:>6},{2:>3},{s:>6})  {ratio:>10.8f}  {TARGET - ratio:>12.10f}")
     count += 1
-    if count >= 12: break
+    if count >= 12:
+        break
 
 print()
 print("  Verifying ρ < 2^{{-1/3}} for ALL type (1,1,2) triples (c ≤ 1000)...")
 violations = 0
-max_r = 0; max_triple = None
+max_r = 0
+max_triple = None
 for c in range(4, 1001):
-    for a in range(1, (c+1)//2+1):
+    for a in range(1, (c + 1) // 2 + 1):
         b = c - a
-        if b < a or gcd(a,b) != 1: continue
-        fa,fb,fc = factorize(a), factorize(b), factorize(c)
-        if len(fa) != 1 or len(fb) != 1 or len(fc) != 2: continue
-        if not (is_squarefree(a) and is_squarefree(b) and is_squarefree(c)): continue
-        omega = len(set(fa)|set(fb)|set(fc))
-        if omega != 4: continue
-        R = rad_abc(a,b,c)
-        nd = nd_norm(a,b,c)
-        ratio = nd / R**(1/3)
+        if b < a or gcd(a, b) != 1:
+            continue
+        fa, fb, fc = factorize(a), factorize(b), factorize(c)
+        if len(fa) != 1 or len(fb) != 1 or len(fc) != 2:
+            continue
+        if not (is_squarefree(a) and is_squarefree(b) and is_squarefree(c)):
+            continue
+        omega = len(set(fa) | set(fb) | set(fc))
+        if omega != 4:
+            continue
+        R = rad_abc(a, b, c)
+        nd = nd_norm(a, b, c)
+        ratio = nd / R ** (1 / 3)
         if ratio > max_r:
-            max_r = ratio; max_triple = (a,b,c)
+            max_r = ratio
+            max_triple = (a, b, c)
         if ratio > BOUND + 1e-9:
-            print(f"  VIOLATION: ({a},{b},{c}) ratio={ratio:.6f} > 2^(-1/3)={BOUND:.6f}")
+            print(
+                f"  VIOLATION: ({a},{b},{c}) ratio={ratio:.6f} > 2^(-1/3)={BOUND:.6f}"
+            )
             violations += 1
 print(f"  Max ratio found: {max_r:.8f} at {max_triple}")
 print(f"  2^(-1/3) =       {BOUND:.8f}")
 print(f"  Violations: {violations}")
 if violations == 0:
-    print(f"  All type (1,1,2) triples satisfy ρ < 2^{{-1/3}}. ✓")
+    print("  All type (1,1,2) triples satisfy ρ < 2^{-1/3}. ✓")
 
 print()
 print("THEOREM F14 SUMMARY:")

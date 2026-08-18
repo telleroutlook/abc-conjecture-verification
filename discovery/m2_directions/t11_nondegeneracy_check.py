@@ -17,7 +17,6 @@ SIGNIFICANCE:
 DISCOVERY TIER: no proof, no abc triples used for construction, pure exploration.
 """
 
-import math
 
 def factorize(n):
     f = {}
@@ -31,10 +30,12 @@ def factorize(n):
         f[n] = 1
     return f
 
+
 def gcd(a, b):
     while b:
         a, b = b, a % b
     return abs(a)
+
 
 def gcd_list(lst):
     g = 0
@@ -42,8 +43,10 @@ def gcd_list(lst):
         g = gcd(g, abs(x))
     return g
 
+
 def lcm(a, b):
     return a * b // gcd(a, b)
+
 
 def rad(n):
     r = 1
@@ -51,10 +54,12 @@ def rad(n):
         r *= p
     return r
 
+
 def wronskian_val(a, b, psi_map, fa, fb):
     sb = sum(fb[p] * psi_map.get(p, 0) / p for p in fb)
     sa = sum(fa[p] * psi_map.get(p, 0) / p for p in fa)
     return a * b * (sb - sa)
+
 
 def setup_int_coeffs(a, b, c):
     fa, fb, fc = factorize(a), factorize(b), factorize(c)
@@ -70,6 +75,7 @@ def setup_int_coeffs(a, b, c):
     for p in fc:
         coeff[p] = coeff.get(p, 0) - fc[p] * (denom // p)
     return primes, coeff, fa, fb, fc
+
 
 def find_shortest_vectors(a, b, c, bound=60):
     """
@@ -120,8 +126,9 @@ def find_shortest_vectors(a, b, c, bound=60):
                 if abs(W) > 1e-9:
                     if best_nondeg is None or norm < best_nondeg:
                         best_nondeg = norm
-        is_same = (best_all is not None and best_nondeg is not None and
-                   best_all == best_nondeg)
+        is_same = (
+            best_all is not None and best_nondeg is not None and best_all == best_nondeg
+        )
         return best_all, best_nondeg, is_same, omega
 
     if rank == 3:
@@ -149,24 +156,44 @@ def find_shortest_vectors(a, b, c, bound=60):
                     if abs(W) > 1e-9:
                         if best_nondeg is None or norm < best_nondeg:
                             best_nondeg = norm
-        is_same = (best_all is not None and best_nondeg is not None and
-                   best_all == best_nondeg)
+        is_same = (
+            best_all is not None and best_nondeg is not None and best_all == best_nondeg
+        )
         return best_all, best_nondeg, is_same, omega
 
     return None, None, None, omega
 
+
 TRIPLES = [
     # omega=2
-    (1, 8, 9), (1, 3, 4), (1, 31, 32), (1, 127, 128),
+    (1, 8, 9),
+    (1, 3, 4),
+    (1, 31, 32),
+    (1, 127, 128),
     # omega=3
-    (3, 125, 128), (1, 80, 81), (5, 27, 32), (1, 242, 243),
-    (1, 48, 49), (13, 243, 256), (32, 49, 81), (7, 25, 32),
-    (4, 121, 125), (1, 728, 729),
+    (3, 125, 128),
+    (1, 80, 81),
+    (5, 27, 32),
+    (1, 242, 243),
+    (1, 48, 49),
+    (13, 243, 256),
+    (32, 49, 81),
+    (7, 25, 32),
+    (4, 121, 125),
+    (1, 728, 729),
     # omega=4
-    (1, 2400, 2401), (1, 4374, 4375), (8, 343, 351), (64, 135, 199),
-    (2, 2673, 2675), (1, 3024, 3025), (5, 1024, 1029),
+    (1, 2400, 2401),
+    (1, 4374, 4375),
+    (8, 343, 351),
+    (64, 135, 199),
+    (2, 2673, 2675),
+    (1, 3024, 3025),
+    (5, 1024, 1029),
     # omega=5 (squarefree small)
-    (2, 3, 5), (4, 5, 9), (8, 9, 17), (1, 35, 36),
+    (2, 3, 5),
+    (4, 5, 9),
+    (8, 9, 17),
+    (1, 35, 36),
 ]
 
 print("T11: Non-degeneracy check for Pasten lattice shortest vector")
@@ -197,7 +224,9 @@ for a, b, c in TRIPLES:
 
     if norm_all is None:
         note = "omega>4 skip"
-        print(f"  {str((a,b,c)):>22}  {omega:>2}  {R:>8}  {'skip':>8}  {'skip':>8}  {'--':>6}  {'--':>6}  {note}")
+        print(
+            f"  {str((a, b, c)):>22}  {omega:>2}  {R:>8}  {'skip':>8}  {'skip':>8}  {'--':>6}  {'--':>6}  {note}"
+        )
         continue
 
     if norm_nd is None:
@@ -214,16 +243,20 @@ for a, b, c in TRIPLES:
             degenerate_cases.append((a, b, c))
 
     nd_str = str(norm_nd) if norm_nd is not None else "N/A"
-    print(f"  {str((a,b,c)):>22}  {omega:>2}  {R:>8}  "
-          f"{str(norm_all):>8}  {nd_str:>8}  {gap_str:>6}  {same_str:>6}  {note}")
+    print(
+        f"  {str((a, b, c)):>22}  {omega:>2}  {R:>8}  "
+        f"{str(norm_all):>8}  {nd_str:>8}  {gap_str:>6}  {same_str:>6}  {note}"
+    )
 
     if omega in stats:
-        stats[omega].append({
-            'norm_all': norm_all,
-            'norm_nd': norm_nd,
-            'same': is_same,
-            'gap': norm_nd / norm_all if norm_nd and norm_all else None,
-        })
+        stats[omega].append(
+            {
+                "norm_all": norm_all,
+                "norm_nd": norm_nd,
+                "same": is_same,
+                "gap": norm_nd / norm_all if norm_nd and norm_all else None,
+            }
+        )
 
 print()
 print("[Summary by omega]")
@@ -235,12 +268,14 @@ for omg in [2, 3, 4, 5]:
     data = stats[omg]
     if not data:
         continue
-    n_same = sum(1 for d in data if d['same'])
-    gaps = [d['gap'] for d in data if d['gap'] is not None]
+    n_same = sum(1 for d in data if d["same"])
+    gaps = [d["gap"] for d in data if d["gap"] is not None]
     max_gap = max(gaps) if gaps else 1.0
     mean_gap = sum(gaps) / len(gaps) if gaps else 1.0
-    print(f"  {omg:>2}  {len(data):>3}  {n_same:>3}/{len(data):<3}  "
-          f"{max_gap:>8.3f}  {mean_gap:>9.3f}")
+    print(
+        f"  {omg:>2}  {len(data):>3}  {n_same:>3}/{len(data):<3}  "
+        f"{max_gap:>8.3f}  {mean_gap:>9.3f}"
+    )
 
 print()
 print("[Non-degenerate cases where shortest vector is degenerate]")
@@ -260,8 +295,12 @@ print("  non-degenerate with probability 1 (measure argument).")
 print("  The question is whether the SHORTEST vector happens to lie in L_0.")
 print()
 print("  If L_0 is a 'thin' sublattice (determinant >> det(L)):")
-print("    The shortest non-degenerate vector is approximately as short as the shortest vector.")
-print("    det(L_0) / det(L) = ||c_W|| / gcd(c_W) where c_W is the Wronskian constraint vector.")
+print(
+    "    The shortest non-degenerate vector is approximately as short as the shortest vector."
+)
+print(
+    "    det(L_0) / det(L) = ||c_W|| / gcd(c_W) where c_W is the Wronskian constraint vector."
+)
 print()
 print("[Conclusion]")
 print()
@@ -270,8 +309,12 @@ if not degenerate_cases:
     print("  Empirical evidence supports: for coprime (a,b,c) with omega >= 2,")
     print("  the minimum-norm vector in F(a,b) is always non-degenerate.")
     print()
-    print("  SIGNIFICANCE: If this holds universally, Corollary C (OB-09) strengthens to:")
-    print("    'There exists a NON-DEGENERATE psi with ||psi||_inf <= det(L)^{1/(omega-1)}'")
+    print(
+        "  SIGNIFICANCE: If this holds universally, Corollary C (OB-09) strengthens to:"
+    )
+    print(
+        "    'There exists a NON-DEGENERATE psi with ||psi||_inf <= det(L)^{1/(omega-1)}'"
+    )
     print("  without any additional argument about non-degeneracy.")
     print()
     print("  STATUS: empirical support only; no proof attempted.")
@@ -280,4 +323,6 @@ else:
     print(f"  {len(degenerate_cases)} triple(s) have a degenerate shortest vector.")
     print("  The gap (norm_nd / norm_all) measures how much longer the shortest")
     print("  non-degenerate vector is relative to the absolute shortest vector.")
-    print("  A bounded gap (e.g. gap <= 2) would preserve the O(R^{1/(omega-1)}) bound.")
+    print(
+        "  A bounded gap (e.g. gap <= 2) would preserve the O(R^{1/(omega-1)}) bound."
+    )

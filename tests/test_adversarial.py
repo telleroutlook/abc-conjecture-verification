@@ -14,7 +14,6 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
-import tempfile
 import textwrap
 from pathlib import Path
 
@@ -86,10 +85,9 @@ def get_witness_content(out: dict, obligation_id: str) -> str:
 # ── import checker internals directly for richer assertions ──────────────────
 
 sys.path.insert(0, str(REPO_ROOT))
-from checker.check_certificate import (
+from checker.check_certificate import (  # noqa: E402
     DISPATCH,
     OBLIGATIONS,
-    _check_dag_acyclic,
     _check_import_barrier,
     _check_forbidden_leaves,
     _project_root,
@@ -109,6 +107,7 @@ def invoke_handler(claim_id: str, extra: dict | None = None) -> list[dict]:
 
 
 # ── TEST-ABC1: CORE-0 axiom defs pass ─────────────────────────────────────────
+
 
 class TestABC1_Core0Definitions:
     """TEST-ABC1: CORE-0 obligations all pass (abc statement, rad, certificate,
@@ -145,15 +144,14 @@ class TestABC1_Core0Definitions:
 
 # ── TEST-ABC2: CORE-1 provenance clean ────────────────────────────────────────
 
+
 class TestABC2_Core1Provenance:
     """TEST-ABC2: CORE-1 passes for the current scaffold (no construction files,
     no forbidden imports, DAG acyclic)."""
 
     def test_core1_dag_acyclic_passes(self):
         results = invoke_handler("core-1-provenance-manifest")
-        dag_result = next(
-            r for r in results if r["id"] == "core1.dag-acyclic"
-        )
+        dag_result = next(r for r in results if r["id"] == "core1.dag-acyclic")
         assert dag_result["verdict"] == "pass", (
             f"core1.dag-acyclic failed: {dag_result.get('witness_digest')}"
         )
@@ -161,7 +159,8 @@ class TestABC2_Core1Provenance:
     def test_core1_import_barrier_passes(self):
         results = invoke_handler("core-1-provenance-manifest")
         barrier_result = next(
-            r for r in results
+            r
+            for r in results
             if r["id"] == "core1.no-forbidden-import-M1-M2-M3-into-M4-M5-M6"
         )
         assert barrier_result["verdict"] == "pass", (
@@ -171,8 +170,7 @@ class TestABC2_Core1Provenance:
     def test_core1_forbidden_leaves_passes(self):
         results = invoke_handler("core-1-provenance-manifest")
         leaf_result = next(
-            r for r in results
-            if r["id"] == "core1.no-forbidden-construction-leaves"
+            r for r in results if r["id"] == "core1.no-forbidden-construction-leaves"
         )
         assert leaf_result["verdict"] == "pass", (
             f"forbidden-leaf check failed: {leaf_result.get('witness_digest')}"
@@ -181,13 +179,15 @@ class TestABC2_Core1Provenance:
     def test_core1_construction_frozen_passes(self):
         results = invoke_handler("core-1-provenance-manifest")
         frozen_result = next(
-            r for r in results
+            r
+            for r in results
             if r["id"] == "core1.construction-frozen-before-comparison"
         )
         assert frozen_result["verdict"] == "pass"
 
 
 # ── TEST-ABC3: CORE-2 OBL ─────────────────────────────────────────────────────
+
 
 class TestABC3_Core2OBL:
     """TEST-ABC3: CORE-2 (height framework) fails as OBL — not yet supplied."""
@@ -203,19 +203,19 @@ class TestABC3_Core2OBL:
     def test_core2_fails_with_obl_message(self):
         """All CORE-2 failures must carry an OBL message referencing the missing
         P_height construction."""
-        import hashlib
         results = invoke_handler("core-2-height-framework")
         # All results are fail; check that the obligation ids include height-related items
         ids = {r["id"] for r in results}
-        assert "core2.rad-function-formally-defined" in ids or \
-               "core2.faltings-height-setup" in ids or \
-               "core2.arithmetic-geometry-framework" in ids or \
-               "core2.framework-built-without-forbidden-inputs" in ids, (
-            f"CORE-2 obligations unexpected: {ids}"
-        )
+        assert (
+            "core2.rad-function-formally-defined" in ids
+            or "core2.faltings-height-setup" in ids
+            or "core2.arithmetic-geometry-framework" in ids
+            or "core2.framework-built-without-forbidden-inputs" in ids
+        ), f"CORE-2 obligations unexpected: {ids}"
 
 
 # ── TEST-ABC4: CORE-3 OBL with IUT gate ──────────────────────────────────────
+
 
 class TestABC4_Core3OBL_IUT:
     """TEST-ABC4: CORE-3 fails as OBL, and the IUT Corollary 3.12 sub-obligation
@@ -225,16 +225,17 @@ class TestABC4_Core3OBL_IUT:
         results = invoke_handler("core-3-key-inequality")
         assert results
         passed = [r for r in results if r["verdict"] == "pass"]
-        assert not passed, (
-            f"CORE-3 unexpectedly passed: {[r['id'] for r in passed]}"
-        )
+        assert not passed, f"CORE-3 unexpectedly passed: {[r['id'] for r in passed]}"
 
     def test_core3_iut_gate_present_and_fails(self):
         results = invoke_handler("core-3-key-inequality")
         iut_result = next(
-            (r for r in results
-             if r["id"] == "core3.iut-corollary-312-independently-verified"),
-            None
+            (
+                r
+                for r in results
+                if r["id"] == "core3.iut-corollary-312-independently-verified"
+            ),
+            None,
         )
         assert iut_result is not None, (
             "core3.iut-corollary-312-independently-verified obligation not found in CORE-3"
@@ -248,7 +249,8 @@ class TestABC4_Core3OBL_IUT:
         it is present and non-empty (the exact message is tested via recomputation)."""
         results = invoke_handler("core-3-key-inequality")
         iut_result = next(
-            r for r in results
+            r
+            for r in results
             if r["id"] == "core3.iut-corollary-312-independently-verified"
         )
         witness = iut_result.get("witness_digest", "")
@@ -257,6 +259,7 @@ class TestABC4_Core3OBL_IUT:
         )
         # Verify the digest matches the expected message
         import hashlib
+
         expected_msg = (
             "OBL (IUT gate): Mochizuki's Corollary 3.12 not independently verified. "
             "Blocking reason: Scholze-Stix objection (2018) — identification of "
@@ -280,14 +283,14 @@ class TestABC4_Core3OBL_IUT:
     def test_core3_inequality_obligation_fails(self):
         results = invoke_handler("core-3-key-inequality")
         ineq_result = next(
-            (r for r in results if r["id"] == "core3.height-inequality-proved"),
-            None
+            (r for r in results if r["id"] == "core3.height-inequality-proved"), None
         )
         assert ineq_result is not None
         assert ineq_result["verdict"] == "fail"
 
 
 # ── TEST-ABC5: CORE-4 OBL ─────────────────────────────────────────────────────
+
 
 class TestABC5_Core4OBL:
     """TEST-ABC5: CORE-4 (finiteness of exceptions) fails as OBL."""
@@ -296,9 +299,7 @@ class TestABC5_Core4OBL:
         results = invoke_handler("core-4-finiteness")
         assert results
         passed = [r for r in results if r["verdict"] == "pass"]
-        assert not passed, (
-            f"CORE-4 unexpectedly passed: {[r['id'] for r in passed]}"
-        )
+        assert not passed, f"CORE-4 unexpectedly passed: {[r['id'] for r in passed]}"
 
     def test_core4_finiteness_obligations_present(self):
         results = invoke_handler("core-4-finiteness")
@@ -307,6 +308,7 @@ class TestABC5_Core4OBL:
 
 
 # ── TEST-ABC6: Circular abc rejection ────────────────────────────────────────
+
 
 class TestABC6_CircularAbcRejection:
     """TEST-ABC6: A construction that uses known abc triples to fit K_epsilon
@@ -320,11 +322,13 @@ class TestABC6_CircularAbcRejection:
 
         # Write a file with a forbidden pattern: 'abc_triples'
         circular_file = proof_m2 / "circular_k_epsilon.py"
-        circular_file.write_text(textwrap.dedent("""\
+        circular_file.write_text(
+            textwrap.dedent("""\
             # This construction uses known abc triples — FORBIDDEN
             abc_triples = [(1, 8, 9), (1, 2, 3)]  # high-quality examples
             K_epsilon = max(c / rad_abc**(1.1) for a, b, c in abc_triples)
-        """))
+        """)
+        )
 
         # Also need proof/__init__.py and proof/m2/__init__.py
         (tmp_path / "proof" / "__init__.py").write_text("")
@@ -357,6 +361,7 @@ class TestABC6_CircularAbcRejection:
 
 # ── TEST-ABC7: Non-anticipation barrier ──────────────────────────────────────
 
+
 class TestABC7_NonAnticipationBarrier:
     """TEST-ABC7: A construction module M2 that imports from M4/M5/M6 must fail CORE-1."""
 
@@ -368,18 +373,22 @@ class TestABC7_NonAnticipationBarrier:
         (tmp_path / "proof" / "m2" / "__init__.py").write_text("")
 
         bad_file = proof_m2 / "uses_known_results.py"
-        bad_file.write_text(textwrap.dedent("""\
+        bad_file.write_text(
+            textwrap.dedent("""\
             # Forbidden: importing M4 (known results) from a construction module
             from proof.m4 import faltings_theorem
             from proof.m4.szpiro import equivalence
-        """))
+        """)
+        )
 
         ok, msg = _check_import_barrier(tmp_path)
         assert not ok, (
             f"Expected import barrier to fail for M2 importing M4, but it passed. "
             f"Message: {msg}"
         )
-        assert "m4" in msg.lower() or "barrier" in msg.lower() or "import" in msg.lower()
+        assert (
+            "m4" in msg.lower() or "barrier" in msg.lower() or "import" in msg.lower()
+        )
 
     def test_m3_importing_m6_rejected(self, tmp_path):
         """M3 file that imports m6 must fail the import barrier."""
@@ -393,7 +402,9 @@ class TestABC7_NonAnticipationBarrier:
 
         ok, msg = _check_import_barrier(tmp_path)
         assert not ok
-        assert "m6" in msg.lower() or "barrier" in msg.lower() or "import" in msg.lower()
+        assert (
+            "m6" in msg.lower() or "barrier" in msg.lower() or "import" in msg.lower()
+        )
 
     def test_clean_m1_passes_barrier(self, tmp_path):
         """M1 file with no forbidden imports passes the barrier."""
@@ -403,7 +414,8 @@ class TestABC7_NonAnticipationBarrier:
         (tmp_path / "proof" / "m1" / "__init__.py").write_text("")
 
         clean_file = proof_m1 / "rad.py"
-        clean_file.write_text(textwrap.dedent("""\
+        clean_file.write_text(
+            textwrap.dedent("""\
             from proof.m0.provenance import assert_no_abc_input
             import math
 
@@ -420,7 +432,8 @@ class TestABC7_NonAnticipationBarrier:
                 if temp > 1:
                     result *= temp
                 return result
-        """))
+        """)
+        )
 
         ok, msg = _check_import_barrier(tmp_path)
         assert ok, f"Clean M1 file should pass barrier, but failed: {msg}"
@@ -428,13 +441,15 @@ class TestABC7_NonAnticipationBarrier:
 
 # ── TEST-ABC8: CORE-5 blocked without CORE-4 ─────────────────────────────────
 
+
 class TestABC8_Core5Blocked:
     """TEST-ABC8: CORE-5 must fail when CORE-3 and CORE-4 have not passed."""
 
     def test_core5_fails_without_dependencies(self):
         results = invoke_handler("core-5-conclusion")
         derive_result = next(
-            r for r in results
+            r
+            for r in results
             if r["id"] == "core5.derive-theorem2-from-passed-artifacts"
         )
         assert derive_result["verdict"] == "fail", (
@@ -446,8 +461,7 @@ class TestABC8_Core5Blocked:
         the checker never reads producer PASS fields."""
         results = invoke_handler("core-5-conclusion")
         no_flag_result = next(
-            r for r in results
-            if r["id"] == "core5.no-trusted-producer-pass-flag"
+            r for r in results if r["id"] == "core5.no-trusted-producer-pass-flag"
         )
         assert no_flag_result["verdict"] == "pass"
 
@@ -457,15 +471,19 @@ class TestABC8_Core5Blocked:
         # Without proper dependency_attestations from actual GLOBALLY_VERIFIED gates,
         # the checker should only pass if attestations include the required claim ids.
         # We test with a genuinely empty default (no attestations).
-        results = invoke_handler("core-5-conclusion", extra={"dependency_attestations": {}})
+        results = invoke_handler(
+            "core-5-conclusion", extra={"dependency_attestations": {}}
+        )
         derive_result = next(
-            r for r in results
+            r
+            for r in results
             if r["id"] == "core5.derive-theorem2-from-passed-artifacts"
         )
         assert derive_result["verdict"] == "fail"
 
 
 # ── TEST-ABC9: CL-03/04 implication and honesty theorems pass ────────────────
+
 
 class TestABC9_CL03CL04:
     """TEST-ABC9: CL-03 (certificate implies abc) and CL-04 (honesty check)
@@ -475,15 +493,12 @@ class TestABC9_CL03CL04:
         results = invoke_handler("cl-03-certificate-implies-abc")
         assert results
         failed = [r for r in results if r["verdict"] != "pass"]
-        assert not failed, (
-            f"CL-03 has unexpected failures: {[r['id'] for r in failed]}"
-        )
+        assert not failed, f"CL-03 has unexpected failures: {[r['id'] for r in failed]}"
 
     def test_cl03_universality_obligation_passes(self):
         results = invoke_handler("cl-03-certificate-implies-abc")
         univ = next(
-            r for r in results
-            if r["id"] == "cl03.bound-is-universal-not-finite-set"
+            r for r in results if r["id"] == "cl03.bound-is-universal-not-finite-set"
         )
         assert univ["verdict"] == "pass"
 
@@ -491,15 +506,11 @@ class TestABC9_CL03CL04:
         results = invoke_handler("cl-04-certificate-equivalent-abc")
         assert results
         failed = [r for r in results if r["verdict"] != "pass"]
-        assert not failed, (
-            f"CL-04 has unexpected failures: {[r['id'] for r in failed]}"
-        )
+        assert not failed, f"CL-04 has unexpected failures: {[r['id'] for r in failed]}"
 
     def test_cl04_honesty_check_recorded(self):
         results = invoke_handler("cl-04-certificate-equivalent-abc")
-        honesty = next(
-            r for r in results if r["id"] == "cl04.honesty-check-recorded"
-        )
+        honesty = next(r for r in results if r["id"] == "cl04.honesty-check-recorded")
         assert honesty["verdict"] == "pass"
 
     def test_cl04_converse_uses_abc_as_hypothesis_only(self):
@@ -508,13 +519,13 @@ class TestABC9_CL03CL04:
         not as a construction leaf."""
         results = invoke_handler("cl-04-certificate-equivalent-abc")
         converse = next(
-            r for r in results
-            if r["id"] == "cl04.converse-uses-abc-as-hypothesis-only"
+            r for r in results if r["id"] == "cl04.converse-uses-abc-as-hypothesis-only"
         )
         assert converse["verdict"] == "pass"
 
 
 # ── TEST-ABC10: CL-07 syntactic provenance theorem passes ────────────────────
+
 
 class TestABC10_CL07Syntactic:
     """TEST-ABC10: CL-07 — the provenance barrier is syntactically machine-checkable —
@@ -524,9 +535,7 @@ class TestABC10_CL07Syntactic:
         results = invoke_handler("cl-07-provenance-barrier-syntactic")
         assert results
         failed = [r for r in results if r["verdict"] != "pass"]
-        assert not failed, (
-            f"CL-07 has unexpected failures: {[r['id'] for r in failed]}"
-        )
+        assert not failed, f"CL-07 has unexpected failures: {[r['id'] for r in failed]}"
 
     def test_cl07_dag_detection_passes(self):
         results = invoke_handler("cl-07-provenance-barrier-syntactic")
@@ -566,6 +575,7 @@ class TestABC10_CL07Syntactic:
 
 # ── P2 TEST-P2-1: foundation_hash frozen and reproducible ────────────────────
 
+
 class TestP2_1_FoundationHash:
     """TEST-P2-1: The foundation_hash in domain/policy-v2.json matches the value
     produced by checker/compute_foundation_hash.py and contains no PLACEHOLDER."""
@@ -585,15 +595,14 @@ class TestP2_1_FoundationHash:
         assert h.startswith("sha256:"), (
             f"foundation_hash must start with 'sha256:'; got: {h!r}"
         )
-        hex_part = h[len("sha256:"):]
-        assert len(hex_part) == 64, (
-            f"SHA-256 hex must be 64 chars; got {len(hex_part)}"
-        )
+        hex_part = h[len("sha256:") :]
+        assert len(hex_part) == 64, f"SHA-256 hex must be 64 chars; got {len(hex_part)}"
 
     def test_foundation_hash_matches_compute_script(self):
         """The hash in policy-v2.json must match what compute_foundation_hash.py produces."""
         sys.path.insert(0, str(REPO_ROOT))
         from checker.compute_foundation_hash import compute_foundation_hash
+
         ledger_path = REPO_ROOT / "proof" / "claim-ledger.json"
         computed = compute_foundation_hash(ledger_path)
 
@@ -611,6 +620,7 @@ class TestP2_1_FoundationHash:
     def test_foundation_hash_covers_base_claims(self):
         """The foundation hash must be derived from BASE claims (CL-02, CL-05, CL-06)."""
         from checker.compute_foundation_hash import canonical_base_text
+
         ledger_path = REPO_ROOT / "proof" / "claim-ledger.json"
         ledger = json.loads(ledger_path.read_text())
         text = canonical_base_text(ledger)
@@ -625,12 +635,14 @@ class TestP2_1_FoundationHash:
 
 # ── P2 TEST-P2-2: replay kernel passes all THM certificates ──────────────────
 
+
 class TestP2_2_ReplayKernel:
     """TEST-P2-2: The replay_kernel verifies all [THM] proof certificates
     (CL-03, CL-04, CL-07) without errors."""
 
     def test_replay_all_pass(self):
         from checker.replay_kernel import replay_all_thm_certificates
+
         report = replay_all_thm_certificates(REPO_ROOT)
         assert report["all_pass"], (
             f"Replay kernel failed:\n"
@@ -640,6 +652,7 @@ class TestP2_2_ReplayKernel:
 
     def test_replay_cl03_passes(self):
         from checker.replay_kernel import replay_all_thm_certificates
+
         report = replay_all_thm_certificates(REPO_ROOT)
         cl03 = next((r for r in report["results"] if r["claim_id"] == "CL-03"), None)
         assert cl03 is not None, "CL-03 certificate not found in replay results"
@@ -647,6 +660,7 @@ class TestP2_2_ReplayKernel:
 
     def test_replay_cl04_passes(self):
         from checker.replay_kernel import replay_all_thm_certificates
+
         report = replay_all_thm_certificates(REPO_ROOT)
         cl04 = next((r for r in report["results"] if r["claim_id"] == "CL-04"), None)
         assert cl04 is not None, "CL-04 certificate not found in replay results"
@@ -654,6 +668,7 @@ class TestP2_2_ReplayKernel:
 
     def test_replay_cl07_passes(self):
         from checker.replay_kernel import replay_all_thm_certificates
+
         report = replay_all_thm_certificates(REPO_ROOT)
         cl07 = next((r for r in report["results"] if r["claim_id"] == "CL-07"), None)
         assert cl07 is not None, "CL-07 certificate not found in replay results"
@@ -661,6 +676,7 @@ class TestP2_2_ReplayKernel:
 
     def test_replay_no_missing_certificates(self):
         from checker.replay_kernel import replay_all_thm_certificates
+
         report = replay_all_thm_certificates(REPO_ROOT)
         assert not report["missing"], (
             f"Missing proof certificates for: {report['missing']}"
@@ -669,6 +685,7 @@ class TestP2_2_ReplayKernel:
     def test_certificates_have_content_digests(self):
         """Every replayed certificate must produce a content_digest (sha256)."""
         from checker.replay_kernel import replay_all_thm_certificates
+
         report = replay_all_thm_certificates(REPO_ROOT)
         for r in report["results"]:
             assert r.get("content_digest", "").startswith("sha256:"), (
@@ -677,6 +694,7 @@ class TestP2_2_ReplayKernel:
 
 
 # ── P2 TEST-P2-3: no PLACEHOLDER anywhere in domain or proof certificates ────
+
 
 class TestP2_3_NoPlaceholder:
     """TEST-P2-3: Freeze gate — no PLACEHOLDER string in domain/policy-v2.json
@@ -713,13 +731,12 @@ class TestP2_3_NoPlaceholder:
             try:
                 json.loads(p.read_text())
             except json.JSONDecodeError as e:
-                pytest.fail(
-                    f"{p.relative_to(REPO_ROOT)}: invalid JSON — {e}"
-                )
+                pytest.fail(f"{p.relative_to(REPO_ROOT)}: invalid JSON — {e}")
 
     def test_replay_kernel_rejects_placeholder_cert(self, tmp_path):
         """A certificate with a PLACEHOLDER string must fail replay."""
         from checker.replay_kernel import verify_certificate
+
         bad_cert = {
             "certificate_format": "abc-proof-term-v1",
             "claim_id": "CL-03",
@@ -727,7 +744,9 @@ class TestP2_3_NoPlaceholder:
             "module": "M6",
             "proof_kind": "definitional",
             "premises": [],
-            "proof_steps": [{"step": 1, "label": "x", "claim": "x", "justification": "x"}],
+            "proof_steps": [
+                {"step": 1, "label": "x", "claim": "x", "justification": "x"}
+            ],
             "qed_claim": "CL-03",
             "forbidden_inputs_used": [],
             "non_circularity": "ok",
@@ -745,6 +764,7 @@ class TestP2_3_NoPlaceholder:
 
 # ── P3 TEST-P3-1: M1 rad function ────────────────────────────────────────────
 
+
 class TestP3_1_RadFunction:
     """TEST-P3-1: proof/m1/rad.py defines the rad function correctly and
     passes the non-anticipation barrier."""
@@ -753,19 +773,22 @@ class TestP3_1_RadFunction:
         """M1 rad.py can be imported without forbidden-leaf violation."""
         sys.path.insert(0, str(REPO_ROOT))
         from proof.m1.rad import rad
+
         assert callable(rad)
 
     def test_rad_basic_values(self):
         from proof.m1.rad import rad
+
         assert rad(1) == 1
         assert rad(2) == 2
-        assert rad(4) == 2          # 4 = 2^2
-        assert rad(12) == 6         # 12 = 2^2 * 3
-        assert rad(30) == 30        # 30 = 2 * 3 * 5 (squarefree)
+        assert rad(4) == 2  # 4 = 2^2
+        assert rad(12) == 6  # 12 = 2^2 * 3
+        assert rad(30) == 30  # 30 = 2 * 3 * 5 (squarefree)
 
     def test_rad_properties(self):
         from proof.m1.rad import check_rad_properties
-        check_rad_properties()      # raises AssertionError if any property fails
+
+        check_rad_properties()  # raises AssertionError if any property fails
 
     def test_rad_no_forbidden_imports(self):
         ok, msg = _check_import_barrier(_project_root())
@@ -778,6 +801,7 @@ class TestP3_1_RadFunction:
 
 # ── P3 TEST-P3-2: source_lock_hash frozen ────────────────────────────────────
 
+
 class TestP3_2_SourceLockHash:
     """TEST-P3-2: The source_lock_hash in domain/policy-v2.json is frozen,
     matches compute_source_lock_hash.py output, and covers only M1 sources."""
@@ -787,30 +811,35 @@ class TestP3_2_SourceLockHash:
         policy = json.loads(policy_path.read_text())
         h = policy.get("source_lock_hash", "")
         assert h, "source_lock_hash must be present in policy-v2.json"
-        assert h.startswith("sha256:"), f"source_lock_hash must start with sha256:; got {h!r}"
+        assert h.startswith("sha256:"), (
+            f"source_lock_hash must start with sha256:; got {h!r}"
+        )
         assert "PLACEHOLDER" not in h, "source_lock_hash must not contain PLACEHOLDER"
 
     def test_source_lock_hash_matches_compute_script(self):
         from checker.compute_source_lock_hash import compute_source_lock_hash
+
         computed = compute_source_lock_hash(REPO_ROOT)
         policy_path = REPO_ROOT / "domain" / "policy-v2.json"
         policy = json.loads(policy_path.read_text())
         stored = policy.get("source_lock_hash", "")
         assert computed == stored, (
-            f"source_lock_hash mismatch.\n"
-            f"Computed: {computed}\n"
-            f"Stored:   {stored}"
+            f"source_lock_hash mismatch.\nComputed: {computed}\nStored:   {stored}"
         )
 
     def test_source_lock_cert_replays(self):
         from checker.replay_kernel import replay_all_thm_certificates
+
         report = replay_all_thm_certificates(REPO_ROOT)
-        sl = next((r for r in report["results"] if r["claim_id"] == "source-lock-m1"), None)
+        sl = next(
+            (r for r in report["results"] if r["claim_id"] == "source-lock-m1"), None
+        )
         assert sl is not None, "source-lock-m1 certificate not found in replay results"
         assert sl["verdict"] == "pass", f"source-lock-m1 replay failed: {sl['errors']}"
 
 
 # ── P3 TEST-P3-3: M1 heights and arithmetic geometry scaffold ─────────────────
+
 
 class TestP3_3_HeightsArithGeom:
     """TEST-P3-3: proof/m1/heights.py and arithmetic_geometry.py load cleanly
@@ -824,17 +853,21 @@ class TestP3_3_HeightsArithGeom:
 
     def test_construction_status_is_scaffold(self):
         from proof.m1.arithmetic_geometry import CONSTRUCTION_STATUS
-        assert "SCAFFOLD" in CONSTRUCTION_STATUS or "scaffold" in CONSTRUCTION_STATUS.lower(), (
-            "CONSTRUCTION_STATUS must record scaffold status, not a proof claim"
-        )
+
+        assert (
+            "SCAFFOLD" in CONSTRUCTION_STATUS
+            or "scaffold" in CONSTRUCTION_STATUS.lower()
+        ), "CONSTRUCTION_STATUS must record scaffold status, not a proof claim"
 
     def test_frey_discriminant_computed(self):
         from proof.m1.arithmetic_geometry import frey_curve_discriminant
+
         d = frey_curve_discriminant(1, 8, 9)
         assert isinstance(d, int) and d > 0
 
     def test_key_inequality_target_computable(self):
         from proof.m1.arithmetic_geometry import key_inequality_target
+
         result = key_inequality_target(1, 8, 9, 1.0, 5.0)
         assert isinstance(result, bool)
 
@@ -848,6 +881,7 @@ class TestP3_3_HeightsArithGeom:
 
 
 # ── P4 TEST-P4-1: key inequality obstruction recorded ────────────────────────
+
 
 class TestP4_1_KeyInequalityObstruction:
     """TEST-P4-1: The key inequality obstruction is precisely recorded.
@@ -905,12 +939,11 @@ class TestP4_1_KeyInequalityObstruction:
         ledger = json.loads((REPO_ROOT / "proof" / "claim-ledger.json").read_text())
         cl10 = next((c for c in ledger["claims"] if c["id"] == "CL-10"), None)
         assert cl10 is not None
-        assert cl10["status"] == "OBL", (
-            f"CL-10 must remain OBL; found {cl10['status']}"
-        )
+        assert cl10["status"] == "OBL", f"CL-10 must remain OBL; found {cl10['status']}"
 
 
 # ── P5 TEST-P5-1: finiteness obstruction inherits P4 ─────────────────────────
+
 
 class TestP5_1_FinitenessObstruction:
     """TEST-P5-1: The finiteness obstruction record exists, inherits from CL-10,
@@ -929,8 +962,12 @@ class TestP5_1_FinitenessObstruction:
         path = REPO_ROOT / "proof" / "m3" / "finiteness_obstruction.json"
         cert = json.loads(path.read_text())
         raw = json.dumps(cert).lower()
-        assert "cl-10" in raw or "cL-10" in raw or "key inequality" in raw or \
-               "core-3" in raw.lower(), (
+        assert (
+            "cl-10" in raw
+            or "cL-10" in raw
+            or "key inequality" in raw
+            or "core-3" in raw.lower()
+        ), (
             "Finiteness obstruction must reference CL-10 or key inequality as prerequisite"
         )
 
@@ -939,9 +976,7 @@ class TestP5_1_FinitenessObstruction:
         ledger = json.loads((REPO_ROOT / "proof" / "claim-ledger.json").read_text())
         cl11 = next((c for c in ledger["claims"] if c["id"] == "CL-11"), None)
         assert cl11 is not None
-        assert cl11["status"] == "OBL", (
-            f"CL-11 must remain OBL; found {cl11['status']}"
-        )
+        assert cl11["status"] == "OBL", f"CL-11 must remain OBL; found {cl11['status']}"
 
     def test_core4_still_fails_obl(self):
         """CORE-4 must still fail with OBL."""
@@ -954,6 +989,7 @@ class TestP5_1_FinitenessObstruction:
 
 # ── P6 TEST-P6-1: conclusion scaffold and CORE-5 still blocked ───────────────
 
+
 class TestP6_1_ConclusionScaffold:
     """TEST-P6-1: The conclusion scaffold encodes the mechanical CORE-5 firing
     condition. CORE-5 remains blocked because CORE-2/3/4 are OBL."""
@@ -963,6 +999,7 @@ class TestP6_1_ConclusionScaffold:
 
     def test_would_core5_fire_logic(self):
         from proof.m6.conclusion_scaffold import would_core5_fire
+
         assert would_core5_fire(True, True, True) is True
         assert would_core5_fire(False, True, True) is False
         assert would_core5_fire(True, False, True) is False
@@ -971,6 +1008,7 @@ class TestP6_1_ConclusionScaffold:
 
     def test_conclusion_status_blocked(self):
         from proof.m6.conclusion_scaffold import CONCLUSION_STATUS
+
         assert "BLOCKED" in CONCLUSION_STATUS, (
             "CONCLUSION_STATUS must record BLOCKED until CORE-2/3/4 pass"
         )
@@ -978,7 +1016,8 @@ class TestP6_1_ConclusionScaffold:
     def test_core5_still_blocked(self):
         results = invoke_handler("core-5-conclusion")
         derive = next(
-            r for r in results
+            r
+            for r in results
             if r["id"] == "core5.derive-theorem2-from-passed-artifacts"
         )
         assert derive["verdict"] == "fail", (
@@ -1006,6 +1045,7 @@ class TestP6_1_ConclusionScaffold:
 
 # ── Integration TEST §7.2: CORE-1+2+3+4 ⟹ CORE-5 ───────────────────────────
 
+
 class TestIntegration_7_2_Mechanical:
     """Mechanical integration tests (spec §7.2): verify CORE-5 firing conditions
     and that would_core5_fire() agrees with the checker."""
@@ -1014,17 +1054,22 @@ class TestIntegration_7_2_Mechanical:
         """When CORE-3 and CORE-4 attestations are present, CORE-5 fires."""
         inp = {
             "claim_id": "core-5-conclusion",
-            "obligation_ids": ["core5.derive-theorem2-from-passed-artifacts",
-                               "core5.no-trusted-producer-pass-flag"],
+            "obligation_ids": [
+                "core5.derive-theorem2-from-passed-artifacts",
+                "core5.no-trusted-producer-pass-flag",
+            ],
             "dependency_attestations": {
                 "core-3-key-inequality": "attestation-present",
-                "core-4-finiteness":     "attestation-present",
+                "core-4-finiteness": "attestation-present",
             },
         }
         handler = DISPATCH["core-5-conclusion"]
         results = handler(inp)
-        derive = next(r for r in results
-                      if r["id"] == "core5.derive-theorem2-from-passed-artifacts")
+        derive = next(
+            r
+            for r in results
+            if r["id"] == "core5.derive-theorem2-from-passed-artifacts"
+        )
         assert derive["verdict"] == "pass", (
             "spec §7.2 integration test: CORE-5 must fire when CORE-3+CORE-4 pass"
         )
@@ -1037,8 +1082,11 @@ class TestIntegration_7_2_Mechanical:
             "dependency_attestations": {"core-4-finiteness": "attestation-present"},
         }
         results = DISPATCH["core-5-conclusion"](inp)
-        derive = next(r for r in results
-                      if r["id"] == "core5.derive-theorem2-from-passed-artifacts")
+        derive = next(
+            r
+            for r in results
+            if r["id"] == "core5.derive-theorem2-from-passed-artifacts"
+        )
         assert derive["verdict"] == "fail"
 
     def test_core5_blocked_without_core4(self):
@@ -1049,21 +1097,28 @@ class TestIntegration_7_2_Mechanical:
             "dependency_attestations": {"core-3-key-inequality": "attestation-present"},
         }
         results = DISPATCH["core-5-conclusion"](inp)
-        derive = next(r for r in results
-                      if r["id"] == "core5.derive-theorem2-from-passed-artifacts")
+        derive = next(
+            r
+            for r in results
+            if r["id"] == "core5.derive-theorem2-from-passed-artifacts"
+        )
         assert derive["verdict"] == "fail"
 
     def test_no_producer_pass_flag_always_passes(self):
         """core5.no-trusted-producer-pass-flag must always pass regardless of attestations."""
-        for attestations in [{}, {"core-3-key-inequality": "x", "core-4-finiteness": "y"}]:
+        for attestations in [
+            {},
+            {"core-3-key-inequality": "x", "core-4-finiteness": "y"},
+        ]:
             inp = {
                 "claim_id": "core-5-conclusion",
                 "obligation_ids": ["core5.no-trusted-producer-pass-flag"],
                 "dependency_attestations": attestations,
             }
             results = DISPATCH["core-5-conclusion"](inp)
-            no_flag = next(r for r in results
-                           if r["id"] == "core5.no-trusted-producer-pass-flag")
+            no_flag = next(
+                r for r in results if r["id"] == "core5.no-trusted-producer-pass-flag"
+            )
             assert no_flag["verdict"] == "pass"
 
     def test_would_core5_fire_matches_checker(self):
@@ -1071,11 +1126,12 @@ class TestIntegration_7_2_Mechanical:
         Note: the checker gates only on core-3 and core-4 attestations (core-2 is
         a prerequisite of core-3, not a separate checker gate)."""
         from proof.m6.conclusion_scaffold import would_core5_fire
+
         # Only test cases where c2 mirrors c3 (since c3 presupposes c2)
         for c3, c4, expected in [
-            (True,  True,  True),
-            (False, True,  False),
-            (True,  False, False),
+            (True, True, True),
+            (False, True, False),
+            (True, False, False),
             (False, False, False),
         ]:
             attestations = {}
@@ -1089,10 +1145,14 @@ class TestIntegration_7_2_Mechanical:
                 "dependency_attestations": attestations,
             }
             results = DISPATCH["core-5-conclusion"](inp)
-            checker_pass = next(
-                r for r in results
-                if r["id"] == "core5.derive-theorem2-from-passed-artifacts"
-            )["verdict"] == "pass"
+            checker_pass = (
+                next(
+                    r
+                    for r in results
+                    if r["id"] == "core5.derive-theorem2-from-passed-artifacts"
+                )["verdict"]
+                == "pass"
+            )
             # scaffold takes (c2, c3, c4); c2 follows c3 in the gate chain
             scaffold_pass = would_core5_fire(c3, c3, c4)
             assert checker_pass == scaffold_pass, (
@@ -1102,6 +1162,7 @@ class TestIntegration_7_2_Mechanical:
 
 
 # ── Contract freeze tests ─────────────────────────────────────────────────────
+
 
 class TestContractFreeze:
     """Verify all domain contracts have no PLACEHOLDER and consistent checker_digest."""
@@ -1125,9 +1186,13 @@ class TestContractFreeze:
     def test_checker_digest_consistent(self):
         """All contracts must reference the same checker_digest."""
         import hashlib
-        expected = "sha256:" + hashlib.sha256(
-            (REPO_ROOT / "checker" / "check_certificate.py").read_bytes()
-        ).hexdigest()
+
+        expected = (
+            "sha256:"
+            + hashlib.sha256(
+                (REPO_ROOT / "checker" / "check_certificate.py").read_bytes()
+            ).hexdigest()
+        )
         contracts_dir = REPO_ROOT / "domain" / "contracts"
         for json_path in sorted(contracts_dir.glob("*.json")):
             d = json.loads(json_path.read_text())
@@ -1139,11 +1204,17 @@ class TestContractFreeze:
     def test_compute_contract_hashes_matches_frozen(self):
         """compute_contract_hashes.py must produce hashes consistent with frozen contracts."""
         from checker.compute_contract_hashes import compute_all
+
         hashes = compute_all(REPO_ROOT)
         contracts_dir = REPO_ROOT / "domain" / "contracts"
-        for cname in ["core-0-abc-definition", "core-1-provenance-manifest",
-                      "core-2-height-framework", "core-3-key-inequality",
-                      "core-4-finiteness", "core-5-conclusion"]:
+        for cname in [
+            "core-0-abc-definition",
+            "core-1-provenance-manifest",
+            "core-2-height-framework",
+            "core-3-key-inequality",
+            "core-4-finiteness",
+            "core-5-conclusion",
+        ]:
             d = json.loads((contracts_dir / f"{cname}.json").read_text())
             assert d["statement_digest"] == hashes[cname]["statement_digest"], (
                 f"{cname}: statement_digest mismatch"
@@ -1153,6 +1224,7 @@ class TestContractFreeze:
 
 # ── Discovery guard tests ─────────────────────────────────────────────────────
 
+
 class TestDiscoveryGuard_ZeroFree:
     """Verify assert_zero_free() in discovery guard raises correctly on forbidden patterns."""
 
@@ -1161,6 +1233,7 @@ class TestDiscoveryGuard_ZeroFree:
 
     def test_guard_rejects_abc_triples(self, tmp_path):
         from discovery.candidates.guard import assert_zero_free
+
         bad = tmp_path / "bad_candidate.py"
         bad.write_text("abc_triples = [(1, 8, 9)]\n")
         with pytest.raises(RuntimeError, match="abc_triple"):
@@ -1168,6 +1241,7 @@ class TestDiscoveryGuard_ZeroFree:
 
     def test_guard_rejects_fitted_k_epsilon(self, tmp_path):
         from discovery.candidates.guard import assert_zero_free
+
         bad = tmp_path / "bad2.py"
         bad.write_text("fitted_k_epsilon = 1.23\n")
         with pytest.raises(RuntimeError, match="fitted_k_epsilon"):
@@ -1175,6 +1249,7 @@ class TestDiscoveryGuard_ZeroFree:
 
     def test_guard_rejects_szpiro_assumed(self, tmp_path):
         from discovery.candidates.guard import assert_zero_free
+
         bad = tmp_path / "bad3.py"
         bad.write_text("assume_szpiro = True\n")
         with pytest.raises(RuntimeError, match="assume_szpiro"):
@@ -1182,6 +1257,7 @@ class TestDiscoveryGuard_ZeroFree:
 
     def test_guard_accepts_clean_candidate(self, tmp_path):
         from discovery.candidates.guard import assert_zero_free
+
         clean = tmp_path / "clean_candidate.py"
         clean.write_text(
             "from discovery.candidates.guard import assert_zero_free\n"
@@ -1196,6 +1272,7 @@ class TestDiscoveryGuard_ZeroFree:
 
 
 # ── Integration test spec §7.2: CORE-1+2+3+4 ⟹ CORE-5 ───────────────────────
+
 
 class TestIntegration_7_2:
     """Integration test spec §7.2: the sole success integration test is
@@ -1216,22 +1293,25 @@ class TestIntegration_7_2:
         )
         # CORE-3 must have the IUT sub-obligation
         c3 = gates["CORE-3"]
-        assert "iut_sub_obligation" in c3, (
-            "CORE-3 must declare iut_sub_obligation"
+        assert "iut_sub_obligation" in c3, "CORE-3 must declare iut_sub_obligation"
+        assert (
+            c3["iut_sub_obligation"] == "core3.iut-corollary-312-independently-verified"
         )
-        assert c3["iut_sub_obligation"] == "core3.iut-corollary-312-independently-verified"
 
     def test_integration_core5_fires_mechanically(self):
         """CORE-5 fires when both CORE-3 and CORE-4 attestations are present."""
         results = invoke_handler(
             "core-5-conclusion",
-            extra={"dependency_attestations": {
-                "core-3-key-inequality": "MOCK_PASS",
-                "core-4-finiteness": "MOCK_PASS",
-            }}
+            extra={
+                "dependency_attestations": {
+                    "core-3-key-inequality": "MOCK_PASS",
+                    "core-4-finiteness": "MOCK_PASS",
+                }
+            },
         )
         derive = next(
-            r for r in results
+            r
+            for r in results
             if r["id"] == "core5.derive-theorem2-from-passed-artifacts"
         )
         assert derive["verdict"] == "pass", (
@@ -1242,10 +1322,11 @@ class TestIntegration_7_2:
         """CORE-5 fails if only CORE-3 passes but not CORE-4."""
         results_3_only = invoke_handler(
             "core-5-conclusion",
-            extra={"dependency_attestations": {"core-3-key-inequality": "MOCK_PASS"}}
+            extra={"dependency_attestations": {"core-3-key-inequality": "MOCK_PASS"}},
         )
         derive_3 = next(
-            r for r in results_3_only
+            r
+            for r in results_3_only
             if r["id"] == "core5.derive-theorem2-from-passed-artifacts"
         )
         assert derive_3["verdict"] == "fail", (
@@ -1254,10 +1335,11 @@ class TestIntegration_7_2:
 
         results_4_only = invoke_handler(
             "core-5-conclusion",
-            extra={"dependency_attestations": {"core-4-finiteness": "MOCK_PASS"}}
+            extra={"dependency_attestations": {"core-4-finiteness": "MOCK_PASS"}},
         )
         derive_4 = next(
-            r for r in results_4_only
+            r
+            for r in results_4_only
             if r["id"] == "core5.derive-theorem2-from-passed-artifacts"
         )
         assert derive_4["verdict"] == "fail", (
@@ -1268,12 +1350,17 @@ class TestIntegration_7_2:
         """A finite collection of abc examples does not pass any CORE gate.
         The checker's FORBIDDEN_PATTERNS must cover the abc_triples pattern."""
         from checker.check_certificate import FORBIDDEN_PATTERNS
+
         patterns = " ".join(FORBIDDEN_PATTERNS)
         assert "abc_triple" in patterns, (
             "FORBIDDEN_PATTERNS must include abc_triple to block known-example shortcuts"
         )
         # Verify no CORE handler passes without actual construction evidence
-        for gate_id in ("core-2-height-framework", "core-3-key-inequality", "core-4-finiteness"):
+        for gate_id in (
+            "core-2-height-framework",
+            "core-3-key-inequality",
+            "core-4-finiteness",
+        ):
             results = invoke_handler(gate_id)
             passed = [r for r in results if r["verdict"] == "pass"]
             assert not passed, (
@@ -1285,7 +1372,8 @@ class TestIntegration_7_2:
         """core3.iut-corollary-312-independently-verified is permanently OPEN."""
         results = invoke_handler("core-3-key-inequality")
         iut = next(
-            r for r in results
+            r
+            for r in results
             if r["id"] == "core3.iut-corollary-312-independently-verified"
         )
         assert iut["verdict"] == "fail", (
@@ -1295,11 +1383,13 @@ class TestIntegration_7_2:
 
 # ── Discovery guard tests ─────────────────────────────────────────────────────
 
+
 class TestDiscoveryGuard:
     """Tests for the discovery layer non-circularity guard."""
 
     def test_guard_imports_clean(self):
         from discovery.candidates.guard import assert_zero_free, FORBIDDEN_PATTERNS
+
         assert callable(assert_zero_free)
         assert len(FORBIDDEN_PATTERNS) > 0
 
@@ -1307,15 +1397,15 @@ class TestDiscoveryGuard:
         """A candidate file using 'abc_triples' must fail the guard scan."""
         from discovery.candidates.guard import FORBIDDEN_PATTERNS
         import re
+
         bad_src = "abc_triples = [(1, 8, 9)]  # known high-quality triples\n"
         matched = any(re.search(p, bad_src, re.IGNORECASE) for p in FORBIDDEN_PATTERNS)
-        assert matched, (
-            "Guard FORBIDDEN_PATTERNS must match 'abc_triples' in source"
-        )
+        assert matched, "Guard FORBIDDEN_PATTERNS must match 'abc_triples' in source"
 
     def test_guard_rejects_fitted_k_epsilon(self, tmp_path):
         from discovery.candidates.guard import FORBIDDEN_PATTERNS
         import re
+
         bad_src = "fitted_k_epsilon = 3.14  # fitted to examples\n"
         matched = any(re.search(p, bad_src, re.IGNORECASE) for p in FORBIDDEN_PATTERNS)
         assert matched

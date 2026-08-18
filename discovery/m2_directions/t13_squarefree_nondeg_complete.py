@@ -23,131 +23,177 @@ DISCOVERY TIER: no abc triples used for construction.
 
 import math
 
+
 def factorize(n):
-    f = {}; d = 2
-    while d*d<=n:
-        while n%d==0: f[d]=f.get(d,0)+1; n//=d
-        d+=1
-    if n>1: f[n]=1
+    f = {}
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            f[d] = f.get(d, 0) + 1
+            n //= d
+        d += 1
+    if n > 1:
+        f[n] = 1
     return f
 
-def gcd(a,b):
-    while b: a,b=b,a%b
+
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
     return abs(a)
 
-def lcm(a,b): return a*b//gcd(a,b)
+
+def lcm(a, b):
+    return a * b // gcd(a, b)
+
 
 def rad(n):
-    r=1
-    for p in factorize(n): r*=p
+    r = 1
+    for p in factorize(n):
+        r *= p
     return r
 
-def wronskian_val(a,b,psi_map,fa,fb):
-    sb=sum(fb[p]*psi_map.get(p,0)/p for p in fb)
-    sa=sum(fa[p]*psi_map.get(p,0)/p for p in fa)
-    return a*b*(sb-sa)
 
-def setup_int_coeffs(a,b,c):
-    fa,fb,fc=factorize(a),factorize(b),factorize(c)
-    primes=sorted(set(fa)|set(fb)|set(fc))
-    denom=1
-    for p in primes: denom=lcm(denom,p)
-    coeff={}
-    for p in fa: coeff[p]=coeff.get(p,0)+fa[p]*(denom//p)
-    for p in fb: coeff[p]=coeff.get(p,0)+fb[p]*(denom//p)
-    for p in fc: coeff[p]=coeff.get(p,0)-fc[p]*(denom//p)
-    return primes,coeff,fa,fb,fc
+def wronskian_val(a, b, psi_map, fa, fb):
+    sb = sum(fb[p] * psi_map.get(p, 0) / p for p in fb)
+    sa = sum(fa[p] * psi_map.get(p, 0) / p for p in fa)
+    return a * b * (sb - sa)
+
+
+def setup_int_coeffs(a, b, c):
+    fa, fb, fc = factorize(a), factorize(b), factorize(c)
+    primes = sorted(set(fa) | set(fb) | set(fc))
+    denom = 1
+    for p in primes:
+        denom = lcm(denom, p)
+    coeff = {}
+    for p in fa:
+        coeff[p] = coeff.get(p, 0) + fa[p] * (denom // p)
+    for p in fb:
+        coeff[p] = coeff.get(p, 0) + fb[p] * (denom // p)
+    for p in fc:
+        coeff[p] = coeff.get(p, 0) - fc[p] * (denom // p)
+    return primes, coeff, fa, fb, fc
+
 
 def is_squarefree(n):
-    f=factorize(n)
-    return all(v==1 for v in f.values())
+    f = factorize(n)
+    return all(v == 1 for v in f.values())
 
-def find_both_minima_rank2(a,b,c,bound=80):
+
+def find_both_minima_rank2(a, b, c, bound=80):
     """For rank-2 lattice (omega=3), find minimum all-vectors and min non-degenerate."""
-    primes,coeff,fa,fb,fc=setup_int_coeffs(a,b,c)
-    items=[(p,coeff[p]) for p in primes]
-    dep_idx=max(range(3),key=lambda i:abs(items[i][1]))
-    free=[i for i in range(3) if i!=dep_idx]
-    p_d,c_d=items[dep_idx]; p1,c1=items[free[0]]; p2,c2=items[free[1]]
-    best_all=None; best_nd=None
-    best_all_psi=None; best_nd_psi=None
-    for v1 in range(-bound,bound+1):
-        for v2 in range(-bound,bound+1):
-            if v1==0 and v2==0: continue
-            num=-(c1*v1+c2*v2)
-            if num%c_d!=0: continue
-            vd=num//c_d
-            psi={p1:v1,p2:v2,p_d:vd}
-            norm=max(abs(v) for v in psi.values())
-            if best_all is None or norm<best_all:
-                best_all=norm; best_all_psi=dict(psi)
-            W=wronskian_val(a,b,psi,fa,fb)
-            if abs(W)>1e-9:
-                if best_nd is None or norm<best_nd:
-                    best_nd=norm; best_nd_psi=dict(psi)
-    return best_all,best_nd,best_all_psi,best_nd_psi,primes
+    primes, coeff, fa, fb, fc = setup_int_coeffs(a, b, c)
+    items = [(p, coeff[p]) for p in primes]
+    dep_idx = max(range(3), key=lambda i: abs(items[i][1]))
+    free = [i for i in range(3) if i != dep_idx]
+    p_d, c_d = items[dep_idx]
+    p1, c1 = items[free[0]]
+    p2, c2 = items[free[1]]
+    best_all = None
+    best_nd = None
+    best_all_psi = None
+    best_nd_psi = None
+    for v1 in range(-bound, bound + 1):
+        for v2 in range(-bound, bound + 1):
+            if v1 == 0 and v2 == 0:
+                continue
+            num = -(c1 * v1 + c2 * v2)
+            if num % c_d != 0:
+                continue
+            vd = num // c_d
+            psi = {p1: v1, p2: v2, p_d: vd}
+            norm = max(abs(v) for v in psi.values())
+            if best_all is None or norm < best_all:
+                best_all = norm
+                best_all_psi = dict(psi)
+            W = wronskian_val(a, b, psi, fa, fb)
+            if abs(W) > 1e-9:
+                if best_nd is None or norm < best_nd:
+                    best_nd = norm
+                    best_nd_psi = dict(psi)
+    return best_all, best_nd, best_all_psi, best_nd_psi, primes
+
 
 # Enumerate all squarefree coprime (a,b,c) with a<=b, a+b=c, omega=3, c<=200
 print("T13: Squarefree omega=3 non-degeneracy — complete classification (c<=200)")
-print("="*75)
+print("=" * 75)
 print()
 print("  KEY THEOREM: For a>=2 (equivalently a,b,c all prime), shortest vector")
 print("               is always non-degenerate. Proof below.")
 print()
-print(f"  {'(a,b,c)':>18}  {'R':>6}  {'type':>8}  {'na':>5}  {'nd':>5}  {'ratio':>8}  {'note'}")
-print("  "+"-"*78)
+print(
+    f"  {'(a,b,c)':>18}  {'R':>6}  {'type':>8}  {'na':>5}  {'nd':>5}  {'ratio':>8}  {'note'}"
+)
+print("  " + "-" * 78)
 
 degenerate_cases = []
 a_ge2_cases = []
 a_eq1_cases = []
-max_ratio_a1 = 0.0; max_ratio_triple_a1 = None
-max_ratio_a2 = 0.0; max_ratio_triple_a2 = None
+max_ratio_a1 = 0.0
+max_ratio_triple_a1 = None
+max_ratio_a2 = 0.0
+max_ratio_triple_a2 = None
 
 for c in range(3, 201):
-    for a in range(1, (c+1)//2+1):
+    for a in range(1, (c + 1) // 2 + 1):
         b = c - a
-        if b <= 0 or b < a: continue
-        if gcd(a,b) != 1: continue
-        if not (is_squarefree(a) and is_squarefree(b) and is_squarefree(c)): continue
-        fa=factorize(a); fb=factorize(b); fc=factorize(c)
-        omega=len(set(fa)|set(fb)|set(fc))
-        if omega != 3: continue
+        if b <= 0 or b < a:
+            continue
+        if gcd(a, b) != 1:
+            continue
+        if not (is_squarefree(a) and is_squarefree(b) and is_squarefree(c)):
+            continue
+        fa = factorize(a)
+        fb = factorize(b)
+        fc = factorize(c)
+        omega = len(set(fa) | set(fb) | set(fc))
+        if omega != 3:
+            continue
 
-        R=1
-        for p in set(fa)|set(fb)|set(fc): R*=p
+        R = 1
+        for p in set(fa) | set(fb) | set(fc):
+            R *= p
 
         # Classify partition type
-        pa=sorted(fa.keys()); pb=sorted(fb.keys()); pc=sorted(fc.keys())
+        pa = sorted(fa.keys())
+        pb = sorted(fb.keys())
+        pc = sorted(fc.keys())
         t = f"|Pa|={len(pa)}"
 
-        best_all,best_nd,psi_all,psi_nd,primes = find_both_minima_rank2(a,b,c,bound=80)
-        if best_all is None: continue
+        best_all, best_nd, psi_all, psi_nd, primes = find_both_minima_rank2(
+            a, b, c, bound=80
+        )
+        if best_all is None:
+            continue
 
         target = R**0.5
-        ratio_nd = best_nd/target if best_nd else None
-        is_degen = (best_nd is None or best_all != best_nd)
+        ratio_nd = best_nd / target if best_nd else None
+        is_degen = best_nd is None or best_all != best_nd
 
         ratio_str = f"{ratio_nd:.4f}" if ratio_nd else "N/A"
         flag = " DEG" if is_degen else ""
 
         if a == 1:
-            a_eq1_cases.append((a,b,c,best_all,best_nd,ratio_nd,t))
+            a_eq1_cases.append((a, b, c, best_all, best_nd, ratio_nd, t))
             if ratio_nd and ratio_nd > max_ratio_a1:
                 max_ratio_a1 = ratio_nd
-                max_ratio_triple_a1 = (a,b,c)
+                max_ratio_triple_a1 = (a, b, c)
         else:
-            a_ge2_cases.append((a,b,c,best_all,best_nd,ratio_nd,t))
+            a_ge2_cases.append((a, b, c, best_all, best_nd, ratio_nd, t))
             if ratio_nd and ratio_nd > max_ratio_a2:
                 max_ratio_a2 = ratio_nd
-                max_ratio_triple_a2 = (a,b,c)
+                max_ratio_triple_a2 = (a, b, c)
 
         if is_degen:
-            degenerate_cases.append((a,b,c,best_all,best_nd,ratio_nd,t))
+            degenerate_cases.append((a, b, c, best_all, best_nd, ratio_nd, t))
 
-        print(f"  {str((a,b,c)):>18}  {R:>6}  {t:>8}  {str(best_all):>5}  {str(best_nd) if best_nd else 'N/A':>5}  {ratio_str:>8}{flag}")
+        print(
+            f"  {str((a, b, c)):>18}  {R:>6}  {t:>8}  {str(best_all):>5}  {str(best_nd) if best_nd else 'N/A':>5}  {ratio_str:>8}{flag}"
+        )
 
 print()
-print("="*75)
+print("=" * 75)
 print()
 print("[Summary]")
 print()
@@ -161,13 +207,17 @@ degen_a1 = sum(1 for t in a_eq1_cases if t[4] is None or t[3] != t[4])
 print(f"    Degenerate shortest vectors: {degen_a1}/{len(a_eq1_cases)}")
 print(f"    Max ||psi_nd||/R^(1/2): {max_ratio_a1:.4f} at {max_ratio_triple_a1}")
 print()
-print(f"  Total squarefree omega=3: {len(a_ge2_cases)+len(a_eq1_cases)} cases, {len(degenerate_cases)} degenerate")
+print(
+    f"  Total squarefree omega=3: {len(a_ge2_cases) + len(a_eq1_cases)} cases, {len(degenerate_cases)} degenerate"
+)
 print()
 print("[All degenerate cases]")
 for t in degenerate_cases:
-    a,b,c,na,nd,ratio,typ = t
+    a, b, c, na, nd, ratio, typ = t
     ratio_s = f"{ratio:.4f}" if ratio else "N/A"
-    print(f"  (a={a},b={b},c={c}) type={typ} norm_all={na} norm_nd={nd} ratio={ratio_s}")
+    print(
+        f"  (a={a},b={b},c={c}) type={typ} norm_all={na} norm_nd={nd} ratio={ratio_s}"
+    )
 print()
 
 print("[Analytical proof for a>=2 (omega=3 squarefree)]")
@@ -218,18 +268,22 @@ print()
 # Verify the formula for the largest ratio case
 print("[Formula verification for max-ratio a=1 case]")
 if max_ratio_triple_a1:
-    a,b,c = max_ratio_triple_a1
-    fa=factorize(b)
+    a, b, c = max_ratio_triple_a1
+    fa = factorize(b)
     primes_b = sorted(fa.keys())
-    if len(primes_b)==2:
-        p,q = primes_b[0], primes_b[1]
+    if len(primes_b) == 2:
+        p, q = primes_b[0], primes_b[1]
         r = c
-        R_check = p*q*r
-        formula_ratio = math.sqrt(r/(p*q))
-        print(f"  Triple (1,{p*q},{r}): p={p}, q={q}, r={r}")
-        print(f"  Formula ratio = sqrt({r}/{p*q}) = sqrt({r}/{p*q}) = {formula_ratio:.4f}")
+        R_check = p * q * r
+        formula_ratio = math.sqrt(r / (p * q))
+        print(f"  Triple (1,{p * q},{r}): p={p}, q={q}, r={r}")
+        print(
+            f"  Formula ratio = sqrt({r}/{p * q}) = sqrt({r}/{p * q}) = {formula_ratio:.4f}"
+        )
         print(f"  Computed ratio = {max_ratio_a1:.4f}")
-        print(f"  Match: {'YES' if abs(formula_ratio-max_ratio_a1)<0.001 else 'NO'}")
+        print(
+            f"  Match: {'YES' if abs(formula_ratio - max_ratio_a1) < 0.001 else 'NO'}"
+        )
 
 print()
 print("[Conclusion]")

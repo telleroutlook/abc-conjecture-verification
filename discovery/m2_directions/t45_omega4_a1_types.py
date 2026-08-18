@@ -11,13 +11,19 @@ Hypothesis: type (0,2,2) also has sup=1 since a=1 forces nd ≈ √R approach.
 
 import math
 
+
 def is_prime(n):
-    if n < 2: return False
-    if n < 4: return True
-    if n % 2 == 0: return False
-    for i in range(3, int(n**0.5)+1, 2):
-        if n % i == 0: return False
+    if n < 2:
+        return False
+    if n < 4:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(n**0.5) + 1, 2):
+        if n % i == 0:
+            return False
     return True
+
 
 def prime_factors(n):
     factors = []
@@ -32,8 +38,10 @@ def prime_factors(n):
         factors.append(n)
     return sorted(factors)
 
+
 def rad(n):
     return math.prod(prime_factors(n))
+
 
 results = []
 
@@ -46,7 +54,7 @@ for b in range(4, 20001):
     if len(pb) != 2 or len(pc) != 2:
         continue
     # Check squarefree (each prime appears exactly once)
-    if not (b == pb[0]*pb[1] and c == pc[0]*pc[1]):
+    if not (b == pb[0] * pb[1] and c == pc[0] * pc[1]):
         continue
     a = 1
     p1, p2 = pb[0], pb[1]  # p1 < p2
@@ -63,13 +71,13 @@ for b in range(4, 20001):
     R = b * c  # since a=1 and b,c squarefree, rad(abc)=rad(1)*rad(b)*rad(c)=b*c
     omega = 4  # Pa empty but still ω counts primes in abc
     # ρ = nd / R^{1/(ω-1)} = nd / R^{1/3}
-    rho = nd / R**(1/3)
+    rho = nd / R ** (1 / 3)
     results.append((rho, b, c, p1, p2, q1, q2, nd, R))
 
 results.sort(reverse=True)
 
 print("T45: ω=4 type (0,2,2) — a=1, b=p1*p2, c=q1*q2 squarefree")
-print("="*70)
+print("=" * 70)
 print(f"Found {len(results)} qualifying triples with b ≤ 20000")
 print()
 print("Top 15 by ρ:")
@@ -79,12 +87,12 @@ for rho, b, c, p1, p2, q1, q2, nd, R in results[:15]:
 
 print()
 print("Distribution of ρ:")
-buckets = [0]*11
+buckets = [0] * 11
 for rho, *_ in results:
     i = min(int(rho * 10), 10)
     buckets[i] += 1
 for i in range(11):
-    lo, hi = i/10, (i+1)/10
+    lo, hi = i / 10, (i + 1) / 10
     print(f"  [{lo:.1f}, {hi:.1f}): {buckets[i]}")
 
 print()
@@ -96,15 +104,18 @@ print()
 # Check the family b=2*p, c=3*q (small primes in each factor)
 print("Special family b=2*p (p prime), c=3*q (q prime), b+1=c:")
 for p in range(3, 1001):
-    if not is_prime(p): continue
+    if not is_prime(p):
+        continue
     b = 2 * p
     c = b + 1
-    if c % 3 != 0: continue
+    if c % 3 != 0:
+        continue
     q = c // 3
-    if not is_prime(q): continue
+    if not is_prime(q):
+        continue
     nd = max(2, 3)  # max(min(Pb), min(Pc)) = max(2,3) = 3
     R = b * c
-    rho = nd / R**(1/3)
+    rho = nd / R ** (1 / 3)
     if rho > 0.5:
         print(f"  b={b} ({2}·{p}), c={c} ({3}·{q}), nd=3, R={R}, ρ={rho:.6f}")
 
@@ -122,12 +133,16 @@ print()
 # b = p * p_large, c = q * q_large (p≈q, p_large=p+1 if prime)
 print("Analytical bound analysis:")
 print("  ρ = max(p1,q1) / (p1*p2*q1*q2)^{1/3}")
-print("  For p1=q1=p (equal group mins): ρ = p / (p*p2*p*q2)^{1/3} = p/(p^2*p2*q2)^{1/3}")
+print(
+    "  For p1=q1=p (equal group mins): ρ = p / (p*p2*p*q2)^{1/3} = p/(p^2*p2*q2)^{1/3}"
+)
 print("  = 1 / (p*p2*q2)^{1/3} → 0 as primes grow")
 print("  Supremum analysis: ρ → 0 for most families → type (0,2,2) has sup → 0")
 print()
 print("Conclusion: type (0,2,2) is BOUNDED with sup approaching small value,")
 print("consistent with OTHER fully-supported ω=4 types.")
 print("This DIFFERS from (0,2,3)/(0,3,2) where a=1 forces sup=1.")
-print("Key: for (0,2,2) with EXACTLY 2 groups, nd is forced to be the larger group min,")
+print(
+    "Key: for (0,2,2) with EXACTLY 2 groups, nd is forced to be the larger group min,"
+)
 print("which grows slower than R^{1/3}, giving ρ→0.")

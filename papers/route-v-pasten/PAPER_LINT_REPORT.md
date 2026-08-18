@@ -1,6 +1,6 @@
 # Paper lint report — route-v-pasten
 
-Date: 2026-08-17 (refreshed after the `thm:f3` reference repair)  
+Date: 2026-08-18 (refreshed after the external-audit follow-up)
 Target: `route-v-pasten.tex`
 
 This report records the checks run after the repairs described in `PLAN.md`.
@@ -64,14 +64,17 @@ This report records the checks run after the repairs described in `PLAN.md`.
   counterexample to the claimed symmetry was found.  The E\(_n\) symmetry cases
   are now spelled out.
 - **P22 external theorem instantiation:** Vaaler Theorem 2 is instantiated with
-  a \(\mathbb Z\)-basis of \(F(a,b)\), ambient coordinate forms, rank
-  \(\omega-1\), and common bound \(\det(F)^{1/(\omega-1)}\).
+  a \(\mathbb Z\)-basis \(A\) of \(F(a,b)\), ambient coordinate forms, rank
+  \(K=\omega-1\), and common real-form bound
+  \(|A^{T}A|^{1/(2K)}=\det(F)^{1/(\omega-1)}\).  The source-backed exponent
+  makes clear that no generic Minkowski second-theorem factor \(2\) is inserted.
 - **P23 operator extensions:** not applicable.
 - **P24 optional environment titles:** no optional title duplicates the
   automatic counter label.
 - **P25 literature formulas:** source anchors replayed with `pdftotext`:
   Pasten `Conjecture 1.2`, `Lemma 2.4`, and `Corollary 4.6`; Vaaler `THEOREM 2`
-  and its geometric corollary.
+  and its geometric corollary.  `baseline/REFERENCE_BASELINE.md` records the
+  real-form exponent \(1/(2K)\) and the \(K=\omega-1\) substitution.
 - **P26 reference operator symbol class:** not applicable.
 - **P27 Tauberian biconditional:** not applicable.
 - **P28 single-letter conflicts:** the quality abbreviation \(q\) was removed;
@@ -154,9 +157,14 @@ This report records the checks run after the repairs described in `PLAN.md`.
 
 ## Additional verification
 
-- `lake build` in `lean/`: exit `0`, `Build completed successfully (2005 jobs)`.
+- `lake build` in `lean/`: exit `0`, `Build completed successfully (2234 jobs)`.
   Warnings are unused-variable/deprecation lint; no build error.
-- `python3 discovery/m2_directions/t30_rho_distribution.py`: exit `0`.
+- `python3 discovery/m2_directions/t30_rho_distribution.py`: exit `0`;
+  the replay reports 44,474 triples, including the 658 triples at \(\omega=8\).
+- `python3 -m pytest -q tests/test_route_v_replays.py`: exit `0`,
+  `5 passed`.  The new table test parses both the script output and
+  Table~`tab:data`; their per-\(\omega\) counts agree and sum to 44,474.
+- `python3 -m pytest -q`: exit `0`, `124 passed`.
 - `python3 discovery/m2_directions/t96_edge_case_both_small_in_Pb.py`: exit `0`,
   `OB-15 violations: 0`.
 - `python3 discovery/m2_directions/t82_nd_type311_verify.py`: exit `0`;
@@ -164,6 +172,24 @@ This report records the checks run after the repairs described in `PLAN.md`.
 - `python3 discovery/m2_directions/t95_all_successive_minima.py`: exit `0`;
   this is a deterministic replay of a **refutation**.  The all-successive-minima
   merged-multiples candidate fails at $(2,13,15)$ and $(3,7,10)$.
+
+## External-audit follow-up (2026-08-18)
+
+- The determinant proof now states the sharp termwise inequality
+  \(1/n^2<1/(n-1)-1/n\), while retaining the subset estimate over all integers
+  from \(2\) through \(M\).  The Lean proof uses the corresponding strict
+  termwise bound.
+- The F8 proof explains why \(R/q\) is coprime to the prime \(q\).
+- Vaaler's theorem is instantiated through the real-form bound
+  \(|A^{T}A|^{1/(2K)}\), with \(K=\omega-1\); this is the source-backed reason
+  the cube-section subspace theorem has no generic Minkowski factor \(2\).
+- The formal-status section no longer claims that the primitive-constraint
+  determinant identity or GCD lemma is separately formalized.  It accurately
+  identifies the Lean coefficient-norm theorem.  The admitted Vaaler premise is
+  now a non-vacuous integer-matrix interface rather than the former
+  existence-of-a-real-number statement.
+- Candidate formulas are introduced as finite-verification statements before
+  the detailed formulas occur.
 
 ## Remaining honest limitations
 

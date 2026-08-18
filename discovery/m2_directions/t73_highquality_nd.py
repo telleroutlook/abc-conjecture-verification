@@ -14,42 +14,54 @@ Also verifies against brute force for small triples.
 
 import math
 from itertools import product as iproduct
-from collections import defaultdict
 
 LIMIT = 500000  # scan prime powers up to this limit
 
 # ── utilities ────────────────────────────────────────────────────────────────
 
+
 def factorize(n):
-    f = {}; d = 2
+    f = {}
+    d = 2
     while d * d <= n:
-        while n % d == 0: f[d] = f.get(d, 0) + 1; n //= d
+        while n % d == 0:
+            f[d] = f.get(d, 0) + 1
+            n //= d
         d += 1
-    if n > 1: f[n] = f.get(n, 0) + 1
+    if n > 1:
+        f[n] = f.get(n, 0) + 1
     return f
 
+
 def extended_gcd(a, b):
-    if b == 0: return a, 1, 0
+    if b == 0:
+        return a, 1, 0
     g, x, y = extended_gcd(b, a % b)
     return g, y, x - (a // b) * y
 
+
 def all_prime_powers(limit):
     """Return list of (value, prime, exponent) for all prime powers ≤ limit."""
-    from sympy import isprime
     result = []
     # Primes
-    sieve = [True] * (limit + 1); sieve[0] = sieve[1] = False
+    sieve = [True] * (limit + 1)
+    sieve[0] = sieve[1] = False
     for i in range(2, int(limit**0.5) + 1):
         if sieve[i]:
-            for j in range(i*i, limit+1, i): sieve[j] = False
-    primes = [i for i in range(2, limit+1) if sieve[i]]
+            for j in range(i * i, limit + 1, i):
+                sieve[j] = False
+    primes = [i for i in range(2, limit + 1) if sieve[i]]
     for p in primes:
-        pk = p; k = 1
+        pk = p
+        k = 1
         while pk <= limit:
             result.append((pk, p, k))
-            if pk > limit // p: break
-            pk *= p; k += 1
+            if pk > limit // p:
+                break
+            pk *= p
+            k += 1
     return result
+
 
 def bezout_min_norm_fixed(m, n, k, pb, pc):
     """
@@ -57,17 +69,18 @@ def bezout_min_norm_fixed(m, n, k, pb, pc):
     CORRECTED: v_part = -v0*(rhs/g) (sign fix vs T72).
     Returns (min_norm, best_triple).
     """
-    best = float('inf')
+    best = float("inf")
     best_v = None
     g, u0, v0 = extended_gcd(m, n)
     for sign in [+1, -1]:
         rhs = sign * k
-        if rhs % g != 0: continue
+        if rhs % g != 0:
+            continue
         s = rhs // g
-        u_part = u0 * s          # phi_b particular solution
-        v_part = -v0 * s         # phi_c particular solution (sign-corrected)
-        step_u = n // g           # step for phi_b
-        step_v = m // g           # step for phi_c
+        u_part = u0 * s  # phi_b particular solution
+        v_part = -v0 * s  # phi_c particular solution (sign-corrected)
+        step_u = n // g  # step for phi_b
+        step_v = m // g  # step for phi_c
         # Minimize max(pb*(u_part+step_u*t), pc*(v_part+step_v*t))
         # Continuous optimum: pb*(u_part+step_u*t_opt)² balance with pc*(...)²
         # Approx: balance pb*|u_part+step_u*t| = pc*|v_part+step_v*t|
@@ -89,6 +102,7 @@ def bezout_min_norm_fixed(m, n, k, pb, pc):
                 best_v = (phi_b, phi_c, sign)
     return best, best_v
 
+
 def nd_exact(pa, pb, pc, k, m, n):
     """
     Exact nd = min(N_pure, max(p_L, B)) for one-prime-per-group triples.
@@ -104,31 +118,37 @@ def nd_exact(pa, pb, pc, k, m, n):
     p_L = max(pa, pb, pc)
 
     # Valuation regime
-    if N0 <= pc: return N0, "val(φ_c=0)", N0, N1, N2, None
-    if N1 <= pa: return N1, "val(φ_a=0)", N0, N1, N2, None
-    if N2 <= pb: return N2, "val(φ_b=0)", N0, N1, N2, None
+    if N0 <= pc:
+        return N0, "val(φ_c=0)", N0, N1, N2, None
+    if N1 <= pa:
+        return N1, "val(φ_a=0)", N0, N1, N2, None
+    if N2 <= pb:
+        return N2, "val(φ_b=0)", N0, N1, N2, None
 
     # Pairwise: Bezout for p_L-prime = ±1
     if p_L == pa:
-        B, bv = bezout_min_norm_fixed(m, n, k, pb, pc)
+        B, _ = bezout_min_norm_fixed(m, n, k, pb, pc)
     elif p_L == pb:
-        B, bv = bezout_min_norm_fixed(k, n, m, pa, pc)
+        B, _ = bezout_min_norm_fixed(k, n, m, pa, pc)
     else:  # p_L == pc
         # phi_c = ±1: k*phi_a + m*phi_b = ±n, minimize max(pa*|phi_a|, pb*|phi_b|, pc)
-        B = float('inf')
-        bv = None
+        B = float("inf")
         for phi_c_sign in [+1, -1]:
             rhs = n * phi_c_sign
             for phi_a in range(-40, 41):
                 rem = rhs - k * phi_a
-                if rem % m != 0: continue
+                if rem % m != 0:
+                    continue
                 phi_b = rem // m
-                if phi_b - phi_a == 0: continue  # W=0
+                if phi_b - phi_a == 0:
+                    continue  # W=0
                 norm = max(pa * abs(phi_a), pb * abs(phi_b), pc)
-                if norm < B: B = norm; bv = (phi_a, phi_b, phi_c_sign)
+                if norm < B:
+                    B = norm
 
     nd = min(N_pure, max(p_L, B))
     return nd, "pairwise", N0, N1, N2, B
+
 
 def nd_brute(a, b, bound=30):
     """Brute-force nd for cross-checking."""
@@ -136,27 +156,47 @@ def nd_brute(a, b, bound=30):
     fa, fb, fc = factorize(a), factorize(b), factorize(c)
     primes = sorted(set(list(fa) + list(fb) + list(fc)))
     np_ = len(primes)
-    if np_ > 4: return None
+    if np_ > 4:
+        return None
     alpha = [fa.get(p, fb.get(p, -fc.get(p, 0))) for p in primes]
     ws = [1 if p in fb else (-1 if p in fa else 0) for p in primes]
-    best = float('inf')
-    for coords in iproduct(range(-bound, bound+1), repeat=np_):
-        if all(c2 == 0 for c2 in coords): continue
-        if sum(alpha[i]*coords[i] for i in range(np_)) != 0: continue
-        W = sum(ws[i]*coords[i] for i in range(np_))
-        if W == 0: continue
-        norm = max(primes[i]*abs(coords[i]) for i in range(np_))
-        if norm > 0: best = min(best, norm)
-    return best if best < float('inf') else None
+    best = float("inf")
+    for coords in iproduct(range(-bound, bound + 1), repeat=np_):
+        if all(c2 == 0 for c2 in coords):
+            continue
+        if sum(alpha[i] * coords[i] for i in range(np_)) != 0:
+            continue
+        W = sum(ws[i] * coords[i] for i in range(np_))
+        if W == 0:
+            continue
+        norm = max(primes[i] * abs(coords[i]) for i in range(np_))
+        if norm > 0:
+            best = min(best, norm)
+    return best if best < float("inf") else None
+
 
 # ── Part 0: Bezout function sanity check ──────────────────────────────────────
 print("Part 0: Bezout function correctness verification")
 print("=" * 70)
 test_cases = [
     # (m, n, k, pb, pc, expected_B)
-    (3, 5, 1, 3, 2, 6),   # (5,27,32): pL=pa=5, 3*phi_b-5*phi_c=±1
-    (5, 7, 1, 5, 2, 9),   # (3,125,128): pL=pb=5, 5*phi_a-7*phi_c=±1 → call(k=1,n=7,m=3,pa=3,pc=2)
-    (5, 4, 2, 2, 3, 6),   # (32,49,81): pL=pb=7, 5*phi_a-4*phi_c=±2 → call(k=5,n=4,m=2,pa=2,pc=3)
+    (3, 5, 1, 3, 2, 6),  # (5,27,32): pL=pa=5, 3*phi_b-5*phi_c=±1
+    (
+        5,
+        7,
+        1,
+        5,
+        2,
+        9,
+    ),  # (3,125,128): pL=pb=5, 5*phi_a-7*phi_c=±1 → call(k=1,n=7,m=3,pa=3,pc=2)
+    (
+        5,
+        4,
+        2,
+        2,
+        3,
+        6,
+    ),  # (32,49,81): pL=pb=7, 5*phi_a-4*phi_c=±2 → call(k=5,n=4,m=2,pa=2,pc=3)
 ]
 # Note: for (3,125,128) pL=pb=5: call bezout(k=1, n=7, m=3, pa=3, pc=2)
 # → m_arg=k=1, n_arg=n=7, k_arg=m=3, pb_arg=pa=3, pc_arg=pc=2
@@ -167,14 +207,16 @@ test_cases_full = [
     ("(3,125,128) pL=pb=5", 1, 7, 3, 3, 2, 9, True),
     ("(32,49,81) pL=pb=7", 5, 4, 2, 2, 3, 6, True),
 ]
-for (label, m, n, k, pb, pc, expected, _) in test_cases_full:
+for label, m, n, k, pb, pc, expected, _ in test_cases_full:
     B, bv = bezout_min_norm_fixed(m, n, k, pb, pc)
     ok = "OK" if B == expected else f"FAIL(got {B})"
     print(f"  {label}: B={B} (expected {expected}) {ok}")
     if bv:
         phi_b, phi_c, sign = bv
         chk = m * phi_b - n * phi_c
-        print(f"    witness=(phi_b={phi_b},phi_c={phi_c},sign={sign}), constraint={chk} (need {sign*k})")
+        print(
+            f"    witness=(phi_b={phi_b},phi_c={phi_c},sign={sign}), constraint={chk} (need {sign * k})"
+        )
 print()
 
 # ── Part 1: Find all high-quality one-prime-per-group triples ─────────────────
@@ -195,23 +237,31 @@ seen = set()
 pp_values = sorted(pp_set.keys())
 print("Scanning pairs for quality >= 0.9 ...")
 for i, a in enumerate(pp_values):
-    if a >= LIMIT: break
+    if a >= LIMIT:
+        break
     pa, k = pp_set[a]
     for b in pp_values:
-        if b >= a: break  # only a > b (we'll re-add both orderings)
+        if b >= a:
+            break  # only a > b (we'll re-add both orderings)
         pb, m = pp_set[b]
-        if pb == pa: continue  # same prime group
+        if pb == pa:
+            continue  # same prime group
         c = a + b
-        if c not in pp_set: continue
+        if c not in pp_set:
+            continue
         pc, nv = pp_set[c]
-        if pc == pa or pc == pb: continue  # three distinct primes
-        if math.gcd(a, b) != 1: continue   # coprime (automatic for distinct prime powers but check)
+        if pc == pa or pc == pb:
+            continue  # three distinct primes
+        if math.gcd(a, b) != 1:
+            continue  # coprime (automatic for distinct prime powers but check)
         key = (min(a, b), max(a, b))
-        if key in seen: continue
+        if key in seen:
+            continue
         seen.add(key)
         q = nv * math.log(pc) / (math.log(pa) + math.log(pb) + math.log(pc))
-        if q < 0.9: continue
-        found.append((min(a,b), max(a,b), pa, pb, pc, k, m, nv, q, a > b))
+        if q < 0.9:
+            continue
+        found.append((min(a, b), max(a, b), pa, pb, pc, k, m, nv, q, a > b))
 
 # Sort by quality descending
 found.sort(key=lambda x: -x[8])
@@ -226,20 +276,26 @@ print()
 high_q = [(t) for t in found if t[8] > 1.0]
 near_q = [(t) for t in found if 0.9 <= t[8] <= 1.0]
 
+
 def analyze_triple(a, b, pa, pb, pc, k, m, nv, q):
     """Compute nd and print row."""
     # Identify assignment: which prime is in Pa, Pb, Pc (from factorizations)
-    fa = factorize(a); fb = factorize(b)
-    actual_pa = list(fa.keys())[0]; actual_ka = fa[actual_pa]
-    actual_pb = list(fb.keys())[0]; actual_mb = fb[actual_pb]
-    c = a + b; fc = factorize(c)
-    actual_pc = list(fc.keys())[0]; actual_nc = fc[actual_pc]
+    fa = factorize(a)
+    fb = factorize(b)
+    actual_pa = list(fa.keys())[0]
+    actual_ka = fa[actual_pa]
+    actual_pb = list(fb.keys())[0]
+    actual_mb = fb[actual_pb]
+    c = a + b
+    fc = factorize(c)
+    actual_pc = list(fc.keys())[0]
+    actual_nc = fc[actual_pc]
 
-    nd, regime, N0, N1, N2, B = nd_exact(actual_pa, actual_pb, actual_pc,
-                                          actual_ka, actual_mb, actual_nc)
+    nd, regime, N0, N1, N2, B = nd_exact(
+        actual_pa, actual_pb, actual_pc, actual_ka, actual_mb, actual_nc
+    )
     p_L = max(actual_pa, actual_pb, actual_pc)
-    rad = actual_pa * actual_pb * actual_pc
-    B_str = f"{B:.0f}" if B is not None and B < float('inf') else "∞"
+    B_str = f"{B:.0f}" if B is not None and B < float("inf") else "∞"
 
     # Brute check for small triples
     nd_b = nd_brute(a, b, bound=30) if max(a, b) < 2000 else "?"
@@ -247,10 +303,13 @@ def analyze_triple(a, b, pa, pb, pc, k, m, nv, q):
     if isinstance(nd_b, int):
         match_str = "✓" if nd_b == nd else f"✗(brute={nd_b})"
 
-    print(f"  ({a},{b})  q={q:.4f}  nd={nd}  pL={p_L}  B={B_str}  "
-          f"N0={N0}  {actual_pa}^{actual_ka}+{actual_pb}^{actual_mb}={actual_pc}^{actual_nc}  "
-          f"{regime}  {match_str}")
+    print(
+        f"  ({a},{b})  q={q:.4f}  nd={nd}  pL={p_L}  B={B_str}  "
+        f"N0={N0}  {actual_pa}^{actual_ka}+{actual_pb}^{actual_mb}={actual_pc}^{actual_nc}  "
+        f"{regime}  {match_str}"
+    )
     return nd, regime, N0, N1, N2, B, p_L
+
 
 print(f"═══ HIGH QUALITY (q > 1.0): {len(high_q)} triples ═══")
 print()
@@ -261,7 +320,7 @@ for row in high_q:
     nd_data.append((a, b, q, nd, p_L, B, N0, regime))
 
 print()
-print(f"═══ NEAR-QUALITY (0.9 ≤ q ≤ 1.0): top {min(20,len(near_q))} triples ═══")
+print(f"═══ NEAR-QUALITY (0.9 ≤ q ≤ 1.0): top {min(20, len(near_q))} triples ═══")
 print()
 for row in near_q[:20]:
     a, b, pa, pb, pc, k, m, nv, q, _ = row
@@ -276,12 +335,16 @@ print()
 if nd_data:
     print("High-quality triples — nd/p_L ratio and n-independence:")
     print()
-    for (a, b, q, nd, p_L, B, N0, regime) in nd_data:
-        B_str = f"{B:.0f}" if B is not None and B < float('inf') else "∞"
-        winner = "N0-branch" if B is None or nd == N0 else ("Bezout" if nd < N0 else "p_L")
+    for a, b, q, nd, p_L, B, N0, regime in nd_data:
+        B_str = f"{B:.0f}" if B is not None and B < float("inf") else "∞"
+        winner = (
+            "N0-branch" if B is None or nd == N0 else ("Bezout" if nd < N0 else "p_L")
+        )
         ndep = "n-indep" if winner == "N0-branch" else "n-dep(B)"
-        print(f"  ({a},{b}): q={q:.4f}  nd={nd}  p_L={p_L}  nd/pL={nd/p_L:.3f}  "
-              f"B={B_str}  winner={winner}  {ndep}")
+        print(
+            f"  ({a},{b}): q={q:.4f}  nd={nd}  p_L={p_L}  nd/pL={nd / p_L:.3f}  "
+            f"B={B_str}  winner={winner}  {ndep}"
+        )
 
 print()
 print("KEY OBSERVATION: quality > 1 ⟹ c-group prime is SMALLEST prime")
@@ -295,10 +358,13 @@ print("  When N0 > B: nd = max(p_L, B), and nd depends on n.")
 print()
 
 # Check: for high-quality triples, is nd always ≥ p_L?
-violations = [(a,b,q,nd,p_L) for (a,b,q,nd,p_L,B,N0,regime) in nd_data if nd < p_L]
+violations = [
+    (a, b, q, nd, p_L) for (a, b, q, nd, p_L, B, N0, regime) in nd_data if nd < p_L
+]
 if violations:
     print(f"  WARNING: nd < p_L for {len(violations)} triples:")
-    for row in violations: print(f"    {row}")
+    for row in violations:
+        print(f"    {row}")
 else:
     print("CONFIRMED: nd ≥ p_L for ALL high-quality triples. ✓")
     print("  (As expected: pairwise regime forces nd ≥ p_L always.)")

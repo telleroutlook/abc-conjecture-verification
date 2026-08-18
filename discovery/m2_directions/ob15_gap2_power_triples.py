@@ -27,23 +27,27 @@ Key theorem (omega*=3 power triple case):
      a+b=c=r^3 are extremely rare (Catalan/Tijdeman: finitely many solutions).
 """
 
-from math import gcd, isqrt, prod
+from math import gcd, prod
+
 
 def factorize(n):
     factors = {}
     d = 2
-    while d*d <= n:
+    while d * d <= n:
         while n % d == 0:
-            factors[d] = factors.get(d,0)+1
+            factors[d] = factors.get(d, 0) + 1
             n //= d
         d += 1
-    if n > 1: factors[n] = factors.get(n,0)+1
+    if n > 1:
+        factors[n] = factors.get(n, 0) + 1
     return factors
+
 
 def has_within_group(f):
     """True if group has >=2 primes with unequal valuations."""
     vals = list(f.values())
     return len(vals) >= 2 and len(set(vals)) > 1
+
 
 def zero_out_construction(fa, fb, fc):
     """
@@ -67,39 +71,52 @@ def zero_out_construction(fa, fb, fc):
         p0, v0 = next(iter(groups[g0].items()))
         p1, v1 = next(iter(groups[g1].items()))
         # Constraint: c_signs[g0]*v0*phi0 + c_signs[g1]*v1*phi1 = 0
-        g = gcd(abs(c_signs[g0]*v0), abs(c_signs[g1]*v1))
-        phi0 = c_signs[g1]*v1 // g
-        phi1 = -c_signs[g0]*v0 // g
-        W = w_signs[g0]*phi0 + w_signs[g1]*phi1
+        g = gcd(abs(c_signs[g0] * v0), abs(c_signs[g1] * v1))
+        phi0 = c_signs[g1] * v1 // g
+        phi1 = -c_signs[g0] * v0 // g
+        W = w_signs[g0] * phi0 + w_signs[g1] * phi1
         if W == 0:
             phi0, phi1 = -phi0, -phi1
-            W = w_signs[g0]*phi0 + w_signs[g1]*phi1
+            W = w_signs[g0] * phi0 + w_signs[g1] * phi1
         if W == 0:
             continue
-        norm = max(p0*abs(phi0), p1*abs(phi1))
+        norm = max(p0 * abs(phi0), p1 * abs(phi1))
         if best is None or norm < best:
             best = norm
     return best
 
+
 cases = [
-    (1,8,9),(5,27,32),(32,49,81),(4,121,125),
-    (3,125,128),(13,243,256),(100,243,343),(169,343,512)
+    (1, 8, 9),
+    (5, 27, 32),
+    (32, 49, 81),
+    (4, 121, 125),
+    (3, 125, 128),
+    (13, 243, 256),
+    (100, 243, 343),
+    (169, 343, 512),
 ]
 
 print("Gap 2 candidates (c<=2000, no within-group construction):")
-print(f"{'Triple':<22} {'omega*':<7} {'R':<12} {'v_max':<7} {'v_max*R^(1/(w-1))':<22} {'nd_zero_out':<14} {'OB-15?'}")
-for (a,b,c) in cases:
+print(
+    f"{'Triple':<22} {'omega*':<7} {'R':<12} {'v_max':<7} {'v_max*R^(1/(w-1))':<22} {'nd_zero_out':<14} {'OB-15?'}"
+)
+for a, b, c in cases:
     fa = factorize(a) if a > 1 else {}
     fb = factorize(b)
     fc = factorize(c)
-    primes = set(list(fa)+list(fb)+list(fc))
+    primes = set(list(fa) + list(fb) + list(fc))
     omega = len(primes)
     R = prod(primes)
-    vmax = max(e for f in [fa,fb,fc] for e in f.values())
-    bound = vmax * R**(1/(omega-1))
+    vmax = max(e for f in [fa, fb, fc] for e in f.values())
+    bound = vmax * R ** (1 / (omega - 1))
     nd_zout = zero_out_construction(fa, fb, fc)
     ok_zout = nd_zout is not None and nd_zout <= bound
-    print(f"{str((a,b,c)):<22} {omega:<7} {R:<12} {vmax:<7} {bound:<22.4f} {str(nd_zout):<14} {'YES' if ok_zout else 'check'}")
+    print(
+        f"{str((a, b, c)):<22} {omega:<7} {R:<12} {vmax:<7} {bound:<22.4f} {str(nd_zout):<14} {'YES' if ok_zout else 'check'}"
+    )
 
 print("\nKey: zero-out-large-prime construction gives small nd for all omega*=3 cases.")
-print("(100,243,343) has omega*=4 and Pa={2,5} with equal valuations -- needs different proof.")
+print(
+    "(100,243,343) has omega*=4 and Pa={2,5} with equal valuations -- needs different proof."
+)

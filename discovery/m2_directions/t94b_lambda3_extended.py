@@ -5,7 +5,6 @@ Same logic as T94 but larger range and higher brute-force bound.
 
 import math
 import itertools
-from collections import defaultdict
 from sympy import factorint
 
 
@@ -28,11 +27,14 @@ def squarefree_omega4_type112_triples(max_c=500):
             for fac in [fac_a, fac_b, fac_c]:
                 for p, e in fac.items():
                     if e > 1:
-                        ok = False; break
+                        ok = False
+                        break
                     if p in abc_fac:
-                        ok = False; break  # same prime in two groups impossible for coprime
+                        ok = False
+                        break  # same prime in two groups impossible for coprime
                     abc_fac[p] = 1
-                if not ok: break
+                if not ok:
+                    break
             if not ok:
                 continue
             Pa = sorted(fac_a.keys())
@@ -52,12 +54,12 @@ def brute_minima(Pa, Pb, Pc, bound=12):
     all_primes = Pa + Pb + Pc
     na, nb = len(Pa), len(Pb)
     norms = set()
-    for vals in itertools.product(range(-bound, bound+1), repeat=4):
+    for vals in itertools.product(range(-bound, bound + 1), repeat=4):
         if all(v == 0 for v in vals):
             continue
         phi_pa = vals[:na]
-        phi_pb = vals[na:na+nb]
-        phi_pc = vals[na+nb:]
+        phi_pb = vals[na : na + nb]
+        phi_pc = vals[na + nb :]
         if sum(phi_pa) + sum(phi_pb) != sum(phi_pc):
             continue
         if sum(phi_pa) == sum(phi_pb):
@@ -69,11 +71,11 @@ def brute_minima(Pa, Pb, Pc, bound=12):
 
 
 def formula_f37(p1, p2, p3, p4):
-    lam2 = min(2*p2, p3)
-    if p3 < 2*p2:
-        lam3 = min(2*p2, p4)
+    lam2 = min(2 * p2, p3)
+    if p3 < 2 * p2:
+        lam3 = min(2 * p2, p4)
     else:
-        lam3 = min(3*p2, p3)
+        lam3 = min(3 * p2, p3)
     return lam2, lam3
 
 
@@ -86,7 +88,7 @@ l2_ok = l2_fail = l3_ok = l3_fail = 0
 case1_ok = case1_fail = case2_ok = case2_fail = 0
 p4_branch_hits = 0  # Case 1 where p₄ < 2p₂
 
-for (a, b, c, Pa, Pb, Pc, primes) in triples:
+for a, b, c, Pa, Pb, Pc, primes in triples:
     p1, p2, p3, p4 = primes
     lam2_f, lam3_f = formula_f37(p1, p2, p3, p4)
 
@@ -99,42 +101,55 @@ for (a, b, c, Pa, Pb, Pc, primes) in triples:
     if lam2_b != lam2_f:
         l2_fail += 1
         if l2_fail <= 3:
-            print(f"  L2-FAIL ({a},{b},{c}) primes={primes} brute={lam2_b} F36={lam2_f}")
+            print(
+                f"  L2-FAIL ({a},{b},{c}) primes={primes} brute={lam2_b} F36={lam2_f}"
+            )
         continue
     l2_ok += 1
 
-    case = 1 if p3 < 2*p2 else 2
+    case = 1 if p3 < 2 * p2 else 2
     if lam3_b == lam3_f:
         l3_ok += 1
-        if case == 1: case1_ok += 1
-        else: case2_ok += 1
-        if case == 1 and p4 < 2*p2:
+        if case == 1:
+            case1_ok += 1
+        else:
+            case2_ok += 1
+        if case == 1 and p4 < 2 * p2:
             p4_branch_hits += 1
     else:
         l3_fail += 1
-        if case == 1: case1_fail += 1
-        else: case2_fail += 1
-        print(f"  L3-FAIL ({a},{b},{c}) primes={primes} case={case} λ₃_brute={lam3_b} λ₃_F37={lam3_f}")
+        if case == 1:
+            case1_fail += 1
+        else:
+            case2_fail += 1
+        print(
+            f"  L3-FAIL ({a},{b},{c}) primes={primes} case={case} λ₃_brute={lam3_b} λ₃_F37={lam3_f}"
+        )
 
 print(f"λ₂ correct: {l2_ok}, failures: {l2_fail}")
 print(f"λ₃ correct: {l3_ok}, failures: {l3_fail}")
-print(f"  Case 1 (p₃<2p₂): {case1_ok} ok, {case1_fail} fail  (p₄-branch triggered: {p4_branch_hits})")
+print(
+    f"  Case 1 (p₃<2p₂): {case1_ok} ok, {case1_fail} fail  (p₄-branch triggered: {p4_branch_hits})"
+)
 print(f"  Case 2 (p₃≥2p₂): {case2_ok} ok, {case2_fail} fail")
 
 # Check: does p₄<2p₂ ever occur in Case 1 among these?
 print()
 if p4_branch_hits > 0:
-    print(f"p₄-branch examples (Case 1, p₄<2p₂):")
+    print("p₄-branch examples (Case 1, p₄<2p₂):")
     shown = 0
-    for (a, b, c, Pa, Pb, Pc, primes) in triples:
-        if shown >= 5: break
+    for a, b, c, Pa, Pb, Pc, primes in triples:
+        if shown >= 5:
+            break
         p1, p2, p3, p4 = primes
-        if p3 < 2*p2 and p4 < 2*p2:
+        if p3 < 2 * p2 and p4 < 2 * p2:
             lam2_f, lam3_f = formula_f37(p1, p2, p3, p4)
             minima = brute_minima(Pa, Pb, Pc, bound=12)
-            if len(minima) < 3: continue
-            if minima[1] != lam2_f: continue
-            print(f"  ({a},{b},{c}) primes={primes} λ₃=p₄={p4} (2p₂={2*p2})")
+            if len(minima) < 3:
+                continue
+            if minima[1] != lam2_f:
+                continue
+            print(f"  ({a},{b},{c}) primes={primes} λ₃=p₄={p4} (2p₂={2 * p2})")
             shown += 1
 
 print(f"\nTotal type-(1,1,2) verified: {l3_ok}")

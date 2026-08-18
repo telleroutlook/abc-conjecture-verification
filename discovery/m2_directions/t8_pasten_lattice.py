@@ -31,6 +31,7 @@ Questions:
 import math
 from itertools import product as iproduct
 
+
 def factorize(n):
     factors = {}
     d = 2
@@ -43,23 +44,31 @@ def factorize(n):
         factors[n] = factors.get(n, 0) + 1
     return factors
 
+
 def is_prime(n):
-    if n < 2: return False
-    if n == 2: return True
-    if n % 2 == 0: return False
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
     d = 3
     while d * d <= n:
-        if n % d == 0: return False
+        if n % d == 0:
+            return False
         d += 2
     return True
+
 
 def gcd(a, b):
     while b:
         a, b = b, a % b
     return a
 
+
 def lcm(a, b):
     return a * b // gcd(a, b)
+
 
 def setup_lattice(a, b, c):
     """
@@ -98,14 +107,14 @@ def setup_lattice(a, b, c):
 
     return all_primes, int_coeff, denom, (p_a, p_b, p_c, fa, fb, fc)
 
+
 def wronskian(a, b, psi_map, fa, fb):
     """W^ψ(a,b) = ab * (sum_{p|b} v_p(b)/p*ψ_p - sum_{p|a} v_p(a)/p*ψ_p)"""
-    sum_b = sum(fb[p] * psi_map[p] for p in fb) / b  # = sum v_p(b)/p * ψ_p ... no
-    # Actually: d^ψ(b) = b * sum_{p|b} v_p(b)/p * ψ_p
-    # W = a*d^ψ(b) - b*d^ψ(a)
+    # d^ψ(b) = b * sum_{p|b} v_p(b)/p * ψ_p, and W = a*d^ψ(b) - b*d^ψ(a).
     sum_b_val = sum(fb[p] * psi_map.get(p, 0) / p for p in fb)
     sum_a_val = sum(fa[p] * psi_map.get(p, 0) / p for p in fa)
     return a * b * (sum_b_val - sum_a_val)
+
 
 def find_min_norm_nondegenerate(a, b, c, search_bound=50):
     """
@@ -124,7 +133,6 @@ def find_min_norm_nondegenerate(a, b, c, search_bound=50):
         return None, omega, all_primes
 
     best_norm = None
-    best_psi = None
 
     if rank == 1:
         # One free variable t; find the fundamental solution by solving int eq.
@@ -144,7 +152,6 @@ def find_min_norm_nondegenerate(a, b, c, search_bound=50):
             if abs(W) > 1e-9:  # nonzero Wronskian
                 if best_norm is None or norm < best_norm:
                     best_norm = norm
-                    best_psi = psi
                     break  # fundamental solution suffices
 
     elif rank == 2:
@@ -161,8 +168,10 @@ def find_min_norm_nondegenerate(a, b, c, search_bound=50):
 
         # ψ_dep = -(c_f1*ψ_f1 + c_f2*ψ_f2) / c_dep
         # For integer: c_dep | (c_f1*ψ_f1 + c_f2*ψ_f2)
-        for v1, v2 in iproduct(range(-search_bound, search_bound + 1),
-                                range(-search_bound, search_bound + 1)):
+        for v1, v2 in iproduct(
+            range(-search_bound, search_bound + 1),
+            range(-search_bound, search_bound + 1),
+        ):
             num = -(c_f1 * v1 + c_f2 * v2)
             if num % c_dep != 0:
                 continue
@@ -176,9 +185,9 @@ def find_min_norm_nondegenerate(a, b, c, search_bound=50):
             W = wronskian(a, b, psi, fa, fb)
             if abs(W) > 1e-9:
                 best_norm = norm
-                best_psi = psi.copy()
 
     return best_norm, omega, all_primes
+
 
 print("T8: Pasten lattice — minimum ||ψ|| exploration")
 print("=" * 70)
@@ -201,29 +210,38 @@ TRIPLES = [
     (1, 2400, 2401, "1+2^5*3*5^2=7^4"),
 ]
 
-print(f"{'triple':>25}  {'omega':>5}  {'rank':>4}  {'||psi||_min':>11}  {'Siegel_bd':>11}  {'eta':>6}  {'c^0.5':>8}")
+print(
+    f"{'triple':>25}  {'omega':>5}  {'rank':>4}  {'||psi||_min':>11}  {'Siegel_bd':>11}  {'eta':>6}  {'c^0.5':>8}"
+)
 print("-" * 80)
 
 for row in TRIPLES:
     if len(row) == 4:
         a, b, c, name = row
     else:
-        a, b, c = row; name = f"({a},{b},{c})"
+        a, b, c = row
+        name = f"({a},{b},{c})"
     assert a + b == c and gcd(a, b) == 1
 
     min_norm, omega, primes = find_min_norm_nondegenerate(a, b, c, search_bound=200)
     siegel = c * math.log(c)
     if min_norm is not None and min_norm > 0:
         eta = math.log(min_norm) / math.log(c) if c > 1 else 0
-        print(f"  {name:>23}  {omega:>5}  {omega-1:>4}  {min_norm:>11}  {siegel:>11.1f}  {eta:>6.3f}  {c**0.5:>8.2f}")
+        print(
+            f"  {name:>23}  {omega:>5}  {omega - 1:>4}  {min_norm:>11}  {siegel:>11.1f}  {eta:>6.3f}  {c**0.5:>8.2f}"
+        )
     else:
-        print(f"  {name:>23}  {omega:>5}  {omega-1:>4}  {'rank>2':>11}  {siegel:>11.1f}  {'N/A':>6}  {c**0.5:>8.2f}")
+        print(
+            f"  {name:>23}  {omega:>5}  {omega - 1:>4}  {'rank>2':>11}  {siegel:>11.1f}  {'N/A':>6}  {c**0.5:>8.2f}"
+        )
 
 # Mersenne family (degenerate) — rank 1 for each
 print()
 print("[B] Mersenne family (1, 2^k-1, 2^k): the degenerate case")
 print()
-print(f"  {'k':>4}  {'||psi||_min':>12}  {'c=2^k':>10}  {'eta=log||psi||/log(c)':>22}  {'Siegel':>12}")
+print(
+    f"  {'k':>4}  {'||psi||_min':>12}  {'c=2^k':>10}  {'eta=log||psi||/log(c)':>22}  {'Siegel':>12}"
+)
 print("  " + "-" * 65)
 
 for k in [2, 3, 5, 7, 13, 17, 19, 31]:
@@ -251,7 +269,9 @@ for k in [2, 3, 5, 7, 13, 17, 19, 31]:
 
 print()
 print("  OBSERVATION: For Mersenne family, ||ψ||_min ~ k*2^{k-1} ~ c * log(c)/2.")
-print("  eta -> 1 as k -> inf. These are the degenerate cases Pasten explicitly EXCLUDES.")
+print(
+    "  eta -> 1 as k -> inf. These are the degenerate cases Pasten explicitly EXCLUDES."
+)
 
 print()
 print("[C] Key result summary:")

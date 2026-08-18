@@ -19,9 +19,12 @@ CONTRACT_IDS = [
 
 
 def test_domain_and_proofctl_contracts_pin_current_checker() -> None:
-    expected = "sha256:" + hashlib.sha256(
-        (REPO_ROOT / "checker" / "check_certificate.py").read_bytes()
-    ).hexdigest()
+    expected = (
+        "sha256:"
+        + hashlib.sha256(
+            (REPO_ROOT / "checker" / "check_certificate.py").read_bytes()
+        ).hexdigest()
+    )
     for directory in ("domain/contracts", ".proofctl/contracts"):
         for claim_id in CONTRACT_IDS:
             path = REPO_ROOT / directory / f"{claim_id}.json"
@@ -31,9 +34,12 @@ def test_domain_and_proofctl_contracts_pin_current_checker() -> None:
 
 
 def test_domain_and_proofctl_graphs_pin_current_checker() -> None:
-    expected = "sha256:" + hashlib.sha256(
-        (REPO_ROOT / "checker" / "check_certificate.py").read_bytes()
-    ).hexdigest()
+    expected = (
+        "sha256:"
+        + hashlib.sha256(
+            (REPO_ROOT / "checker" / "check_certificate.py").read_bytes()
+        ).hexdigest()
+    )
     for relative in ("graph.json", ".proofctl/graph.json"):
         graph = json.loads((REPO_ROOT / relative).read_text(encoding="utf-8"))
         pins = {

@@ -44,19 +44,65 @@
     "constant_k_epsilon"
   ],
   "module_import_policy": {
-    "note": "Non-anticipation barrier (spec §0.3). Construction modules must not import target/comparison/conclusion modules.",
-    "modules": ["M0", "M1", "M2", "M3", "M4", "M5", "M6"],
+    "note": "Non-anticipation barrier (spec \u00a70.3). Construction modules must not import target/comparison/conclusion modules.",
+    "modules": [
+      "M0",
+      "M1",
+      "M2",
+      "M3",
+      "M4",
+      "M5",
+      "M6"
+    ],
     "allowed_edges": [
-      ["M0", "M1"], ["M1", "M2"], ["M2", "M3"], ["M3", "M5"], ["M5", "M6"],
-      ["M0", "M4"], ["M4", "M5"]
+      [
+        "M0",
+        "M1"
+      ],
+      [
+        "M1",
+        "M2"
+      ],
+      [
+        "M2",
+        "M3"
+      ],
+      [
+        "M3",
+        "M5"
+      ],
+      [
+        "M5",
+        "M6"
+      ],
+      [
+        "M0",
+        "M4"
+      ],
+      [
+        "M4",
+        "M5"
+      ]
     ],
     "forbidden_imports": {
-      "M1": ["M4", "M5", "M6"],
-      "M2": ["M4", "M5", "M6"],
-      "M3": ["M4", "M5", "M6"]
+      "M1": [
+        "M4",
+        "M5",
+        "M6"
+      ],
+      "M2": [
+        "M4",
+        "M5",
+        "M6"
+      ],
+      "M3": [
+        "M4",
+        "M5",
+        "M6"
+      ]
     }
   },
-  "source_lock_hash": "sha256:d094dff9cf5dda3feb1a19d0201845cfdb74bab98269212db3b16da34541c131",
+  "source_lock_hash": "sha256:7f5315beba21d443b1b1da6514c429514f5a4d2843aabcec2c2c83709defc685",
   "source_lock_hash_note": "SHA-256 of M1 source files (proof/m1/*.py excluding __init__) in lexicographic order. Updated 2026-08-15 to include ob03_frey_framework.py (OB-03 independent review verified computations). Reproducible via checker/compute_source_lock_hash.py. Must be computed before any comparison/conclusion modules are admitted.",
   "iut_policy": {
     "note": "IUT-specific policy. Corollary 3.12 of IUTT-III must be independently machine-replayed. The Scholze-Stix dispute is recorded as a blocking obligation. This policy does not adjudicate the dispute.",

@@ -40,20 +40,28 @@ ANALYSIS:
 
 import math
 
+
 def factorize(n):
-    f = {}; d = 2
-    while d*d <= n:
-        while n%d == 0: f[d]=f.get(d,0)+1; n//=d
+    f = {}
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            f[d] = f.get(d, 0) + 1
+            n //= d
         d += 1
-    if n > 1: f[n] = 1
+    if n > 1:
+        f[n] = 1
     return f
 
-def gcd(a,b):
-    while b: a,b=b,a%b
+
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
     return abs(a)
 
+
 print("T34: Type (0,2,3) extremal analysis")
-print("="*65)
+print("=" * 65)
 print()
 
 # Focus: b = p*q odd (both primes), c = b+1 = 2*(b+1)/2, (b+1)/2 = s*t.
@@ -70,19 +78,26 @@ violations = 0
 cases = []
 for c in range(6, 5001):
     fc = factorize(c)
-    if any(v>1 for v in fc.values()) or len(fc) != 3: continue
+    if any(v > 1 for v in fc.values()) or len(fc) != 3:
+        continue
     b = c - 1
-    if b < 2: continue
+    if b < 2:
+        continue
     fb = factorize(b)
-    if any(v>1 for v in fb.values()) or len(fb) != 2: continue
-    if set(fb.keys()) & set(fc.keys()): continue
+    if any(v > 1 for v in fb.values()) or len(fb) != 2:
+        continue
+    if set(fb.keys()) & set(fc.keys()):
+        continue
     all_primes = sorted(set(fb.keys()) | set(fc.keys()))
-    if len(all_primes) != 5: continue
+    if len(all_primes) != 5:
+        continue
     R = math.prod(all_primes)
     nd = all_primes[1]
     rho4 = nd**4 / R
     rho = nd / R**0.25
-    cases.append((rho, 1, b, c, tuple(sorted(fb.keys())), tuple(sorted(fc.keys())), rho4))
+    cases.append(
+        (rho, 1, b, c, tuple(sorted(fb.keys())), tuple(sorted(fc.keys())), rho4)
+    )
     if rho4 >= 0.5:
         print(f"  VIOLATION rho^4 >= 1/2: (1,{b},{c}) rho4={rho4:.6f}")
         violations += 1
@@ -108,35 +123,46 @@ print()
 # Smallest b = p*q s.t. (b+1)/2 = s*t with s fixed and t prime, and p,q prime, p,q > s.
 # The smallest valid b for each nd=s candidate.
 
-print("="*65)
+print("=" * 65)
 print("For fixed nd=s: maximize rho = minimize b (smallest valid triple)")
 print()
 print("For s=23 (nd=23): smallest b = p*q where (b+1)/2 = 23*t, p,q prime > 23:")
 
+
 def isprime(n):
-    if n < 2: return False
-    if n == 2: return True
-    if n % 2 == 0: return False
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
     d = 3
-    while d*d <= n:
-        if n%d == 0: return False
+    while d * d <= n:
+        if n % d == 0:
+            return False
         d += 2
     return True
 
+
 found = []
 for t in range(29, 1000):  # t > s=23
-    if not isprime(t): continue
+    if not isprime(t):
+        continue
     c = 2 * 23 * t  # = 46*t
     b = c - 1  # b = 46t - 1
     fb = factorize(b)
-    if any(v>1 for v in fb.values()) or len(fb) != 2: continue
+    if any(v > 1 for v in fb.values()) or len(fb) != 2:
+        continue
     p1, p2 = sorted(fb.keys())
-    if p1 <= 23 or p2 <= 23: continue  # need p,q > s=23
+    if p1 <= 23 or p2 <= 23:
+        continue  # need p,q > s=23
     # Check no shared primes
-    if set(fb.keys()) & {2, 23, t}: continue
-    R = 2*23*t*p1*p2
-    nd = sorted([2,23,t,p1,p2])[1]
-    if nd != 23: continue  # nd must be 23 (our s)
+    if set(fb.keys()) & {2, 23, t}:
+        continue
+    R = 2 * 23 * t * p1 * p2
+    nd = sorted([2, 23, t, p1, p2])[1]
+    if nd != 23:
+        continue  # nd must be 23 (our s)
     rho = 23 / R**0.25
     found.append((rho, b, c, t, p1, p2))
 
@@ -153,9 +179,10 @@ print()
 print("  ρ^4 = 23³/(2·t·b) = 12167/(2·t·(46t−1)) as function of t:")
 print(f"  {'t':>6}  {'b=46t-1':>10}  {'rho^4':>10}  {'rho':>8}")
 for t in [29, 31, 37, 41, 43, 53, 59, 67, 71, 79, 83, 89, 97]:
-    if not isprime(t): continue
-    b = 46*t - 1
-    rho4 = 23**3 / (2*t*b)
+    if not isprime(t):
+        continue
+    b = 46 * t - 1
+    rho4 = 23**3 / (2 * t * b)
     rho = rho4**0.25
     print(f"  {t:>6}  {b:>10}  {rho4:>10.6f}  {rho:.6f}")
 
@@ -164,7 +191,7 @@ print("  rho^4 = 12167/(2t(46t-1)) is STRICTLY DECREASING in t.")
 print("  Maximum at smallest valid t=29: b=1333, rho=0.6298.  ✓")
 print()
 
-print("="*65)
+print("=" * 65)
 print("THEOREM F22-023 (analytic, verified numerically):")
 print("  For type (0,2,3) with nd = s (2nd prime of c), b = p*q (odd primes > s):")
 print("  ρ^4 < 1/2  (proved: t*p*q > s^3 since t,p,q > s).")

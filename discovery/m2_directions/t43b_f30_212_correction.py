@@ -15,18 +15,22 @@ WLOG nd = p1 = min(Pa) (by symmetry / relabeling). Then:
 This is the SAME proof as for type (1,2,2) (F28 / F27), matching the a<->b symmetry.
 """
 
-import math
 
 def is_prime(n):
-    if n < 2: return False
-    if n < 4: return True
-    if n % 2 == 0: return False
-    for i in range(3, int(n**0.5)+1, 2):
-        if n % i == 0: return False
+    if n < 2:
+        return False
+    if n < 4:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(n**0.5) + 1, 2):
+        if n % i == 0:
+            return False
     return True
 
+
 SUP_NEW = 2 ** (-0.25)  # 2^{-1/4} ≈ 0.841
-SUP_OLD = (1/6) ** 0.25  # (1/6)^{1/4} ≈ 0.639
+SUP_OLD = (1 / 6) ** 0.25  # (1/6)^{1/4} ≈ 0.639
 
 LIMIT = 50000
 
@@ -36,7 +40,7 @@ print(f"  New (correct) sup: 2^{{-1/4}} = {SUP_NEW:.6f}")
 print()
 
 # Precompute
-primes = [p for p in range(2, LIMIT+1) if is_prime(p)]
+primes = [p for p in range(2, LIMIT + 1) if is_prime(p)]
 prime_set = set(primes)
 
 semiprimes = []
@@ -44,7 +48,7 @@ prime_list = primes
 for i, p1 in enumerate(prime_list):
     if p1 * p1 >= LIMIT:
         break
-    for p2 in prime_list[i+1:]:
+    for p2 in prime_list[i + 1 :]:
         a = p1 * p2
         if a > LIMIT:
             break
@@ -67,7 +71,13 @@ for q1 in primes:
         # Find semiprime factorization of c
         r1 = None
         if c % 2 == 0:
-            if c // 2 > 1 and is_prime(c // 2) and c // 2 != p1 and c // 2 != p2 and c // 2 != q1:
+            if (
+                c // 2 > 1
+                and is_prime(c // 2)
+                and c // 2 != p1
+                and c // 2 != p2
+                and c // 2 != q1
+            ):
                 r1, r2 = 2, c // 2
             else:
                 continue
@@ -88,7 +98,7 @@ for q1 in primes:
         group_mins = sorted([p1, q1, r1])
         nd = group_mins[1]
         R = p1 * p2 * q1 * r1 * r2
-        rho = nd / R ** 0.25
+        rho = nd / R**0.25
 
         count += 1
         if rho >= SUP_OLD:

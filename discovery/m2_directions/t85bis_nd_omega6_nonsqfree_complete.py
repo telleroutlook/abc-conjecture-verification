@@ -50,7 +50,7 @@ def nd_sublattice_5var(primes5, alpha5, ws5, bound):
     a5 = alpha5[4]  # alpha for the 5th prime (to solve from constraint)
     if a5 == 0:
         return None  # degenerate — shouldn't happen
-    best = float('inf')
+    best = float("inf")
     for coords4 in iproduct(range(-bound, bound + 1), repeat=4):
         rhs = -sum(alpha5[i] * coords4[i] for i in range(4))
         if rhs % a5 != 0:
@@ -67,7 +67,7 @@ def nd_sublattice_5var(primes5, alpha5, ws5, bound):
         nrm = max(primes5[i] * abs(coords[i]) for i in range(5))
         if nrm > 0:
             best = min(best, nrm)
-    return best if best < float('inf') else None
+    return best if best < float("inf") else None
 
 
 def find_sqfree_cross_pair(sub_primes, groups, vals):
@@ -98,7 +98,9 @@ for a in range(2, LIMIT + 1):
         if set(fa) & set(fb) or set(fa) & set(fc) or set(fb) & set(fc):
             continue
         # Exclude squarefree (all valuations == 1)
-        if all(v == 1 for v in list(fa.values()) + list(fb.values()) + list(fc.values())):
+        if all(
+            v == 1 for v in list(fa.values()) + list(fb.values()) + list(fc.values())
+        ):
             continue
         key = tuple(sorted([a, b]))
         if key in seen:
@@ -128,11 +130,14 @@ for a, b, primes, alpha, ws, fa, fb, fc in triples:
     vals = {}
     for p in sub5_primes:
         if p in fa:
-            groups[p] = 'a'; vals[p] = fa[p]
+            groups[p] = "a"
+            vals[p] = fa[p]
         elif p in fb:
-            groups[p] = 'b'; vals[p] = fb[p]
+            groups[p] = "b"
+            vals[p] = fb[p]
         else:
-            groups[p] = 'c'; vals[p] = fc[p]
+            groups[p] = "c"
+            vals[p] = fc[p]
 
     # Sub-case B1: analytic
     pair = find_sqfree_cross_pair(sub5_primes, groups, vals)
@@ -149,7 +154,9 @@ for a, b, primes, alpha, ws, fa, fb, fc in triples:
 
     if bp6 is None:
         case_skip += 1
-        print(f"  SKIP ({a},{b}): B_{{p6={p6}}} not found with BB={BB_B2}, primes={primes}")
+        print(
+            f"  SKIP ({a},{b}): B_{{p6={p6}}} not found with BB={BB_B2}, primes={primes}"
+        )
         continue
 
     if bp6 <= p6:
@@ -160,9 +167,13 @@ for a, b, primes, alpha, ws, fa, fb, fc in triples:
         print(f"  VIOLATION ({a},{b}): B_{{p6={p6}}}={bp6} > p6={p6}, primes={primes}")
 
 total_verified = case_b1 + case_b2_ok
-print(f"Results:")
-print(f"  Sub-case B1 (analytically proved):       {case_b1:5d}  ({100*case_b1/len(triples):.1f}%)")
-print(f"  Sub-case B2 OK (B_{{p6}} <= p6, BB={BB_B2}):  {case_b2_ok:5d}  ({100*case_b2_ok/len(triples):.1f}%)")
+print("Results:")
+print(
+    f"  Sub-case B1 (analytically proved):       {case_b1:5d}  ({100 * case_b1 / len(triples):.1f}%)"
+)
+print(
+    f"  Sub-case B2 OK (B_{{p6}} <= p6, BB={BB_B2}):  {case_b2_ok:5d}  ({100 * case_b2_ok / len(triples):.1f}%)"
+)
 print(f"  Sub-case B2 VIOLATIONS:                  {case_b2_viol:5d}")
 print(f"  Skipped (BB insufficient):               {case_skip:5d}")
 print(f"  Total verified: {total_verified}/{len(triples)}, violations: {case_b2_viol}")
@@ -171,5 +182,9 @@ if case_b2_viol == 0 and case_skip == 0:
     print("ZERO-COORDINATE PROPERTY FULLY VERIFIED for all omega*=6 non-squarefree")
     print(f"triples with a,b <= {LIMIT}.")
     if b2_details:
-        print(f"B2 sub-case: B_{{p6}} range = [{min(d[3] for d in b2_details)}, {max(d[3] for d in b2_details)}]")
-        print(f"B2 worst margin (B_{{p6}} / p6): {max(d[3]/d[4] for d in b2_details):.3f}")
+        print(
+            f"B2 sub-case: B_{{p6}} range = [{min(d[3] for d in b2_details)}, {max(d[3] for d in b2_details)}]"
+        )
+        print(
+            f"B2 worst margin (B_{{p6}} / p6): {max(d[3] / d[4] for d in b2_details):.3f}"
+        )

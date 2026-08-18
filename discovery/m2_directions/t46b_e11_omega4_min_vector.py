@@ -15,48 +15,59 @@ T46b — E11：ω=4 类型(1,1,2) Pasten 格最小非退化向量
   → 全局最小非退化范数=q，与F10一致
 """
 
-import math
 
 def is_prime(n):
-    if n < 2: return False
-    if n < 4: return True
-    if n % 2 == 0: return False
-    for i in range(3, int(n**0.5)+1, 2):
-        if n % i == 0: return False
+    if n < 2:
+        return False
+    if n < 4:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(n**0.5) + 1, 2):
+        if n % i == 0:
+            return False
     return True
+
 
 def in_lattice_phi(phi):
     """φ坐标约束: φ_p + φ_q = φ_r1 + φ_r2"""
     return phi[0] + phi[1] == phi[2] + phi[3]
 
+
 def wronskian_phi(phi):
     """W = pq*(φ_q - φ_p) 的符号部分，即 (φ_q - φ_p)"""
     return phi[1] - phi[0]  # W≠0 ↔ φ_q≠φ_p
 
+
 def psi_norm(p, q, r1, r2, phi):
     """ψ范数: max(p|φ_p|, q|φ_q|, r1|φ_r1|, r2|φ_r2|)"""
-    return max(p*abs(phi[0]), q*abs(phi[1]), r1*abs(phi[2]), r2*abs(phi[3]))
+    return max(p * abs(phi[0]), q * abs(phi[1]), r1 * abs(phi[2]), r2 * abs(phi[3]))
+
 
 def find_min_nondeg_phi(p, q, r1, r2, bound=5):
     """搜索最小范数非退化向量（φ坐标）"""
-    best = float('inf')
+    best = float("inf")
     best_phi = None
-    for fp in range(-bound, bound+1):
-        for fq in range(-bound, bound+1):
-            for fr1 in range(-bound, bound+1):
+    for fp in range(-bound, bound + 1):
+        for fq in range(-bound, bound + 1):
+            for fr1 in range(-bound, bound + 1):
                 fr2 = fp + fq - fr1  # 由约束决定
-                if abs(fr2) > bound: continue
+                if abs(fr2) > bound:
+                    continue
                 phi = (fp, fq, fr1, fr2)
-                if fp == fq == fr1 == fr2 == 0: continue
-                if wronskian_phi(phi) == 0: continue  # 退化
+                if fp == fq == fr1 == fr2 == 0:
+                    continue
+                if wronskian_phi(phi) == 0:
+                    continue  # 退化
                 n = psi_norm(p, q, r1, r2, phi)
                 if n < best:
                     best = n
                     best_phi = phi
     return best, best_phi
 
+
 print("T46b: ω=4 类型(1,1,2) Pasten格最小非退化向量验证")
-print("="*70)
+print("=" * 70)
 
 # 生成 ω=4 类型(1,1,2) 三元组
 triples = []
@@ -65,15 +76,20 @@ prime_set = set(primes)
 
 for i, p in enumerate(primes[:30]):
     for j, q in enumerate(primes):
-        if q <= p: continue
+        if q <= p:
+            continue
         c = p + q
         # c = r1*r2, squarefree, r1 < r2, both prime, r1 > q
         for k, r1 in enumerate(primes):
-            if r1 <= q: continue
-            if c % r1 != 0: continue
+            if r1 <= q:
+                continue
+            if c % r1 != 0:
+                continue
             r2 = c // r1
-            if r2 <= r1: continue
-            if r2 not in prime_set: continue
+            if r2 <= r1:
+                continue
+            if r2 not in prime_set:
+                continue
             triples.append((p, q, r1, r2))
             if len(triples) >= 30:
                 break
@@ -83,8 +99,10 @@ for i, p in enumerate(primes[:30]):
         break
 
 print(f"找到 {len(triples)} 个三元组\n")
-print(f"{'(p,q,r1,r2)':25}  {'F10 nd':>6}  {'暴力最小':>8}  {'预测ψ=(p,-q,0,0)':>20}  {'匹配':>6}")
-print("-"*80)
+print(
+    f"{'(p,q,r1,r2)':25}  {'F10 nd':>6}  {'暴力最小':>8}  {'预测ψ=(p,-q,0,0)':>20}  {'匹配':>6}"
+)
+print("-" * 80)
 
 all_match = True
 for p, q, r1, r2 in triples[:20]:
@@ -106,11 +124,13 @@ for p, q, r1, r2 in triples[:20]:
     if best_norm != q:
         all_match = False
 
-    print(f"({p:2},{q:3},{r1:3},{r2:4})  nd={nd_f10:4d}  "
-          f"暴力={best_norm:4d}  ψ=({p},-{q},0,0)范数={norm_pred}  {match}")
+    print(
+        f"({p:2},{q:3},{r1:3},{r2:4})  nd={nd_f10:4d}  "
+        f"暴力={best_norm:4d}  ψ=({p},-{q},0,0)范数={norm_pred}  {match}"
+    )
 
 print()
-print("="*70)
+print("=" * 70)
 if all_match:
     print("✓ 全部匹配：最小非退化范数=q=F10预测")
     print()
@@ -131,7 +151,7 @@ else:
     print("✗ 存在不匹配！需要进一步分析")
 
 print()
-print("="*70)
+print("=" * 70)
 print("与 E10 (ω=3) 比较：")
 print("  E10: ψ=(p,-q,0)，范数=q，Wronskian=-2pq（r-坐标为0）")
 print("  E11: ψ=(p,-q,0,0)，范数=q，Wronskian=-2pq（两个r-坐标均为0）")

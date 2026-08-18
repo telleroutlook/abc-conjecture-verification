@@ -37,13 +37,19 @@ OB-13C: reviewer's formula gives WRONG values for multi-prime groups (e.g. (1,15
 import math
 from itertools import product as iproduct
 
+
 def is_prime(n):
-    if n < 2: return False
-    if n < 4: return True
-    if n % 2 == 0: return False
-    for i in range(3, int(n**0.5)+1, 2):
-        if n % i == 0: return False
+    if n < 2:
+        return False
+    if n < 4:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(n**0.5) + 1, 2):
+        if n % i == 0:
+            return False
     return True
+
 
 def factorize(n):
     factors = {}
@@ -53,31 +59,40 @@ def factorize(n):
             factors[d] = factors.get(d, 0) + 1
             n //= d
         d += 1
-    if n > 1: factors[n] = factors.get(n, 0) + 1
+    if n > 1:
+        factors[n] = factors.get(n, 0) + 1
     return factors
+
 
 def rad(n):
     return math.prod(factorize(n).keys()) if n > 1 else 1
+
 
 def brute_nd(a, b, bound=10):
     c = a + b
     fa, fb, fc = factorize(a), factorize(b), factorize(c)
     all_p = sorted(set(list(fa.keys()) + list(fb.keys()) + list(fc.keys())))
     omega = len(all_p)
-    if omega == 0: return None
-    cc = {p: fa.get(p,0) + fb.get(p,0) - fc.get(p,0) for p in all_p}
+    if omega == 0:
+        return None
+    cc = {p: fa.get(p, 0) + fb.get(p, 0) - fc.get(p, 0) for p in all_p}
     Pb, Pa = list(fb.keys()), list(fa.keys())
-    best = float('inf')
-    for vals in iproduct(*[range(-bound, bound+1)]*omega):
+    best = float("inf")
+    for vals in iproduct(*[range(-bound, bound + 1)] * omega):
         phi = {all_p[i]: vals[i] for i in range(omega)}
-        if all(v==0 for v in vals): continue
-        if sum(cc[p]*phi[p] for p in all_p) != 0: continue
-        W = sum(phi.get(p,0) for p in Pb) - sum(phi.get(p,0) for p in Pa)
-        if W == 0: continue
-        norm = max(p*abs(phi[p]) for p in all_p)
-        if norm == 0: continue
+        if all(v == 0 for v in vals):
+            continue
+        if sum(cc[p] * phi[p] for p in all_p) != 0:
+            continue
+        W = sum(phi.get(p, 0) for p in Pb) - sum(phi.get(p, 0) for p in Pa)
+        if W == 0:
+            continue
+        norm = max(p * abs(phi[p]) for p in all_p)
+        if norm == 0:
+            continue
         best = min(best, norm)
-    return best if best < float('inf') else None
+    return best if best < float("inf") else None
+
 
 def three_construction_upper_bound(a, b):
     """
@@ -90,8 +105,8 @@ def three_construction_upper_bound(a, b):
     """
     c = a + b
     fa, fb, fc = factorize(a), factorize(b), factorize(c)
-    best = float('inf')
-    best_label = ''
+    best = float("inf")
+    best_label = ""
 
     def try_pair(p, vp, q, vq, label):
         nonlocal best, best_label
@@ -115,52 +130,79 @@ def three_construction_upper_bound(a, b):
         for p_b, v_b in fb.items():
             try_pair(p_a, v_a, p_b, v_b, f"C:({p_a},{p_b})")
 
-    return best if best < float('inf') else None, best_label
+    return best if best < float("inf") else None, best_label
+
 
 # ── Main test ────────────────────────────────────────────────────────────────
 test_cases = [
-    (2,3),(3,5),(5,11),       # squarefree (1,1,1)
-    (2,13),(2,19),            # squarefree (1,1,2)
-    (1,3),(1,7),(1,8),(1,15),(1,24),(1,48),  # non-squarefree
-    (4,5),(8,1),(2,7),(2,23),
-    (4,21),(9,16),(3,5),(5,3),
-    (1,2**6-1),(1,2**8-1),   # Mersenne-adjacent
+    (2, 3),
+    (3, 5),
+    (5, 11),  # squarefree (1,1,1)
+    (2, 13),
+    (2, 19),  # squarefree (1,1,2)
+    (1, 3),
+    (1, 7),
+    (1, 8),
+    (1, 15),
+    (1, 24),
+    (1, 48),  # non-squarefree
+    (4, 5),
+    (8, 1),
+    (2, 7),
+    (2, 23),
+    (4, 21),
+    (9, 16),
+    (3, 5),
+    (5, 3),
+    (1, 2**6 - 1),
+    (1, 2**8 - 1),  # Mersenne-adjacent
 ]
 
 print("T59 (revised): Three-construction OB-13B verification")
-print("="*100)
-print(f"{'(a,b,c)':<16} {'brute':>6} {'3-constr':>9} {'OB13B':>6} {'v_max*R^1/(w-1)':>16} "
-      f"{'best':>14} {'OB13C?':>7}")
-print("-"*100)
+print("=" * 100)
+print(
+    f"{'(a,b,c)':<16} {'brute':>6} {'3-constr':>9} {'OB13B':>6} {'v_max*R^1/(w-1)':>16} "
+    f"{'best':>14} {'OB13C?':>7}"
+)
+print("-" * 100)
 
 all_b_pass = True
 
-for (a, b) in test_cases:
-    if math.gcd(a, b) != 1: continue
+for a, b in test_cases:
+    if math.gcd(a, b) != 1:
+        continue
     c = a + b
     fa, fb, fc = factorize(a), factorize(b), factorize(c)
     all_p = set(list(fa.keys()) + list(fb.keys()) + list(fc.keys()))
     omega = len(all_p)
-    if omega < 2: continue
-    v_max = max(max((fa.get(p,0) for p in all_p), default=0),
-                max((fb.get(p,0) for p in all_p), default=0),
-                max((fc.get(p,0) for p in all_p), default=0))
+    if omega < 2:
+        continue
+    v_max = max(
+        max((fa.get(p, 0) for p in all_p), default=0),
+        max((fb.get(p, 0) for p in all_p), default=0),
+        max((fc.get(p, 0) for p in all_p), default=0),
+    )
     R = rad(a * b * c)
-    bound_b = v_max * R**(1/(omega-1))
+    bound_b = v_max * R ** (1 / (omega - 1))
 
     nd_brute = brute_nd(a, b, bound=8)
     nd_constr, label = three_construction_upper_bound(a, b)
 
     ob13b = "✓" if nd_brute is not None and nd_brute <= bound_b + 1e-9 else "✗"
     ob13c = "✓" if nd_constr == nd_brute else f"✗({nd_constr})"
-    if ob13b == "✗": all_b_pass = False
+    if ob13b == "✗":
+        all_b_pass = False
 
-    print(f"  ({a},{b},{c}){'':<5} {str(nd_brute):>6} {str(nd_constr):>9} {ob13b:>6} "
-          f"{bound_b:>16.3f} {label:>14} {ob13c:>7}")
+    print(
+        f"  ({a},{b},{c}){'':<5} {str(nd_brute):>6} {str(nd_constr):>9} {ob13b:>6} "
+        f"{bound_b:>16.3f} {label:>14} {ob13c:>7}"
+    )
 
 print()
-print("="*100)
-print(f"OB-13B (nd <= v_max*R^{{1/(omega-1)}}): {'ALL PASS ✓' if all_b_pass else 'SOME FAIL ✗'}")
+print("=" * 100)
+print(
+    f"OB-13B (nd <= v_max*R^{{1/(omega-1)}}): {'ALL PASS ✓' if all_b_pass else 'SOME FAIL ✗'}"
+)
 print()
 print("PROOF OF OB-13B (constructive):")
 print("  For each triple, at least one of three constructions (A/B/C) gives")

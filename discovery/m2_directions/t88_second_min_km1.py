@@ -10,17 +10,20 @@ Focus on pairwise regime: nd = r (i.e., max(pm/g, qk/g) >= r).
 """
 
 import math
-from itertools import product as iproduct
 from collections import defaultdict
 
 
 def is_prime(n):
-    if n < 2: return False
-    if n == 2: return True
-    if n % 2 == 0: return False
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
     d = 3
     while d * d <= n:
-        if n % d == 0: return False
+        if n % d == 0:
+            return False
         d += 2
     return True
 
@@ -61,8 +64,8 @@ for p in primes:
             continue
         for k in range(2, 8):
             for m in range(2, 8):
-                a = p ** k
-                b = q ** m
+                a = p**k
+                b = q**m
                 if a > 600 or b > 600:
                     continue
                 c = a + b
@@ -89,7 +92,7 @@ print()
 nd_fail = 0
 results = []
 
-for (p, q, r, k, m, g, n0, nd_f, regime) in triples:
+for p, q, r, k, m, g, n0, nd_f, regime in triples:
     kp = k // g
     mp = m // g
     bb = max(6, n0 // p + 3, 2 * r // q + 3)
@@ -117,10 +120,10 @@ print()
 
 # For each result, compute candidate formulas and see which matches
 match_stats = defaultdict(int)
-for (p, q, r, k, m, g, kp, mp, n0, nd, l2, reg) in pair_results:
+for p, q, r, k, m, g, kp, mp, n0, nd, l2, reg in pair_results:
     # Candidates
-    c1 = 2 * r           # scale phi_r=1 vector
-    c2 = n0              # phi_r=0 branch (always >= r in pairwise)
+    c1 = 2 * r  # scale phi_r=1 vector
+    c2 = n0  # phi_r=0 branch (always >= r in pairwise)
     c3 = q * (kp - 1) if kp > 1 and q * (kp - 1) > r else None
     c4 = p * (mp - 1) if mp > 1 and p * (mp - 1) > r else None
     c5 = p * mp + q * kp  # sum bound
@@ -137,8 +140,10 @@ for (p, q, r, k, m, g, kp, mp, n0, nd, l2, reg) in pair_results:
         match_stats["MATCH"] += 1
     else:
         match_stats["MISMATCH"] += 1
-        print(f"  MISMATCH ({p}^{k},{q}^{m},{r}) g={g} k'={kp} m'={mp} "
-              f"n0={n0} nd={nd} l2={l2}: formula={formula_val}")
+        print(
+            f"  MISMATCH ({p}^{k},{q}^{m},{r}) g={g} k'={kp} m'={mp} "
+            f"n0={n0} nd={nd} l2={l2}: formula={formula_val}"
+        )
         print(f"    cands={cands} | c1={c1} c2={c2} c3={c3} c4={c4}")
 
 print(f"\nPairwise: MATCH={match_stats['MATCH']} MISMATCH={match_stats['MISMATCH']}")
@@ -149,7 +154,7 @@ val_results = [r for r in results if r[-1] == "val"]
 print(f"Count: {len(val_results)}")
 
 val_match = val_miss = 0
-for (p, q, r, k, m, g, kp, mp, n0, nd, l2, reg) in val_results:
+for p, q, r, k, m, g, kp, mp, n0, nd, l2, reg in val_results:
     # In valuation regime nd=n0, analogous to F34 valuation:
     # candidate: min(r, 2*n0)
     c1 = r
@@ -161,21 +166,29 @@ for (p, q, r, k, m, g, kp, mp, n0, nd, l2, reg) in val_results:
         val_match += 1
     else:
         val_miss += 1
-        print(f"  VAL-MISS ({p}^{k},{q}^{m},{r}) g={g} n0={n0} nd={n0} "
-              f"l2={l2}: formula=min(r,2n0)={formula_val}")
+        print(
+            f"  VAL-MISS ({p}^{k},{q}^{m},{r}) g={g} n0={n0} nd={n0} "
+            f"l2={l2}: formula=min(r,2n0)={formula_val}"
+        )
 
 print(f"\nValuation: MATCH={val_match} MISMATCH={val_miss}")
 print()
 
 # Print sample table for visual inspection
 print("=== Sample (pairwise, first 15) ===")
-print(f"{'triple':20s} {'g':>3} {'k,m':>7} {'nd':>5} {'n0':>5} {'l2':>6} {'winner':15s}")
-for (p, q, r, k, m, g, kp, mp, n0, nd, l2, reg) in pair_results[:15]:
-    c1, c2 = 2*r, n0
-    c3 = q*(kp-1) if kp>1 and q*(kp-1)>r else None
-    c4 = p*(mp-1) if mp>1 and p*(mp-1)>r else None
+print(
+    f"{'triple':20s} {'g':>3} {'k,m':>7} {'nd':>5} {'n0':>5} {'l2':>6} {'winner':15s}"
+)
+for p, q, r, k, m, g, kp, mp, n0, nd, l2, reg in pair_results[:15]:
+    c1, c2 = 2 * r, n0
+    c3 = q * (kp - 1) if kp > 1 and q * (kp - 1) > r else None
+    c4 = p * (mp - 1) if mp > 1 and p * (mp - 1) > r else None
     cands = {f"2r={c1}": c1, f"n0={c2}": c2}
-    if c3: cands[f"qk'1={c3}"] = c3
-    if c4: cands[f"pm'1={c4}"] = c4
-    winner = min(cands, key=lambda x: cands[x] if cands[x] > r else float('inf'))
-    print(f"({p}^{k},{q}^{m},{r:3d})      {g:>3} {k},{m:>5}  {nd:>5} {n0:>5} {l2:>6}  {winner}")
+    if c3:
+        cands[f"qk'1={c3}"] = c3
+    if c4:
+        cands[f"pm'1={c4}"] = c4
+    winner = min(cands, key=lambda x: cands[x] if cands[x] > r else float("inf"))
+    print(
+        f"({p}^{k},{q}^{m},{r:3d})      {g:>3} {k},{m:>5}  {nd:>5} {n0:>5} {l2:>6}  {winner}"
+    )

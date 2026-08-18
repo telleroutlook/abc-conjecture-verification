@@ -33,6 +33,7 @@ This script:
 import math
 from itertools import product as iproduct
 
+
 def factorize(n):
     f = {}
     d = 2
@@ -45,6 +46,7 @@ def factorize(n):
         f[n] = f.get(n, 0) + 1
     return f
 
+
 def nd_brute(a, b, bound=30):
     c = a + b
     fa, fb, fc = factorize(a), factorize(b), factorize(c)
@@ -54,7 +56,7 @@ def nd_brute(a, b, bound=30):
         return None
     alpha = [fa.get(p, fb.get(p, -fc.get(p, 0))) for p in primes]
     ws = [1 if p in fb else (-1 if p in fa else 0) for p in primes]
-    best = float('inf')
+    best = float("inf")
     for coords in iproduct(range(-bound, bound + 1), repeat=n):
         if all(c == 0 for c in coords):
             continue
@@ -66,7 +68,8 @@ def nd_brute(a, b, bound=30):
         norm = max(primes[i] * abs(coords[i]) for i in range(n))
         if norm > 0:
             best = min(best, norm)
-    return best if best < float('inf') else None
+    return best if best < float("inf") else None
+
 
 def nd_three_pure(pa, pb, pc, k, m, n):
     g_km = math.gcd(k, m)
@@ -76,6 +79,7 @@ def nd_three_pure(pa, pb, pc, k, m, n):
     N1 = max(pb * n // g_mn, pc * m // g_mn)  # phi_a=0
     N2 = max(pa * n // g_kn, pc * k // g_kn)  # phi_b=0
     return min(N0, N1, N2), N0, N1, N2
+
 
 def nd_valuation_regime_formula(pa, pb, pc, k, m, n):
     """
@@ -98,6 +102,7 @@ def nd_valuation_regime_formula(pa, pb, pc, k, m, n):
         return N2, "N2_val(phi_b=0)", N0, N1, N2
     return None, "pairwise/mixed", N0, N1, N2
 
+
 def nd_mixed_formula_k1(pa, pb, pc, m, n):
     """
     For k=1, tries to find nd via the mixed witness:
@@ -107,7 +112,7 @@ def nd_mixed_formula_k1(pa, pb, pc, m, n):
 
     Try phi_c in {1,...,10}, phi_b in {-20,...,20}
     """
-    best = float('inf')
+    best = float("inf")
     best_coords = None
     for phi_c in range(1, 15):
         for phi_b in range(-20, 21):
@@ -135,6 +140,7 @@ def nd_mixed_formula_k1(pa, pb, pc, m, n):
                 best_coords = (phi_a, phi_b, phi_c)
     return best, best_coords
 
+
 # -------------------------------------------------------------------
 # Part 1: Verify n-generalized valuation regime on all (k,m,n) triples with n>=2
 # -------------------------------------------------------------------
@@ -149,40 +155,55 @@ triples_n2 = []
 seen = set()
 for a in range(2, 500):
     fa = factorize(a)
-    if len(fa) != 1: continue
-    pa = list(fa.keys())[0]; k = fa[pa]
+    if len(fa) != 1:
+        continue
+    pa = list(fa.keys())[0]
+    k = fa[pa]
     for b in range(1, 500):
         fb = factorize(b)
-        if len(fb) != 1: continue
-        pb = list(fb.keys())[0]; m = fb[pb]
-        if pb == pa: continue
+        if len(fb) != 1:
+            continue
+        pb = list(fb.keys())[0]
+        m = fb[pb]
+        if pb == pa:
+            continue
         c = a + b
         fc = factorize(c)
-        if len(fc) != 1: continue
-        pc = list(fc.keys())[0]; nv = fc[pc]
-        if pc == pa or pc == pb: continue
-        if nv < 2: continue
-        key = (min(a,b), max(a,b))
-        if key in seen: continue
+        if len(fc) != 1:
+            continue
+        pc = list(fc.keys())[0]
+        nv = fc[pc]
+        if pc == pa or pc == pb:
+            continue
+        if nv < 2:
+            continue
+        key = (min(a, b), max(a, b))
+        if key in seen:
+            continue
         seen.add(key)
         triples_n2.append((a, b, pa, pb, pc, k, m, nv))
 
 print(f"Found {len(triples_n2)} one-prime-per-group triples with n>=2 in [1,500)")
 
-val_ok = 0; val_formula_ok = 0; val_formula_fail = 0
+val_ok = 0
+val_formula_ok = 0
+val_formula_fail = 0
 mixed_cases = []
 
-for (a, b, pa, pb, pc, k, m, nv) in triples_n2:
+for a, b, pa, pb, pc, k, m, nv in triples_n2:
     nd_b = nd_brute(a, b, bound=25)
-    if nd_b is None: continue
+    if nd_b is None:
+        continue
     pred, regime, N0, N1, N2 = nd_valuation_regime_formula(pa, pb, pc, k, m, nv)
     if pred is not None:
         if pred == nd_b:
             val_formula_ok += 1
         else:
             val_formula_fail += 1
-            print(f"  VAL FAIL: ({a},{b}) pa={pa}^{k} pb={pb}^{m} pc={pc}^{nv} "
-                  f"N0={N0},N1={N1},N2={N2} pred={pred} brute={nd_b} regime={regime}")
+            print(
+                f"  VAL FAIL: ({a},{b}) pa={pa}^{k} pb={pb}^{m} pc={pc}^{nv} "
+                f"N0={N0},N1={N1},N2={N2} pred={pred} brute={nd_b} regime={regime}"
+            )
     else:
         mixed_cases.append((a, b, pa, pb, pc, k, m, nv, nd_b, N0, N1, N2))
 
@@ -197,17 +218,21 @@ print("=" * 75)
 print("Part 2: Mixed-witness (non-pure) cases — characterizing nd")
 print("=" * 75)
 
-for (a, b, pa, pb, pc, k, m, nv, nd_b, N0, N1, N2) in mixed_cases:
+for a, b, pa, pb, pc, k, m, nv, nd_b, N0, N1, N2 in mixed_cases:
     pure_min = min(N0, N1, N2)
-    print(f"  ({a},{b}) pa={pa}^{k} pb={pb}^{m} pc={pc}^{nv}  "
-          f"N0={N0} N1={N1} N2={N2} pure_min={pure_min}  nd_brute={nd_b}")
+    print(
+        f"  ({a},{b}) pa={pa}^{k} pb={pb}^{m} pc={pc}^{nv}  "
+        f"N0={N0} N1={N1} N2={N2} pure_min={pure_min}  nd_brute={nd_b}"
+    )
     # Try to find the winning witness
     if k == 1:
         nd_mix, coords = nd_mixed_formula_k1(pa, pb, pc, m, nv)
         if coords:
             phi_a, phi_b, phi_c = coords
-            print(f"    mixed witness (phi_a={phi_a}, phi_b={phi_b}, phi_c={phi_c}) "
-                  f"W={phi_b-phi_a} nd_mix={nd_mix}")
+            print(
+                f"    mixed witness (phi_a={phi_a}, phi_b={phi_b}, phi_c={phi_c}) "
+                f"W={phi_b - phi_a} nd_mix={nd_mix}"
+            )
     # Check if nd_b matches three-pure or something else
     ratio = nd_b / pure_min
     print(f"    ratio nd/pure_min = {nd_b}/{pure_min} = {ratio:.3f}")
@@ -218,33 +243,40 @@ for (a, b, pa, pb, pc, k, m, nv, nd_b, N0, N1, N2) in mixed_cases:
 print()
 print("=" * 75)
 print("Part 3: Formula for nd when pa is the largest prime (k=1)")
-print("  Conjecture: nd = min over phi_c in {1} of min_{phi_b} max(pa|n-m*phi_b|, pb*phi_b, pc)")
+print(
+    "  Conjecture: nd = min over phi_c in {1} of min_{phi_b} max(pa|n-m*phi_b|, pb*phi_b, pc)"
+)
 print("=" * 75)
 
 # Focus on cases where pa > pb > pc (a-prime largest)
-pa_largest = [(a,b,pa,pb,pc,k,m,nv,nd_b,N0,N1,N2)
-              for (a,b,pa,pb,pc,k,m,nv,nd_b,N0,N1,N2) in mixed_cases
-              if pa > pb and pa > pc]
+pa_largest = [
+    (a, b, pa, pb, pc, k, m, nv, nd_b, N0, N1, N2)
+    for (a, b, pa, pb, pc, k, m, nv, nd_b, N0, N1, N2) in mixed_cases
+    if pa > pb and pa > pc
+]
 
 print(f"Cases with pa largest: {len(pa_largest)}")
-for (a, b, pa, pb, pc, k, m, nv, nd_b, N0, N1, N2) in pa_largest:
+for a, b, pa, pb, pc, k, m, nv, nd_b, N0, N1, N2 in pa_largest:
     # Formula: for phi_c=1, minimize over phi_b of max(pa|n-m*phi_b|, pb*phi_b, pc)
     if k == 1:
-        best_norm = float('inf')
+        best_norm = float("inf")
         best_phib = None
         for phi_b in range(0, nv + 5):
             phi_a = nv - m * phi_b  # phi_c=1 case
             W = phi_b - phi_a
-            if W == 0: continue
+            if W == 0:
+                continue
             norm = max(pa * abs(phi_a), pb * phi_b, pc)
             if norm < best_norm:
                 best_norm = norm
                 best_phib = phi_b
         # Continuous optimum: pa*|n-m*phi_b| = pb*phi_b → phi_b* = pa*n/(pb+pa*m)
         phi_b_star = pa * nv / (pb + pa * m)
-        print(f"  ({a},{b}) pa={pa} pb={pb} pc={pc} k={k} m={m} n={nv}: "
-              f"nd={nd_b} formula={best_norm} phi_b*={phi_b_star:.2f} best_phi_b={best_phib}")
-        print(f"    N0={N0} [pa*m={pa*m} pa*m/m={pa}; needs N0<=pc={pc}? {N0<=pc}]")
+        print(
+            f"  ({a},{b}) pa={pa} pb={pb} pc={pc} k={k} m={m} n={nv}: "
+            f"nd={nd_b} formula={best_norm} phi_b*={phi_b_star:.2f} best_phi_b={best_phib}"
+        )
+        print(f"    N0={N0} [pa*m={pa * m} pa*m/m={pa}; needs N0<=pc={pc}? {N0 <= pc}]")
 
 # -------------------------------------------------------------------
 # Part 4: Conjecture for mixed regime — nd = min(N0, 1D_opt, r_term)
@@ -252,34 +284,42 @@ for (a, b, pa, pb, pc, k, m, nv, nd_b, N0, N1, N2) in pa_largest:
 print()
 print("=" * 75)
 print("Part 4: Unified formula conjecture")
-print("  nd = min over all phi_c>=1: [min_{phi_b} max(pa*|n*phi_c-m*phi_b|, pb*|phi_b|, pc*phi_c)]")
-print("  and also min over all phi_a>=1: [min_{phi_b} max(pa*phi_a, pb*|m*phi_a-n_like|, pc*|phi_c|)]")
+print(
+    "  nd = min over all phi_c>=1: [min_{phi_b} max(pa*|n*phi_c-m*phi_b|, pb*|phi_b|, pc*phi_c)]"
+)
+print(
+    "  and also min over all phi_a>=1: [min_{phi_b} max(pa*phi_a, pb*|m*phi_a-n_like|, pc*|phi_c|)]"
+)
 print("=" * 75)
 
 # For each mixed case, compute this 2D discrete optimization
-for (a, b, pa, pb, pc, k, m, nv, nd_b, N0, N1, N2) in mixed_cases[:10]:
+for a, b, pa, pb, pc, k, m, nv, nd_b, N0, N1, N2 in mixed_cases[:10]:
     # General k: phi_p*k + phi_q*m = phi_r*n
     # Minimize max(pa*k*|phi_p|, pb*m*|phi_q|, pc*n*|phi_r|) / (k,m,n)?
     # Actually: norm = max(pa*|phi_p|, pb*|phi_q|, pc*|phi_r|)
     # Brute check with larger range to confirm nd_b
     nd_check = nd_brute(a, b, bound=30)
-    formula_2d = float('inf')
+    formula_2d = float("inf")
     best_v = None
     for phi_c in range(-10, 11):
         for phi_b in range(-15, 16):
             # k*phi_a + m*phi_b = n*phi_c
             rhs = nv * phi_c - m * phi_b
-            if rhs % k != 0: continue
+            if rhs % k != 0:
+                continue
             phi_a = rhs // k
             W = phi_b - phi_a
-            if W == 0: continue
+            if W == 0:
+                continue
             norm = max(pa * abs(phi_a), pb * abs(phi_b), pc * abs(phi_c))
             if norm > 0 and norm < formula_2d:
                 formula_2d = norm
                 best_v = (phi_a, phi_b, phi_c)
     match = "OK" if formula_2d == nd_check else f"FAIL(nd={nd_check})"
-    print(f"  ({a},{b}) pa={pa}^{k} pb={pb}^{m} pc={pc}^{nv} "
-          f"nd={nd_check} 2D_opt={formula_2d} {match} v={best_v}")
+    print(
+        f"  ({a},{b}) pa={pa}^{k} pb={pb}^{m} pc={pc}^{nv} "
+        f"nd={nd_check} 2D_opt={formula_2d} {match} v={best_v}"
+    )
 
 print()
 print("Summary of Part 4: 2D optimization always recovers nd_brute?")

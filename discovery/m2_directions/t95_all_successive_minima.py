@@ -30,12 +30,12 @@ def brute_minima_all(Pa, Pb, Pc, bound=20, count=10):
     all_primes = Pa + Pb + Pc
     na, nb = len(Pa), len(Pb)
     norms = set()
-    for vals in itertools.product(range(-bound, bound+1), repeat=4):
+    for vals in itertools.product(range(-bound, bound + 1), repeat=4):
         if all(v == 0 for v in vals):
             continue
         phi_pa = vals[:na]
-        phi_pb = vals[na:na+nb]
-        phi_pc = vals[na+nb:]
+        phi_pb = vals[na : na + nb]
+        phi_pc = vals[na + nb :]
         if sum(phi_pa) + sum(phi_pb) != sum(phi_pc):
             continue
         if sum(phi_pa) == sum(phi_pb):
@@ -49,6 +49,7 @@ def brute_minima_all(Pa, Pb, Pc, bound=20, count=10):
 def merged_multiples(p2, p3, p4, count=10):
     """Sorted merge of {k*p2}, {k*p3}, {k*p4} for k>=1."""
     from heapq import heappush, heappop
+
     h = [(p2, p2, 1), (p3, p3, 1), (p4, p4, 1)]
     result = []
     seen = set()
@@ -57,44 +58,54 @@ def merged_multiples(p2, p3, p4, count=10):
         if val not in seen:
             seen.add(val)
             result.append(val)
-        heappush(h, (p * (k+1), p, k+1))
+        heappush(h, (p * (k + 1), p, k + 1))
     return result
 
 
 # Test on diverse triples
 test_cases = [
     # (a, b, c, Pa, Pb, Pc)
-    (1, 14, 15, [2], [7], [3, 5]),     # primes [2,3,5,7]
-    (1, 21, 22, [2], [3], [7, 11]),    # primes [2,3,7,11]
-    (1, 34, 35, [5], [2], [7, 17]),    # primes [2,5,7,17]  — wait: a=1 Pa=empty
-    (2, 13, 15, [2], [13], [3, 5]),    # primes [2,3,5,13]
-    (2, 35, 37, [2], [37], [5, 7]),    # primes [2,5,7,37]
-    (7, 22, 29, [7], [2], [11, 29]),   # primes [2,7,11,29] — wait need to recalc
-    (11, 26, 37, [11], [2], [13, 37]), # wait
+    (1, 14, 15, [2], [7], [3, 5]),  # primes [2,3,5,7]
+    (1, 21, 22, [2], [3], [7, 11]),  # primes [2,3,7,11]
+    (1, 34, 35, [5], [2], [7, 17]),  # primes [2,5,7,17]  — wait: a=1 Pa=empty
+    (2, 13, 15, [2], [13], [3, 5]),  # primes [2,3,5,13]
+    (2, 35, 37, [2], [37], [5, 7]),  # primes [2,5,7,37]
+    (7, 22, 29, [7], [2], [11, 29]),  # primes [2,7,11,29] — wait need to recalc
+    (11, 26, 37, [11], [2], [13, 37]),  # wait
 ]
 
 # Recompute from actual factorization
-from sympy import factorint
 
 actual_cases = []
 test_abc = [
-    (1, 14, 15), (1, 21, 22), (2, 13, 15), (2, 35, 37),
-    (3, 7, 10), (7, 22, 29), (11, 26, 37), (13, 46, 59),
-    (17, 29, 46), (31, 43, 74),  # p4-branch cases
-    (1, 33, 34), (1, 85, 86),    # Case 2 examples
+    (1, 14, 15),
+    (1, 21, 22),
+    (2, 13, 15),
+    (2, 35, 37),
+    (3, 7, 10),
+    (7, 22, 29),
+    (11, 26, 37),
+    (13, 46, 59),
+    (17, 29, 46),
+    (31, 43, 74),  # p4-branch cases
+    (1, 33, 34),
+    (1, 85, 86),  # Case 2 examples
 ]
 
-for (a, b, c) in test_abc:
-    if math.gcd(a, b) != 1: continue
+for a, b, c in test_abc:
+    if math.gcd(a, b) != 1:
+        continue
     fac_a = factorint(a) if a > 1 else {}
     fac_b = factorint(b) if b > 1 else {}
     fac_c = factorint(c)
     Pa = sorted(fac_a.keys())
     Pb = sorted(fac_b.keys())
     Pc = sorted(fac_c.keys())
-    if len(Pa) != 1 or len(Pb) != 1 or len(Pc) != 2: continue
+    if len(Pa) != 1 or len(Pb) != 1 or len(Pc) != 2:
+        continue
     primes = sorted(list(fac_a.keys()) + list(fac_b.keys()) + list(fac_c.keys()))
-    if len(primes) != 4: continue
+    if len(primes) != 4:
+        continue
     actual_cases.append((a, b, c, Pa, Pb, Pc, primes))
 
 print("T95: All successive minima vs merged-multiples conjecture")
@@ -102,7 +113,7 @@ print(f"Testing {len(actual_cases)} type-(1,1,2) triples\n")
 
 all_match = True
 mismatched_cases = []
-for (a, b, c, Pa, Pb, Pc, primes) in actual_cases:
+for a, b, c, Pa, Pb, Pc, primes in actual_cases:
     p1, p2, p3, p4 = primes
     brute = brute_minima_all(Pa, Pb, Pc, bound=20, count=10)
     conjecture = merged_multiples(p2, p3, p4, count=10)
@@ -115,7 +126,7 @@ for (a, b, c, Pa, Pb, Pc, primes) in actual_cases:
         else:
             break
 
-    ok = (brute == conjecture)
+    ok = brute == conjecture
     if not ok:
         all_match = False
         mismatched_cases.append((a, b, c))
@@ -132,11 +143,15 @@ print(f"All matched: {all_match}")
 expected_mismatches = {(2, 13, 15), (3, 7, 10)}
 actual_mismatches = set(mismatched_cases)
 if all_match or actual_mismatches != expected_mismatches:
-    print("T95 replay failed: expected exactly the known mismatches "
-          f"{sorted(expected_mismatches)}, got {sorted(actual_mismatches)}.")
+    print(
+        "T95 replay failed: expected exactly the known mismatches "
+        f"{sorted(expected_mismatches)}, got {sorted(actual_mismatches)}."
+    )
     raise SystemExit(1)
-print("T95 REFUTATION REPLAYED: the merged-multiples spectrum fails at "
-      "(2,13,15) and (3,7,10).")
+print(
+    "T95 REFUTATION REPLAYED: the merged-multiples spectrum fails at "
+    "(2,13,15) and (3,7,10)."
+)
 
 # Show merged-multiples visualization for (1,14,15): [2,3,5,7]
 print()
@@ -144,7 +159,10 @@ print("=== Merged-multiples structure for primes [2,3,5,7] (p2=3,p3=5,p4=7) ==="
 p2, p3, p4 = 3, 5, 7
 for v in merged_multiples(p2, p3, p4, count=15):
     sources = []
-    if v % p2 == 0: sources.append(f"{v//p2}·{p2}")
-    if v % p3 == 0: sources.append(f"{v//p3}·{p3}")
-    if v % p4 == 0: sources.append(f"{v//p4}·{p4}")
+    if v % p2 == 0:
+        sources.append(f"{v // p2}·{p2}")
+    if v % p3 == 0:
+        sources.append(f"{v // p3}·{p3}")
+    if v % p4 == 0:
+        sources.append(f"{v // p4}·{p4}")
     print(f"  {v:3d}  =  {', '.join(sources)}")

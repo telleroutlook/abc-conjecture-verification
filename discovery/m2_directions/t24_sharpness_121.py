@@ -98,91 +98,117 @@ ANALYTICAL SUPREMUM:
 VERIFICATION: check that ratio = 1/(2u(1+2u))^{1/3} formula matches numerical data.
 """
 
-import math
 
 def factorize(n):
-    f = {}; d = 2
-    while d*d <= n:
-        while n%d == 0: f[d]=f.get(d,0)+1; n//=d
+    f = {}
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            f[d] = f.get(d, 0) + 1
+            n //= d
         d += 1
-    if n > 1: f[n] = 1
+    if n > 1:
+        f[n] = 1
     return f
 
-def gcd(a,b):
-    while b: a,b=b,a%b
+
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
     return abs(a)
 
+
 def isprime(n):
-    if n<2: return False
-    if n==2: return True
-    if n%2==0: return False
-    d=3
-    while d*d<=n:
-        if n%d==0: return False
-        d+=2
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    d = 3
+    while d * d <= n:
+        if n % d == 0:
+            return False
+        d += 2
     return True
 
+
 def is_squarefree(n):
-    return all(v==1 for v in factorize(n).values())
+    return all(v == 1 for v in factorize(n).values())
+
 
 print("T24: Sharpness of 2^{-1/3} for type (1,2,1)")
-print("="*55)
+print("=" * 55)
 print()
 print("Analytical formula (b=2*q2 subfamily):")
 print("  ratio = 1 / (2*u*(1+2*u))^{1/3}  where u = q2/p ≥ 1/2")
-print("  Supremum at u = 1/2: ratio_max = 2^{-1/3} =", round(2**(-1/3), 6))
+print("  Supremum at u = 1/2: ratio_max = 2^{-1/3} =", round(2 ** (-1 / 3), 6))
 print()
 
 # Verify against numerical data
 print("Numerical verification — growing pairs (p, q2) with q2/p → 1/2:")
-print(f"  {'p':>6}  {'q2':>6}  {'u=q2/p':>8}  {'ratio_exact':>12}  {'ratio_formula':>13}  {'diff':>10}")
-print("  " + "-"*65)
+print(
+    f"  {'p':>6}  {'q2':>6}  {'u=q2/p':>8}  {'ratio_exact':>12}  {'ratio_formula':>13}  {'diff':>10}"
+)
+print("  " + "-" * 65)
 
 count = 0
 for p in range(100, 100000, 100):
     if not isprime(p):
         p += 1
-        while not isprime(p): p += 1
+        while not isprime(p):
+            p += 1
     q2 = (p + 1) // 2  # smallest integer ≥ p/2
-    while not isprime(q2): q2 += 1
+    while not isprime(q2):
+        q2 += 1
     c = p + 2 * q2
-    if not isprime(c): continue
-    if 2 * q2 < p: continue  # ensure b ≥ a
+    if not isprime(c):
+        continue
+    if 2 * q2 < p:
+        continue  # ensure b ≥ a
 
     R = p * 2 * q2 * c
     nd = p  # second smallest of {p, 2, c} when p < c
-    ratio_exact = nd / R**(1/3)
+    ratio_exact = nd / R ** (1 / 3)
 
     u = q2 / p
-    ratio_formula = 1.0 / (2*u*(1+2*u))**(1/3)
+    ratio_formula = 1.0 / (2 * u * (1 + 2 * u)) ** (1 / 3)
 
-    print(f"  {p:>6}  {q2:>6}  {u:>8.4f}  {ratio_exact:>12.8f}  {ratio_formula:>13.8f}  {abs(ratio_exact-ratio_formula):>10.2e}")
+    print(
+        f"  {p:>6}  {q2:>6}  {u:>8.4f}  {ratio_exact:>12.8f}  {ratio_formula:>13.8f}  {abs(ratio_exact - ratio_formula):>10.2e}"
+    )
     count += 1
-    if count >= 12: break
+    if count >= 12:
+        break
 
 print()
-print(f"2^{{-1/3}} = {2**(-1/3):.8f}")
+print(f"2^{{-1/3}} = {2 ** (-1 / 3):.8f}")
 print()
 
 # Show the approaching sequence more dramatically
 print("Sequence approaching 2^{-1/3} from below (p twin to 2*q2):")
 print(f"  {'p':>8}  {'q2':>8}  {'ratio':>12}  {'gap to 2^(-1/3)':>16}")
-target = 2**(-1/3)
+target = 2 ** (-1 / 3)
 count = 0
 for p in range(3, 500000, 2):
-    if not isprime(p): continue
-    q2 = (p+1)//2
-    while not isprime(q2): q2 += 1
-    if 2*q2 < p: continue
-    c = p + 2*q2
-    if not isprime(c): continue
+    if not isprime(p):
+        continue
+    q2 = (p + 1) // 2
+    while not isprime(q2):
+        q2 += 1
+    if 2 * q2 < p:
+        continue
+    c = p + 2 * q2
+    if not isprime(c):
+        continue
 
     R = p * 2 * q2 * c
-    ratio = p / R**(1/3)
+    ratio = p / R ** (1 / 3)
 
-    print(f"  {p:>8}  {q2:>8}  {ratio:>12.8f}  {target-ratio:>16.10f}")
+    print(f"  {p:>8}  {q2:>8}  {ratio:>12.8f}  {target - ratio:>16.10f}")
     count += 1
-    if count >= 15: break
+    if count >= 15:
+        break
 
 print()
 print("CONCLUSION F12:")
@@ -193,7 +219,9 @@ print()
 print("  Implication for P_ineq:")
 print("  For type (1,2,1) triples: min_nd_norm ≤ 2^{-1/3} * R^{1/3} < R^{1/3}.")
 print("  This gives ψ_nd = O(R^{1/3}) = O(c^{(1+ε)/3}) — useful only if ω ≥ 4.")
-print("  But squarefree triples have quality < 1 (R ≥ c), so c ≤ R < R^{1+ε} trivially.")
+print(
+    "  But squarefree triples have quality < 1 (R ≥ c), so c ≤ R < R^{1+ε} trivially."
+)
 print()
 print("  Key limitation: Pasten lattice analysis for squarefree triples only covers")
 print("  quality-< 1 examples. High-quality abc triples (quality > 1) involve prime")

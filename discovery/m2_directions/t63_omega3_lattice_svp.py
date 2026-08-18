@@ -77,7 +77,9 @@ def lattice_basis(va, vb, vc):
     # need va*phi1 ≡ 0 mod g_vb_vc for phi2 to exist
     # smallest phi1: phi1 = g_vb_vc / gcd(va, g_vb_vc)
     g_va_gvbvc = math.gcd(va, g_vb_vc)
-    phi1_step = g_vb_vc // g_va_gvbvc  # smallest positive phi1 making rhs divisible by g_vb_vc
+    phi1_step = (
+        g_vb_vc // g_va_gvbvc
+    )  # smallest positive phi1 making rhs divisible by g_vb_vc
 
     # For phi1 = phi1_step: solve vb*phi2 = -va*phi1_step mod vc
     # vb*phi2 = -va*phi1_step mod vc; gcd(vb, vc) | va*phi1_step (by construction)
@@ -137,11 +139,13 @@ def gauss_reduce_2d(b1, b2, p1, p2, p3, va, vb, vc):
     phi3 = (va*phi1 + vb*phi2) / vc; contributes p3*|phi3|.
     Proxy: sqrt( (p1*phi1)^2 + (p2*phi2)^2 + (p3*(va*phi1+vb*phi2)/vc)^2 )
     """
+
     def inner(u, v):
         # inner product using the scaled metric
         def vec3(x, y):
             phi3_num = va * x + vb * y
             return (p1 * x, p2 * y, p3 * phi3_num / vc)
+
         ux, uy, uz = vec3(*u)
         vx, vy, vz = vec3(*v)
         return ux * vx + uy * vy + uz * vz
@@ -207,7 +211,7 @@ def nd_svp_omega3(a, b):
 
     # Search (-R..R)^2 in reduced basis
     R = 25
-    best_norm = float('inf')
+    best_norm = float("inf")
     best_phi = None
     best_n = None
 
@@ -233,13 +237,13 @@ def nd_svp_omega3(a, b):
                 best_n = (n1, n2)
 
     return {
-        'nd': best_norm,
-        'phi': best_phi,
-        'n': best_n,
-        'basis': (e1, e2),
-        'reduced_basis': (e1r, e2r),
-        'p': (p1, p2, p3),
-        'v': (va, vb, vc),
+        "nd": best_norm,
+        "phi": best_phi,
+        "n": best_n,
+        "basis": (e1, e2),
+        "reduced_basis": (e1r, e2r),
+        "p": (p1, p2, p3),
+        "v": (va, vb, vc),
     }
 
 
@@ -254,7 +258,7 @@ def brute_nd(a, b, bound=12):
     cc = {p: fa.get(p, 0) + fb.get(p, 0) - fc.get(p, 0) for p in all_p}
     Pb_keys = list(fb.keys())
     Pa_keys = list(fa.keys())
-    best = float('inf')
+    best = float("inf")
     for vals in iproduct(*[range(-bound, bound + 1)] * omega):
         phi = {all_p[i]: vals[i] for i in range(omega)}
         if all(v == 0 for v in vals):
@@ -268,30 +272,45 @@ def brute_nd(a, b, bound=12):
         if norm == 0:
             continue
         best = min(best, norm)
-    return best if best < float('inf') else None
+    return best if best < float("inf") else None
 
 
 # ── Test battery ──────────────────────────────────────────────────────────────
 test_cases = [
     # squarefree
-    (2, 3), (3, 5), (5, 11), (2, 13),
+    (2, 3),
+    (3, 5),
+    (5, 11),
+    (2, 13),
     # non-squarefree single-prime-per-group
-    (1, 3), (1, 7), (1, 8), (4, 5), (8, 1), (27, 5),
-    (9, 16), (4, 25), (16, 9), (25, 2),
+    (1, 3),
+    (1, 7),
+    (1, 8),
+    (4, 5),
+    (8, 1),
+    (27, 5),
+    (9, 16),
+    (4, 25),
+    (16, 9),
+    (25, 2),
     # larger
-    (1, 31), (8, 3), (32, 3),
+    (1, 31),
+    (8, 3),
+    (32, 3),
 ]
 
 print("T63: omega=3 Pasten lattice SVP")
 print("=" * 95)
-print(f"{'(a,b,c)':<16} {'Pa/Pb/Pc':>12} {'(va,vb,vc)':>12} "
-      f"{'nd_svp':>7} {'nd_brute':>8} {'match':>6} {'phi':>20} {'W':>4}")
+print(
+    f"{'(a,b,c)':<16} {'Pa/Pb/Pc':>12} {'(va,vb,vc)':>12} "
+    f"{'nd_svp':>7} {'nd_brute':>8} {'match':>6} {'phi':>20} {'W':>4}"
+)
 print("-" * 95)
 
 all_match = True
 svp_results = []
 
-for (a, b) in test_cases:
+for a, b in test_cases:
     if math.gcd(a, b) != 1:
         continue
     c = a + b
@@ -302,21 +321,23 @@ for (a, b) in test_cases:
         print(f"  ({a},{b},{c}){'':<5} [skip: multi-prime group or omega!=3]")
         continue
 
-    nd_s = res['nd']
-    match = 'Y' if nd_s == nd_b else f'N({nd_b})'
+    nd_s = res["nd"]
+    match = "Y" if nd_s == nd_b else f"N({nd_b})"
     if nd_s != nd_b:
         all_match = False
 
-    p1, p2, p3 = res['p']
-    va, vb, vc = res['v']
-    phi = res['phi']
+    p1, p2, p3 = res["p"]
+    va, vb, vc = res["v"]
+    phi = res["phi"]
     W = phi[1] - phi[0] if phi else None
     groups = f"({p1},{p2},{p3})"
     vals_str = f"({va},{vb},{vc})"
-    phi_str = str(phi) if phi else 'None'
+    phi_str = str(phi) if phi else "None"
 
-    print(f"  ({a},{b},{c}){'':<5} {groups:>12} {vals_str:>12} "
-          f"{nd_s:>7} {str(nd_b):>8} {match:>6} {phi_str:>20} {str(W):>4}")
+    print(
+        f"  ({a},{b},{c}){'':<5} {groups:>12} {vals_str:>12} "
+        f"{nd_s:>7} {str(nd_b):>8} {match:>6} {phi_str:>20} {str(W):>4}"
+    )
     svp_results.append((a, b, c, nd_s, nd_b, res))
 
 print()
@@ -325,51 +346,55 @@ print(f"SVP matches brute nd: {'ALL' if all_match else 'SOME MISMATCHES'}")
 
 print()
 print("LATTICE BASIS DETAILS for selected non-squarefree cases:")
-for (a, b, c, nd_s, nd_b, res) in svp_results:
+for a, b, c, nd_s, nd_b, res in svp_results:
     fa, fb, fc = factorize(a), factorize(b), factorize(c)
     sq = all(v == 1 for d in [fa, fb, fc] for v in d.values())
     if sq:
         continue
-    e1, e2 = res['basis']
-    e1r, e2r = res['reduced_basis']
-    p1, p2, p3 = res['p']
-    va, vb, vc = res['v']
-    phi = res['phi']
-    n = res['n']
+    e1, e2 = res["basis"]
+    e1r, e2r = res["reduced_basis"]
+    p1, p2, p3 = res["p"]
+    va, vb, vc = res["v"]
+    phi = res["phi"]
+    n = res["n"]
     print(f"\n  ({a},{b},{c}): Pa={{{p1}^{va}}}, Pb={{{p2}^{vb}}}, Pc={{{p3}^{vc}}}")
     print(f"    Raw basis:     e1={e1}, e2={e2}")
     print(f"    Reduced basis: e1r={e1r}, e2r={e2r}")
-    print(f"    Optimal n=(n1,n2)={n}: phi={phi}, W={phi[1]-phi[0]}, nd={nd_s}")
+    print(f"    Optimal n=(n1,n2)={n}: phi={phi}, W={phi[1] - phi[0]}, nd={nd_s}")
     # Verify constraint
     if phi:
         lhs = va * phi[0] + vb * phi[1]
         rhs = vc * phi[2]
-        print(f"    Constraint check: {va}*{phi[0]} + {vb}*{phi[1]} = {lhs}, "
-              f"{vc}*{phi[2]} = {rhs}, OK={lhs==rhs}")
+        print(
+            f"    Constraint check: {va}*{phi[0]} + {vb}*{phi[1]} = {lhs}, "
+            f"{vc}*{phi[2]} = {rhs}, OK={lhs == rhs}"
+        )
 
 print()
 print("FORMULA SEARCH for nd as f(va,vb,vc,p1,p2,p3):")
-print(f"{'(a,b,c)':<14} {'(va,vb,vc)':>12} {'(p1,p2,p3)':>14} {'nd':>5} {'formula candidate':>30}")
+print(
+    f"{'(a,b,c)':<14} {'(va,vb,vc)':>12} {'(p1,p2,p3)':>14} {'nd':>5} {'formula candidate':>30}"
+)
 print("-" * 80)
-for (a, b, c, nd_s, nd_b, res) in svp_results:
-    p1, p2, p3 = res['p']
-    va, vb, vc = res['v']
+for a, b, c, nd_s, nd_b, res in svp_results:
+    p1, p2, p3 = res["p"]
+    va, vb, vc = res["v"]
     nd = nd_s
     # Search for nd as a simple expression
     cands = [
-        (p2, 'p2'),
-        (p1, 'p1'),
-        (p3, 'p3'),
-        (p1 * va, 'p1*va'),
-        (p2 * vb, 'p2*vb'),
-        (p3 * vc, 'p3*vc'),
-        (max(p1, p2), 'max(p1,p2)'),
-        (min(p1, p2), 'min(p1,p2)'),
-        (p3 * vc // math.gcd(va, vc), 'p3*vc/gcd(va,vc)'),
-        (p1 * vc // math.gcd(va, vc), 'p1*vc/gcd(va,vc)'),
-        (p2 * vc // math.gcd(vb, vc), 'p2*vc/gcd(vb,vc)'),
+        (p2, "p2"),
+        (p1, "p1"),
+        (p3, "p3"),
+        (p1 * va, "p1*va"),
+        (p2 * vb, "p2*vb"),
+        (p3 * vc, "p3*vc"),
+        (max(p1, p2), "max(p1,p2)"),
+        (min(p1, p2), "min(p1,p2)"),
+        (p3 * vc // math.gcd(va, vc), "p3*vc/gcd(va,vc)"),
+        (p1 * vc // math.gcd(va, vc), "p1*vc/gcd(va,vc)"),
+        (p2 * vc // math.gcd(vb, vc), "p2*vc/gcd(vb,vc)"),
     ]
-    found = 'none'
+    found = "none"
     for val, name in cands:
         if val == nd:
             found = name
@@ -384,4 +409,6 @@ print("  The 2D sublattice SVP recovers exact nd for all tested omega=3 triples.
 print("  Basis construction: L = {(phi1,phi2) in Z^2 : vc | va*phi1 + vb*phi2}")
 print("  No single closed-form formula for nd in terms of (va,vb,vc,p1,p2,p3).")
 print("  The 3-prime balanced construction (T62 gap cases) is captured naturally")
-print("  by the 2D lattice: the optimal (n1,n2) in the reduced basis gives norm < GCD-pair.")
+print(
+    "  by the 2D lattice: the optimal (n1,n2) in the reduced basis gives norm < GCD-pair."
+)

@@ -32,6 +32,7 @@ GOAL: Verify this obstruction numerically, find the best bound ADAI-log gives,
 import math
 from functools import reduce
 
+
 def factorize(n):
     factors = {}
     d = 2
@@ -44,8 +45,10 @@ def factorize(n):
         factors[n] = factors.get(n, 0) + 1
     return factors
 
+
 def rad(n):
     return reduce(lambda x, p: x * p, factorize(n).keys(), 1)
+
 
 def arith_deriv(n):
     if n <= 1:
@@ -62,6 +65,7 @@ def arith_deriv(n):
         result += n // m
     return result
 
+
 def sigma(n):
     """sigma(n) = n'/n = sum_{p|n} v_p(n)/p"""
     if n <= 1:
@@ -69,15 +73,21 @@ def sigma(n):
     facts = factorize(n)
     return sum(e / p for p, e in facts.items())
 
+
 def is_prime(n):
-    if n < 2: return False
-    if n == 2: return True
-    if n % 2 == 0: return False
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
     d = 3
     while d * d <= n:
-        if n % d == 0: return False
+        if n % d == 0:
+            return False
         d += 2
     return True
+
 
 print("T7: Conditional implication ADAI-log => abc")
 print("=" * 65)
@@ -92,7 +102,9 @@ print()
 # --- Part A: Trace the implication for known triples ---
 print("[A] What bound on c does ADAI-log give (assuming C=1)?")
 print()
-print(f"  {'triple':>20}  {'R':>8}  {'sigma(c)':>10}  {'ADAI_bound':>12}  {'c':>10}  {'ratio':>8}  {'abc_q':>8}")
+print(
+    f"  {'triple':>20}  {'R':>8}  {'sigma(c)':>10}  {'ADAI_bound':>12}  {'c':>10}  {'ratio':>8}  {'abc_q':>8}"
+)
 print("  " + "-" * 82)
 
 TRIPLES = [
@@ -117,7 +129,9 @@ for a, b, c in TRIPLES:
     adai_bound = (da + db + R * math.log(R)) / sig_c
     q = math.log(c) / math.log(R)
     bound_ratio = adai_bound / c
-    print(f"  ({a:>5},{b:>6},{c:>6})  {R:>8}  {sig_c:>10.5f}  {adai_bound:>12.1f}  {c:>10}  {bound_ratio:>8.2f}  {q:>8.4f}")
+    print(
+        f"  ({a:>5},{b:>6},{c:>6})  {R:>8}  {sig_c:>10.5f}  {adai_bound:>12.1f}  {c:>10}  {bound_ratio:>8.2f}  {q:>8.4f}"
+    )
 
 print()
 print("  NOTE: 'ADAI_bound' is the upper bound on c that ADAI-log gives.")
@@ -128,7 +142,9 @@ print("  For a useful bound we'd need ratio close to 1 (tight) or c <= K*R^{1+ep
 print()
 print("[B] Mersenne family (1, 2^k-1, 2^k): what bound does ADAI-log give?")
 print()
-print(f"  {'k':>4}  {'R':>12}  {'sigma(c)':>10}  {'ADAI_bound/c':>14}  {'ADAI_bound/R^2':>16}  {'c/R^2':>10}")
+print(
+    f"  {'k':>4}  {'R':>12}  {'sigma(c)':>10}  {'ADAI_bound/c':>14}  {'ADAI_bound/R^2':>16}  {'c/R^2':>10}"
+)
 print("  " + "-" * 72)
 
 for k in [2, 3, 5, 7, 13, 17, 19, 31]:
@@ -143,7 +159,9 @@ for k in [2, 3, 5, 7, 13, 17, 19, 31]:
     adai_bound = (da + db + R * math.log(R)) / sig_c
     # How does ADAI_bound compare to R^2 (a much weaker bound than abc)?
     R2 = R * R
-    print(f"  {k:>4}  {R:>12}  {sig_c:>10.5f}  {adai_bound/c:>14.2f}  {adai_bound/R2:>16.4f}  {c/R2:>10.6f}")
+    print(
+        f"  {k:>4}  {R:>12}  {sig_c:>10.5f}  {adai_bound / c:>14.2f}  {adai_bound / R2:>16.4f}  {c / R2:>10.6f}"
+    )
 
 print()
 print("  KEY OBSERVATION:")

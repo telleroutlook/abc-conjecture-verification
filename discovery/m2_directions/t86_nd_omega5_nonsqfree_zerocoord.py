@@ -21,37 +21,49 @@ SAMPLE_PER_TYPE = 20
 
 
 def factorize(n):
-    f = {}; d = 2
+    f = {}
+    d = 2
     while d * d <= n:
-        while n % d == 0: f[d] = f.get(d, 0) + 1; n //= d
+        while n % d == 0:
+            f[d] = f.get(d, 0) + 1
+            n //= d
         d += 1
-    if n > 1: f[n] = f.get(n, 0) + 1
+    if n > 1:
+        f[n] = f.get(n, 0) + 1
     return f
 
 
 def nd_brute_full(primes, alpha, ws, bound=BB):
     n = len(primes)
-    best = float('inf')
+    best = float("inf")
     for coords in iproduct(range(-bound, bound + 1), repeat=n):
-        if all(x == 0 for x in coords): continue
-        if sum(alpha[i] * coords[i] for i in range(n)) != 0: continue
-        if sum(ws[i] * coords[i] for i in range(n)) == 0: continue
+        if all(x == 0 for x in coords):
+            continue
+        if sum(alpha[i] * coords[i] for i in range(n)) != 0:
+            continue
+        if sum(ws[i] * coords[i] for i in range(n)) == 0:
+            continue
         nrm = max(primes[i] * abs(coords[i]) for i in range(n))
-        if nrm > 0: best = min(best, nrm)
-    return best if best < float('inf') else None
+        if nrm > 0:
+            best = min(best, nrm)
+    return best if best < float("inf") else None
 
 
 def nd_brute_zero_p(primes, alpha, ws, zero_idx, bound=BB):
     n = len(primes)
-    best = float('inf')
+    best = float("inf")
     ranges = [range(-bound, bound + 1) if i != zero_idx else [0] for i in range(n)]
     for coords in iproduct(*ranges):
-        if all(x == 0 for x in coords): continue
-        if sum(alpha[i] * coords[i] for i in range(n)) != 0: continue
-        if sum(ws[i] * coords[i] for i in range(n)) == 0: continue
+        if all(x == 0 for x in coords):
+            continue
+        if sum(alpha[i] * coords[i] for i in range(n)) != 0:
+            continue
+        if sum(ws[i] * coords[i] for i in range(n)) == 0:
+            continue
         nrm = max(primes[i] * abs(coords[i]) for i in range(n))
-        if nrm > 0: best = min(best, nrm)
-    return best if best < float('inf') else None
+        if nrm > 0:
+            best = min(best, nrm)
+    return best if best < float("inf") else None
 
 
 def partition_type(fa, fb, fc, primes):
@@ -62,7 +74,9 @@ def partition_type(fa, fb, fc, primes):
 
 
 def is_squarefree(fa, fb, fc):
-    return all(v == 1 for v in list(fa.values()) + list(fb.values()) + list(fc.values()))
+    return all(
+        v == 1 for v in list(fa.values()) + list(fb.values()) + list(fc.values())
+    )
 
 
 # Enumerate all omega*=5 coprime triples (non-squarefree only)
@@ -71,17 +85,22 @@ seen = set()
 for a in range(2, LIMIT + 1):
     fa = factorize(a)
     for b in range(2, LIMIT + 1):
-        if math.gcd(a, b) != 1: continue
+        if math.gcd(a, b) != 1:
+            continue
         c = a + b
         fb = factorize(b)
         fc = factorize(c)
         primes = sorted(set(list(fa) + list(fb) + list(fc)))
-        if len(primes) != 5: continue
+        if len(primes) != 5:
+            continue
         # require disjoint prime groups
-        if set(fa) & set(fb) or set(fa) & set(fc) or set(fb) & set(fc): continue
-        if is_squarefree(fa, fb, fc): continue   # squarefree handled analytically
+        if set(fa) & set(fb) or set(fa) & set(fc) or set(fb) & set(fc):
+            continue
+        if is_squarefree(fa, fb, fc):
+            continue  # squarefree handled analytically
         key = tuple(sorted([a, b]))
-        if key in seen: continue
+        if key in seen:
+            continue
         seen.add(key)
         ptype = partition_type(fa, fb, fc, primes)
         alpha = [fa.get(p, fb.get(p, -fc.get(p, 0))) for p in primes]
@@ -107,13 +126,17 @@ for ptype, lst in sorted(by_type.items()):
     for tt in sample:
         a, b, primes, alpha, ws, _ = tt
         nd = nd_brute_full(primes, alpha, ws, BB)
-        if nd is None: skip += 1; continue
+        if nd is None:
+            skip += 1
+            continue
         bp_vals = []
         for i in range(5):
             bp = nd_brute_zero_p(primes, alpha, ws, i, BB)
             if bp is not None:
                 bp_vals.append(bp)
-        if not bp_vals: skip += 1; continue
+        if not bp_vals:
+            skip += 1
+            continue
         min_bp = min(bp_vals)
         if min_bp == nd:
             ok += 1
@@ -122,11 +145,17 @@ for ptype, lst in sorted(by_type.items()):
             print(f"  IMPOSSIBLE ({a},{b}) type {ptype}: min_bp={min_bp} < nd={nd}")
         else:
             fail += 1
-            print(f"  VIOLATION ({a},{b}) type {ptype}: nd={nd} but min_bp={min_bp} > nd")
+            print(
+                f"  VIOLATION ({a},{b}) type {ptype}: nd={nd} but min_bp={min_bp} > nd"
+            )
             print(f"    primes={primes} alpha={alpha}")
     print(f"  type {ptype}: sample {len(sample)}: OK={ok}  skip={skip}  FAIL={fail}")
-    grand_ok += ok; grand_fail += fail; grand_skip += skip
+    grand_ok += ok
+    grand_fail += fail
+    grand_skip += skip
 
 print(f"\nTotals: OK={grand_ok}  skip={grand_skip}  FAIL={grand_fail}")
 if grand_fail == 0:
-    print(f"ZERO-COORDINATE PROPERTY CONFIRMED for all omega*=5 non-squarefree types (BB={BB}).")
+    print(
+        f"ZERO-COORDINATE PROPERTY CONFIRMED for all omega*=5 non-squarefree types (BB={BB})."
+    )

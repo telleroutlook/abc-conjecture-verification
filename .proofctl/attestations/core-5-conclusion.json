@@ -25,13 +25,13 @@
   "outcome": "accepted",
   "assurance": "",
   "resources": {
-    "wall_millis": 25,
+    "wall_millis": 59,
     "cpu_millis": 0,
     "mem_bytes": 0
   },
-  "start_freshness": "2026-08-17",
-  "end_freshness": "2026-08-17",
-  "self_digest": "sha256:5a3959b986ec5ac7e2b9a807ff2eba8f2fa8b34c68db0dae7980bc8f553b73d7",
+  "start_freshness": "2026-08-18",
+  "end_freshness": "2026-08-18",
+  "self_digest": "sha256:8fff5a334285e2dcdefd8142c9b6c0c37b3db3b94aae93e00d00f194491d3a5f",
   "cache_key": "0aafd0e4663ed6c72971219cc49518606b2f71e1f2a758ad80a490de15cf4abd",
   "toolchain": {
     "python": "3.14.6"

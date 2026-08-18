@@ -24,13 +24,13 @@
   "outcome": "rejected",
   "assurance": "",
   "resources": {
-    "wall_millis": 25,
+    "wall_millis": 48,
     "cpu_millis": 0,
     "mem_bytes": 0
   },
-  "start_freshness": "2026-08-17",
-  "end_freshness": "2026-08-17",
-  "self_digest": "sha256:ee5369ff29ef6915531afed2f312ce281a0b2ebe20b6d2db118d89ca573ae0c2",
+  "start_freshness": "2026-08-18",
+  "end_freshness": "2026-08-18",
+  "self_digest": "sha256:97615cd52164cdbe6cae94799339b9e38799eafc6ba0b04ffa5ca349fd1c6e45",
   "cache_key": "ecade8fb7c0838456fa3e4a0337a589c22a388c44c76d2cedf8b619d372d5f2c",
   "toolchain": {
     "python": "3.14.6"

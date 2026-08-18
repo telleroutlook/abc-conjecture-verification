@@ -833,6 +833,49 @@ ten draft-stage underfull boxes were repaired by using ragged-right typography
 for long Candidate Formula statements, the formal-verification section, and the
 bibliography.
 
+#### Step E7d — External audit follow-up (2026-08-18) ✅ COMPLETE
+
+**Goal:** triage and repair the remaining external-audit findings without
+changing any proof-ledger status.
+
+**Delivered:**
+
+1. Tightened the paper and Lean telescoping displays to the sharp termwise
+   inequality \(1/n^2<1/(n-1)-1/n\).  The estimate over the containing integer
+   interval remains non-strict, as required.
+2. Added the missing coprimality explanation in F8: \(R/q\) is a product of
+   distinct primes from \(P\setminus\{q\}\), hence is prime to \(q\).
+3. Corrected the Vaaler source anchor to the real-form exponent
+   \(|\det A^*A|^{1/(2K)}\), and made the paper substitution
+   \(K=\omega-1\), \(|\det A^TA|=\det(F)^2\), explicit.  The paper does not
+   insert the generic Minkowski-second-theorem factor \(2\), because Vaaler's
+   cube-section theorem supplies the stronger subspace bound.
+4. Added the missing \(\omega=8\) row (658 triples) to Table `tab:data`, and
+   added a regression test that parses the replay script and the TeX table and
+   checks exact per-\(\omega\) count equality plus total \(44{,}474\).
+5. Replaced the vacuous Lean Vaaler axiom by a non-vacuous integer-matrix
+   interface: a positive Gram determinant yields a nonzero integer coefficient
+   vector whose ambient coordinates are bounded by the Gram-determinant power.
+   The paper explicitly identifies this as an admitted premise, not a Lean proof.
+6. Corrected the formal-status prose: Lean proves the coefficient-norm bound;
+   the primitive-constraint/determinant identity and GCD lemma are paper proofs,
+   not separately named Lean theorems.
+7. Moved the Candidate Formula status explanation forward so readers encounter
+   it before the candidate environments.
+
+**Checker evidence:**
+
+- `lake build` in `lean/`: exit `0`, `Build completed successfully (2234 jobs)`.
+- `python3 -m pytest -q tests/test_route_v_replays.py`: exit `0`, `5 passed`.
+- `python3 -m pytest -q`: exit `0`, `124 passed`.
+- Three `pdflatex` passes exited `0,0,0`; the final PDF has 44 pages and no
+  undefined references/citations, errors, overfull boxes, or underfull boxes.
+- `proofctl check --all`: CORE-0/1/5 PASS and CORE-2/3/4 FAIL with
+  `outcome=rejected`, preserving the intended honest obligation state.
+- CORE-2 partial-evidence artifact digests were recomputed after the Lean and
+  baseline edits; the manifest remains explicitly non-accepting and CORE-2
+  remains `[OBL]`.
+
 #### Baseline source refresh (2026-08-17)
 
 **Added primary/source PDFs:**
@@ -2183,3 +2226,47 @@ requires a generalized lattice definition.
 **This route does NOT claim progress on abc.**
 The non-degenerate bound ‖ψ_nd‖ ≤ √(7/6)·R^{1/2} for squarefree ω=3 is a
 structural result about Pasten's lattice, not a proof of abc or SDC.
+
+---
+
+## Repository hygiene — full-repository Ruff cleanup (2026-08-18)
+
+**Status:** COMPLETE (engineering cleanup only; no mathematical status promotion).
+
+Cleaned the historical Python lint debt across `checker/`, `discovery/`, `proof/`,
+and `tests/`. The work consisted of:
+
+- splitting legacy one-line compound statements;
+- removing genuinely unused imports/variables and empty f-string prefixes;
+- moving imports to module scope where behavior-preserving, with one explicit
+  `noqa: E402` for the path-bootstrapped checker import in `tests/test_adversarial.py`;
+- applying Ruff formatting to files that otherwise required compound-statement repair;
+- keeping the trusted checker byte digest unchanged and limiting the M1 source change
+  to the required unused-import correction in `proof/m1/arithmetic_geometry.py`;
+- recomputing the M1 source-lock hash
+  (`sha256:7f5315beba21d443b1b1da6514c429514f5a4d2843aabcec2c2c83709defc685`)
+  and CORE-2 partial-evidence artifact hashes by script;
+- rerunning proofctl so regenerated attestations remain checker-derived.
+
+Verification records:
+
+```text
+ruff check .
+All checks passed!
+
+python3 -m compileall -q checker discovery proof tests
+(exit 0)
+
+python3 -m pytest -q
+124 passed in 39.47s
+
+proofctl contract lint domain/contracts/*.json
+six contracts — OK
+
+proofctl verify --signature-only --project
+all six claims — OK
+```
+
+The expected semantic gate state is unchanged: CORE-0/1/5 are accepted by replay,
+while CORE-2/3/4 remain rejected/open obligations. In particular, this cleanup does
+not prove abc, verify IUT, or promote any `[OBL]` item.

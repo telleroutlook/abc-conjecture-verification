@@ -15,6 +15,7 @@ DISCOVERY TIER: no abc triples used for construction; pure structural exploratio
 
 import math
 
+
 def factorize(n):
     f = {}
     d = 2
@@ -27,10 +28,12 @@ def factorize(n):
         f[n] = 1
     return f
 
+
 def gcd(a, b):
     while b:
         a, b = b, a % b
     return abs(a)
+
 
 def gcd_list(lst):
     g = 0
@@ -38,8 +41,10 @@ def gcd_list(lst):
         g = gcd(g, abs(x))
     return g
 
+
 def lcm(a, b):
     return a * b // gcd(a, b)
+
 
 def rad(n):
     r = 1
@@ -47,15 +52,18 @@ def rad(n):
         r *= p
     return r
 
+
 def max_valuation(a, b, c):
     fa, fb, fc = factorize(a), factorize(b), factorize(c)
     vals = list(fa.values()) + list(fb.values()) + list(fc.values())
     return max(vals) if vals else 1
 
+
 def wronskian_val(a, b, psi_map, fa, fb):
     sb = sum(fb[p] * psi_map.get(p, 0) / p for p in fb)
     sa = sum(fa[p] * psi_map.get(p, 0) / p for p in fa)
     return a * b * (sb - sa)
+
 
 def setup_int_coeffs(a, b, c):
     fa, fb, fc = factorize(a), factorize(b), factorize(c)
@@ -72,6 +80,7 @@ def setup_int_coeffs(a, b, c):
         coeff[p] = coeff.get(p, 0) - fc[p] * (denom // p)
     return primes, coeff, fa, fb, fc
 
+
 def lattice_det(coeff, primes):
     vals = [coeff[p] for p in primes]
     g = gcd_list(vals)
@@ -79,6 +88,7 @@ def lattice_det(coeff, primes):
         return 0.0
     prim = [v // g for v in vals]
     return math.sqrt(sum(v * v for v in prim))
+
 
 def find_min_nondeg_norm(a, b, c, bound=60):
     primes, coeff, fa, fb, fc = setup_int_coeffs(a, b, c)
@@ -147,20 +157,34 @@ def find_min_nondeg_norm(a, b, c, bound=60):
 
     return None, omega
 
+
 # Build a larger triple set organized by (omega, max_v)
 SQUAREFREE_TRIPLES = [
     # omega=2 squarefree
-    (1, 2, 3), (2, 3, 5), (1, 4, 5), (3, 4, 7), (4, 5, 9), (1, 6, 7),
+    (1, 2, 3),
+    (2, 3, 5),
+    (1, 4, 5),
+    (3, 4, 7),
+    (4, 5, 9),
+    (1, 6, 7),
     # omega=3 squarefree
-    (2, 3, 5), (4, 5, 9), (8, 9, 17), (1, 35, 36), (2, 15, 17),
-    (1, 6, 7), (6, 7, 13), (10, 11, 21), (3, 10, 13), (5, 6, 11),
+    (2, 3, 5),
+    (4, 5, 9),
+    (8, 9, 17),
+    (1, 35, 36),
+    (2, 15, 17),
+    (1, 6, 7),
+    (6, 7, 13),
+    (10, 11, 21),
+    (3, 10, 13),
+    (5, 6, 11),
 ]
 
 # Triples with max_v = 2 (some prime appears squared)
 MAX_V2_TRIPLES = [
-    (1, 3, 4),    # 4=2^2, max_v=2
-    (1, 8, 9),    # 8=2^3 -- actually max_v=3
-    (4, 5, 9),    # 4=2^2, 9=3^2, max_v=2, squarefree NO: 4=2^2
+    (1, 3, 4),  # 4=2^2, max_v=2
+    (1, 8, 9),  # 8=2^3 -- actually max_v=3
+    (4, 5, 9),  # 4=2^2, 9=3^2, max_v=2, squarefree NO: 4=2^2
     (1, 24, 25),  # 25=5^2, max_v=2
     (1, 48, 49),  # 49=7^2, max_v=2
     (8, 25, 33),  # 8=2^3: skip
@@ -171,13 +195,14 @@ MAX_V2_TRIPLES = [
 
 # Triples with max_v = 3
 MAX_V3_TRIPLES = [
-    (1, 8, 9),    # 8=2^3
+    (1, 8, 9),  # 8=2^3
     (3, 125, 128),  # 125=5^3, 128=2^7: max_v=7
     (1, 26, 27),  # 27=3^3
     (1, 80, 81),  # 81=3^4
     (8, 19, 27),  # 8=2^3, 27=3^3
     (8, 125, 133),  # 125=5^3
 ]
+
 
 def collect_triples_by_maxv(c_limit=500):
     """Enumerate coprime triples a+b=c with c<=c_limit, grouped by max_v."""
@@ -204,11 +229,14 @@ def collect_triples_by_maxv(c_limit=500):
         result[mv] = unique
     return result
 
+
 print("T12: Bounded-exponent subfamily — det(L)/R and ||psi||/R^{1/(omega-1)}")
 print("=" * 75)
 print()
 print("  For max_v(abc) <= M: how does det(L)/R scale with M?")
-print("  H1 bound: ||psi||_inf <= C(M) * R^{1/(omega-1)} with C(M) = O(M^{1/(omega-1)})")
+print(
+    "  H1 bound: ||psi||_inf <= C(M) * R^{1/(omega-1)} with C(M) = O(M^{1/(omega-1)})"
+)
 print()
 print("  Collecting triples with c <= 300 by max valuation M = 1,2,3,4...")
 print()
@@ -228,7 +256,7 @@ for M in [1, 2, 3, 4]:
     det_R_ratios = {}
     norm_ratios = {}
 
-    sample = triples[:min(80, len(triples))]
+    sample = triples[: min(80, len(triples))]
 
     for a, b, c, omega in sample:
         R = rad(a) * rad(b) * rad(c)
@@ -249,16 +277,20 @@ for M in [1, 2, 3, 4]:
             if target > 0:
                 norm_ratios[omega].append(norm / target)
 
-    print(f"  {'ω':>2}  {'n':>4}  {'det/R min':>9}  {'det/R max':>9}  "
-          f"{'det/R mean':>10}  {'||ψ||/R^{1/(ω-1)} max':>22}")
+    print(
+        f"  {'ω':>2}  {'n':>4}  {'det/R min':>9}  {'det/R max':>9}  "
+        f"{'det/R mean':>10}  {'||ψ||/R^{1/(ω-1)} max':>22}"
+    )
     print("  " + "-" * 65)
 
     for omg in sorted(det_R_ratios.keys()):
         drs = det_R_ratios[omg]
         nrs = norm_ratios.get(omg, [])
         nr_max = f"{max(nrs):.3f}" if nrs else "N/A"
-        print(f"  {omg:>2}  {len(drs):>4}  {min(drs):>9.3f}  {max(drs):>9.3f}  "
-              f"{sum(drs)/len(drs):>10.3f}  {nr_max:>22}")
+        print(
+            f"  {omg:>2}  {len(drs):>4}  {min(drs):>9.3f}  {max(drs):>9.3f}  "
+            f"{sum(drs) / len(drs):>10.3f}  {nr_max:>22}"
+        )
     print()
 
 print()
@@ -269,14 +301,18 @@ print("  ||c||_2^2 = sum_p (R/p)^2 = R^2 * sum_p 1/p^2")
 print("  gcd(coeff_p) = 1 (proved in OB-09 Step 2).")
 print("  det(L) = sqrt(R^2 * sum 1/p^2) = R * sqrt(sum 1/p^2) < R * 1 = R.")
 print()
-print("  KEY: det(L)/R = sqrt(sum_{p in P} 1/p^2) depends only on which primes divide abc.")
+print(
+    "  KEY: det(L)/R = sqrt(sum_{p in P} 1/p^2) depends only on which primes divide abc."
+)
 print("  As P grows: det(L)/R -> sqrt(P(2)) where P(2) = sum_{p prime} 1/p^2 ≈ 0.4522.")
 print("  For small P: det(L)/R can be close to 1 (e.g. P={2}: det/R = 1/2).")
 print()
 print("[det(L)/R formula for max_v = M]")
 print()
 print("  coeff_p = v_p(n) * R_p  where R_p = denom/p = lcm(all primes) / p.")
-print("  For squarefree abc: denom = R, v_p = 1. For max_v = M: coeff_p <= M * R/min_p.")
+print(
+    "  For squarefree abc: denom = R, v_p = 1. For max_v = M: coeff_p <= M * R/min_p."
+)
 print("  ||c||_2^2 = sum_p (v_p * denom/p)^2 <= M^2 * R^2 * sum_p 1/p^2.")
 print("  det(L) = ||c||_2 / gcd <= M * R * sqrt(sum 1/p^2) < M * R.")
 print()
@@ -285,13 +321,15 @@ print("  => For omega >= 3 and bounded M: H1 holds with explicit constant.")
 print()
 print("[Theoretical bound summary]")
 print()
-print(f"  {'M':>2}  {'omega=2 bound':>15}  {'omega=3 bound':>15}  {'omega=4 bound':>15}")
+print(
+    f"  {'M':>2}  {'omega=2 bound':>15}  {'omega=3 bound':>15}  {'omega=4 bound':>15}"
+)
 print("  " + "-" * 52)
 for M in [1, 2, 3, 4]:
     bounds = []
     for omg in [2, 3, 4]:
         r = omg - 1
-        b = M ** (1.0 / r) if r > 0 else float('inf')
+        b = M ** (1.0 / r) if r > 0 else float("inf")
         bounds.append(f"{b:.4f}")
     print(f"  {M:>2}  {bounds[0]:>15}  {bounds[1]:>15}  {bounds[2]:>15}")
 print()

@@ -58,6 +58,29 @@ exclusive responsibility of the offline checkers and the proof assistant.
 
 ## Priority 2 — paper and discovery hygiene
 
+- [x] External-audit follow-up: tighten the valid but non-sharp displays in
+      the determinant proof (and matching Lean comments/statements where
+      appropriate) to \(1/n^2 < 1/(n-1)-1/n\) and
+      \(\sum_{p\in P}1/p^2 < 1-1/M\).  While editing that proof, add the
+      one-clause reason that \(R/q\) is coprime to the prime \(q\).
+- [x] Correct the Vaaler source anchor in
+      `baseline/REFERENCE_BASELINE.md`: Theorem 2's real-coordinate particular
+      bound is \(|L_j(\pm v)| \le |\det A^*A|^{1/(2K)}\), not
+      \(|\det A^*A|^{1/2}\).  Also spell out this \(K=\omega-1\) substitution
+      in the paper so the absence of Minkowski's generic factor \(2\) is
+      source-backed rather than merely implicit.
+- [x] Reconcile Table `tab:data` with `t30_rho_distribution.py`: the prose total
+      is \(44{,}474\), while the displayed rows currently omit the \(658\)
+      triples at \(\omega=8\).  Add the missing row and add a replay check that
+      table counts sum to the script total.
+- [x] Tighten the formal-status claims: Lean currently proves the coefficient
+      norm bound, not the primitive-constraint/determinant identity or GCD
+      lemma as a named theorem; and `minkowski_vaaler_pasten` is a vacuous
+      existence-of-a-real-number statement.  Either formalize non-vacuous
+      interfaces or state these limitations explicitly in the paper.
+- [x] Add one sentence near the first `Candidate Formula` (or in the
+      introduction) explaining that candidate environments are finite-verification
+      formulas and cannot be used as unconditional theorems.
 - [x] Keep the eleven `Candidate Formula` environments clearly separated from
       theorem-tier results.
 - [x] Preserve the conditional status of prime-pattern sharpness and

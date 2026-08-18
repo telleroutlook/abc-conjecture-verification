@@ -42,6 +42,7 @@ NON-CIRCULARITY: exploring known triples for structural insight. No K_eps is fit
 import math
 from functools import reduce
 
+
 def factorize(n):
     factors = {}
     d = 2
@@ -54,16 +55,20 @@ def factorize(n):
         factors[n] = factors.get(n, 0) + 1
     return factors
 
+
 def rad(n):
     return reduce(lambda x, p: x * p, factorize(n).keys(), 1)
+
 
 def phi_excess(n):
     """Phi(n) = n / rad(n): squarefull excess."""
     return n // rad(n)
 
+
 def quality(a, b, c):
     R = rad(a) * rad(b) * rad(c)  # coprime so rad(abc) = rad(a)*rad(b)*rad(c)
     return math.log(c) / math.log(R), R
+
 
 # High-quality triples for analysis
 TRIPLES = [
@@ -91,7 +96,9 @@ print()
 # --- Part A: Phi values for known triples ---
 print("[A] Phi(c) and the abc equivalence:")
 print()
-print(f"{'triple':>20}  {'R':>8}  {'q':>6}  {'Phi(c)':>10}  {'Phi(c)/R^0.5':>12}  {'Phi(c)/R^0.3':>12}")
+print(
+    f"{'triple':>20}  {'R':>8}  {'q':>6}  {'Phi(c)':>10}  {'Phi(c)/R^0.5':>12}  {'Phi(c)/R^0.3':>12}"
+)
 print("-" * 80)
 
 for a, b, c in TRIPLES:
@@ -100,7 +107,9 @@ for a, b, c in TRIPLES:
     Phi_c = phi_excess(c)
     ratio_05 = Phi_c / R**0.5 if R > 0 else 0
     ratio_03 = Phi_c / R**0.3 if R > 0 else 0
-    print(f"  ({a:>5},{b:>6},{c:>6})  {R:>8}  {q:>6.3f}  {Phi_c:>10}  {ratio_05:>12.4f}  {ratio_03:>12.4f}")
+    print(
+        f"  ({a:>5},{b:>6},{c:>6})  {R:>8}  {q:>6.3f}  {Phi_c:>10}  {ratio_05:>12.4f}  {ratio_03:>12.4f}"
+    )
 
 print()
 print("  OBSERVATION: Phi(c) grows, but slowly relative to R.")
@@ -127,7 +136,9 @@ for a, b, c in TRIPLES:
     rad_a = rad(a)
     rad_c = rad(c)
     W = a / rad_c - c / rad_a
-    print(f"  ({a:>5},{b:>6},{c:>6})  {W:>14.4f}  {abs(W)*R:>12.4f}  {abs(W)*R/c:>12.6f}")
+    print(
+        f"  ({a:>5},{b:>6},{c:>6})  {W:>14.4f}  {abs(W) * R:>12.4f}  {abs(W) * R / c:>12.6f}"
+    )
 
 print()
 print("  KEY QUESTION: Is |W_Phi(a,c)| >= 1/R^delta for some delta?")
@@ -143,15 +154,21 @@ print()
 # A1: Multiplicativity (not Leibniz)
 # For gcd(m,n)=1: Phi(mn) = mn/rad(mn) = mn/(rad(m)*rad(n)) = Phi(m)*Phi(n)
 m, n = 8, 9
-print(f"  A1 (multiplicativity for coprime): Phi({m})*Phi({n}) = {phi_excess(m)}*{phi_excess(n)} = {phi_excess(m)*phi_excess(n)}")
-print(f"  Phi({m}*{n}) = Phi({m*n}) = {phi_excess(m*n)}  ✓ (multiplicative, not Leibniz)")
+print(
+    f"  A1 (multiplicativity for coprime): Phi({m})*Phi({n}) = {phi_excess(m)}*{phi_excess(n)} = {phi_excess(m) * phi_excess(n)}"
+)
+print(
+    f"  Phi({m}*{n}) = Phi({m * n}) = {phi_excess(m * n)}  ✓ (multiplicative, not Leibniz)"
+)
 
 # A2: Size drop
 print()
 print("  A2 (size drop): Phi(n)/n = 1/rad(n)")
 for n in [4, 8, 9, 16, 27, 64, 128, 729, 4375]:
     ratio = phi_excess(n) / n
-    print(f"    Phi({n:>6}) / {n:>6} = 1/{rad(n):>4} = {ratio:.6f}  [log ratio: {math.log(phi_excess(n))/math.log(n):.4f}]")
+    print(
+        f"    Phi({n:>6}) / {n:>6} = 1/{rad(n):>4} = {ratio:.6f}  [log ratio: {math.log(phi_excess(n)) / math.log(n):.4f}]"
+    )
 
 print()
 print("  A2 CHECK: log(Phi(n))/log(n) < 1 iff n is NOT squarefree.")
@@ -160,7 +177,9 @@ print("  So Phi(n) is NOT bounded by n^{1-delta} for any fixed delta!")
 print("  FAILS A2 for prime powers with large exponent.")
 print()
 print("  DIAGNOSIS: Phi(p^k) = p^{k-1}  and  (p^k)^{1-delta} = p^{k(1-delta)}.")
-print("  Phi(p^k) < (p^k)^{1-delta}  iff  p^{k-1} < p^{k-k*delta}  iff  k-1 < k-k*delta")
+print(
+    "  Phi(p^k) < (p^k)^{1-delta}  iff  p^{k-1} < p^{k-k*delta}  iff  k-1 < k-k*delta"
+)
 print("  iff  k*delta < 1  iff  k < 1/delta.")
 print("  So A2 holds only for n with v_p(n) < 1/delta. NOT uniformly in n.")
 
@@ -229,12 +248,18 @@ for a, b, c in TRIPLES:
     db = arith_deriv(b)
     dc = arith_deriv(c)
     R = rad(a) * rad(b) * rad(c)
-    print(f"  ({a:>5},{b:>6},{c:>6})  {da:>8}  {db:>8}  {dc:>8}  {R:>8}  {dc/R:>10.4f}")
+    print(
+        f"  ({a:>5},{b:>6},{c:>6})  {da:>8}  {db:>8}  {dc:>8}  {R:>8}  {dc / R:>10.4f}"
+    )
 
 print()
 print("  OBSERVATION: c' / R varies widely and can be >> 1.")
-print("  c' is NOT bounded by O(R) in general (e.g., (1,4374,4375): c'=5^3*7=875, R=210).")
-print("  However: c' / c = sum_{p|c} v_p(c)/p, which IS small when c has few prime factors.")
+print(
+    "  c' is NOT bounded by O(R) in general (e.g., (1,4374,4375): c'=5^3*7=875, R=210)."
+)
+print(
+    "  However: c' / c = sum_{p|c} v_p(c)/p, which IS small when c has few prime factors."
+)
 print()
 print("  THE KEY RATIO: c'/c vs log(c)/log(R) = quality")
 print()
@@ -244,12 +269,16 @@ for a, b, c in TRIPLES[:8]:
     R = rad(a) * rad(b) * rad(c)
     q = math.log(c) / math.log(R)
     deriv_ratio = dc / c  # = sum_{p|c} v_p(c)/p
-    print(f"  ({a:>5},{b:>6},{c:>6}): c'/c={deriv_ratio:.4f},  quality={q:.4f},  "
-          f"quality*log(R)={q*math.log(R):.3f},  log(c'/c)={math.log(dc/c) if dc > 0 else '-inf':.3f}")
+    print(
+        f"  ({a:>5},{b:>6},{c:>6}): c'/c={deriv_ratio:.4f},  quality={q:.4f},  "
+        f"quality*log(R)={q * math.log(R):.3f},  log(c'/c)={math.log(dc / c) if dc > 0 else '-inf':.3f}"
+    )
 
 print()
 print("CONCLUSION:")
-print("  Phi(n) = n/rad(n) is the RIGHT OBJECT (equivalent to abc) but proves nothing by itself.")
+print(
+    "  Phi(n) = n/rad(n) is the RIGHT OBJECT (equivalent to abc) but proves nothing by itself."
+)
 print("  The arithmetic derivative n' satisfies Leibniz but fails size-drop.")
 print("  The MISSING PIECE is an ADDITIVE INEQUALITY for the arithmetic derivative:")
 print("    If  a' + b' + rad(abc) >= C * c'  (universally for coprime a+b=c)")

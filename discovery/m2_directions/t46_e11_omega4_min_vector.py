@@ -17,15 +17,19 @@ Pasten 格约束（标准形式）：
      它的范数是多少（与 F10 预测 nd=min(p,q)=p 的关系）？
 """
 
-import math
 
 def is_prime(n):
-    if n < 2: return False
-    if n < 4: return True
-    if n % 2 == 0: return False
-    for i in range(3, int(n**0.5)+1, 2):
-        if n % i == 0: return False
+    if n < 2:
+        return False
+    if n < 4:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(n**0.5) + 1, 2):
+        if n % i == 0:
+            return False
     return True
+
 
 def wronskian_omega4(p, q, r1, r2, psi):
     """
@@ -35,23 +39,26 @@ def wronskian_omega4(p, q, r1, r2, psi):
     """
     return p * psi[1] - q * psi[0]
 
+
 def in_lattice_omega4(psi):
     """约束: ψ_p + ψ_q - ψ_r1 - ψ_r2 = 0"""
     return psi[0] + psi[1] - psi[2] - psi[3] == 0
 
+
 def linf(psi):
     return max(abs(x) for x in psi)
 
+
 def find_min_vector(p, q, r1, r2, search_bound):
     """暴力搜索最小范数向量（受限搜索空间）。"""
-    best_norm = float('inf')
+    best_norm = float("inf")
     best_vec = None
     best_nondeg = False
 
     # ψ_r2 = ψ_p + ψ_q - ψ_r1（由约束确定）
-    for ap in range(-search_bound, search_bound+1):
-        for aq in range(-search_bound, search_bound+1):
-            for ar1 in range(-search_bound, search_bound+1):
+    for ap in range(-search_bound, search_bound + 1):
+        for aq in range(-search_bound, search_bound + 1):
+            for ar1 in range(-search_bound, search_bound + 1):
                 ar2 = ap + aq - ar1
                 if abs(ar2) > search_bound:
                     continue
@@ -60,7 +67,7 @@ def find_min_vector(p, q, r1, r2, search_bound):
                 vec = (ap, aq, ar1, ar2)
                 n = linf(vec)
                 w = wronskian_omega4(p, q, r1, r2, vec)
-                is_nd = (w != 0)
+                is_nd = w != 0
 
                 if n < best_norm or (n == best_norm and is_nd and not best_nondeg):
                     best_norm = n
@@ -68,14 +75,15 @@ def find_min_vector(p, q, r1, r2, search_bound):
                     best_nondeg = is_nd
     return best_norm, best_vec, best_nondeg
 
+
 def find_min_nondeg_vector(p, q, r1, r2, search_bound):
     """搜索最小范数的非退化向量。"""
-    best_norm = float('inf')
+    best_norm = float("inf")
     best_vec = None
 
-    for ap in range(-search_bound, search_bound+1):
-        for aq in range(-search_bound, search_bound+1):
-            for ar1 in range(-search_bound, search_bound+1):
+    for ap in range(-search_bound, search_bound + 1):
+        for aq in range(-search_bound, search_bound + 1):
+            for ar1 in range(-search_bound, search_bound + 1):
                 ar2 = ap + aq - ar1
                 if abs(ar2) > search_bound:
                     continue
@@ -91,25 +99,32 @@ def find_min_nondeg_vector(p, q, r1, r2, search_bound):
                     best_vec = vec
     return best_norm, best_vec
 
+
 print("T46: ω=4 类型 (1,1,2) Pasten 格最小非退化向量")
 print("约束: ψ_p + ψ_q = ψ_r1 + ψ_r2")
-print("="*70)
+print("=" * 70)
 
 # 收集 ω=4 类型 (1,1,2) 三元组
 triples = []
 primes = [x for x in range(2, 200) if is_prime(x)]
 for i, p in enumerate(primes):
     for j, q in enumerate(primes):
-        if q <= p: continue
+        if q <= p:
+            continue
         c = p + q
         # c 必须是两个素数之积（squarefree 且 ω(c)=2）
         for k, r1 in enumerate(primes):
-            if r1 <= q: continue
-            if c % r1 != 0: continue
+            if r1 <= q:
+                continue
+            if c % r1 != 0:
+                continue
             r2 = c // r1
-            if r2 <= r1: continue
-            if not is_prime(r2): continue
-            if r2 * r1 != c: continue
+            if r2 <= r1:
+                continue
+            if not is_prime(r2):
+                continue
+            if r2 * r1 != c:
+                continue
             triples.append((p, q, r1, r2, c))
         if len(triples) >= 20:
             break
@@ -117,10 +132,12 @@ for i, p in enumerate(primes):
         break
 
 print(f"\n分析前 {len(triples)} 个三元组：\n")
-print(f"{'(p,q,r1,r2)':30}  {'F10 nd':>6}  {'min_nondeg_norm':>15}  {'min_vec':>25}  {'Wronskian':>10}")
+print(
+    f"{'(p,q,r1,r2)':30}  {'F10 nd':>6}  {'min_nondeg_norm':>15}  {'min_vec':>25}  {'Wronskian':>10}"
+)
 
 candidate_norms = []
-for (p, q, r1, r2, c) in triples[:15]:
+for p, q, r1, r2, c in triples[:15]:
     # F10 预测：nd = second_smallest{min(Pa), min(Pb), min(Pc)} = second_smallest{p, q, r1}
     group_mins = sorted([p, q, r1])
     nd_f10 = group_mins[1]  # 第二小
@@ -130,13 +147,15 @@ for (p, q, r1, r2, c) in triples[:15]:
     w = wronskian_omega4(p, q, r1, r2, vec) if vec else None
 
     match = "✓" if norm == nd_f10 else f"≠{nd_f10}"
-    print(f"({p:2},{q:2},{r1:2},{r2:3})  a={p}+b={q}  nd={nd_f10:4d}  "
-          f"min_nd_norm={norm:4d} {match:5}  vec={str(vec):25}  W={w}")
+    print(
+        f"({p:2},{q:2},{r1:2},{r2:3})  a={p}+b={q}  nd={nd_f10:4d}  "
+        f"min_nd_norm={norm:4d} {match:5}  vec={str(vec):25}  W={w}"
+    )
     candidate_norms.append((norm, nd_f10, p, q, r1, r2, vec, w))
 
 print()
 # 分析候选向量的模式
-print("="*70)
+print("=" * 70)
 print("模式分析：最小非退化向量的结构\n")
 
 # 按类型分析
@@ -145,16 +164,16 @@ for norm, nd_f10, p, q, r1, r2, vec, w in candidate_norms[:10]:
     print(f"({p},{q},{r1},{r2}): vec=({ap},{aq},{ar1},{ar2}), norm={norm}, W={w}")
     # 尝试识别模式
     if ar1 == 0:
-        print(f"  → ar1=0: (ψ_p, ψ_q, 0, ψ_r2) 结构，ψ_r2=ψ_p+ψ_q")
+        print("  → ar1=0: (ψ_p, ψ_q, 0, ψ_r2) 结构，ψ_r2=ψ_p+ψ_q")
     elif ar2 == 0:
-        print(f"  → ar2=0: (ψ_p, ψ_q, ψ_r1, 0) 结构，ψ_r1=ψ_p+ψ_q")
+        print("  → ar2=0: (ψ_p, ψ_q, ψ_r1, 0) 结构，ψ_r1=ψ_p+ψ_q")
     elif ap == 0:
-        print(f"  → ap=0: (0, ψ_q, ψ_r1, ψ_r2) 结构")
+        print("  → ap=0: (0, ψ_q, ψ_r1, ψ_r2) 结构")
     elif aq == 0:
-        print(f"  → aq=0: (ψ_p, 0, ψ_r1, ψ_r2) 结构")
+        print("  → aq=0: (ψ_p, 0, ψ_r1, ψ_r2) 结构")
 
 print()
-print("="*70)
+print("=" * 70)
 print("关键候选：v = (p, -q, r2, -r1) 是否总在格中并非退化？")
 print()
 for norm, nd_f10, p, q, r1, r2, vec, w in candidate_norms[:10]:

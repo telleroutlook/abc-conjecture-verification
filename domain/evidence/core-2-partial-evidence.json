@@ -83,17 +83,17 @@
     {
       "role": "lean-kernel",
       "path": "lean/AbcHeightKernel.lean",
-      "sha256": "sha256:b9709e96783df183669a3062ddc2f70c77947ec27b294fe53016b8695fff405c"
+      "sha256": "sha256:c14a375f81fb7a57a656c9b98b0c03b6de82ddc47f1e470d7f2a2c90176d32ac"
     },
     {
       "role": "lean-axiom-audit-test",
       "path": "tests/test_lean_ob04.py",
-      "sha256": "sha256:3d1676439d4c41ca1b407323176ae4f594d701a9f620447c8e0f70a0c0670981"
+      "sha256": "sha256:f2d2cbbc3aa68ab5a5b0321a54e502067db96a76dda7c5dfcdfad85d8cce9742"
     },
     {
       "role": "baseline-record",
       "path": "baseline/REFERENCE_BASELINE.md",
-      "sha256": "sha256:7cd5d732ffce4cbf74a7a9dd9ee0447db677625089bb77b19b4d051dd4231d36"
+      "sha256": "sha256:9d4c0f16a608a2ae3f1094a82697047fb262593277c6c5c84fb9b236ab1bd679"
     },
     {
       "role": "silverman-aec-source",
@@ -113,7 +113,7 @@
     {
       "role": "core2-nonacceptance-test",
       "path": "tests/test_core2_partial_evidence.py",
-      "sha256": "sha256:e02e6fa5f40e52ca5e564c78503a62399a07a2c4f617afc1c7426350fc3b2881"
+      "sha256": "sha256:c6d31db39a9473425d87b50ff1727f4cfdd1a6bd37e986d19257ef989558462e"
     }
   ]
 }

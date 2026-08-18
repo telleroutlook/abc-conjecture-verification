@@ -79,14 +79,18 @@ ambient cube gives volume at least $2^K$ for $[-1,1]^N\cap P_K$.
 Theorem 2 states in particular:
 
 > If $|\det A^*A|>0$, then there exists a pair of nonzero lattice points
-> $\pm v$ such that $|L_j(\pm v)|\le|\det A^*A|^{1/2}$ for each real form
-> $j=1,\ldots,r$ (and the corresponding complex bounds hold).
+> $\pm v$ such that $|L_j(\pm v)|\le\varepsilon_j$ for each form $j$, where
+> $\varepsilon_j=|\det A^*A|^{1/(2K)}$ for the real forms $j=1,\ldots,r$
+> (and $\varepsilon_j=(2/\pi)^{1/2}|\det A^*A|^{1/(2K)}$ for the complex
+> coordinate pairs).
 
 Use in the paper: take the columns of $A$ to be a $\mathbb Z$-basis of the
-rank-$(\omega-1)$ lattice $F(a,b)$ and take the ambient coordinate functionals
-as $L_j$.  With all coordinate bounds equal to
-$\det(F(a,b))^{1/(\omega-1)}$, the theorem gives a nonzero lattice vector with
-that $\ell^\infty$-bound.
+rank-$K=\omega-1$ lattice $F(a,b)$ and take the ambient coordinate functionals
+as the real forms $L_j$.  Since the columns are a basis,
+$|\det A^{T}A|=\det(F(a,b))^2$, so Vaaler's common real-form bound
+$|\det A^{T}A|^{1/(2K)}$ is exactly $\det(F(a,b))^{1/(\omega-1)}$.  Thus the
+theorem gives a nonzero lattice vector with that $\ell^\infty$-bound; no
+generic Minkowski second-theorem factor $2$ is inserted.
 
 ## Faltings (1983), Inventiones mathematicae 73, 349–366
 

@@ -17,6 +17,7 @@ import math
 
 LIMIT = 10000
 
+
 # Sieve to precompute rad(n) for all n up to LIMIT*2
 def sieve_rad(N):
     rad_arr = [1] * (N + 1)
@@ -26,11 +27,13 @@ def sieve_rad(N):
                 rad_arr[m] *= p
     return rad_arr
 
+
 rad_arr = sieve_rad(LIMIT * 2)
 
 # Sieve to find coprime pairs quickly: gcd via Euler's totient sieve is complex,
 # so we just check gcd for pairs where rad(a*b) = rad(a)*rad(b) (i.e., coprime)
 # For speed: use math.gcd which is fast in Python 3.9+
+
 
 def quality(a, b, c):
     # rad(abc) = rad(a)*rad(b)*rad(c) when gcd(a,b)=1 (since gcd(a,c)=gcd(b,c)=1 follows)
@@ -80,7 +83,7 @@ for a, b, c, q in high_q[:20]:
     print(f"{a:>8} {b:>8} {c:>8}  {R:>12}  {q:>8.5f}")
 
 # Compute max quality as function of c_max
-print(f"\nEmpirical max quality vs c_max:")
+print("\nEmpirical max quality vs c_max:")
 print(f"{'c_max':>8}  {'q_max':>8}  {'triple':>20}")
 thresholds = [100, 300, 1000, 3000, 10000]
 for thresh in thresholds:
@@ -94,11 +97,11 @@ print(f"\nQuality histogram (all triples with q>1, c<{LIMIT}):")
 bins = [1.0, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.4, 1.5, 2.0, 3.0]
 for i in range(len(bins) - 1):
     count = sum(1 for _, _, _, q in high_q if bins[i] <= q < bins[i + 1])
-    print(f"  [{bins[i]:.2f}, {bins[i+1]:.2f}): {count:>5} triples")
+    print(f"  [{bins[i]:.2f}, {bins[i + 1]:.2f}): {count:>5} triples")
 
-print(f"\nIMPLICATION FOR M2:")
-print(f"  M2 requires: for all ε>0, ∃K_ε: q(a,b,c) ≤ 1+ε for all triples.")
-print(f"  Empirically: q_max appears bounded but grows (slowly) with c_max.")
-print(f"  The PROOF gap: we can observe this but cannot currently bound it universally.")
-print(f"  Best unconditional bound: c < exp(κ·R^{{1/3}}·(log R)^3) [Stewart-Yu 2001]")
-print(f"  This is far from q ≤ 1+ε.")
+print("\nIMPLICATION FOR M2:")
+print("  M2 requires: for all ε>0, ∃K_ε: q(a,b,c) ≤ 1+ε for all triples.")
+print("  Empirically: q_max appears bounded but grows (slowly) with c_max.")
+print("  The PROOF gap: we can observe this but cannot currently bound it universally.")
+print("  Best unconditional bound: c < exp(κ·R^{1/3}·(log R)^3) [Stewart-Yu 2001]")
+print("  This is far from q ≤ 1+ε.")

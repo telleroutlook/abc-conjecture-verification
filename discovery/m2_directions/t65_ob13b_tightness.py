@@ -12,6 +12,7 @@ Also: find the triple with the LARGEST ratio nd/bound_B (nearest to OB-13B equal
 import math
 from itertools import product as iproduct
 
+
 def factorize(n):
     f = {}
     d = 2
@@ -24,20 +25,24 @@ def factorize(n):
         f[n] = f.get(n, 0) + 1
     return f
 
+
 def rad(n):
     f = factorize(n)
     return math.prod(f.keys()) if f else 1
+
 
 def quality(a, b):
     c = a + b
     R = rad(a * b * c)
     return math.log(c) / math.log(R) if R > 1 else 0
 
+
 def extended_gcd(a, b):
     if b == 0:
         return a, 1, 0
     g, x, y = extended_gcd(b, a % b)
     return g, y, x - (a // b) * y
+
 
 def lattice_basis_from_constraint(alpha):
     n = len(alpha)
@@ -58,13 +63,14 @@ def lattice_basis_from_constraint(alpha):
         a_work[col] = 0
     return [[U[row][col] for row in range(n)] for col in range(1, n)]
 
+
 def lll_reduce(basis, primes, delta=0.75):
     n_vecs = len(basis)
     n_dim = len(basis[0])
     B = [list(v) for v in basis]
 
     def dot(u, v):
-        return sum(primes[i]**2 * u[i] * v[i] for i in range(n_dim))
+        return sum(primes[i] ** 2 * u[i] * v[i] for i in range(n_dim))
 
     def gram_schmidt_full(vecs):
         gs = []
@@ -95,13 +101,14 @@ def lll_reduce(basis, primes, delta=0.75):
             return dot(v, v)
 
         lhs = norm2(gs[k])
-        rhs = (delta - mu_mat[k][k-1]**2) * norm2(gs[k-1])
+        rhs = (delta - mu_mat[k][k - 1] ** 2) * norm2(gs[k - 1])
         if lhs >= rhs:
             k += 1
         else:
-            B[k], B[k-1] = B[k-1], B[k]
+            B[k], B[k - 1] = B[k - 1], B[k]
             k = max(k - 1, 1)
     return B
+
 
 def nd_svp(a, b, search_radius=20):
     c = a + b
@@ -129,7 +136,7 @@ def nd_svp(a, b, search_radius=20):
     basis = lattice_basis_from_constraint(alpha)
     rank = len(basis)
     basis_red = lll_reduce(basis, primes)
-    best = float('inf')
+    best = float("inf")
     for coords in iproduct(range(-search_radius, search_radius + 1), repeat=rank):
         if all(c_k == 0 for c_k in coords):
             continue
@@ -145,16 +152,21 @@ def nd_svp(a, b, search_radius=20):
         norm = max(primes[i] * abs(phi[i]) for i in range(n))
         if norm > 0:
             best = min(best, norm)
-    return best if best < float('inf') else None
+    return best if best < float("inf") else None
+
 
 # ── Enumerate high-quality triples ───────────────────────────────────────────
 C_MAX = 5000
 QUALITY_MIN = 1.15
 
-print(f"T65: OB-13B tightness — high-quality triples (quality > {QUALITY_MIN}, c <= {C_MAX})")
+print(
+    f"T65: OB-13B tightness — high-quality triples (quality > {QUALITY_MIN}, c <= {C_MAX})"
+)
 print("=" * 105)
-print(f"{'(a,b,c)':<22} {'omega':>5} {'sq':>3} {'qual':>6} {'v_max':>6} {'R':>6} "
-      f"{'nd':>5} {'bound_B':>9} {'ratio':>7}")
+print(
+    f"{'(a,b,c)':<22} {'omega':>5} {'sq':>3} {'qual':>6} {'v_max':>6} {'R':>6} "
+    f"{'nd':>5} {'bound_B':>9} {'ratio':>7}"
+)
 print("-" * 105)
 
 results = []
@@ -179,9 +191,13 @@ for c in range(3, C_MAX + 1):
         if omega < 2 or omega > 6:
             continue
 
-        v_max = max([max(fa.values()) if fa else 0,
-                     max(fb.values()) if fb else 0,
-                     max(fc.values()) if fc else 0])
+        v_max = max(
+            [
+                max(fa.values()) if fa else 0,
+                max(fb.values()) if fb else 0,
+                max(fc.values()) if fc else 0,
+            ]
+        )
         bound_b = v_max * (R ** (1.0 / (omega - 1)))
 
         nd = nd_svp(a, b, search_radius=15)
@@ -196,10 +212,12 @@ for c in range(3, C_MAX + 1):
 # Sort by ratio descending (tightest = closest to 1)
 results.sort(key=lambda x: -x[10])
 
-for (a, b, c, omega, sq, qual, v_max, R, nd, bound_b, ratio) in results[:40]:
-    sq_str = 'Y' if sq else 'N'
-    print(f"  ({a},{b},{c}){'':<10} {omega:>5} {sq_str:>3} {qual:>6.3f} {v_max:>6} "
-          f"{R:>6} {nd:>5} {bound_b:>9.3f} {ratio:>7.4f}")
+for a, b, c, omega, sq, qual, v_max, R, nd, bound_b, ratio in results[:40]:
+    sq_str = "Y" if sq else "N"
+    print(
+        f"  ({a},{b},{c}){'':<10} {omega:>5} {sq_str:>3} {qual:>6.3f} {v_max:>6} "
+        f"{R:>6} {nd:>5} {bound_b:>9.3f} {ratio:>7.4f}"
+    )
 
 print()
 print("=" * 105)
@@ -211,10 +229,14 @@ if results:
     print(f"Mean ratio nd/bound_B: {mean_ratio:.4f}")
     non_sq = [r for r in results if not r[4]]
     if non_sq:
-        print(f"Non-squarefree: {len(non_sq)} triples, max ratio {max(r[10] for r in non_sq):.4f}")
+        print(
+            f"Non-squarefree: {len(non_sq)} triples, max ratio {max(r[10] for r in non_sq):.4f}"
+        )
     sq_only = [r for r in results if r[4]]
     if sq_only:
-        print(f"Squarefree: {len(sq_only)} triples, max ratio {max(r[10] for r in sq_only):.4f}")
+        print(
+            f"Squarefree: {len(sq_only)} triples, max ratio {max(r[10] for r in sq_only):.4f}"
+        )
 
 print()
 print("ANALYSIS:")
